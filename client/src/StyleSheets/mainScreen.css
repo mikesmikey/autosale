@@ -1,0 +1,21 @@
+@import url("color.css");
+@import url("mainNavBar.css");
+@import url("mainMenuBar.css");
+
+.main-screen {
+    height: 100%;
+}
+
+.main-subcontent {
+    padding: 5.25rem 2rem 2rem 14.5rem;
+    min-height: inherit;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.main-subcontent-box {
+    width: 100%;
+    min-height: 800px;
+    margin: 0 auto;
+}

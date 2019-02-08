@@ -4,54 +4,55 @@ class MainScrenMenuBar extends Component {
   render() {
     return (
       <aside className="menu main-menu">
-        <p className="menu-label">General</p>
+        <div className="menu-space"></div>
         <ul className="menu-list">
           <li>
-            <a>Dashboard</a>
+            <a>
+              <i className="fas fa-home menu-icon"></i>
+              หน้าแรก
+            </a>
           </li>
           <li>
-            <a>Customers</a>
-          </li>
-        </ul>
-        <p className="menu-label">Administration</p>
-        <ul className="menu-list">
-          <li>
-            <a>Team Settings</a>
+            <a>
+              <i className="fas fa-money-check menu-icon"></i>
+              จัดการต่อทะเบียน
+            </a>
           </li>
           <li>
-            <a className="is-active">Manage Your Team</a>
+            <a>
+              <i className="fas fa-car menu-icon"></i>
+              จัดการซื้อ-ขายรถ
+            </a>
             <ul>
-              <li>
-                <a>Members</a>
-              </li>
-              <li>
-                <a>Plugins</a>
-              </li>
-              <li>
-                <a>Add a member</a>
-              </li>
+              <li><a>จัดการซื้อรถ</a></li>
+              <li><a>จัดการขายรถ</a></li>
             </ul>
           </li>
           <li>
-            <a>Invitations</a>
+            <a>
+              <i className="fas fa-tools menu-icon"></i>
+              จัดการซ่อมรถ
+            </a>
+            <ul>
+              <li><a>จัดการซ่อม</a></li>
+              <li><a>จัดการอะไหล่ในส่วนการซ่อม</a></li>
+            </ul>
           </li>
           <li>
-            <a>Cloud Storage Environment Settings</a>
+            <a>
+              <i className="fas fa-boxes menu-icon"></i>
+              จัดการอะไหล่
+            </a>
+            <ul>
+              <li><a>จัดการบริษัทอะไหล่</a></li>
+              <li><a>จัดการใบสั่งซื้ออะไหล่</a></li>
+            </ul>
           </li>
           <li>
-            <a>Authentication</a>
-          </li>
-        </ul>
-        <p className="menu-label">Transactions</p>
-        <ul className="menu-list">
-          <li>
-            <a>Payments</a>
-          </li>
-          <li>
-            <a>Transfers</a>
-          </li>
-          <li>
-            <a>Balance</a>
+            <a>
+              <i className="fas fa-address-card menu-icon"></i>
+              จัดการลูกค้า
+            </a>
           </li>
         </ul>
       </aside>

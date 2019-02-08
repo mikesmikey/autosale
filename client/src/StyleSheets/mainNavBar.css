@@ -1,0 +1,53 @@
+.main-nav-bar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 999;
+}
+
+.banner {
+    height: 100%;
+    width: 200px;
+    background-color: #05897c;
+    margin-bottom: 0;
+
+    font-size: 18px;
+}
+
+.user-icon {
+    vertical-align: middle;
+}
+
+.user-nav {
+    color : #232323;
+}
+
+.user-nav:hover {
+    color: white;
+}
+
+.user-nav-text-div {
+    display: inline-block;
+}
+
+.user-text {
+    display: flex;
+    
+    overflow: hidden;
+    white-space: nowrap;
+
+    margin: 0 1rem;
+    max-width: 300px;
+}
+
+.drop-icon {
+    margin-right: 1rem;
+}
+
+.logo {
+    padding: 0 .5rem;
+}
+
+.user-option-icon {
+    margin-right: .5rem;
+}

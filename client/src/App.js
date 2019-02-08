@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import './App.css';
-import '../node_modules/bulma/css/bulma.css'
+import './StyleSheets/App.css';
+import '../node_modules/bulma/css/bulma.css';
 
 import MainScreen from "./Components/MainScreen";
 

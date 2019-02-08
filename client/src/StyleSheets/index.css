@@ -1,0 +1,10 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  background-color: #d6d6d3;
+}
+
+html, body, .App, .App>div, #root {
+  min-height: 100vh;
+}

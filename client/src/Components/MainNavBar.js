@@ -1,17 +1,17 @@
 import React, { Component } from "react";
+import '../StyleSheets/mainNavBar.css';
+
+import logo from '../Resources/imgs/logo.png'
 
 class MainNavBar extends Component {
   render() {
     return (
       <div className="main-nav-bar">
-        <nav className="navbar" role="navigation" aria-label="main navigation">
+        <nav className="navbar is-oros" role="navigation" aria-label="main navigation">
           <div className="navbar-brand">
-            <a className="navbar-item" href="https://bulma.io">
-              <img
-                src="https://bulma.io/images/bulma-logo.png"
-                width="112"
-                height="28"
-              />
+            <a className="navbar-item banner has-text-white" href="https://bulma.io">
+              <img className="logo" src={logo} alt="logo" />
+              โชคทวี
             </a>
 
             <a
@@ -29,30 +29,32 @@ class MainNavBar extends Component {
 
           <div id="navbarBasicExample" className="navbar-menu">
             <div className="navbar-start">
-              <a className="navbar-item">Home</a>
-
-              <a className="navbar-item">Documentation</a>
-
-              <div className="navbar-item has-dropdown is-hoverable">
-                <a className="navbar-link">More</a>
-
-                <div className="navbar-dropdown">
-                  <a className="navbar-item">About</a>
-                  <a className="navbar-item">Jobs</a>
-                  <a className="navbar-item">Contact</a>
-                  <hr className="navbar-divider" />
-                  <a className="navbar-item">Report an issue</a>
-                </div>
-              </div>
             </div>
 
             <div className="navbar-end">
-              <div className="navbar-item">
-                <div className="buttons">
-                  <a className="button is-primary">
-                    <strong>Sign up</strong>
+              <div className="navbar-item  is-active">
+                <a className="user-nav">
+                  <i className="fas fa-user-circle fa-2x user-icon"></i>
+                  <div className="user-nav-text-div">
+                    <div className="user-text">
+                      inwza008
+                    </div>
+                  </div>
+                  <i className="fas fa-caret-down drop-icon"></i>
+                </a>
+                <div className="navbar-dropdown is-right">
+                  <a className="navbar-item">
+                    <i className="far fa-question-circle user-option-icon"></i>
+                    เกี่ยวกับ
                   </a>
-                  <a className="button is-light">Log in</a>
+                  <a className="navbar-item">
+                    <i className="fas fa-sign-out-alt user-option-icon"></i>
+                    ออกจากระบบ
+                  </a>
+                  <hr className="navbar-divider" />
+                  <div className="navbar-item user-option-icon">
+                    เวอร์ชั่น 0.0.1
+                  </div>
                 </div>
               </div>
             </div>
