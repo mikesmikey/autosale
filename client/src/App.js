@@ -1,17 +1,46 @@
 import React, { Component } from 'react';
+import {
+  Route, Redirect, withRouter, Switch
+} from 'react-router-dom';
+
 import './StyleSheets/App.css';
 import '../node_modules/bulma/css/bulma.css';
 
-import MainScreen from "./Components/MainScreen";
+import MainScreen from "./Components/MainScreen/MainScreen";
+import LoginScreen from "./Components/LoginScreen/LoginScreen";
+import RegisterScreen from './Components/RegisterScreen/RegisterScreen';
+import About from './Components/About/About';
 
 class App extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isAuth: true
+    }
+  }
+
   render() {
     return (
       <div className="App">
-        <MainScreen/>
+        <Switch>
+          <Route exact path="/login" render={(props) =>
+            !this.state.isAuth ? <LoginScreen /> : <Redirect to="/" />
+          } />
+          <Route exact path="/register" render={(props) =>
+            !this.state.isAuth ? <RegisterScreen /> : <Redirect to="/" />
+          } />
+          <Route exact path="/about" render={(props) =>
+            <About />
+          } />
+          <Route path="/" render={(props) =>
+            this.state.isAuth ? <MainScreen /> : <Redirect to="/login" />
+          } />
+        </Switch>
+
       </div>
     );
   }
 }
 
-export default App;
+export default withRouter(App);

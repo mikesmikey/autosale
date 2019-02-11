@@ -14,8 +14,7 @@
     justify-content: center;
 }
 
-.main-subcontent-box {
-    width: 100%;
+.main-subcontent-div {
     min-height: 800px;
     margin: 0 auto;
 }

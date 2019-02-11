@@ -1,7 +1,11 @@
 import React, { Component } from "react";
-import '../StyleSheets/mainNavBar.css';
+import {
+  Link, Redirect
+} from 'react-router-dom';
 
-import logo from '../Resources/imgs/logo.png'
+import '../../StyleSheets/mainNavBar.css';
+
+import logo from '../../Resources/imgs/logo.png'
 
 class MainNavBar extends Component {
   render() {
@@ -9,10 +13,10 @@ class MainNavBar extends Component {
       <div className="main-nav-bar">
         <nav className="navbar is-oros" role="navigation" aria-label="main navigation">
           <div className="navbar-brand">
-            <a className="navbar-item banner has-text-white" href="https://bulma.io">
+            <Link to="/" className="navbar-item banner has-text-white">
               <img className="logo" src={logo} alt="logo" />
               โชคทวี
-            </a>
+            </Link>
 
             <a
               role="button"
@@ -43,10 +47,10 @@ class MainNavBar extends Component {
                   <i className="fas fa-caret-down drop-icon"></i>
                 </a>
                 <div className="navbar-dropdown is-right">
-                  <a className="navbar-item">
+                  <Link className="navbar-item" to="/about">
                     <i className="far fa-question-circle user-option-icon"></i>
                     เกี่ยวกับ
-                  </a>
+                  </Link>
                   <a className="navbar-item">
                     <i className="fas fa-sign-out-alt user-option-icon"></i>
                     ออกจากระบบ

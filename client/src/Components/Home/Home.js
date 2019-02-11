@@ -1,19 +1,12 @@
-import React, { Component } from "react";
+import React, {Component} from 'react';
 
-import MainNavBar from './MainNavBar';
-import MainMenuBar from './MainMenuBar';
+import '../../StyleSheets/home.css';
 
-import '../StyleSheets/mainScreen.css';
-
-class MainScreen extends Component {
+class Home extends Component {
     render() {
-        return (
-            <div className="main-screen">
-                <MainNavBar />
-                <MainMenuBar />
-                <div className="main-subcontent">
-                    <div className="main-subcontent-box box">
-                    The post has just arrived and in it a very nice surprise, the discovery that Jacques Seguela, one-time adviser to President Mitterrand, now close confidant of President and Madame Sarkozy (indeed he intoduced them), and something of a legend in French political communications, has dedicated his latest book to little old moi.
+        return(
+            <div className="box home">
+                The post has just arrived and in it a very nice surprise, the discovery that Jacques Seguela, one-time adviser to President Mitterrand, now close confidant of President and Madame Sarkozy (indeed he intoduced them), and something of a legend in French political communications, has dedicated his latest book to little old moi.
 
 With apologies for the missing accents here and in the French bits of the long posting which follows – the dedication to ‘Le Pouvoir dans la Peau‘ (Power in the skin) reads ‘A Alastair Campbell, mon spin doctor prefere’ (three missing accents in one word – mes excuses sinceres).
 
@@ -80,11 +73,9 @@ I don’t agree with all of Seguela’s analysis. I don’t accept that only fou
 He is, as one would expect for someone who has been close to different leaders, clued up on the importance of good chemistry between leader and strategist. He understands the importance of body language as well as language. He knows the importance of emotion as well as reason. He understands how the web is changing politics. One of my favourite phrases is that ‘life is on the record’. He has a different way of putting it. ‘Le “off” n’existe plus desormais. Tout ce que vous direz pourra se retourner contre vous.’ It is why the whole ‘droit d’etre oublie’ is emerging as a debate. How many of the young men and women today filling the web with pictures and confessions from their private lives may end up running for office one day, and regretting their openness? On verra.
 
 Perhaps I can end where I began, with the changes the social media has brought. At the last election Labour did not do poster campaigns. This was a shame. In previous campaigns we had had some brilliant posters. But under Gordon Brown, we had very little money for the campaign. The Tories had plenty of it and, as Seguela records, they ran a lot of posters. One of their most expensive billboard campaigns was of a giant photo of Cameron with an anti-Labour slogan ‘we can’t go on like this.’ Someone noticed that the Tory leader’s face had been airbrushed. This fact became the source of thousands of tweets. Then someone set up a website mydavidcameron.com where people could send their own, largely anti-Tory, versions of this poster. These were sent in in their thousands, and many were much better, wittier and more politically devastating than the original. I’ll tell you when I knew they had wasted their money – when the newspapers carried photos of one giant poster site which had been defaced … Cameron’s hair had been replaced with a painted version of Elvis Presley’s hair, and to the slogan ‘we can’t go on like this’ had been added the words of one of Elvis’ most famous songs … ‘with suspicious minds’. The combination of the internet and wit had reduced the political impact of a hugely expensive campaign to zero. That is my final thought as you begin to read Jacques Seguela’s account. It is a quote from a former colleague, Labour MP Hazel Blears … ‘Campaigning is like sex. If you’re not enjoying it, you’re not doing it properly.’
-                    </div>
-                </div>
             </div>
-        );
+        )
     }
 }
 
-export default MainScreen;
+export default Home;
