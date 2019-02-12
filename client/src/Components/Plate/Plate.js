@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import '../../StyleSheets/my.css';
+import '../../StyleSheets/colorStyle.css';
 class Plate extends Component {
     render() {
         return (
