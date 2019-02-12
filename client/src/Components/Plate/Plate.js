@@ -64,7 +64,7 @@ class Plate extends Component {
                                                                     </table>
                                                                 </div>
                                                             </div>
-                                                            <a class="button is-buttonMINT " id="m75" >พิมพ์</a>
+                                                            <a class="button is-buttonMINT " id="m72" >พิมพ์</a>
                                                         </div>
                                                     </div>
                                                 </div>
