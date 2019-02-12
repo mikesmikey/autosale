@@ -5,7 +5,7 @@ import '../../StyleSheets/home.css';
 class Home extends Component {
     render() {
         return(
-            <div className="box home">
+            <div className="subcontent-main-div box home">
                 The post has just arrived and in it a very nice surprise, the discovery that Jacques Seguela, one-time adviser to President Mitterrand, now close confidant of President and Madame Sarkozy (indeed he intoduced them), and something of a legend in French political communications, has dedicated his latest book to little old moi.
 
 With apologies for the missing accents here and in the French bits of the long posting which follows – the dedication to ‘Le Pouvoir dans la Peau‘ (Power in the skin) reads ‘A Alastair Campbell, mon spin doctor prefere’ (three missing accents in one word – mes excuses sinceres).

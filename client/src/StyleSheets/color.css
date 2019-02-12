@@ -1,11 +1,15 @@
 .is-oros {
-    background-color: #09bcaa;
+    background-color: #09bcaa !important;
 }
 
 .is-yentafo {
-    background-color: #c92d39;
+    background-color: #c92d39 !important;
 }
 
 .is-orange {
-    background-color: #ef8d22;
+    background-color: #ef8d22 !important;
+}
+
+.is-black-oros {
+    background-color: #05897c !important;
 }

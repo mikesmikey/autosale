@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 class PartnerManage extends Component {
     render() {
         return(
-            <div className="box partner-manage">
+            <div className="subcontent-main-div box partner-manage">
                 จัดการคู่ค้า
             </div>
         )

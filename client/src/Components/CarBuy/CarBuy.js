@@ -1,10 +1,13 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
+
+import Modal from '../Utilities/Modal'
 
 class CarBuy extends Component {
+
     render() {
-        return(
-            <div className="box car-buy">
-                จัดการซื้อรถ
+        return (
+            <div className="subcontent-main-div box car-buy">
+                ขายรถ
             </div>
         )
     }

@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
+import {
+    Link
+} from 'react-router-dom';
 
 class LoginScreen extends Component {
     render() {
         return (
             <div className="login-screen">
                 ไม่มีรหัส?
-                <a>Register</a>
+                <Link to="/register">Register</Link>
             </div>
         );
     }

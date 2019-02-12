@@ -1,11 +1,15 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
+import {
+    Link
+} from 'react-router-dom';
+
 
 class RegisterScreen extends Component {
     render() {
-        return(
+        return (
             <div className="register-screen">
                 มีรหัสแล้ว?
-                <a>ล๊อคอิน</a>
+                <Link to="/login">Login</Link>
             </div>
         )
     }

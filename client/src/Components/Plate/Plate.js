@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 class Plate extends Component {
     render() {
         return(
-            <div className="box plate">
+            <div className="subcontent-main-div box plate">
                 จัดการต่อทะเบียน
             </div>
         )

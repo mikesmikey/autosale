@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 class CarSell extends Component {
     render() {
         return(
-            <div className="box car-sell">
+            <div className="subcontent-main-div box car-sell">
                 จัดการขายรถ
             </div>
         )

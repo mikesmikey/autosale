@@ -20,51 +20,49 @@ import CustomerManage from "../CustomerManage/CustomerManage";
 import PartCompanyManage from "../PartCompanyManage/PartCompanyManage";
 
 import '../../StyleSheets/mainScreen.css';
+import '../../StyleSheets/pageHelper.css';
 
 class MainScreen extends Component {
-
-    constructor(props) {
-        super(props);
-    }
 
     render() {
         return (
             <div className="main-screen">
-                <MainNavBar />
+                <MainNavBar
+                    mockLogout={this.props.mockLogout}
+                    username={this.props.username}
+                />
                 <MainMenuBar />
                 <div className="main-subcontent">
-                    <div className="main-subcontent-div">
-                        <Route exact path="/" render={(props) =>
-                            <Home />
-                        } />
-                        <Route path="/plate_license" render={(props) =>
-                            <Plate />
-                        } />
-                        <Route path="/car_buy" render={(props) =>
-                            <CarBuy />
-                        } />
-                        <Route path="/car_sell" render={(props) =>
-                            <CarSell />
-                        } />
-                        <Route path="/car_fix" render={(props) =>
-                            <CarFix />
-                        } />
-                        <Route path="/car_part" render={(props) =>
-                            <CarPart />
-                        } />
-                        <Route path="/part_order" render={(props) =>
-                            <PartOrderManage />
-                        } />
-                        <Route path="/partner_manage" render={(props) =>
-                            <PartnerManage />
-                        } />
-                        <Route path="/part_company" render={(props) =>
-                            <PartCompanyManage />
-                        } />
-                        <Route path="/customer_manage" render={(props) =>
-                            <CustomerManage />
-                        } />
-                    </div>
+                    <Route exact path="/" render={(props) =>
+                        <Home />
+                    } />
+                    <Route path="/plate_license" render={(props) =>
+                        <Plate />
+                    } />
+                    <Route path="/car_buy" render={(props) =>
+                        <CarBuy />
+                    } />
+                    <Route path="/car_sell" render={(props) =>
+                        <CarSell />
+                    } />
+                    <Route path="/car_fix" render={(props) =>
+                        <CarFix />
+                    } />
+                    <Route path="/car_part" render={(props) =>
+                        <CarPart />
+                    } />
+                    <Route path="/part_order" render={(props) =>
+                        <PartOrderManage />
+                    } />
+                    <Route path="/partner_manage" render={(props) =>
+                        <PartnerManage />
+                    } />
+                    <Route path="/part_company" render={(props) =>
+                        <PartCompanyManage />
+                    } />
+                    <Route path="/customer_manage" render={(props) =>
+                        <CustomerManage />
+                    } />
                 </div>
 
             </div>

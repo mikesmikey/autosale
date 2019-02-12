@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import {
-  Link, Redirect
+  Link
 } from 'react-router-dom';
 
 import '../../StyleSheets/mainNavBar.css';
@@ -8,10 +8,39 @@ import '../../StyleSheets/mainNavBar.css';
 import logo from '../../Resources/imgs/logo.png'
 
 class MainNavBar extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      settingclick: false
+    }
+
+    this.handleDropDown = this.handleDropDown.bind(this);
+    this.dropdownBlurHandle = this.dropdownBlurHandle.bind(this);
+  }
+
+  dropdownBlurHandle(e) {
+    if (!e.target.className.includes('navbar-item')) {
+      this.setState({ settingclick: false });
+      document.getElementById('root').removeEventListener('click', this.dropdownBlurHandle);
+    }
+  }
+
+  handleDropDown() {
+    if (!this.state.settingclick) {
+      this.setState({ settingclick: true })
+      document.getElementById('root').addEventListener('click', this.dropdownBlurHandle);
+    } else {
+      this.setState({ settingclick: false })
+      document.getElementById('root').removeEventListener('click', this.dropdownBlurHandle);
+    }
+  }
+
   render() {
     return (
       <div className="main-nav-bar">
-        <nav className="navbar is-oros" role="navigation" aria-label="main navigation">
+        <nav className="navbar is-oros" aria-label="main navigation">
           <div className="navbar-brand">
             <Link to="/" className="navbar-item banner has-text-white">
               <img className="logo" src={logo} alt="logo" />
@@ -36,12 +65,15 @@ class MainNavBar extends Component {
             </div>
 
             <div className="navbar-end">
-              <div className="navbar-item  is-active">
+              <div
+                className={this.state.settingclick ? "navbar-item is-active" : "navbar-item"}
+                onClick={this.handleDropDown}
+              >
                 <a className="user-nav">
                   <i className="fas fa-user-circle fa-2x user-icon"></i>
                   <div className="user-nav-text-div">
                     <div className="user-text">
-                      inwza008
+                      {this.props.username}
                     </div>
                   </div>
                   <i className="fas fa-caret-down drop-icon"></i>
@@ -51,7 +83,7 @@ class MainNavBar extends Component {
                     <i className="far fa-question-circle user-option-icon"></i>
                     เกี่ยวกับ
                   </Link>
-                  <a className="navbar-item">
+                  <a className="navbar-item" onClick={this.props.mockLogout}>
                     <i className="fas fa-sign-out-alt user-option-icon"></i>
                     ออกจากระบบ
                   </a>

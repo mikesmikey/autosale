@@ -28,3 +28,12 @@
     border-left: 5px solid #dbdbdb;
     font-size: 14px;
 }
+
+
+.dropdown-hide {
+    display: none;
+}
+
+.dropdown-active {
+    display: block;
+}

@@ -16,8 +16,21 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isAuth: true
+      isAuth: true,
+      username : "inwza007"
     }
+
+    this.mockLogout = this.mockLogout.bind(this);
+  }
+
+  setMockAuth(status) {
+    this.setState({
+      isAuth : status
+    })
+  }
+
+  mockLogout() {
+    this.setMockAuth(false);
   }
 
   render() {
@@ -25,19 +38,24 @@ class App extends Component {
       <div className="App">
         <Switch>
           <Route exact path="/login" render={(props) =>
-            !this.state.isAuth ? <LoginScreen /> : <Redirect to="/" />
+            !this.state.isAuth ? <LoginScreen {...props} /> : <Redirect to="/" />
           } />
           <Route exact path="/register" render={(props) =>
-            !this.state.isAuth ? <RegisterScreen /> : <Redirect to="/" />
+            !this.state.isAuth ? <RegisterScreen {...props} /> : <Redirect to="/" />
           } />
           <Route exact path="/about" render={(props) =>
             <About />
           } />
           <Route path="/" render={(props) =>
-            this.state.isAuth ? <MainScreen /> : <Redirect to="/login" />
+            this.state.isAuth ? 
+            <MainScreen 
+              {...props}
+              username={this.state.username} 
+              mockLogout={this.mockLogout}
+            /> : 
+            <Redirect to="/login" />
           } />
         </Switch>
-
       </div>
     );
   }
