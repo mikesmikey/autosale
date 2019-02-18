@@ -3,7 +3,7 @@ import {
   NavLink
 } from 'react-router-dom';
 
-import '../../StyleSheets/new-mainMenuBar.css';
+import '../../StyleSheets/mainMenuBar.css';
 
 class MainScrenMenuBar extends Component {
 

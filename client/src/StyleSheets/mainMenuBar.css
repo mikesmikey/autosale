@@ -1,38 +1,72 @@
 .main-menu {
-    background-color: #303030;
-    height: 100%;
-    width: 200px;
     position: fixed;
     left: 0;
     top: 3.25rem;
+
+    height: 100%;
+    width: 200px;
+
+    background-color: #303030;
+    text-decoration: none;
 }
 
 .menu-space {
     height: 4rem;
 }
 
-.menu-list a {
-    color: gainsboro;
+.menu-list {
+    list-style: none;
+    padding: 0;
+
     background-color: #232323;
-    padding: 0.8rem 0.75rem;
+    color: white;
+}
+
+.menu-list li {
+    margin: 0;
+    padding: 0;
+
+    display: list-item;
+    list-style: none;
+}
+
+.menu-list li a {
+    padding: .8rem .5rem;
+
+    display: block;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.menu-list li a:hover {
+    background-color: white;
+    color: black ;
+}
+
+.menu-list li a:visited {
+    color: white;
+}
+
+.menu-list li a:visited:hover {
+    color: black;
+}
+
+.menu-list li ul {
+    border-left: 5px solid #dbdbdb;
+    padding: 0;
+
+    background-color: #161616;
+}
+
+.menu .dropdown-hide {
+    display: none;
+}
+
+.menu .dropdown-active {
+    display: block;
 }
 
 .menu-icon {
     margin-right: 1rem;
-}
-
-
-.menu-list li ul {
-    margin: 0;
-    padding: 0;
-    border-left: 5px solid #dbdbdb;
-    font-size: 14px;
-}
-
-.dropdown-hide {
-    display: none;
-}
-
-.dropdown-active {
-    display: block;
+    vertical-align: bottom;
 }

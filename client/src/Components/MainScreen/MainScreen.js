@@ -60,7 +60,6 @@ class MainScreen extends Component {
                         <CustomerManage />
                     } />
                 </div>
-
             </div>
         );
     }
