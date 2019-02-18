@@ -15,7 +15,6 @@ import CarSell from '../CarSell/CarSell';
 import CarFix from '../CarFix/CarFix';
 import CarPart from '../CarPart/CarPart';
 import PartOrderManage from "../PartOrderManage/PartOrderManage";
-import PartnerManage from "../PartnerManage/PartnerManage";
 import CustomerManage from "../CustomerManage/CustomerManage";
 import PartCompanyManage from "../PartCompanyManage/PartCompanyManage";
 
@@ -53,9 +52,6 @@ class MainScreen extends Component {
                     } />
                     <Route path="/part_order" render={(props) =>
                         <PartOrderManage />
-                    } />
-                    <Route path="/partner_manage" render={(props) =>
-                        <PartnerManage />
                     } />
                     <Route path="/part_company" render={(props) =>
                         <PartCompanyManage />

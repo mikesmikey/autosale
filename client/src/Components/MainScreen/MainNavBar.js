@@ -3,9 +3,11 @@ import {
   Link
 } from 'react-router-dom';
 
+//import '../../StyleSheets/mainNavBar.css';
 import '../../StyleSheets/mainNavBar.css';
 
 import logo from '../../Resources/imgs/logo.png'
+import userIcon from '../../Icons/user.svg';
 
 class MainNavBar extends Component {
 
@@ -21,7 +23,7 @@ class MainNavBar extends Component {
   }
 
   dropdownBlurHandle(e) {
-    if (!e.target.className.includes('navbar-item')) {
+    if (!e.target.className.includes('dropdown-items')) {
       this.setState({ settingclick: false });
       document.getElementById('root').removeEventListener('click', this.dropdownBlurHandle);
     }
@@ -41,60 +43,24 @@ class MainNavBar extends Component {
     return (
       <div className="main-nav-bar">
         <nav className="navbar is-oros" aria-label="main navigation">
-          <div className="navbar-brand">
-            <Link to="/" className="navbar-item banner has-text-white">
-              <img className="logo" src={logo} alt="logo" />
-              โชคทวี
-            </Link>
-
-            <a
-              role="button"
-              className="navbar-burger burger"
-              aria-label="menu"
-              aria-expanded="false"
-              data-target="navbarBasicExample"
-            >
-              <span aria-hidden="true" />
-              <span aria-hidden="true" />
-              <span aria-hidden="true" />
-            </a>
-          </div>
-
-          <div id="navbarBasicExample" className="navbar-menu">
-            <div className="navbar-start">
+          <Link to="/" className="navbar-item banner">
+            <div>
+              <img className="navbar-banner-logo" src={logo} alt="logo"></img>
+              <span className="navbar-banner-text">โชคทวี</span>
             </div>
-
-            <div className="navbar-end">
-              <div
-                className={this.state.settingclick ? "navbar-item is-active" : "navbar-item"}
-                onClick={this.handleDropDown}
-              >
-                <a className="user-nav">
-                  <i className="fas fa-user-circle fa-2x user-icon"></i>
-                  <div className="user-nav-text-div">
-                    <div className="user-text">
-                      {this.props.username}
-                    </div>
-                  </div>
-                  <i className="fas fa-caret-down drop-icon"></i>
-                </a>
-                <div className="navbar-dropdown is-right">
-                  <Link className="navbar-item" to="/about">
-                    <i className="far fa-question-circle user-option-icon"></i>
-                    เกี่ยวกับ
-                  </Link>
-                  <a className="navbar-item" onClick={this.props.mockLogout}>
-                    <i className="fas fa-sign-out-alt user-option-icon"></i>
-                    ออกจากระบบ
-                  </a>
-                  <hr className="navbar-divider" />
-                  <div className="navbar-item user-option-icon">
-                    เวอร์ชั่น 0.0.1
-                  </div>
-                </div>
-              </div>
+          </Link>
+          <button className="navbar-item user" onClick={this.handleDropDown}>
+            <div className="user-container">
+              <svg className="navbar-user-icon icon-user icon-size-5" ></svg>
+              <span className="navbar-user-text">{this.props.username}</span>
+              <svg className="navbar-user-icon icon-down-arrow icon-size-6" ></svg>
             </div>
-          </div>
+            <div className={this.state.settingclick ? "dropdown-items is-active" :"dropdown-items user"}>
+              <Link to='/about'>เกี่ยวกับ</Link>
+              <a onClick={this.props.mockLogout}>ออกจากระบบ</a>
+              <a className="is-detail">เวอร์ชั่น 0.0.2</a>
+            </div>
+          </button>
         </nav>
       </div>
     );

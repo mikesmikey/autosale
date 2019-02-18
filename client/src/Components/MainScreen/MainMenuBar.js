@@ -3,6 +3,8 @@ import {
   NavLink
 } from 'react-router-dom';
 
+import '../../StyleSheets/new-mainMenuBar.css';
+
 class MainScrenMenuBar extends Component {
 
   constructor(props) {
@@ -51,13 +53,13 @@ class MainScrenMenuBar extends Component {
         <ul className="menu-list">
           <li>
             <NavLink to="/" activeClassName="is-active is-orange" onClick={this.handleButtonPointer}>
-              <i className="fas fa-home menu-icon"></i>
+              <svg className="menu-icon icon-home icon-size-6" ></svg>
               หน้าแรก
             </NavLink>
           </li>
           <li>
             <NavLink to="/plate_license" activeClassName="is-active is-black-oros" onClick={this.handleButtonPointer}>
-              <i className="fas fa-money-check menu-icon"></i>
+            <svg className="menu-icon icon-license-plate icon-size-6" ></svg>
               จัดการต่อทะเบียน
             </NavLink>
           </li>
@@ -65,7 +67,7 @@ class MainScrenMenuBar extends Component {
             <a id="car_manage_button"
               onClick={this.handleMenuDropDown}
             >
-              <i className="fas fa-car menu-icon"></i>
+              <svg className="menu-icon icon-car icon-size-6" ></svg>
               จัดการซื้อ-ขายรถ
             </a>
             <ul id="car_manage_list" className="dropdown-hide">
@@ -85,7 +87,7 @@ class MainScrenMenuBar extends Component {
             <a id="fix_manage_button"
               onClick={this.handleMenuDropDown}
             >
-              <i className="fas fa-tools menu-icon"></i>
+              <svg className="menu-icon icon-car-motor icon-size-6" ></svg>
               จัดการซ่อมรถ
             </a>
             <ul id="fix_manage_list" className="dropdown-hide">
@@ -105,7 +107,7 @@ class MainScrenMenuBar extends Component {
           <a id="part_manage_button"
               onClick={this.handleMenuDropDown}
             >
-              <i className="fas fa-boxes menu-icon"></i>
+              <svg className="menu-icon icon-car-part icon-size-6" ></svg>
               จัดการอะไหล่
             </a>
             <ul id="part_manage_list" className="dropdown-hide">
@@ -122,14 +124,8 @@ class MainScrenMenuBar extends Component {
             </ul>
           </li>
           <li>
-            <NavLink to="/partner_manage" activeClassName="is-active is-black-oros" onClick={this.handleButtonPointer}>
-              <i className="fas fa-user-tie menu-icon"></i>
-              จัดการคู่ค้า
-            </NavLink>
-          </li>
-          <li>
             <NavLink to="/customer_manage" activeClassName="is-active is-black-oros" onClick={this.handleButtonPointer}>
-              <i className="fas fa-address-card menu-icon"></i>
+            <svg className="menu-icon icon-customer-card icon-size-6" ></svg>
               จัดการลูกค้า
             </NavLink>
           </li>

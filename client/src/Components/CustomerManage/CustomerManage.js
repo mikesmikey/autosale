@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 
-import '../../StyleSheets/colorStyle.css';
 class CustomerManage extends Component {
     render() {
         return (

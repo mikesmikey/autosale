@@ -4,7 +4,9 @@ import {
 } from 'react-router-dom';
 
 import './StyleSheets/App.css';
-import '../node_modules/bulma/css/bulma.css';
+import './StyleSheets/icon.css';
+import './StyleSheets/element.css';
+//import '../node_modules/bulma/css/bulma.css';
 
 import MainScreen from "./Components/MainScreen/MainScreen";
 import LoginScreen from "./Components/LoginScreen/LoginScreen";
