@@ -7,8 +7,9 @@ const mongoClient = require('mongodb').MongoClient
 const ObjectId = require('mongodb').ObjectID
 const url = 'mongodb://root:root123@ds131765.mlab.com:31765/ooad_kob'
 const dbName = 'ooad_kob';
-
 app.use(bodyParser.json())
+app.use(cors())
+
 
 
 
@@ -20,7 +21,7 @@ app.post('/user',(req,res) => {
                 res.status(200)
                 res.jason({status:true,id:data._id})
             }else{
-                res.sedStatus(401)
+                res.sendStatus(401)
             }
         })
     })
