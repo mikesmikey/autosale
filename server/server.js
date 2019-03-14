@@ -12,9 +12,11 @@ const WebDAO = require('./WebDAO');
 const WebService = require('./WebService');
 const User = require('./User');
 
+const WebDAOObj = new WebDAO();
+const WebServiceObj = new WebService();
+
 app.get('/user', (req, res) => {
-    var DAO = new WebDAO;
-    DAO.getAllUser().then((data)=> {
+    WebDAOObj.getAllUser().then((data)=> {
         if (data != null) {
             res.json(data);
         } else {
@@ -25,15 +27,13 @@ app.get('/user', (req, res) => {
 
 app.post('/user', (req, res) => {
     //console.log(req.body.registerForm)
-    var DAO = new WebDAO;
-    DAO.insertUser(new User(req.body.registerForm)).then((pass)=> {
+    WebDAOObj.insertUser(new User(req.body.registerForm)).then((pass)=> {
         res.send(pass);
     })
 });
 
 app.get('/user/:username', (req, res) => {
-    var DAO = new WebDAO;
-    DAO.getUserByUsername(req.params.username).then((data)=> {
+    WebDAOObj.getUserByUsername(req.params.username).then((data)=> {
         if (data != null) {
             res.json(data);
         } else {
@@ -43,8 +43,7 @@ app.get('/user/:username', (req, res) => {
 })
 
 app.post('/login', (req, res) => {
-    var Service = new WebService();
-    Service.loginAuth(req.body.loginInfo).then((pass)=> {
+    WebServiceObj.loginAuth(req.body.loginInfo).then((pass)=> {
         res.send(pass);
     })
 })
