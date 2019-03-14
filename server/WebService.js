@@ -8,7 +8,7 @@ class WebService {
             DAO.getUserByUsername(loginInfo.username).then((result) => {
                 if (result) {
                     if (loginInfo.password == result.password) {
-                        return resolve(true);
+                        return resolve(result);
                     }
                     return resolve(false);
                 } else {
