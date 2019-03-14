@@ -27,11 +27,7 @@ app.post('/user', (req, res) => {
     //console.log(req.body.registerForm)
     var DAO = new WebDAO;
     DAO.insertUser(new User(req.body.registerForm)).then((pass)=> {
-        if (pass) {
-            res.send(pass);
-        } else {
-            res.sendStatus(406);
-        }
+        res.send(pass);
     })
 });
 
@@ -46,8 +42,11 @@ app.get('/user/:username', (req, res) => {
     })
 })
 
-app.get('/login', (req, res) => {
-    loginAuth(req);
+app.post('/login', (req, res) => {
+    var Service = new WebService();
+    Service.loginAuth(req.body.loginInfo).then((pass)=> {
+        res.send(pass);
+    })
 })
 
 
