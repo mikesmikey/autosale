@@ -2,14 +2,6 @@ const WebDAO = require('./WebDAO');
 
 class WebService {
 
-    usernameIllegalCheck() {
-
-    }
-
-    passwordIllegalCheck() {
-
-    }
-
     loginAuth(loginInfo) {
         return new Promise((resolve, reject) => {
             var DAO = new WebDAO;
