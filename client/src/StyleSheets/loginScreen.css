@@ -1,0 +1,39 @@
+/*=========[Login Screen]==============*/
+
+.login-box {
+    width: 60%;
+    height: 60%;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.login-box form {
+    margin: 0 2rem;
+}
+
+.login-box .input[type=text] {
+    box-sizing: border-box;
+    margin-bottom: 2rem;
+}
+
+.login-columns {
+    height: 100vh;
+}
+
+.login-columns .column {
+    height: inherit;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-box-image {
+    height: 25%;
+    margin-bottom: 3rem;
+}
+
+.login-form {
+    text-align: center;
+}

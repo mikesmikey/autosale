@@ -48,6 +48,8 @@
     text-align: center;
     text-overflow: ellipsis;
 
+    text-decoration: none;
+
     width: 100px;
 }
 
@@ -82,6 +84,20 @@
     width: 100%;
 }
 
+.button.is-width80 {
+    width: 80%;
+}
+
+.button-group button {
+    margin-right: 20px !important;
+}
+
+.button-group button:first-child {
+    margin-right: 0 !important;
+}
+
+
+
 /*===============[label]===================*/
 
 .label {
@@ -105,4 +121,83 @@
     font-size: 14px;
 }
 
+/*===============[input]===================*/
+
+.input[type=text], .input[type=password] {
+    padding: 5px;
+
+    border: 1px solid gray;
+    border-radius: 5px;
+
+    font-size: 16px;
+}
+
+.input.is-full-width {
+    width: 100%;
+}
+.input.is-half {
+    width: 50%;
+}
+
+.textarea {
+    background-color: white;
+    border-color: gray;
+    color: #363636;
+    box-shadow: inset 0 1px 2px rgba(10, 10, 10, 0.1);
+    max-width: 100%;
+    width: 100%;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
 /*===============[select]===================*/
+
+.select {
+    width: 100%;
+
+    border: 1px solid gray;
+    border-radius: 5px;
+
+    font-size: 16px;
+}
+
+.select option {
+    padding: 6px;
+}
+
+
+/*===============[modal]===================*/
+
+.modal {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+
+    width: 100%;
+    height: 100%;
+
+    display: none;
+
+    z-index: 9999;
+
+    justify-content: center;
+    align-items: center;
+
+    background-color: rgba(0, 0, 0, 0.5)
+}
+
+.modal.is-active {
+    display: flex;
+}
+.textarea {
+    background-color: white;
+    border-color: gray;
+    color: #363636;
+    box-shadow: inset 0 1px 2px rgba(10, 10, 10, 0.1);
+    max-width: 100%;
+    width: 100%;
+    border-radius: 5px;
+    font-size: 16px;
+}

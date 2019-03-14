@@ -6,8 +6,6 @@ import {
 //import '../../StyleSheets/mainNavBar.css';
 import '../../StyleSheets/mainNavBar.css';
 
-import logo from '../../Resources/imgs/logo.png'
-
 class MainNavBar extends Component {
 
   constructor(props) {
@@ -36,6 +34,11 @@ class MainNavBar extends Component {
       this.setState({ settingclick: false })
       document.getElementById('root').removeEventListener('click', this.dropdownBlurHandle);
     }
+  }
+
+  componentWillUnmount() {
+    this.setState({ settingclick: false })
+    document.getElementById('root').removeEventListener('click', this.dropdownBlurHandle);
   }
 
   render() {
