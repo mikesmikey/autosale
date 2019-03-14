@@ -57,7 +57,7 @@ class MainScrenMenuBar extends Component {
               หน้าแรก
             </NavLink>
           </li>
-          <li>
+          {/*<li>
             <NavLink to="/plate_license" activeClassName="is-active is-black-oros" onClick={this.handleButtonPointer}>
             <svg className="menu-icon icon-license-plate icon-size-6" ></svg>
               จัดการต่อทะเบียน
@@ -129,6 +129,7 @@ class MainScrenMenuBar extends Component {
               จัดการลูกค้า
             </NavLink>
           </li>
+          */}
         </ul>
       </aside>
     );

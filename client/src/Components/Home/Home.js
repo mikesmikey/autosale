@@ -7,7 +7,7 @@ class Home extends Component {
         return (
             <div className="subcontent-main-div home">
                 <div className="box with-title is-round">
-                    <div className="box-title is-oros">
+                    <div className="box-title is-violet">
                         sdfsadfsdlakf;
                     </div>
                     <div className="box-content">

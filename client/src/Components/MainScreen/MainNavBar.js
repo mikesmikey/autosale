@@ -7,7 +7,6 @@ import {
 import '../../StyleSheets/mainNavBar.css';
 
 import logo from '../../Resources/imgs/logo.png'
-import userIcon from '../../Icons/user.svg';
 
 class MainNavBar extends Component {
 
@@ -42,11 +41,10 @@ class MainNavBar extends Component {
   render() {
     return (
       <div className="main-nav-bar">
-        <nav className="navbar is-oros" aria-label="main navigation">
+        <nav className="navbar is-violet" aria-label="main navigation">
           <Link to="/" className="navbar-item banner">
             <div>
-              <img className="navbar-banner-logo" src={logo} alt="logo"></img>
-              <span className="navbar-banner-text">โชคทวี</span>
+              <span className="navbar-banner-text">Wua-Chon University</span>
             </div>
           </Link>
           <button className="navbar-item user" onClick={this.handleDropDown}>

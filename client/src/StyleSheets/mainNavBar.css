@@ -23,7 +23,7 @@
 }
 
 .navbar .banner {
-    background-color: #05897c;
+    background-color: #542f77;
     width: 200px;
     overflow: hidden;
 
@@ -32,7 +32,7 @@
 }
 
 .navbar .banner:hover {
-    background-color: #07c1af;
+    background-color: #814ab5;
 }
 
 .navbar .banner div {
@@ -48,7 +48,7 @@
 }
 
 .navbar-banner-text {
-    font-size: 20px;
+    font-size: 18px;
     margin: 0;
 }
 
@@ -65,11 +65,11 @@
 }
 
 .navbar .user:hover {
-    background-color: #07c1af;
+    background-color: #542f77;
 }
 
 .navbar .user:focus {
-    background-color: #07c1af;
+    background-color: #542f77;
 }
 
 .navbar .user:focus {

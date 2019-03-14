@@ -48,3 +48,14 @@
     color: white !important;
 }
 
+.is-violet {
+    background-color: #814ab5 !important;
+    color: white !important;
+}
+
+.is-violet.button:hover {
+    background-color: white !important;
+    color: #542f77 !important;
+    border-color: #542f77 !important;
+}
+
