@@ -62,6 +62,7 @@ class LoginScreen extends Component {
                     <div className="column">
                         <div className="login-box box">
                             <img className="login-box-image" src={keyIcon} />
+                            <span className="label is-1" style={{"margin-bottom" : "2rem"}}>เข้าสู่ระบบ</span>
                             <form id="loginForm" className="login-form">
                                 <input className="input is-full-width" type="text" placeholder="Username" name="username" onChange={this.handleInput}/>
                                 <input className="input is-full-width" type="text" placeholder="Password" name="password" onChange={this.handleInput}/>
