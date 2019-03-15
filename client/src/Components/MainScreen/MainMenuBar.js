@@ -11,7 +11,7 @@ class MainScrenMenuBar extends Component {
     super(props);
 
     this.state = {
-      buttonPointer : null
+      buttonPointer: null
     }
 
     this.handleMenuDropDown = this.handleMenuDropDown.bind(this);
@@ -42,7 +42,7 @@ class MainScrenMenuBar extends Component {
 
   handleButtonPointer(e) {
     this.setState({
-      buttonPointer : e.target.type
+      buttonPointer: e.target.type
     })
   }
 
@@ -57,7 +57,14 @@ class MainScrenMenuBar extends Component {
               หน้าแรก
             </NavLink>
           </li>
-          {/*<li>
+          <li>
+            <NavLink to="/exam_schedule" activeClassName="is-active is-black-oros" onClick={this.handleButtonPointer}>
+              <i className="menu-icon-awesome fas fa-calendar-week"></i>
+              ดูห้องสอบ
+            </NavLink>
+          </li>
+          {/*
+          <li>
             <NavLink to="/plate_license" activeClassName="is-active is-black-oros" onClick={this.handleButtonPointer}>
             <svg className="menu-icon icon-license-plate icon-size-6" ></svg>
               จัดการต่อทะเบียน
