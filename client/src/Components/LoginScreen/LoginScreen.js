@@ -25,9 +25,9 @@ class LoginScreen extends Component {
         this.loginSubmit = this.loginSubmit.bind(this);
     }
 
-    loginSubmit(e) {
-        const button = e.target;
-        button.classList.add("disabled");
+    loginSubmit() {
+        const form = document.getElementById("loginForm");
+        form.classList.add("disabled");
         const loginData = {
             username : this.state.username,
             password : this.state.password
@@ -37,7 +37,7 @@ class LoginScreen extends Component {
                 this.props.mockLogin(result);
             } else {
                 alert("ข้อมูลผู้ใช้ไม่ถูกต้อง โปรดระบุใหม่");
-                button.classList.remove("disabled");
+                form.classList.remove("disabled");
             }
         });
     }
@@ -62,7 +62,7 @@ class LoginScreen extends Component {
                     <div className="column">
                         <div className="login-box box">
                             <img className="login-box-image" src={keyIcon} />
-                            <span className="label is-1" style={{"margin-bottom" : "2rem"}}>เข้าสู่ระบบ</span>
+                            <span className="label is-1" style={{marginBottom : "2rem"}}>เข้าสู่ระบบ</span>
                             <form id="loginForm" className="login-form">
                                 <input className="input is-full-width" type="text" placeholder="Username" name="username" onChange={this.handleInput}/>
                                 <input className="input is-full-width" type="text" placeholder="Password" name="password" onChange={this.handleInput}/>
