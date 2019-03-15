@@ -18,21 +18,27 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isAuth: true,
-      username : "inwza007"
+      isAuth: false,
+      user: null
     }
 
     this.mockLogout = this.mockLogout.bind(this);
+    this.mockLogin = this.mockLogin.bind(this);
   }
 
-  setMockAuth(status) {
+  setMockAuth(status, user) {
     this.setState({
-      isAuth : status
+      isAuth: status,
+      user : user
     })
   }
 
+  mockLogin(user) {
+    this.setMockAuth(true, user);
+  }
+
   mockLogout() {
-    this.setMockAuth(false);
+    this.setMockAuth(false, null);
   }
 
   render() {
@@ -40,7 +46,11 @@ class App extends Component {
       <div className="App">
         <Switch>
           <Route exact path="/login" render={(props) =>
-            !this.state.isAuth ? <LoginScreen {...props} /> : <Redirect to="/" />
+            !this.state.isAuth ? 
+            <LoginScreen
+              {...props}
+              mockLogin={this.mockLogin}
+            /> : <Redirect to="/" />
           } />
           <Route exact path="/register" render={(props) =>
             !this.state.isAuth ? <RegisterScreen {...props} /> : <Redirect to="/" />
@@ -49,13 +59,13 @@ class App extends Component {
             <About />
           } />
           <Route path="/" render={(props) =>
-            this.state.isAuth ? 
-            <MainScreen 
-              {...props}
-              username={this.state.username} 
-              mockLogout={this.mockLogout}
-            /> : 
-            <Redirect to="/login" />
+            this.state.isAuth ?
+              <MainScreen
+                {...props}
+                user={this.state.user}
+                mockLogout={this.mockLogout}
+              /> :
+              <Redirect to="/login" />
           } />
         </Switch>
       </div>

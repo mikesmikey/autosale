@@ -20,7 +20,7 @@ class MainScreen extends Component {
             <div className="main-screen">
                 <MainNavBar
                     mockLogout={this.props.mockLogout}
-                    username={this.props.username}
+                    username={this.props.user.firstName}
                 />
                 <MainMenuBar />
                 <div className="main-subcontent">
