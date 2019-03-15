@@ -96,7 +96,16 @@
     margin-right: 0 !important;
 }
 
+.button:focus {
+    outline: none;
+    box-shadow: 0px 0px 2px blue;
+}
 
+.button.disabled {
+    cursor: default;
+    pointer-events: none;
+    opacity: 0.5;
+}
 
 /*===============[label]===================*/
 
@@ -130,6 +139,11 @@
     border-radius: 5px;
 
     font-size: 16px;
+}
+
+.input[type=text]:focus, .input[type=password]:focus {
+    outline: none;
+    box-shadow: 0px 0px 2px blue;
 }
 
 .input.is-full-width {
