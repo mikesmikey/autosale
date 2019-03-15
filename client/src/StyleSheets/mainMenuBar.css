@@ -43,6 +43,10 @@
     color: black ;
 }
 
+.menu-list a:link {
+    color: white;
+}
+
 .menu-list li a:visited {
     color: white;
 }
@@ -69,4 +73,8 @@
 .menu-icon {
     margin-right: 1rem;
     vertical-align: bottom;
+}
+
+.menu-icon-awesome {
+    margin-right: 1rem;
 }

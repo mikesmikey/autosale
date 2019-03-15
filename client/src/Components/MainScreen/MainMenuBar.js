@@ -57,7 +57,14 @@ class MainScrenMenuBar extends Component {
               หน้าแรก
             </NavLink>
           </li>
-          {/*<li>
+          <li>
+            <NavLink to="/exam_schedule" activeClassName="is-active is-black-oros" onClick={this.handleButtonPointer}>
+            <i className="menu-icon-awesome fas fa-calendar-week"></i>
+              ดูห้องสอบ
+            </NavLink>
+          </li>
+          {/*
+          <li>
             <NavLink to="/plate_license" activeClassName="is-active is-black-oros" onClick={this.handleButtonPointer}>
             <svg className="menu-icon icon-license-plate icon-size-6" ></svg>
               จัดการต่อทะเบียน
