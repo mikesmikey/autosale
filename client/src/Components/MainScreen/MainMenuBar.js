@@ -52,13 +52,13 @@ class MainScrenMenuBar extends Component {
         <div className="menu-space"></div>
         <ul className="menu-list">
           <li>
-            <NavLink to="/" activeClassName="is-active is-orange" onClick={this.handleButtonPointer}>
+            <NavLink to="/" activeClassName="is-active is-black-oros" onClick={this.handleButtonPointer}>
               <svg className="menu-icon icon-home icon-size-6" ></svg>
               หน้าแรก
             </NavLink>
           </li>
           <li>
-            <NavLink to="/exam_schedule" activeClassName="is-active is-black-oros" onClick={this.handleButtonPointer}>
+            <NavLink to="/exam_schedule" activeClassName="is-active is-black-violet" onClick={this.handleButtonPointer}>
               <i className="menu-icon-awesome fas fa-calendar-week"></i>
               ดูห้องสอบ
             </NavLink>

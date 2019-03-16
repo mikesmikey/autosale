@@ -9,7 +9,7 @@ import MainMenuBar from './MainMenuBar';
 
 //all pages
 import Home from '../Home/Home';
-import ExamSchedule from '../ExamSchelude/ExamSchedule';
+import ExamSchedule from '../ExamSchedule/ExamSchedule';
 
 import '../../StyleSheets/mainScreen.css';
 import '../../StyleSheets/pageHelper.css';
