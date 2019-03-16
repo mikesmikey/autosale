@@ -59,3 +59,17 @@
     border-color: #542f77 !important;
 }
 
+.is-black-violet {
+    background-color: #542f77 !important;
+    color: white !important;
+}
+
+.is-white-violet {
+    background-color: #b28dd6 !important;
+    color: white !important;
+}
+
+.is-light-gray {
+    background-color: #dbdbdb !important;
+    color: black !important;
+}

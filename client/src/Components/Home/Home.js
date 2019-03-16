@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 
+//Components
+import Modal from '../Utilities/Modal';
+
 import '../../StyleSheets/home.css';
 
 class Home extends Component {
@@ -46,11 +49,36 @@ class Home extends Component {
                     </div>
                 </div>
                 <div className="box">
-                    dfsasl;kfdj;sldaf
+                    <button className="button is-primary" onClick={() => { this.modal.showModal() }}>modal1</button>
+                    <button className="button is-danger" onClick={() => { this.modal2.showModal() }}>modal2</button>
+                    <Modal ref={instance => { this.modal = instance }} content={<Example closeModal={() => { this.modal.closeModal() }} />} />
+                    <Modal ref={instance => { this.modal2 = instance }} content={
+                        <div className="box">
+                            อะไร
+                                <button className="button" onClick={() => { this.modal2.closeModal() }}>ปิด</button>
+                        </div>
+                    } />
                 </div>
             </div>
-        )
+        );
     }
 }
+
+class Example extends Component {
+
+    hello() {
+        console.log("Hello!")
+    }
+
+    render() {
+        return (
+            <div className="box">
+                <button className="button" onClick={() => { this.hello() }}>print Hello</button>
+                <button className="button" onClick={this.props.closeModal}>close</button>
+            </div>
+        );
+    }
+}
+
 
 export default Home;

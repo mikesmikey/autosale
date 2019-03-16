@@ -18,8 +18,10 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isAuth: false,
-      user: null
+      isAuth: true,
+      user: {
+        firstname : "N/A"
+      }
     }
 
     this.mockLogout = this.mockLogout.bind(this);

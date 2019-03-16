@@ -15,12 +15,18 @@ class Modal extends Component {
     }
 
     showModal() {
+
+        document.querySelector("body").style.overflow = "hidden";
+
         this.setState({
             status : true
         });
     }
 
     closeModal() {
+
+        document.querySelector("body").style.overflow = "scroll";
+
         this.setState({
             status : false
         })

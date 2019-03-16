@@ -1,3 +1,126 @@
 .exam-schedule {
     width: 60%;
 }
+
+.exam-schedule-item {
+    padding: 0;
+
+    border: 1px solid #e8e8e8;
+    box-sizing: content-box;
+
+    -webkit-box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.21);
+    -moz-box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.21);
+    box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.21);
+}
+
+.exam-schedule-item:hover {
+    cursor: pointer;
+    background-color: #ededed;
+}
+
+.exam-schedule-item .column {
+    height: 250px;
+}
+
+.date-labels {
+    text-align: center;
+    overflow: hidden;
+}
+
+.date-labels h1 {
+    font-size: 72px;
+    margin: 1rem 0;
+}
+
+.date-labels h2 {
+    font-size: 32px;
+    margin: 0;
+}
+
+.date-labels h3 {
+    font-size: 20px;
+    margin: 0;
+}
+
+.exam-title {
+    height: 50%;
+    padding: 15px 50px;
+    box-sizing: border-box;
+
+    overflow: hidden;
+}
+
+.exam-title .columns {
+    align-items: flex-start;
+}
+
+.exam-title .column {
+    height: auto;
+}
+
+.exam-title .column:first-child {
+    margin-right: 10px;
+}
+
+.exam-title .column.auto {
+    flex: none;
+    width: auto;
+}
+
+.exam-title h2 {
+    font-size: 26px;
+    margin: 0;
+
+    overflow: hidden;
+}
+
+#subject-id {
+    white-space: nowrap;
+}
+
+.exam-detail {
+    height: 50%;
+    padding: 15px 50px;
+
+    box-sizing: border-box;
+}
+
+.exam-detail .box {
+    max-height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+.exam-detail p {
+    margin: 0;
+
+    font-size: 18px;
+    color: #542f77;
+}
+
+.exam-date-box {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.exam-extend-detail {
+    width: 800px;
+}
+
+.exam-extend-detail .box-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.exam-extend-detail .box-content h2 {
+    color : #814ab5;
+}
+
+.exam-extend-detail .close-button {
+    cursor: pointer;
+}
+
+.exam-extend-detail .close-button:hover {
+    color: #dbdbdb;
+}
