@@ -10,9 +10,11 @@ import MainMenuBar from './MainMenuBar';
 //all pages
 import Home from '../Home/Home';
 import ExamSchedule from '../ExamSchedule/ExamSchedule';
+import ManageUser from '../UserManage/UserManage';
 
 import '../../StyleSheets/mainScreen.css';
 import '../../StyleSheets/pageHelper.css';
+import UserManage from "../UserManage/UserManage";
 
 class MainScreen extends Component {
 
@@ -30,6 +32,9 @@ class MainScreen extends Component {
                     } />
                     <Route path="/exam_schedule" render={(props) =>
                         <ExamSchedule />
+                    } />
+                    <Route path="/user_manage" render={(props) =>
+                        <UserManage />
                     } />
                 </div>
             </div>
