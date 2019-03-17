@@ -58,8 +58,15 @@
     width: 100%;
 }
 
+.columns.is-stay-top {
+    align-items: flex-start;
+}
+
 /*===============[text helper]===================*/
 
 .text-center {
     text-align: center;
+}
+.is-pulled-right {
+    float: right !important;
 }

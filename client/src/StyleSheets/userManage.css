@@ -1,0 +1,103 @@
+.user-manage {
+    width: 80%;
+}
+.user-mange-select-box{
+    width: 180px;
+    height: 32px;
+    padding: 5px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    font-size: 16px;
+}
+.user-mange-select-box-popUp{
+    width: 382px;
+    height: 32px;
+    padding: 5px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    font-size: 16px;
+}
+.user-tab-is-20 { 
+    display:inline-block; 
+    margin-left: 10px; 
+}
+.user-tab-is-15 { 
+    display:inline-block; 
+    margin-left: 1px; 
+}
+.user-tab-is-40 { 
+    display:inline-block; 
+    margin-left: 40px; 
+}
+div.border-user-1{
+    border:1px solid gray;
+}
+.user-column-table {
+    margin-right: 20px;
+   
+}
+.user-column-image {
+    margin-top: 5px;
+    margin-left: 20%;
+   
+}
+.user-column-detail {
+    border:3px solid #542f77;
+    background-color: #c7afdd;
+    margin-left: 1px;
+    margin-right: 1px;
+    margin-bottom: 1px;
+    
+   
+}
+.column.is-user-popUp {
+    width: 500px;
+}
+
+.p-inline{
+    display:inline
+}
+
+.height50{
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+table, td, th {
+    border: 1px solid black;
+}
+  
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+  
+th{
+    height: 50px;
+}
+.select-table tr:not(:first-child):hover{ 
+    background: #c7afdd; 
+    color: white;
+}
+.input.is-userName-width {
+    width: 370px;
+}
+.input.is-userId-width {
+    width: 180px;
+}
+.margin-user-popUp{
+  margin-left: 150px;
+}
+
+.margin-user-popUp-1{
+  margin-left: 100px;
+}
+
+.user-table-item {
+    cursor: pointer;
+}
+
+.user-table-item.is-active {
+    background: #c7afdd; 
+    color: white;
+}
