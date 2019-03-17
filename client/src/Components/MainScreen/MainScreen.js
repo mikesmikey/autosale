@@ -10,6 +10,7 @@ import MainMenuBar from './MainMenuBar';
 //all pages
 import Home from '../Home/Home';
 import ExamSchedule from '../ExamSchedule/ExamSchedule';
+import ExamCreateScreen from '../ExamCreateSceen/ExamCreateScreen';
 
 import '../../StyleSheets/mainScreen.css';
 import '../../StyleSheets/pageHelper.css';
@@ -30,6 +31,9 @@ class MainScreen extends Component {
                     } />
                     <Route path="/exam_schedule" render={(props) =>
                         <ExamSchedule />
+                    } />
+                    <Route path="/exam_create" render={(props) =>
+                        <ExamCreateScreen />
                     } />
                 </div>
             </div>
