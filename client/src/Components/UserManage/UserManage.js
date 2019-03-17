@@ -467,7 +467,7 @@ class ManageUserPopUp extends Component {
                                 <label className="label">ชั้นปี</label>
                             </div>
                             <div className="column">
-                                <select className="user-mange-select-box-popUp is-full-width" type="text" id="popAddPosition">
+                                <select className="user-mange-select-box-popUp is-full-width" type="text" id="popAddYear">
                                     <option value="0"></option>
                                     <option value="1">1</option>
                                     <option value="2">2</option>
@@ -486,11 +486,16 @@ class ManageUserPopUp extends Component {
                     {this.props.selectedType === "staff" ?
 
                         <div className="columns input-div">
-                            <div className="column is-1">
+                            <div className="column is-2">
                                 <label className="label">ตำแหน่ง</label>
                             </div>
                             <div className="column">
-                                <input className="input is-userName-width is-pulled-right" type="text" id="popAddUserId" />
+                                <select className="user-mange-select-box-popUp is-full-width" type="text" id="popAddPosition">
+                                    <option value="0"></option>
+                                    <option value="1">แม่บ้าน</option>
+                                    <option value="2">ช่างไฟ</option>
+                                    <option value="3">คนล้างส้วม</option>
+                                </select>
                             </div>
                         </div>
                         :
