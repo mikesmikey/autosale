@@ -10,6 +10,7 @@
 .columns {
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 
 .column {
@@ -56,6 +57,10 @@
 .column.is-8 {
     flex: none;
     width: 100%;
+}
+
+.column.is-alway-top {
+    align-items: flex-start;
 }
 
 /*===============[text helper]===================*/
