@@ -44,22 +44,28 @@ class UserManage extends Component {
                         จัดการผู้ใช้
                     </div>
                     <div className="box-content">
-                        <div>
-                            <label className="label">ผู้ใช้ : </label>
-                            <select className="user-mange-select-box" onChange={this.handleSelectType}>
-                                <option value="student">นิสิต</option>
-                                <option value="professor">อาจารย์</option>
-                                <option value="staff">เจ้าหน้าที่</option>
-                            </select>
-
-                            <label className="label">รหัสประจำตัว : </label>
-                            <input className="input is-userId-width" type="text" id="userId" />
-
-                            <span className="user-tab-is-15">
-                                <button type="submit"><i className="fa fa-search height50"></i></button>
-                            </span>
-
-                            <button className="button is-oros is-round is-pulled-right" onClick={() => { this.managePopup.showManageModal("insert") }}>เพิ่มผู้ใช้</button>
+                        <div className="columns">
+                            <div className="column is-6">
+                                <div className="input-with-text">
+                                    <label className="label">ผู้ใช้ : </label>
+                                    <select className="user-mange-select-box" onChange={this.handleSelectType}>
+                                        <option value="student">นิสิต</option>
+                                        <option value="professor">อาจารย์</option>
+                                        <option value="staff">เจ้าหน้าที่</option>
+                                    </select>
+                                </div>
+                                <div className="input-with-text">
+                                    <label className="label">รหัสประจำตัว : </label>
+                                    <input className="input is-userId-width" type="text" id="userId" />
+                                </div>
+                                <div className="input-with-text">
+                                    <button type="submit"><i className="fa fa-search height50"></i></button>
+                                </div>
+                            </div>
+                            <div className="column">
+                                <button className="button is-yentafo is-round is-free-size is-pulled-right" onClick={() => { this.managePopup.showManageModal("insert") }}>นำเข้าผู้ใช้โดย Excel</button>
+                                <button className="button is-oros is-round is-pulled-right" onClick={() => { this.managePopup.showManageModal("insert") }}>เพิ่มผู้ใช้</button>
+                            </div>
                         </div>
                         <div>
                             <span className="user-tab-is-15"></span>
@@ -170,7 +176,7 @@ class UserTable extends Component {
 
     sampleTableData() {
         var dataArr = [];
-        for (var i = 0; i < this.userArr.length; i++) {
+        /*for (var i = 0; i < this.userArr.length; i++) {
             if (this.props.selectedType === this.userArr[i].type) {
                 dataArr[i] = <UserTableItem
                     key={i}
@@ -181,6 +187,18 @@ class UserTable extends Component {
                     itemData={this.userArr[i]}
                 />
             }
+        }*/
+        for (var i = 0; i < 16; i++) {
+            if (this.props.selectedType === this.userArr[0].type) {
+                dataArr[i] = <UserTableItem
+                    key={i}
+                    selectItem={(e) => { this.selectItem(e) }}
+                    editItem={(e) => { this.editItem(e) }}
+                    selectedType={this.props.selectedType}
+                    itemIndex={0}
+                    itemData={this.userArr[0]}
+                />
+            }
         }
         return dataArr;
     }
@@ -188,7 +206,7 @@ class UserTable extends Component {
     renderTableHead() {
         if (this.props.selectedType === "student") {
             return (
-                <tr >
+                <tr className="is-header">
                     <th>รหัสประจำตัว</th>
                     <th >ชื่อ-นามสกุล</th>
                     <th >คณะ</th>
@@ -197,7 +215,7 @@ class UserTable extends Component {
             );
         } else if (this.props.selectedType === "professor") {
             return (
-                <tr >
+                <tr className="is-header">
                     <th>รหัสประจำตัว</th>
                     <th >ชื่อ-นามสกุล</th>
                     <th >คณะ</th>
@@ -205,7 +223,7 @@ class UserTable extends Component {
             );
         } else if (this.props.selectedType === "staff") {
             return (
-                <tr >
+                <tr className="is-header" >
                     <th>รหัสประจำตัว</th>
                     <th >ชื่อ-นามสกุล</th>
                     <th >ต่ำแหน่ง</th>
@@ -240,7 +258,7 @@ class UserTable extends Component {
 
     render() {
         return (
-            <table className="select-table" id="userTable" >
+            <table className="user-table" id="userTable" >
                 <thead>
                     {this.renderTableHead()}
                 </thead>
@@ -271,7 +289,7 @@ class UserTableItem extends Component {
                     <td id="tableUserId">{this.props.itemData.username}</td>
                     <td>{this.props.itemData.gname}</td>
                     <td>{this.props.itemData.faculty.name}</td>
-                    <td>{this.props.itemData.faculty.year}</td>
+                    <td>{this.props.itemData.year}</td>
                 </tr>
             );
         } else if (this.props.selectedType === "professor") {
@@ -340,7 +358,7 @@ class ManageUserPopUp extends Component {
             fname_input: "",
             sname_input: "",
             username_input: "",
-            yearIndex : 0
+            yearIndex: 0
         })
     }
 
