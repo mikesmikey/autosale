@@ -15,7 +15,9 @@ const User = require('./User');
 const WebDAOObj = new WebDAO();
 const WebServiceObj = new WebService();
 
-app.get('/user', (req, res) => {
+var session = [];
+
+app.get('/users', (req, res) => {
     WebDAOObj.getAllUser().then((data)=> {
         if (data != null) {
             res.json(data);
@@ -24,6 +26,27 @@ app.get('/user', (req, res) => {
         }
     })
 });
+
+app.get('/users/type/:userType', (req, res) => {
+    WebDAOObj.getAllUserByType(req.params.userType).then((data)=> {
+        if (data != null) {
+            res.json(data);
+        } else {
+            res.sendStatus(404);
+        }
+    })
+});
+
+
+app.get('/users/:type/:username', (req, res) => {
+    WebDAOObj.getAllUserByTypeAndUsername(req.params.type, req.params.username).then((data)=> {
+        if (data != null) {
+            res.json(data);
+        } else {
+            res.sendStatus(404);
+        }
+    })
+})
 
 app.post('/user', (req, res) => {
     //console.log(req.body.registerForm)
@@ -44,10 +67,47 @@ app.get('/user/:username', (req, res) => {
 
 app.post('/login', (req, res) => {
     WebServiceObj.loginAuth(req.body.loginInfo).then((pass)=> {
+        if (pass) {
+            session[req.body.loginInfo.username] = true;
+        }
         res.send(pass);
     })
 })
 
+app.post('/user/remove/:username', (req, res) => {
+    WebDAOObj.deleteUserByUsername(req.params.username).then((pass)=> {
+        res.send(pass);
+    })
+})
+
+app.post('/user/add', (req, res) => {
+    console.log(req.body.userData)
+    WebDAOObj.insertUser(new User(req.body.userData)).then((pass)=> {
+        res.send(pass);
+    })
+})
+
+app.post('/user/edit', (req, res) => {
+    WebDAOObj.editUser(new User(req.body.userData)).then((pass)=> {
+        res.send(pass);
+    })
+})
+
+app.post('/autogenerate', (req, res) => {
+    WebServiceObj.autoGenerateSampleUserData().then((pass)=> {
+        res.send(pass);
+    })
+})
+
+app.get('/facultys', (req, res) => {
+    WebDAOObj.getAllFaculty().then((data)=> {
+        if (data != null) {
+            res.json(data);
+        } else {
+            res.sendStatus(404);
+        }
+    })
+})
 
 app.listen(port, () => {
     console.log(`App listening on ${port}`);

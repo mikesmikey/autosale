@@ -138,3 +138,7 @@ div.border-user-1{
     display: inline-block;
     margin: 3px 5px;
 }
+
+.user-manage-box {
+    min-height: 80vh;
+}
