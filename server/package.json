@@ -5,6 +5,7 @@
   "main": "server.js",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "concurrently": "^4.1.0",
     "express": "^4.16.4",
     "mongodb": "^3.1.13"
   },
@@ -15,7 +16,8 @@
     "client": "cd .. && cd client && npm start",
     "server": "nodemon server.js",
     "full": "concurrently \"npm run server\" \"npm run client\"",
-    "i-client": "cd .. && cd client && npm i"
+    "i-client": "cd .. && cd client && npm i",
+    "i-dev-package": "npm i && npm run i-client && npm i nodemon -g && npm i concurrently -g"
   },
   "keywords": [],
   "author": "",
