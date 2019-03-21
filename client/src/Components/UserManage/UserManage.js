@@ -4,7 +4,6 @@ import ClientService from '../Utilities/ClientService';
 //Components
 import Modal from '../Utilities/Modal';
 import '../../StyleSheets/userManage.css'
-import userImage from '../../Resources/imgs/default-user-image.png';
 import ManageUserPopUp from './ManageUserPopup';
 import UserTable from './UserTable';
 

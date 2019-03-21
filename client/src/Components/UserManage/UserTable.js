@@ -18,7 +18,6 @@ class UserTable extends Component {
             data: []
         }
 
-        this.loadDataBySelectType = this.loadDataBySelectType.bind(this);
         this.loadDataByTypeAndUsername = this.loadDataByTypeAndUsername.bind(this);
         this.loadDataIntoTable = this.loadDataIntoTable.bind(this);
     }
@@ -60,7 +59,7 @@ class UserTable extends Component {
     }
 
     deleteSelectedItem() {
-        const index = Number.parseInt(this.state.selectedRow.getAttribute("index"));
+        const index = Number.parseInt(this.state.selectedRow.getAttribute("index"), 10);
         var arr = this.state.data;
         arr.splice(index, 1);
         this.setState({
@@ -84,7 +83,7 @@ class UserTable extends Component {
         })
     }
 
-    decideUserObject(data)  {
+    decideUserObject(data) {
         if (data.typeOfUser === "student") {
             return new Student(data);
         } else if (data.typeOfUser === "professor") {
@@ -108,19 +107,6 @@ class UserTable extends Component {
             />
         }
         return returnData;
-    }
-
-    loadDataBySelectType(type) {
-        if (!this.props.isDataLoading) {
-            this.props.setDataLoadingStatus(true);
-            this.setState({
-                data: []
-            })
-            ServiceObj.getAllUserBySelectType(type).then((usersData) => {
-                this.props.setDataLoadingStatus(false);
-                this.setState({ data: usersData });
-            });
-        }
     }
 
     loadDataByTypeAndUsername(typeInput, usernameInput) {

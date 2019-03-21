@@ -1,7 +1,4 @@
 import React, { Component } from 'react';
-import {
-    Link
-} from 'react-router-dom';
 
 import '../../StyleSheets/loginScreen.css';
 
@@ -57,11 +54,11 @@ class LoginScreen extends Component {
             <div className="login-screen">
                 <div className="login-columns columns">
                     <div className="column is-violet">
-                        <img src={loginImage} style={{ height: "75%" }}></img>
+                        <img src={loginImage} style={{ height: "75%" }} alt="login-decorate-img"></img>
                     </div>
                     <div className="column">
                         <div className="login-box box">
-                            <img className="login-box-image" src={keyIcon} />
+                            <img className="login-box-image" src={keyIcon} alt="key-img" />
                             <span className="label is-1" style={{marginBottom : "2rem"}}>เข้าสู่ระบบ</span>
                             <form id="loginForm" className="login-form">
                                 <input className="input is-full-width" type="text" placeholder="Username" name="username" onChange={this.handleInput}/>
