@@ -10,8 +10,12 @@ const ServiceObj = new ClientService();
 
 class UserTable extends Component {
 
+    _isMounted = false;
+
     constructor(props) {
         super(props);
+
+        this._isMounted = true;
 
         this.state = {
             selectedRow: null,
@@ -20,6 +24,10 @@ class UserTable extends Component {
 
         this.loadDataByTypeAndUsername = this.loadDataByTypeAndUsername.bind(this);
         this.loadDataIntoTable = this.loadDataIntoTable.bind(this);
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false
     }
 
     renderTableHead() {
@@ -110,15 +118,19 @@ class UserTable extends Component {
     }
 
     loadDataByTypeAndUsername(typeInput, usernameInput) {
-        this.props.setDataLoadingStatus(true);
-        this.setState({
-            data: []
-        })
+        if (!this.props.isDataLoading) {
+            this.props.setDataLoadingStatus(true);
+            this.setState({
+                data: []
+            })
 
-        ServiceObj.searchAllUserByTypeAndUsername(typeInput, usernameInput).then((usersData) => {
-            this.props.setDataLoadingStatus(false);
-            this.setState({ data: usersData });
-        })
+            ServiceObj.searchAllUserByTypeAndUsername(typeInput, usernameInput).then((usersData) => {
+                if (this._isMounted) {
+                    this.props.setDataLoadingStatus(false);
+                    this.setState({ data: usersData });
+                }
+            })
+        }
     }
 
     render() {
