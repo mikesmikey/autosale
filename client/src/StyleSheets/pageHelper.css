@@ -71,3 +71,9 @@
 .is-pulled-right {
     float: right !important;
 }
+
+/*===============[userversal element helper]===================*/
+
+.is-hiding {
+    display: none !important;
+}

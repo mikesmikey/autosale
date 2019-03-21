@@ -4,7 +4,6 @@ import ClientService from '../Utilities/ClientService';
 //Components
 import Modal from '../Utilities/Modal';
 import '../../StyleSheets/userManage.css'
-import userImage from '../../Resources/imgs/default-user-image.png';
 import ManageUserPopUp from './ManageUserPopup';
 import UserTable from './UserTable';
 
@@ -20,7 +19,7 @@ class UserManage extends Component {
             selectedUser: false,
             searchInput: "",
             facultys: [],
-            isDataLoading : false
+            isDataLoading: false
         }
 
         this.handleSelectType = this.handleSelectType.bind(this);
@@ -63,7 +62,7 @@ class UserManage extends Component {
 
     setDataLoadingStatus(status) {
         this.setState({
-            isDataLoading : status
+            isDataLoading: status
         })
     }
 
@@ -74,10 +73,10 @@ class UserManage extends Component {
     loadFacultyData() {
         if (!this.state.isDataLoading) {
             this.setDataLoadingStatus(true);
-            ServiceObj.getAllFaculty().then((data)=> {
+            ServiceObj.getAllFaculty().then((data) => {
                 this.setDataLoadingStatus(false);
                 this.setState({
-                    facultys : data,
+                    facultys: data,
                 })
             })
         }
@@ -117,54 +116,15 @@ class UserManage extends Component {
                         <div>
                             <span className="user-tab-is-15"></span>
                         </div>
-                        <div className="table-div columns is-stay-top">
-                            <div className="column is-6 user-column-table">
-                                <UserTable
-                                    ref={instance => { this.userTable = instance }}
-                                    showManageModal={() => { this.managePopup.showManageModal("view") }}
-                                    selectedType={this.state.selectedType}
-                                    setSelectedUser={this.setSelectedUser}
-                                    facultys={this.state.facultys}
-                                    isDataLoading={this.state.isDataLoading}
-                                    setDataLoadingStatus={(status)=> {this.setDataLoadingStatus(status)}}
-                                />
-                            </div>
-                            <div className="column">
-                                <div className="border-user-1">
-                                    <div className="user-column-image">
-                                        <img className="user-image" src={userImage} height="200" width="170" />
-                                    </div>
-                                    <div className="user-column-detail">
-                                        {this.state.selectedUser && this.state.facultys.length !== 0 ?
-                                            <span>
-                                                <label className="label">รหัสประจำตัว : </label> <p id="userId" className="p-inline">{this.state.selectedUser.username}</p> <br />
-                                                <label className="label">ชื่อ : </label> <p id="userName" className="p-inline">{`${this.state.selectedUser.firstName} ${this.state.selectedUser.lastName}`}</p> <br />
-                                                {
-                                                    this.state.selectedUser.typeOfUser !== "staff" ?
-                                                        <span>
-                                                            <label className="label">คณะ : </label> <p id="userFaculty" className="p-inline">{this.state.facultys[this.state.selectedUser.facultyId].faculty_name}</p> <br />
-                                                            <label className="label">สาขา : </label> <p id="userBranch" className="p-inline">{this.state.facultys[this.state.selectedUser.facultyId].branches[this.state.selectedUser.branchId]}</p> <br />
-                                                        </span>
-                                                        :
-                                                        null
-                                                }
-                                                {this.state.selectedUser.typeOfUser === "student" ? <label className="label">ชั้นปี :  <p id="userBranch" className="p-inline">{this.state.selectedUser.year}</p> </label> : null}
-                                                {this.state.selectedUser.typeOfUser === "staff" ? <label className="label">ตำแหน่ง :  <p id="userBranch" className="p-inline">{this.state.selectedUser.standing}</p> </label> : null}
-                                            </span>
-                                            :
-                                            <span>
-                                                <label className="label">รหัสประจำตัว : -</label> <br />
-                                                <label className="label">ชื่อ : -</label><br />
-                                                <label className="label">คณะ : -</label><br />
-                                                <label className="label">สาขา : -</label><br />
-                                                <label className="label">ชั้นปี : -</label><br />
-                                            </span>
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
+                        <UserTable
+                            ref={instance => { this.userTable = instance }}
+                            showManageModal={() => { this.managePopup.showManageModal("view") }}
+                            selectedType={this.state.selectedType}
+                            setSelectedUser={this.setSelectedUser}
+                            facultys={this.state.facultys}
+                            isDataLoading={this.state.isDataLoading}
+                            setDataLoadingStatus={this.setDataLoadingStatus}
+                        />
                     </div>
                 </div>
                 <Modal ref={instance => { this.manageUserModal = instance }} content={
@@ -176,14 +136,14 @@ class UserManage extends Component {
                         showModal={() => {
                             this.manageUserModal.showModal()
                         }}
-                        deleteSelectedItem={()=> {this.userTable.deleteSelectedItem()}}
-                        editSelectedItem={(data)=> {this.userTable.editSelectedItem(data)}}
-                        addItem={(data)=> {this.userTable.addItem(data)}}
+                        deleteSelectedItem={() => { this.userTable.deleteSelectedItem() }}
+                        editSelectedItem={(data) => { this.userTable.editSelectedItem(data) }}
+                        addItem={(data) => { this.userTable.addItem(data) }}
                         selectedType={this.state.selectedType}
                         selectedUser={this.state.selectedUser}
                         facultys={this.state.facultys}
                         isDataLoading={this.state.isDataLoading}
-                        setDataLoadingStatus={(status)=> {this.setDataLoadingStatus(status)}}
+                        setDataLoadingStatus={(status) => { this.setDataLoadingStatus(status) }}
                     />
                 }
                 />

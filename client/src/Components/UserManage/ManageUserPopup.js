@@ -55,8 +55,13 @@ class ManageUserPopUp extends Component {
             yearIndex: this.props.selectedUser.year,
             facultyIndex: this.props.selectedUser.facultyId,
             branchIndex: this.props.selectedUser.branchId,
-            standingInput: this.props.selectedUser.standing
-        })
+        });
+
+        if (this.props.selectedUser.standing) {
+            this.setState({
+                standingInput : this.props.selectedUser.standing
+            });
+        }
     }
 
     changeStatus(status) {
@@ -251,98 +256,79 @@ class ManageUserPopUp extends Component {
                         </div>
                     </div>
 
-                    {this.props.selectedType === "student" || this.props.selectedType === "professor" ?
-                        <div className="columns input-div">
-                            <div className="column is-2">
-                                <label className="label">คณะ</label>
-                            </div>
-                            <div className="column">
-                                <select
-                                    className="user-mange-select-box-popUp is-full-width"
-                                    type="text"
-                                    id="popAddUserFaculty"
-                                    name="facultyIndex"
-                                    onChange={this.handleInputChange}
-                                    value={this.state.facultyIndex}
-                                >
-
-                                    {this.renderFacultyComponent()}
-                                </select>
-                            </div>
+                    <div className={`columns input-div ${this.props.selectedType === "student" || this.props.selectedType === "professor" ? "" : "is-hiding"}`}>
+                        <div className="column is-2">
+                            <label className="label">คณะ</label>
                         </div>
-                        :
-                        null
-                    }
-                    {this.props.selectedType === "student" || this.props.selectedType === "professor" ?
-                        <div className="columns input-div">
-                            <div className="column is-2">
-                                <label className="label">สาขา</label>
-                            </div>
-                            <div className="column">
-                                <select
-                                    className="user-mange-select-box-popUp is-full-width"
-                                    type="text"
-                                    id="popAddUserBranch"
-                                    name="branchIndex"
-                                    onChange={this.handleInputChange}
-                                    value={this.state.branchIndex}
-                                >
-                                    {this.renderFacultyBranchComponent()}
-                                </select>
-                            </div>
+                        <div className="column">
+                            <select
+                                className="user-mange-select-box-popUp is-full-width"
+                                type="text"
+                                id="popAddUserFaculty"
+                                name="facultyIndex"
+                                onChange={this.handleInputChange}
+                                value={this.state.facultyIndex}
+                            >
+                                {this.renderFacultyComponent()}
+                            </select>
                         </div>
-                        :
-                        null
-                    }
+                    </div>
 
-                    {this.props.selectedType === "student" ?
-                        <div className="columns input-div">
-                            <div className="column is-2">
-                                <label className="label">ชั้นปี</label>
-                            </div>
-                            <div className="column">
-                                <select
-                                    className="user-mange-select-box-popUp is-full-width"
-                                    id="popAddYear"
-                                    name="yearIndex"
-                                    onChange={this.handleInputChange}
-                                    value={this.state.yearIndex}
-                                >
-                                    <option value="0"></option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                    <option value="6">6</option>
-                                </select>
-                            </div>
+                    <div className={`columns input-div ${this.props.selectedType === "student" || this.props.selectedType === "professor" ? "" : "is-hiding"}`}>
+                        <div className="column is-2">
+                            <label className="label">สาขา</label>
                         </div>
-
-                        :
-                        null
-                    }
-
-                    {this.props.selectedType === "staff" ?
-
-                        <div className="columns input-div">
-                            <div className="column is-2">
-                                <label className="label">ตำแหน่ง</label>
-                            </div>
-                            <div className="column">
-                                <input
-                                    className="input is-full-width"
-                                    type="text"
-                                    id="popAddPosition"
-                                    name="standingInput"
-                                    value={this.state.standingInput}
-                                    onChange={this.handleInputChange}
-                                />
-                            </div>
+                        <div className="column">
+                            <select
+                                className="user-mange-select-box-popUp is-full-width"
+                                type="text"
+                                id="popAddUserBranch"
+                                name="branchIndex"
+                                onChange={this.handleInputChange}
+                                value={this.state.branchIndex}
+                            >
+                                {this.renderFacultyBranchComponent()}
+                            </select>
                         </div>
-                        :
-                        null
-                    }
+                    </div>
+
+                    <div className={`columns input-div ${this.props.selectedType === "student" ? "" : "is-hiding"}`}>
+                        <div className="column is-2">
+                            <label className="label">ชั้นปี</label>
+                        </div>
+                        <div className="column">
+                            <select
+                                className="user-mange-select-box-popUp is-full-width"
+                                id="popAddYear"
+                                name="yearIndex"
+                                onChange={this.handleInputChange}
+                                value={this.state.yearIndex}
+                            >
+                                <option value="0"></option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div className={`columns input-div ${this.props.selectedType === "staff" ? "" : "is-hiding"}`}>
+                        <div className="column is-2">
+                            <label className="label">ตำแหน่ง</label>
+                        </div>
+                        <div className="column">
+                            <input
+                                className="input is-full-width"
+                                type="text"
+                                id="popAddPosition"
+                                name="standingInput"
+                                value={this.state.standingInput}
+                                onChange={this.handleInputChange}
+                            />
+                        </div>
+                    </div>
 
                     <div className={`columns ${this.props.isDataLoading ? "disabled" : ""}`} style={{ marginTop: "20px" }}>
                         {this.state.popupStatus === "view" ?

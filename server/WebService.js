@@ -1,5 +1,4 @@
 const WebDAO = require('./WebDAO');
-const User = require('./User');
 
 class WebService {
 
@@ -49,7 +48,7 @@ class WebService {
                     userData.standing = "แม่บ้าน";
                 }
 
-                DAO.insertUser(new User(userData)).then((result) => { if (!result) return resolve(false) });
+                DAO.insertUser(userData).then((result) => { if (!result) return resolve(false) });
             }
 
             return resolve(true);
