@@ -59,7 +59,7 @@ class UserTable extends Component {
         var arr = this.state.data;
         arr.splice(index, 1);
         this.setState({
-            data : arr
+            data: arr
         })
     }
 
@@ -67,7 +67,7 @@ class UserTable extends Component {
         var arr = this.state.data;
         arr[this.state.selectedRow.getAttribute("index")] = newData;
         this.setState({
-            data : arr
+            data: arr
         })
     }
 
@@ -75,7 +75,7 @@ class UserTable extends Component {
         var arr = this.state.data;
         arr[arr.length] = newData;
         this.setState({
-            data : arr
+            data: arr
         })
     }
 
@@ -96,20 +96,26 @@ class UserTable extends Component {
     }
 
     loadDataBySelectType(type) {
-        this.setState({
-            data: []
-        })
-        ServiceObj.getAllUserBySelectType(type).then((usersData) => {
-            this.setState({ data: usersData });
-        });
+        if (!this.props.isDataLoading) {
+            this.props.setDataLoadingStatus(true);
+            this.setState({
+                data: []
+            })
+            ServiceObj.getAllUserBySelectType(type).then((usersData) => {
+                this.props.setDataLoadingStatus(false);
+                this.setState({ data: usersData });
+            });
+        }
     }
 
     loadDataByTypeAndUsername(typeInput, usernameInput) {
+        this.props.setDataLoadingStatus(true);
         this.setState({
             data: []
         })
 
-        ServiceObj.searchAllUserByTypeAndUsername(typeInput, usernameInput).then((usersData)=> {
+        ServiceObj.searchAllUserByTypeAndUsername(typeInput, usernameInput).then((usersData) => {
+            this.props.setDataLoadingStatus(false);
             this.setState({ data: usersData });
         })
     }
@@ -144,9 +150,9 @@ class UserTableItem extends Component {
             >
                 <td id="tableUserId">{this.props.itemData.username}</td>
                 <td>{`${this.props.itemData.firstName} ${this.props.itemData.lastName}`}</td>
-                {this.props.facultys.length !== 0 ?    
+                {this.props.facultys.length !== 0 ?
                     this.props.itemData.typeOfUser !== "staff" ? <td>{this.props.facultys[this.props.itemData.facultyId].faculty_name}</td> : null
-                :
+                    :
                     null
                 }
                 {this.props.itemData.typeOfUser === "student" ? <td>{this.props.itemData.year}</td> : null}
