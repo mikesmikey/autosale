@@ -11,6 +11,8 @@ const ServiceObj = new ClientService();
 
 class UserManage extends Component {
 
+    _isMounted = false;
+
     constructor(props) {
         super(props);
 
@@ -21,6 +23,8 @@ class UserManage extends Component {
             facultys: [],
             isDataLoading: false
         }
+
+        this._isMounted = true;
 
         this.handleSelectType = this.handleSelectType.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -42,6 +46,10 @@ class UserManage extends Component {
     componentDidMount() {
         this.userTable.loadDataByTypeAndUsername(this.state.selectedType, this.state.searchInput);
         this.loadFacultyData();
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 
     handleInputChange(e) {
@@ -74,10 +82,12 @@ class UserManage extends Component {
         if (!this.state.isDataLoading) {
             this.setDataLoadingStatus(true);
             ServiceObj.getAllFaculty().then((data) => {
-                this.setDataLoadingStatus(false);
-                this.setState({
-                    facultys: data,
-                })
+                if (this._isMounted) {
+                    this.setDataLoadingStatus(false);
+                    this.setState({
+                        facultys: data,
+                    })
+                }
             })
         }
     }
@@ -143,7 +153,7 @@ class UserManage extends Component {
                         selectedUser={this.state.selectedUser}
                         facultys={this.state.facultys}
                         isDataLoading={this.state.isDataLoading}
-                        setDataLoadingStatus={(status) => { this.setDataLoadingStatus(status) }}
+                        setDataLoadingStatus={this.setDataLoadingStatus}
                     />
                 }
                 />
