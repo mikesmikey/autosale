@@ -12,6 +12,7 @@ import Home from '../Home/Home';
 import ExamSchedule from '../ExamSchedule/ExamSchedule';
 import ExamCreateScreen from '../ExamCreateSceen/ExamCreateScreen';
 import ManageUser from '../UserManage/UserManage';
+import ExamScoreSceen from "../ExamScoreSceen/ExamScoreSceen";
 
 import '../../StyleSheets/mainScreen.css';
 import '../../StyleSheets/pageHelper.css';
@@ -35,10 +36,13 @@ class MainScreen extends Component {
                         <ExamSchedule />
                     } />
                     <Route path="/exam_create" render={(props) =>
-                        <ExamCreateScreen />
+                       <ExamCreateScreen />
                     } />
                     <Route path="/user_manage" render={(props) =>
                         <UserManage />
+                    } />
+                    <Route path="/exam_score" render={(props) =>
+                        <ExamScoreSceen />
                     } />
                 </div>
             </div>

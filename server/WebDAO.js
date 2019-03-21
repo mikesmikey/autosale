@@ -117,6 +117,25 @@ class WebDAO {
             });
         });
     }
+
+    
+/*===========[Score DAO]===================*/
+getScoreByUsername(username) {
+    return new Promise((resolve, reject) => {
+        mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+            const db = client.db(dbName)
+            db.collection('User').findOne({ "username": username }, { "_id": 0, "password": 0 }, (err, data) => {
+                if (err) { throw err }
+                return resolve(data);
+            });
+        });
+    });
 }
+
+
+}
+
+
+
 
 module.exports = WebDAO;

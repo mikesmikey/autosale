@@ -1,0 +1,62 @@
+.exam-score-select-box{
+    width: 150px;
+    height: 32px;
+    padding: 5px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    font-size: 16px;
+}
+.input-with-text {
+    display: inline-block;
+    margin: 3px 5px;
+}
+.score-tab-is-15 { 
+    display:inline-block; 
+    margin-left: 1px; 
+}
+.user-column-table {
+    margin-right: 20px;
+   
+}
+.score-table,.score-table  td,.score-table  th {
+    border: none;
+}
+  
+.score-table {
+    border-collapse: collapse;
+    border-radius: 3px;
+    width: 100%;
+}
+  
+.score-table th{
+    height: 50px;
+}
+
+.score-table td:not(:first-child) {
+    border-left: 3px solid white;
+}
+
+.score-table td {
+    padding: 5px;
+}
+
+.score-table tr:not(.is-header) {
+    height: 30px;
+    background-color: #f2f2f2;
+}
+
+.score-table tr:not(.is-header):hover{ 
+    background: #c7afdd; 
+    color: white;
+}
+
+.score-table thead{ 
+    background: #906cb2 !important; 
+    color: white;
+}
+.score-exam {
+    width: 80%;
+}
+.score-exam-box {
+    min-height: 80vh;
+}

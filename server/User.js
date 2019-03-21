@@ -14,6 +14,7 @@ class User {
 
         if (this.typeOfUser === "student") {
             this.year = form.year;
+            this.isScore = form.isScore ;
         }
 
         if (this.typeOfUser === "staff") {
