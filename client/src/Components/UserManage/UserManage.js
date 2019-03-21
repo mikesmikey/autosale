@@ -126,7 +126,7 @@ class UserManage extends Component {
                                     setSelectedUser={this.setSelectedUser}
                                     facultys={this.state.facultys}
                                     isDataLoading={this.state.isDataLoading}
-                                    setDataLoadingStatus={(status)=> {this.setDataLoadingStatus(status)}}
+                                    setDataLoadingStatus={this.setDataLoadingStatus}
                                 />
                             </div>
                             <div className="column">
