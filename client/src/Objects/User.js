@@ -7,7 +7,7 @@ class User {
         this.typeOfUser = form.typeOfUser;
         this.isExaminer = form.isExaminer;
 
-        if (this.typeOfUser === "student" || this.typeOfUser === "professor") {
+        /*if (this.typeOfUser === "student" || this.typeOfUser === "professor") {
             this.facultyId = form.facultyId;
             this.branchId = form.branchId;
         }
@@ -19,7 +19,7 @@ class User {
 
         if (this.typeOfUser === "staff") {
             this.standing = form.standing;
-        }
+        }*/
     }
 
     getUserObjectData() {
@@ -31,4 +31,4 @@ class User {
     }
 }
 
-module.exports = User;
+export default User;

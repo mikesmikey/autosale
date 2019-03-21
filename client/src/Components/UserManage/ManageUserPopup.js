@@ -55,8 +55,13 @@ class ManageUserPopUp extends Component {
             yearIndex: this.props.selectedUser.year,
             facultyIndex: this.props.selectedUser.facultyId,
             branchIndex: this.props.selectedUser.branchId,
-            standingInput: this.props.selectedUser.standing
-        })
+        });
+
+        if (this.props.selectedUser.standing) {
+            this.setState({
+                standingInput : this.props.selectedUser.standing
+            });
+        }
     }
 
     changeStatus(status) {

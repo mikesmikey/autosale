@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import ClientService from '../Utilities/ClientService';
 
+//Objects
+import Student from '../../Objects/Student';
+import Professor from '../../Objects/Professor';
+import Staff from '../../Objects/Staff';
+
 const ServiceObj = new ClientService();
 
 class UserTable extends Component {
@@ -79,6 +84,16 @@ class UserTable extends Component {
         })
     }
 
+    decideUserObject(data)  {
+        if (data.typeOfUser === "student") {
+            return new Student(data);
+        } else if (data.typeOfUser === "professor") {
+            return new Professor(data);
+        } else if (data.typeOfUser === "staff") {
+            return new Staff(data);
+        }
+    }
+
     loadDataIntoTable() {
         var returnData = [];
         for (var i = 0; i < this.state.data.length; i++) {
@@ -88,7 +103,7 @@ class UserTable extends Component {
                 inspectItem={(e) => { this.inspectItem(e) }}
                 selectedType={this.props.selectedType}
                 itemIndex={i}
-                itemData={this.state.data[i]}
+                itemData={this.decideUserObject(this.state.data[i])}
                 facultys={this.props.facultys}
             />
         }

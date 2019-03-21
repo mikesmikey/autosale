@@ -10,7 +10,6 @@ app.use(bodyParser.json());
 
 const WebDAO = require('./WebDAO');
 const WebService = require('./WebService');
-const User = require('./User');
 
 const WebDAOObj = new WebDAO();
 const WebServiceObj = new WebService();
@@ -49,8 +48,7 @@ app.get('/users/:type/:username', (req, res) => {
 })
 
 app.post('/user', (req, res) => {
-    //console.log(req.body.registerForm)
-    WebDAOObj.insertUser(new User(req.body.registerForm)).then((pass)=> {
+    WebDAOObj.insertUser(req.body.registerForm).then((pass)=> {
         res.send(pass);
     })
 });
@@ -81,14 +79,13 @@ app.post('/user/remove/:username', (req, res) => {
 })
 
 app.post('/user/add', (req, res) => {
-    console.log(req.body.userData)
-    WebDAOObj.insertUser(new User(req.body.userData)).then((pass)=> {
+    WebDAOObj.insertUser(req.body.userData).then((pass)=> {
         res.send(pass);
     })
 })
 
 app.post('/user/edit', (req, res) => {
-    WebDAOObj.editUser(new User(req.body.userData)).then((pass)=> {
+    WebDAOObj.editUser(req.body.userData).then((pass)=> {
         res.send(pass);
     })
 })
