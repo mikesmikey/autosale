@@ -19,13 +19,15 @@ class UserManage extends Component {
             selectedType: "student",
             selectedUser: false,
             searchInput: "",
-            facultys: []
+            facultys: [],
+            isDataLoading : false
         }
 
         this.handleSelectType = this.handleSelectType.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSearchButton = this.handleSearchButton.bind(this);
         this.setSelectedUser = this.setSelectedUser.bind(this);
+        this.setDataLoadingStatus = this.setDataLoadingStatus.bind(this);
     }
 
     handleSelectType(e) {
@@ -59,16 +61,26 @@ class UserManage extends Component {
         })
     }
 
+    setDataLoadingStatus(status) {
+        this.setState({
+            isDataLoading : status
+        })
+    }
+
     handleSearchButton() {
         this.userTable.loadDataByTypeAndUsername(this.state.selectedType, this.state.searchInput);
     }
 
     loadFacultyData() {
-        ServiceObj.getAllFaculty().then((data)=> {
-            this.setState({
-                facultys : data
+        if (!this.state.isDataLoading) {
+            this.setDataLoadingStatus(true);
+            ServiceObj.getAllFaculty().then((data)=> {
+                this.setDataLoadingStatus(false);
+                this.setState({
+                    facultys : data,
+                })
             })
-        })
+        }
     }
 
     render() {
@@ -79,7 +91,7 @@ class UserManage extends Component {
                         จัดการผู้ใช้
                     </div>
                     <div className="box-content">
-                        <div className="columns">
+                        <div className={`columns ${this.state.isDataLoading ? "disabled" : ""}`}>
                             <div className="column is-6">
                                 <div className="input-with-text">
                                     <label className="label">ผู้ใช้ : </label>
@@ -113,6 +125,8 @@ class UserManage extends Component {
                                     selectedType={this.state.selectedType}
                                     setSelectedUser={this.setSelectedUser}
                                     facultys={this.state.facultys}
+                                    isDataLoading={this.state.isDataLoading}
+                                    setDataLoadingStatus={(status)=> {this.setDataLoadingStatus(status)}}
                                 />
                             </div>
                             <div className="column">
@@ -168,6 +182,8 @@ class UserManage extends Component {
                         selectedType={this.state.selectedType}
                         selectedUser={this.state.selectedUser}
                         facultys={this.state.facultys}
+                        isDataLoading={this.state.isDataLoading}
+                        setDataLoadingStatus={(status)=> {this.setDataLoadingStatus(status)}}
                     />
                 }
                 />

@@ -126,6 +126,7 @@ class ManageUserPopUp extends Component {
     }
 
     deleteButtonHandle() {
+        this.props.setDataLoadingStatus(true);
         CServiceObj.deleteUser(this.props.selectedUser.username).then((result) => {
             if (result) {
                 this.props.deleteSelectedItem();
@@ -133,6 +134,7 @@ class ManageUserPopUp extends Component {
             } else {
                 alert("ลบไม่สำเร็จ!")
             }
+            this.props.setDataLoadingStatus(false);
         })
     }
 
@@ -152,6 +154,8 @@ class ManageUserPopUp extends Component {
             newData.standing = this.state.standingInput;
         }
 
+        this.props.setDataLoadingStatus(true);
+
         CServiceObj.editUser(newData).then((result) => {
             if (result) {
                 this.props.editSelectedItem(newData);
@@ -159,6 +163,7 @@ class ManageUserPopUp extends Component {
             } else {
                 alert("แก้ไขไม่สำเร็จ!")
             }
+            this.props.setDataLoadingStatus(false);
         })
     }
 
@@ -180,6 +185,8 @@ class ManageUserPopUp extends Component {
             newData.standing = this.state.standingInput;
         }
 
+        this.props.setDataLoadingStatus(true);
+
         CServiceObj.addUser(newData).then((result) => {
             if (result) {
                 this.props.addItem(newData);
@@ -187,6 +194,7 @@ class ManageUserPopUp extends Component {
             } else {
                 alert("เพิ่มไม่สำเร็จ!")
             }
+            this.props.setDataLoadingStatus(false);
         })
     }
 
@@ -336,7 +344,7 @@ class ManageUserPopUp extends Component {
                         null
                     }
 
-                    <div className="columns" style={{ marginTop: "20px" }}>
+                    <div className={`columns ${this.props.isDataLoading ? "disabled" : ""}`} style={{ marginTop: "20px" }}>
                         {this.state.popupStatus === "view" ?
                             <div className="column is-7" style={{ textAlign: "center" }}>
                                 <button className="button is-oros is-round" onClick={() => { this.deleteButtonHandle() }}>ลบข้อมูล</button>
