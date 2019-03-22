@@ -75,6 +75,12 @@ class MainScrenMenuBar extends Component {
               จัดการผู้ใช้
             </NavLink>
           </li>
+          <li>
+            <NavLink to="/exam_score" activeClassName="is-active is-black-violet" onClick={this.handleButtonPointer}>
+              <i className="menu-icon-awesome fas fa-users"></i>
+              ดูคะแนนสอบ
+            </NavLink>
+          </li>
           {/*
           <li>
             <NavLink to="/plate_license" activeClassName="is-active is-black-oros" onClick={this.handleButtonPointer}>
