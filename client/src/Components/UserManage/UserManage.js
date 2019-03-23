@@ -3,8 +3,9 @@ import ClientService from '../Utilities/ClientService';
 
 //Components
 import Modal from '../Utilities/Modal';
-import '../../StyleSheets/userManage.css'
+import '../../StyleSheets/userManage.css';
 import ManageUserPopUp from './ManageUserPopup';
+import StudentExcelPopUp from './StudentExcelPopup';
 import UserTable from './UserTable';
 
 const ServiceObj = new ClientService();
@@ -119,7 +120,7 @@ class UserManage extends Component {
                                 </div>
                             </div>
                             <div className="column">
-                                <button className="button is-yentafo is-round is-free-size is-pulled-right" onClick={() => { this.managePopup.showManageModal("insert") }}>นำเข้าผู้ใช้โดย Excel</button>
+                                <button className="button is-yentafo is-round is-free-size is-pulled-right" onClick={() => { this.studentExcelPopup.showInsertExcelModal("insertFile") }}>นำเข้าผู้ใช้โดย Excel</button>
                                 <button className="button is-oros is-round is-pulled-right" onClick={() => { this.managePopup.showManageModal("insert") }}>เพิ่มผู้ใช้</button>
                             </div>
                         </div>
@@ -154,6 +155,18 @@ class UserManage extends Component {
                         facultys={this.state.facultys}
                         isDataLoading={this.state.isDataLoading}
                         setDataLoadingStatus={this.setDataLoadingStatus}
+                    />
+                }
+                />
+                <Modal ref={instance => { this.studentExcelModal = instance }} content={
+                    <StudentExcelPopUp
+                        ref={instance => { this.studentExcelPopup = instance }}
+                        closeModal={() => {
+                            this.studentExcelModal.closeModal()
+                        }}
+                        showModal={() => {
+                            this.studentExcelModal.showModal()
+                        }}
                     />
                 }
                 />
