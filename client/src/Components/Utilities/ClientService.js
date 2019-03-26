@@ -57,6 +57,14 @@ class ClientService {
         })
     }
 
+    addManyUsers(userData) {
+        return new Promise((resolve, reject) => {
+            axios.post(`/user/addmany`, {"userData" : userData}).then((result) => {
+                resolve(result.data);
+            })
+        })
+    }
+
     editUser(newUserData) {
         return new Promise((resolve, reject) => {
             axios.post(`/user/edit`, {"userData" : newUserData}).then((result) => {

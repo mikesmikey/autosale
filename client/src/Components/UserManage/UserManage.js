@@ -120,7 +120,7 @@ class UserManage extends Component {
                                 </div>
                             </div>
                             <div className="column">
-                                <button className="button is-yentafo is-round is-free-size is-pulled-right" onClick={() => { this.studentExcelPopup.showInsertExcelModal("insertFile") }}>นำเข้าผู้ใช้โดย Excel</button>
+                                <button className="button is-yentafo is-round is-free-size is-pulled-right" onClick={() => { this.studentExcelPopup.showInsertExcelModal() }}>นำเข้าผู้ใช้โดย Excel</button>
                                 <button className="button is-oros is-round is-pulled-right" onClick={() => { this.managePopup.showManageModal("insert") }}>เพิ่มผู้ใช้</button>
                             </div>
                         </div>
