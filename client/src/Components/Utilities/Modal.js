@@ -24,13 +24,14 @@ class Modal extends Component {
     }
 
     closeModal() {
-
         document.querySelector("body").style.overflow = "auto";
 
         this.setState({
             status : false
         })
     }
+
+    
 
     render() {
         return (

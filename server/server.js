@@ -84,6 +84,12 @@ app.post('/user/add', (req, res) => {
     })
 })
 
+app.post('/user/addmany', (req, res) => {
+    WebDAOObj.insertManyUsers(req.body.userData).then((pass)=> {
+        res.send(pass);
+    })
+})
+
 app.post('/user/edit', (req, res) => {
     WebDAOObj.editUser(req.body.userData).then((pass)=> {
         res.send(pass);
@@ -109,3 +115,4 @@ app.get('/facultys', (req, res) => {
 app.listen(port, () => {
     console.log(`App listening on ${port}`);
 })
+
