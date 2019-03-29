@@ -1,10 +1,10 @@
-import User from './User';
+import User from './User'
 
 class Staff extends User {
-    constructor(form) {
-        super(form);
-        this.standing = form.standing;
-    }
+  constructor (form) {
+    super(form)
+    this.standing = form.standing
+  }
 }
 
-export default Staff;
+export default Staff

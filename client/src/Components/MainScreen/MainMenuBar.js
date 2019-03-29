@@ -1,52 +1,52 @@
-import React, { Component } from "react";
+/* eslint-disable no-unused-vars */
+import React, { Component } from 'react'
 import {
   NavLink
-} from 'react-router-dom';
+} from 'react-router-dom'
 
-import '../../StyleSheets/mainMenuBar.css';
+import '../../StyleSheets/mainMenuBar.css'
 
 class MainScrenMenuBar extends Component {
-
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
 
     this.state = {
       buttonPointer: null
     }
 
-    this.handleMenuDropDown = this.handleMenuDropDown.bind(this);
-    this.handleButtonPointer = this.handleButtonPointer.bind(this);
+    this.handleMenuDropDown = this.handleMenuDropDown.bind(this)
+    this.handleButtonPointer = this.handleButtonPointer.bind(this)
   }
 
-  dropDownSwitch(id) {
-    var element = document.getElementById(id);
+  dropDownSwitch (id) {
+    var element = document.getElementById(id)
 
-    if (element.classList.contains("dropdown-hide")) {
-      element.classList.remove("dropdown-hide")
-      element.classList.add("dropdown-active");
+    if (element.classList.contains('dropdown-hide')) {
+      element.classList.remove('dropdown-hide')
+      element.classList.add('dropdown-active')
     } else {
-      element.classList.remove("dropdown-active");
-      element.classList.add("dropdown-hide")
+      element.classList.remove('dropdown-active')
+      element.classList.add('dropdown-hide')
     }
   }
 
-  handleMenuDropDown(e) {
-    if (e.target.id === "car_manage_button" && this.state.buttonPointer !== "sub_car_manage") {
-      this.dropDownSwitch("car_manage_list");
-    } else if (e.target.id === "fix_manage_button" && this.state.buttonPointer !== "sub_fix_manage") {
-      this.dropDownSwitch("fix_manage_list");
-    } else if (e.target.id === "part_manage_button" && this.state.buttonPointer !== "sub_part_manage") {
-      this.dropDownSwitch("part_manage_list");
+  handleMenuDropDown (e) {
+    if (e.target.id === 'car_manage_button' && this.state.buttonPointer !== 'sub_car_manage') {
+      this.dropDownSwitch('car_manage_list')
+    } else if (e.target.id === 'fix_manage_button' && this.state.buttonPointer !== 'sub_fix_manage') {
+      this.dropDownSwitch('fix_manage_list')
+    } else if (e.target.id === 'part_manage_button' && this.state.buttonPointer !== 'sub_part_manage') {
+      this.dropDownSwitch('part_manage_list')
     }
   }
 
-  handleButtonPointer(e) {
+  handleButtonPointer (e) {
     this.setState({
       buttonPointer: e.target.type
     })
   }
 
-  render() {
+  render () {
     return (
       <aside className="menu main-menu">
         <div className="menu-space"></div>
@@ -157,8 +157,8 @@ class MainScrenMenuBar extends Component {
           */}
         </ul>
       </aside>
-    );
+    )
   }
 }
 
-export default MainScrenMenuBar;
+export default MainScrenMenuBar
