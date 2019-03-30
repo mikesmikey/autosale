@@ -1,5 +1,6 @@
+
 .exam-schedule {
-    width: 60%;
+    width: 60%
 }
 
 .exam-schedule-item {
@@ -123,4 +124,11 @@
 
 .exam-extend-detail .close-button:hover {
     color: #dbdbdb;
+}
+
+@media screen and (max-width: 800px) {
+
+    .exam-schedule {
+        width: 100%;
+    }
 }
