@@ -24,7 +24,8 @@
     "server": "nodemon server.js",
     "full": "concurrently \"npm run server\" \"npm run client\"",
     "i-client": "cd .. && cd client && npm i",
-    "i-dev-package": "npm i && npm run i-client && npm i nodemon -g && npm i concurrently -g && npm i eslint -g"
+    "i-global": "npm i nodemon concurrently eslint -g",
+    "i-dev-package": "npm i && npm run i-client && npm run i-global"
   },
   "keywords": [],
   "author": "",
