@@ -148,33 +148,35 @@ class UserTable extends Component {
 }
 
 class UserTableItem extends Component {
-  constructor (props) {
-    super(props)
-    this.renderItemByType = this.renderItemByType.bind(this)
-  }
 
-  renderItemByType () {
-    return (
-      <tr className="user-table-item"
-        onClick={(e) => { this.props.selectItem(e) }}
-        onDoubleClick={(e) => { this.props.inspectItem(e) }}
-        index={this.props.itemIndex}
-      >
-        <td id="tableUserId">{this.props.itemData.username}</td>
-        <td>{`${this.props.itemData.firstName} ${this.props.itemData.lastName}`}</td>
-        {this.props.facultys.length !== 0
-          ? this.props.itemData.typeOfUser !== 'staff' ? <td>{this.props.facultys[this.props.itemData.facultyId].faculty_name}</td> : null
-          : null
-        }
-        {this.props.itemData.typeOfUser === 'student' ? <td>{this.props.itemData.year}</td> : null}
-        {this.props.itemData.typeOfUser === 'staff' ? <td>{this.props.itemData.standing}</td> : null}
-      </tr>
-    )
-  }
+    constructor(props) {
+        super(props);
+        this.renderItemByType = this.renderItemByType.bind(this);
+    }
 
-  render () {
-    return (this.renderItemByType())
-  }
+    renderItemByType() {
+        return (
+            <tr className="user-table-item"
+                onClick={(e) => { this.props.selectItem(e) }}
+                onDoubleClick={(e) => { this.props.inspectItem(e) }}
+                index={this.props.itemIndex}
+            >
+                <td id="tableUserId">{this.props.itemData.username}</td>
+                <td>{`${this.props.itemData.firstName} ${this.props.itemData.lastName}`}</td>
+                {this.props.facultys.length !== 0 ?
+                    this.props.itemData.typeOfUser !== "staff" ? <td>{this.props.facultys[this.props.itemData.facultyId-1].facultyName}</td> : null
+                    :
+                    null
+                }
+                {this.props.itemData.typeOfUser === "student" ? <td>{this.props.itemData.year}</td> : null}
+                {this.props.itemData.typeOfUser === "staff" ? <td>{this.props.itemData.standing}</td> : null}
+            </tr>
+        );
+    }
+
+    render() {
+        return (this.renderItemByType());
+    }
 }
 
 export default UserTable

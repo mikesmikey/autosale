@@ -7,26 +7,27 @@ import Modal from '../Utilities/Modal'
 import '../../StyleSheets/examSchedule.css'
 
 class ExamSchedule extends Component {
-  createSampleData () {
-    var returnArr = []
-    for (var i = 0; i < 50; i++) {
-      returnArr[i] = <ExamScheduleItem key={i} showModal={() => { this.extendDetailModal.showModal() }} />
+
+    createSampleData() {
+        var returnArr = [];
+        for (var i = 0; i < 50; i++) {
+            //returnArr[i] = <ExamScheduleItem key={i} showModal={() => { this.extendDetailModal.showModal() }} />
+            //returnArr[i] = <div>asdasd</div>
+        }
+
+        return returnArr;
     }
 
-    return returnArr
-  }
-
-  render () {
-    return (
-      <div className="subcontent-main-div exam-schedule">
-        <Modal ref={instance => { this.extendDetailModal = instance }} content={<ExamExtendDetail closeModal={() => { this.extendDetailModal.closeModal() }} />} />
-        <div className="box is-round">
-          {this.createSampleData()}
-          <ExamScheduleItem showModal={() => { this.extendDetailModal.showModal() }} />
-        </div>
-      </div>
-    )
-  }
+    render() {
+        return (
+            <div className="subcontent-main-div exam-schedule">
+                <Modal ref={instance => { this.extendDetailModal = instance }} content={<ExamExtendDetail closeModal={() => { this.extendDetailModal.closeModal() }} />} />
+                <div className="box is-round">
+                    {this.createSampleData()}
+                </div>
+            </div>
+        );
+    }
 }
 
 class ExamScheduleItem extends Component {

@@ -78,3 +78,7 @@
 .menu-icon-awesome {
     margin-right: 1rem;
 }
+
+.main-menu.is-active {
+    display: block;
+}

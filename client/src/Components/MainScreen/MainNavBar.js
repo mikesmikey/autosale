@@ -56,11 +56,14 @@ class MainNavBar extends Component {
               <span className="navbar-user-text">{this.props.username}</span>
               <svg className="navbar-user-icon icon-down-arrow icon-size-6" ></svg>
             </div>
-            <div className={this.state.settingclick ? 'dropdown-items is-active' : 'dropdown-items user'}>
+            <div className={this.state.settingclick ? "dropdown-items is-active" : "dropdown-items user"}>
               <Link to='/about'>เกี่ยวกับ</Link>
               <a onClick={this.props.mockLogout}>ออกจากระบบ</a>
               <a className="is-detail">เวอร์ชั่น 0.0.2</a>
             </div>
+          </button>
+          <button className="navbar-item hamburger" onClick={this.props.handleHamburger}>
+            <i className="fas fa-bars"></i>
           </button>
         </nav>
       </div>

@@ -6,23 +6,24 @@ import ClientService from '../Utilities/ClientService'
 const CServiceObj = new ClientService()
 
 class ManageUserPopUp extends Component {
-  constructor (props) {
-    super(props)
 
-    this.state = {
-      popupStatus: 'view',
-      fnameInput: '',
-      snameInput: '',
-      usernameInput: '',
-      yearIndex: 0,
-      facultyIndex: 0,
-      branchIndex: 0,
-      standingInput: ''
-    }
+    constructor(props) {
+        super(props);
 
-    this.changeStatus = this.changeStatus.bind(this)
-    this.handleInputChange = this.handleInputChange.bind(this)
-    this.loadUserInput = this.loadUserInput.bind(this)
+        this.state = {
+            popupStatus: "view",
+            fnameInput: "",
+            snameInput: "",
+            usernameInput: "",
+            yearIndex: 0,
+            facultyIndex: 1,
+            branchIndex: 1,
+            standingInput: ""
+        }
+
+        this.changeStatus = this.changeStatus.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.loadUserInput = this.loadUserInput.bind(this);
   }
 
   handleInputChange (e) {
@@ -32,18 +33,6 @@ class ManageUserPopUp extends Component {
 
     this.setState({
       [name]: value
-    })
-  }
-
-  clearInput () {
-    this.setState({
-      fnameInput: '',
-      snameInput: '',
-      usernameInput: '',
-      yearIndex: 0,
-      facultyIndex: 0,
-      branchIndex: 0,
-      standingInput: ''
     })
   }
 
@@ -62,6 +51,18 @@ class ManageUserPopUp extends Component {
         standingInput: this.props.selectedUser.standing
       })
     }
+  }
+
+    clearInput() {
+        this.setState({
+            fnameInput: "",
+            snameInput: "",
+            usernameInput: "",
+            yearIndex: 0,
+            facultyIndex: 1,
+            branchIndex: 1,
+            standingInput: ""
+    })
   }
 
   changeStatus (status) {
@@ -113,21 +114,21 @@ class ManageUserPopUp extends Component {
     return compareStatusTable[this.state.popupStatus]
   }
 
-  renderFacultyComponent () {
+  renderFacultyComponent() {
     return this.props.facultys.map((item) => {
-      return <option key={item.faculty_id} value={item.faculty_id}>{item.faculty_name}</option>
-    })
-  }
+        return <option key={item.facultyId} value={item.facultyId}>{item.facultyName}</option>
+    });
+}
 
-  renderFacultyBranchComponent () {
-    const faculty = this.props.facultys[this.state.facultyIndex]
-    if (!faculty) return null
-    var returnArr = []
+renderFacultyBranchComponent() {
+    const faculty = this.props.facultys[this.state.facultyIndex === 0 ? this.state.facultyIndex : this.state.facultyIndex - 1];
+    if (!faculty) return null;
+    var returnArr = [];
     for (var i = 0; i < faculty.branches.length; i++) {
-      returnArr[i] = <option key={i} value={i}>{faculty.branches[i]}</option>
+        returnArr[i] = <option key={faculty.branches[i].branchId} value={faculty.branches[i].branchId}>{faculty.branches[i].branchName}</option>;
     }
-    return returnArr
-  }
+    return returnArr;
+}
 
   deleteButtonHandle () {
     this.props.setDataLoadingStatus(true)
