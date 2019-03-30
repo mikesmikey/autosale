@@ -1,4 +1,7 @@
 import axios from 'axios'
+import Student from '../../Objects/Student'
+import Professor from '../../Objects/Professor'
+import Staff from '../../Objects/Staff'
 
 class ClientService {
   loginUsernameCheck (username) {
@@ -13,6 +16,16 @@ class ClientService {
       return false
     }
     return true
+  }
+
+  userObjFormCheck (userObj) {
+    return userObj.validMethod()
+  }
+
+  createUserObjectByType (userData) {
+    if (userData.typeOfUser === 'student') return new Student(userData)
+    if (userData.typeOfUser === 'professor') return new Professor(userData)
+    if (userData.typeOfUser === 'staff') return new Staff(userData)
   }
 
   getAllUserBySelectType (type) {

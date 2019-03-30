@@ -6,24 +6,23 @@ import ClientService from '../Utilities/ClientService'
 const CServiceObj = new ClientService()
 
 class ManageUserPopUp extends Component {
+  constructor (props) {
+    super(props)
 
-    constructor(props) {
-        super(props);
+    this.state = {
+      popupStatus: 'view',
+      fnameInput: '',
+      snameInput: '',
+      usernameInput: '',
+      yearIndex: 0,
+      facultyIndex: 1,
+      branchIndex: 1,
+      standingInput: ''
+    }
 
-        this.state = {
-            popupStatus: "view",
-            fnameInput: "",
-            snameInput: "",
-            usernameInput: "",
-            yearIndex: 0,
-            facultyIndex: 1,
-            branchIndex: 1,
-            standingInput: ""
-        }
-
-        this.changeStatus = this.changeStatus.bind(this);
-        this.handleInputChange = this.handleInputChange.bind(this);
-        this.loadUserInput = this.loadUserInput.bind(this);
+    this.changeStatus = this.changeStatus.bind(this)
+    this.handleInputChange = this.handleInputChange.bind(this)
+    this.loadUserInput = this.loadUserInput.bind(this)
   }
 
   handleInputChange (e) {
@@ -53,15 +52,15 @@ class ManageUserPopUp extends Component {
     }
   }
 
-    clearInput() {
-        this.setState({
-            fnameInput: "",
-            snameInput: "",
-            usernameInput: "",
-            yearIndex: 0,
-            facultyIndex: 1,
-            branchIndex: 1,
-            standingInput: ""
+  clearInput () {
+    this.setState({
+      fnameInput: '',
+      snameInput: '',
+      usernameInput: '',
+      yearIndex: 0,
+      facultyIndex: 1,
+      branchIndex: 1,
+      standingInput: ''
     })
   }
 
@@ -114,21 +113,21 @@ class ManageUserPopUp extends Component {
     return compareStatusTable[this.state.popupStatus]
   }
 
-  renderFacultyComponent() {
+  renderFacultyComponent () {
     return this.props.facultys.map((item) => {
-        return <option key={item.facultyId} value={item.facultyId}>{item.facultyName}</option>
-    });
-}
+      return <option key={item.facultyId} value={item.facultyId}>{item.facultyName}</option>
+    })
+  }
 
-renderFacultyBranchComponent() {
-    const faculty = this.props.facultys[this.state.facultyIndex === 0 ? this.state.facultyIndex : this.state.facultyIndex - 1];
-    if (!faculty) return null;
-    var returnArr = [];
+  renderFacultyBranchComponent () {
+    const faculty = this.props.facultys[this.state.facultyIndex === 0 ? this.state.facultyIndex : this.state.facultyIndex - 1]
+    if (!faculty) return null
+    var returnArr = []
     for (var i = 0; i < faculty.branches.length; i++) {
-        returnArr[i] = <option key={faculty.branches[i].branchId} value={faculty.branches[i].branchId}>{faculty.branches[i].branchName}</option>;
+      returnArr[i] = <option key={faculty.branches[i].branchId} value={faculty.branches[i].branchId}>{faculty.branches[i].branchName}</option>
     }
-    return returnArr;
-}
+    return returnArr
+  }
 
   deleteButtonHandle () {
     this.props.setDataLoadingStatus(true)
@@ -143,27 +142,38 @@ renderFacultyBranchComponent() {
     })
   }
 
-  editButtonHandle () {
-    var newData = this.props.selectedUser
+  currentFormObject (mode) {
+    var newData = mode === 'edit' ? this.props.selectedUser : mode === 'add' ? {} : undefined
     newData.firstName = this.state.fnameInput
     newData.lastName = this.state.snameInput
+    newData.username = this.state.usernameInput
+    newData.typeOfUser = this.props.selectedType
 
-    if (newData.typeOfUser === 'student' || newData.typeOfUser === 'professor') {
+    if (newData.typeOfUser === 'student') {
       newData.facultyId = this.state.facultyIndex
       newData.branchId = this.state.branchIndex
+      newData.year = Number.parseInt(this.state.yearIndex)
     }
-    if (newData.typeOfUser === 'student') {
-      newData.year = this.state.yearIndex
+    if (newData.typeOfUser === 'professor') {
+      newData.facultyId = this.state.facultyIndex
+      newData.branchId = this.state.branchIndex
     }
     if (newData.typeOfUser === 'staff') {
       newData.standing = this.state.standingInput
     }
+    return newData
+  }
+
+  editButtonHandle () {
+    const userObj = CServiceObj.createUserObjectByType(this.currentFormObject('edit'))
+
+    if (!CServiceObj.userObjFormCheck(userObj)) { alert('แก้ไขไม่สำเร็จ!'); return }
 
     this.props.setDataLoadingStatus(true)
 
-    CServiceObj.editUser(newData).then((result) => {
+    CServiceObj.editUser(userObj.getUserObjectData()).then((result) => {
       if (result) {
-        this.props.editSelectedItem(newData)
+        this.props.editSelectedItem(userObj.getUserObjectData())
         this.changeStatus('view')
       } else {
         alert('แก้ไขไม่สำเร็จ!')
@@ -173,28 +183,15 @@ renderFacultyBranchComponent() {
   }
 
   addButtonHandle () {
-    var newData = {}
-    newData.username = this.state.usernameInput
-    newData.firstName = this.state.fnameInput
-    newData.lastName = this.state.snameInput
-    newData.typeOfUser = this.props.selectedType
+    const userObj = CServiceObj.createUserObjectByType(this.currentFormObject('add'))
 
-    if (newData.typeOfUser === 'student' || newData.typeOfUser === 'professor') {
-      newData.facultyId = this.state.facultyIndex
-      newData.branchId = this.state.branchIndex
-    }
-    if (newData.typeOfUser === 'student') {
-      newData.year = this.state.yearIndex
-    }
-    if (newData.typeOfUser === 'staff') {
-      newData.standing = this.state.standingInput
-    }
+    if (!CServiceObj.userObjFormCheck(userObj)) { alert('เพิ่มไม่สำเร็จ!'); return }
 
     this.props.setDataLoadingStatus(true)
 
-    CServiceObj.addUser(newData).then((result) => {
+    CServiceObj.addUser(userObj.getUserObjectData()).then((result) => {
       if (result) {
-        this.props.addItem(newData)
+        this.props.addItem(userObj.getUserObjectData())
         this.props.closeModal()
       } else {
         alert('เพิ่มไม่สำเร็จ!')
