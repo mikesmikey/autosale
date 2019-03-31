@@ -16,6 +16,7 @@ class StudentExcelPopup extends Component {
 
         this.handleFileChange = this.handleFileChange.bind(this);
     }
+
     resetFile() {
         this.props.closeModal();
         this.setState({
@@ -28,8 +29,7 @@ class StudentExcelPopup extends Component {
     }
 
     addManyStudent(JSON_object) {
-        //console.log('json object ', JSON_object)
-        CServiceObj.addManyUsers(JSON_object).then((result) => {
+        CServiceObj.addManyStudents(JSON_object).then((result) => {
             if (result) {
                 alert("เพิ่มสำเร็จ")
                 this.setState({
@@ -40,9 +40,9 @@ class StudentExcelPopup extends Component {
                 alert("เพิ่มไม่สำเร็จ!")
             }
         })
-
     }
-    validateDataInFile() {
+
+    validateDataFile() {
         if (this.state.fileName.length < 1) {
             alert('ไม่มีไฟล์ อัพโหลดมาใหม่')
         }
@@ -56,31 +56,38 @@ class StudentExcelPopup extends Component {
                         rows[0][4] === 'สาขา' &&
                         rows[0][5] === 'ชั้นปี') {
 
-                        var users = []
+                        var users = [],verifier = false;
 
                         for (var i = 1; i < rows.length; i++) {
-                            users.push({
-                                "username": rows[i][0],
-                                "gname": rows[i][1],
-                                "sname": rows[i][2],
-                                "faculty": {
-                                    "name": rows[i][3],
-                                    "branch": rows[i][4]
-                                },
-                                "typeof_user": "student",
-                                "year": rows[i][5],
-                                "isExaminer": false
-                            })
+                            console.log(typeof rows[i][0].toString())
+                            // users.push({
+                            //     "username": rows[i][0].toString(),
+                            //     "password":"changenow",
+                            //     "firstName": rows[i][1],
+                            //     "lastName": rows[i][2],
+                            //     // "faculty": {
+                            //     //     "name": rows[i][3],
+                            //     //     "branch": rows[i][4]
+                            //     // },
+                            //     "facultyId":0,
+                            //     "branchId":1,
+                            //     "typeOfUser": "student",
+                            //     "year": rows[i][5],
+                            //     "isExaminer": false
+                            // })
                         }
                         alert('OK')
-                        this.addManyStudent(users)
+                        if(verifier)
+                            this.addManyStudent(users)
+                        else
+                            alert('เพิ่มไม่ได้')
                     }
                     else {
                         alert('คอลัมน์ในไฟล์ Excel ไม่ถูกต้อง')
                     }
                 }
                 else {
-                    alert('คอมัมน์ในไฟล์ Excel ไม่มีข้อมูล')
+                    alert('ไฟล์ Excel ไม่มีข้อมูล')
                     this.setState({
                         fileName: '',
                         source: null
@@ -121,7 +128,7 @@ class StudentExcelPopup extends Component {
         return (
             <div className="box is-user-popUp" style={{ width: "500px" }}>
                 <h1 align="center">เลือกไฟล์</h1>
-                <div align="left F">
+                <div align="left">
                     <label className="label is-fake">อัพโหลดไฟล์ (.xlsx)
                         <input
                             className="input"
@@ -137,8 +144,7 @@ class StudentExcelPopup extends Component {
                 <div align="right">
                     <button
                         className="button is-oros is-free-size is-round"
-                        onClick={() => { this.validateDataInFile() }}
-
+                        onClick={() => { this.validateDataFile() }}
                     >
                         นำเข้าข้อมูลนิสิต
                     </button>

@@ -48,11 +48,11 @@ class WebDAO {
         });
     }
 
-    insertManyUsers(users) {
+    insertManyStudents(students) {
         return new Promise((resolve, reject) => {
             mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
                 const db = client.db(dbName)
-                db.collection('User').insertMany(users, (err, result) => {
+                db.collection('User').insertMany(students, (err, result) => {
                     if (err) { throw err }
                         return resolve(true);
                 });
