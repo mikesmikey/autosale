@@ -1,48 +1,45 @@
-import React, { Component } from 'react';
-import '../../StyleSheets/modal.css';
+/* eslint-disable no-unused-vars */
+import React, { Component } from 'react'
+import '../../StyleSheets/modal.css'
 
 class Modal extends Component {
+  constructor (props) {
+    super(props)
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            status : false
-        }
-
-        this.showModal = this.showModal.bind(this);
-        this.closeModal = this.closeModal.bind(this);
+    this.state = {
+      status: false
     }
 
-    showModal() {
+    this.showModal = this.showModal.bind(this)
+    this.closeModal = this.closeModal.bind(this)
+  }
 
-        document.querySelector("body").style.overflow = "hidden";
+  showModal () {
+    document.querySelector('body').style.overflow = 'hidden'
 
-        this.setState({
-            status : true
-        });
-    }
+    this.setState({
+      status: true
+    })
+  }
 
-    closeModal() {
-        document.querySelector("body").style.overflow = "auto";
+  closeModal () {
+    document.querySelector('body').style.overflow = 'auto'
 
-        this.setState({
-            status : false
-        })
-    }
+    this.setState({
+      status: false
+    })
+  }
 
-    
-
-    render() {
-        return (
-            <div className={this.state.status? "modal is-active" : "modal"}>
-                <div className="modal-background"></div>
-                <div className="modal-content">
-                    {this.props.content}
-                </div>
-            </div>
-        )
-    };
+  render () {
+    return (
+      <div className={this.state.status ? 'modal is-active' : 'modal'}>
+        <div className="modal-background"></div>
+        <div className="modal-content">
+          {this.props.content}
+        </div>
+      </div>
+    )
+  };
 }
 
-export default Modal;
+export default Modal

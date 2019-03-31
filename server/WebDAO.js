@@ -1,7 +1,6 @@
-const mongoClient = require('mongodb').MongoClient;
-const ObjectId = require('mongodb').ObjectID;
-const url = 'mongodb://hanami:hanami02@ds131765.mlab.com:31765/ooad_kob';
-const dbName = 'ooad_kob';
+const mongoClient = require('mongodb').MongoClient
+const url = 'mongodb://hanami:hanami02@ds131765.mlab.com:31765/ooad_kob'
+const dbName = 'ooad_kob'
 
 class WebDAO {
 
@@ -143,7 +142,4 @@ class WebDAO {
     }
 }
 
-
-
-
-module.exports = WebDAO;
+module.exports = WebDAO
