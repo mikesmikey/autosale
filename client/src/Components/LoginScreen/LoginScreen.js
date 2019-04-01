@@ -31,7 +31,7 @@ class LoginScreen extends Component {
     }
     ServiceObj.checkAuth(loginData).then((result) => {
       if (result) {
-        this.props.login(result)
+        ServiceObj.login(() => { this.props.setUserAppAuth(true, result.userData) }, result)
       } else {
         alert('ข้อมูลผู้ใช้ไม่ถูกต้อง โปรดระบุใหม่')
         form.classList.remove('disabled')

@@ -33,7 +33,7 @@ class WebService {
   verifyToken (token) {
     return new Promise((resolve, reject) => {
       try {
-        return jwt.verify(token, secret)
+        return resolve(jwt.verify(token, secret))
       } catch (err) {
         return resolve(false)
       }

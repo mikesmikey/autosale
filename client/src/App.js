@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { Component } from 'react'
 import {
   Route, Redirect, withRouter, Switch
@@ -24,38 +25,38 @@ class App extends Component {
       isAuth: false,
       user: {
         firstname: 'N/A'
-      }
+      },
+      loadStatus: false
     }
 
-    this.logout = this.logout.bind(this)
-    this.login = this.login.bind(this)
+    this.setUserAppAuth = this.setUserAppAuth.bind(this)
   }
 
-  setUserAuth (status, user) {
-    console.log(user)
-    this.setState({
-      isAuth: status,
-      user: user
+  componentDidMount () {
+    this.setState({ loadStatus: true })
+    CServiceObj.loginByToken(this.setUserAppAuth).then(() => {
+      this.setState({ loadStatus: false })
     })
   }
 
-  login (data) {
-    this.setUserAuth(true, data.userData)
-  }
-
-  logout () {
-    this.setUserAuth(false, null)
+  setUserAppAuth (status, user) {
+    this.setState({
+      isAuth: status,
+      user: user || null
+    })
   }
 
   render () {
+    const isLoading = this.state.loadStatus ? 'none' : 'block'
+
     return (
-      <div className="App">
+      <div className="App" style={{ display: isLoading }}>
         <Switch>
           <Route exact path="/login" render={(props) =>
             !this.state.isAuth
               ? <LoginScreen
                 {...props}
-                login={this.login}
+                setUserAppAuth={this.setUserAppAuth}
               /> : <Redirect to="/" />
           } />
           <Route exact path="/register" render={(props) =>
@@ -69,7 +70,7 @@ class App extends Component {
               ? <MainScreen
                 {...props}
                 user={this.state.user}
-                logout={this.logout}
+                setUserAppAuth={this.setUserAppAuth}
               />
               : <Redirect to="/login" />
           } />

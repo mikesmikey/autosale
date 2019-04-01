@@ -61,6 +61,14 @@ class ClientService {
     })
   }
 
+  getUserByToken (token) {
+    return new Promise((resolve, reject) => {
+      axios.post(`/token`, { 'token': token }).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
   addUser (userData) {
     return new Promise((resolve, reject) => {
       axios.post(`/user/add`, { 'userData': userData }).then((result) => {
@@ -85,16 +93,52 @@ class ClientService {
     })
   }
 
-  checkCurrentToken () {
-    if (typeof (localStorage.getItem('iAMToken')) !== 'undefined' && localStorage.getItem('iAMToken') !== null) {
-      console.log('fuck yeah im here.')
-    } else {
-      console.log('hell nah im not.')
+  loginByToken (logoutCallBack) {
+    return new Promise((resolve, reject) => {
+      const token = this.getCurrentToken()
+      if (token) {
+        this.getUserByToken(token).then((result) => {
+          if (result) {
+            this.login(logoutCallBack(true, result), false)
+          }
+          resolve(true)
+        })
+      } else {
+        resolve(true)
+      }
+    })
+  }
+
+  login (loginCallBack, data) {
+    if (data.token) {
+      this.keepTokenInLocalStore(data.token)
     }
+
+    if (loginCallBack) {
+      loginCallBack()
+    }
+  }
+
+  logout (logoutCallBack) {
+    this.removeTokenFromLocalStore()
+    if (logoutCallBack) {
+      logoutCallBack()
+    }
+  }
+
+  getCurrentToken () {
+    const token = localStorage.getItem('iAMToken')
+    if (typeof (token) !== 'undefined' && token !== null) {
+      return token
+    } else { return false }
   }
 
   keepTokenInLocalStore (token) {
     localStorage.setItem('iAMToken', token)
+  }
+
+  removeTokenFromLocalStore () {
+    localStorage.removeItem('iAMToken')
   }
 
   checkAuth (data) {
@@ -102,7 +146,6 @@ class ClientService {
       if (this.loginUsernameCheck(data.username) && this.loginPasswordCheck(data.password)) {
         const sendData = { 'loginInfo': data }
         axios.post('/login', sendData).then((result) => {
-          this.keepTokenInLocalStore(result.data.token)
           resolve(result.data)
         })
       } else {

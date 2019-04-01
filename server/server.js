@@ -106,6 +106,18 @@ app.get('/facultys', (req, res) => {
   })
 })
 
+app.post('/token', (req, res) => {
+  WebServiceObj.verifyToken(req.body.token).then((verifyResult) => {
+    if (verifyResult) {
+      WebDAOObj.getUserByUsername(verifyResult.username).then((result) => {
+        res.send(result)
+      })
+    } else {
+      res.send(verifyResult)
+    }
+  })
+})
+
 app.listen(port, () => {
   console.log(`App listening on ${port}`)
 })
