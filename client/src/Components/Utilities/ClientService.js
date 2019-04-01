@@ -85,11 +85,24 @@ class ClientService {
     })
   }
 
+  checkCurrentToken () {
+    if (typeof (localStorage.getItem('iAMToken')) !== 'undefined' && localStorage.getItem('iAMToken') !== null) {
+      console.log('fuck yeah im here.')
+    } else {
+      console.log('hell nah im not.')
+    }
+  }
+
+  keepTokenInLocalStore (token) {
+    localStorage.setItem('iAMToken', token)
+  }
+
   checkAuth (data) {
     return new Promise((resolve, reject) => {
       if (this.loginUsernameCheck(data.username) && this.loginPasswordCheck(data.password)) {
         const sendData = { 'loginInfo': data }
         axios.post('/login', sendData).then((result) => {
+          this.keepTokenInLocalStore(result.data.token)
           resolve(result.data)
         })
       } else {

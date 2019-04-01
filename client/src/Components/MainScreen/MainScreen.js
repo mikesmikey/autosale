@@ -24,7 +24,7 @@ class MainScreen extends Component {
         return (
             <div className="main-screen">
                 <MainNavBar
-                    mockLogout={this.props.mockLogout}
+                    logout={this.props.logout}
                     username={this.props.user.firstName}
                     handleHamburger={()=> {this.mainMenuBar.handleHamburger()}}
                 />

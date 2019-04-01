@@ -1,4 +1,9 @@
+const jwt = require('jsonwebtoken')
+const fs = require('fs')
+
 const WebDAO = require('./WebDAO')
+
+const secret = fs.readFileSync('secret.key').toString()
 
 class WebService {
   loginAuth (loginInfo) {
@@ -7,13 +12,31 @@ class WebService {
       DAO.getUserByUsername(loginInfo.username).then((result) => {
         if (result) {
           if (loginInfo.password === result.password) {
-            return resolve(result)
+            return resolve({
+              userData: result,
+              token: this.provideToken(result)
+            })
           }
           return resolve(false)
         } else {
           return resolve(false)
         }
       })
+    })
+  }
+
+  provideToken (userData) {
+    const token = jwt.sign({ username: userData.username }, secret, { expiresIn: 60 })
+    return token
+  }
+
+  verifyToken (token) {
+    return new Promise((resolve, reject) => {
+      try {
+        return jwt.verify(token, secret)
+      } catch (err) {
+        return resolve(false)
+      }
     })
   }
 

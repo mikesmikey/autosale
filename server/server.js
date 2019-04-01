@@ -14,8 +14,6 @@ const WebService = require('./WebService')
 const WebDAOObj = new WebDAO()
 const WebServiceObj = new WebService()
 
-var session = []
-
 app.get('/users', (req, res) => {
   WebDAOObj.getAllUser().then((data) => {
     if (data != null) {
@@ -64,9 +62,6 @@ app.get('/user/:username', (req, res) => {
 
 app.post('/login', (req, res) => {
   WebServiceObj.loginAuth(req.body.loginInfo).then((pass) => {
-    if (pass) {
-      session[req.body.loginInfo.username] = true
-    }
     res.send(pass)
   })
 })
