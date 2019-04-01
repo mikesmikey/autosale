@@ -19,36 +19,35 @@ import '../../StyleSheets/mainScreen.css'
 import '../../StyleSheets/pageHelper.css'
 
 class MainScreen extends Component {
-
-    render() {
-        return (
-            <div className="main-screen">
-                <MainNavBar
-                    mockLogout={this.props.mockLogout}
-                    username={this.props.user.firstName}
-                    handleHamburger={()=> {this.mainMenuBar.handleHamburger()}}
-                />
-                <MainMenuBar ref={ instance => {this.mainMenuBar = instance}}/>
-                <div className="main-subcontent">
-                    <Route exact path="/" render={(props) =>
-                        <Home />
-                    } />
-                    <Route path="/exam_schedule" render={(props) =>
-                        <ExamSchedule />
-                    } />
-                    <Route path="/exam_create" render={(props) =>
-                        <ExamCreateScreen />
-                    } />
-                    <Route path="/user_manage" render={(props) =>
-                        <UserManage />
-                    } />
-                    <Route path="/exam_score" render={(props) =>
-                        <ExamScoreSceen />
-                    } />
-                </div>
-            </div>
-        );
-    }
+  render () {
+    return (
+      <div className="main-screen">
+        <MainNavBar
+          setUserAppAuth={this.props.setUserAppAuth}
+          username={this.props.user.firstName}
+          handleHamburger={() => { this.mainMenuBar.handleHamburger() }}
+        />
+        <MainMenuBar ref={ instance => { this.mainMenuBar = instance }}/>
+        <div className="main-subcontent">
+          <Route exact path="/" render={(props) =>
+            <Home />
+          } />
+          <Route path="/exam_schedule" render={(props) =>
+            <ExamSchedule />
+          } />
+          <Route path="/exam_create" render={(props) =>
+            <ExamCreateScreen />
+          } />
+          <Route path="/user_manage" render={(props) =>
+            <UserManage />
+          } />
+          <Route path="/exam_score" render={(props) =>
+            <ExamScoreSceen />
+          } />
+        </div>
+      </div>
+    )
+  }
 }
 
 export default MainScreen

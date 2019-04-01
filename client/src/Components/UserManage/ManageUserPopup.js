@@ -152,7 +152,7 @@ class ManageUserPopUp extends Component {
     if (newData.typeOfUser === 'student') {
       newData.facultyId = this.state.facultyIndex
       newData.branchId = this.state.branchIndex
-      newData.year = Number.parseInt(this.state.yearIndex)
+      newData.year = Number.parseInt(this.state.yearIndex, 10)
     }
     if (newData.typeOfUser === 'professor') {
       newData.facultyId = this.state.facultyIndex
