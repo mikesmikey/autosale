@@ -89,13 +89,14 @@ class MainScrenMenuBar extends Component {
               ดูคะแนนสอบ
             </NavLink>
           </li>
-          {/*
+         
           <li>
-            <NavLink to="/plate_license" activeClassName="is-active is-black-oros" onClick={this.handleButtonPointer}>
-            <svg className="menu-icon icon-license-plate icon-size-6" ></svg>
+            <NavLink to="/build_add" activeClassName="is-active is-black-oros" onClick={this.handleButtonPointer}>
+            <i className="menu-icon icon-license-plate icon-size-6" ></i>
               จัดการต่อทะเบียน
             </NavLink>
           </li>
+           {/*
           <li>
             <a id="car_manage_button"
               onClick={this.handleMenuDropDown}
