@@ -111,8 +111,8 @@ app.get('/facultys', (req, res) => {
   })
 })
 
-app.get('/exam/year/:year', (req, res) => {
-  WebDAOObj.getAllExamByYear(req.params.year).then((data) => {
+app.get('/exam', (req, res) => {
+  WebDAOObj.getAllExam().then((data) => {
     if (data != null) {
       res.json(data)
     } else {

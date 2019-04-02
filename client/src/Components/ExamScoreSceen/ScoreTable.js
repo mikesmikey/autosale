@@ -35,10 +35,10 @@ class ScoreTable extends Component {
     )
   }
 
-  loadDataByYear() {
-   // ServiceObj.getAllExamByYear().then((usersData) => {
-    //    this.setState({ data: usersData })
-    //})
+  loadData() {
+    ServiceObj.getAllExam().then((usersData) => {
+       this.setState({ data: usersData })
+    })
   }
 
   loadDataBySubjectID(subjectId) {
@@ -47,7 +47,7 @@ class ScoreTable extends Component {
 
   loadDataIntoTable () {
     var returnData = []
-    this.loadDataByYear()
+    this.loadData()
     for (var i = 0; i < this.state.data.length; i++) {
       if(this.state.data[i].scoreAnoucementDay != "") {
         for (var j = 0; j < this.state.data[i].ExamSeat.length; j++) {

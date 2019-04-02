@@ -99,9 +99,9 @@ class ClientService {
   }
 
 
-  getAllExamByYear(year) {
+  getAllExam() {
     return new Promise((resolve, reject) => {
-      axios.get(`/exam/year/${year}`).then((result) => {
+      axios.get(`/exam`).then((result) => {
         resolve(result.data)
       })
     })
