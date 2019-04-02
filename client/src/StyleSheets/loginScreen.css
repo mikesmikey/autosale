@@ -13,10 +13,11 @@
     margin: 0 2rem;
 }
 
-.login-box .input[type=text] {
+.login-box .input[type=text],.login-box  .input[type=password] {
     box-sizing: border-box;
     margin-bottom: 2rem;
 }
+
 
 .login-columns {
     height: 100vh;

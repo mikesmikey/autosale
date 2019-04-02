@@ -31,7 +31,7 @@ class LoginScreen extends Component {
     }
     ServiceObj.checkAuth(loginData).then((result) => {
       if (result) {
-        this.props.mockLogin(result)
+        ServiceObj.login(() => { this.props.setUserAppAuth(true, result.userData) }, result)
       } else {
         alert('ข้อมูลผู้ใช้ไม่ถูกต้อง โปรดระบุใหม่')
         form.classList.remove('disabled')
@@ -62,7 +62,7 @@ class LoginScreen extends Component {
               <span className="label is-1" style={{ marginBottom: '2rem' }}>เข้าสู่ระบบ</span>
               <form id="loginForm" className="login-form">
                 <input className="input is-full-width" type="text" placeholder="Username" name="username" onChange={this.handleInput}/>
-                <input className="input is-full-width" type="text" placeholder="Password" name="password" onChange={this.handleInput}/>
+                <input className="input is-full-width" type="password" placeholder="Password" name="password" onChange={this.handleInput}/>
                 <button
                   className="button is-orange is-round"
                   style={{ width: '10rem' }}

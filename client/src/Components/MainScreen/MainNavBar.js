@@ -6,6 +6,9 @@ import {
 
 // import '../../StyleSheets/mainNavBar.css';
 import '../../StyleSheets/mainNavBar.css'
+import ClientService from '../Utilities/ClientService'
+
+const CServiceObj = new ClientService()
 
 class MainNavBar extends Component {
   constructor (props) {
@@ -56,9 +59,9 @@ class MainNavBar extends Component {
               <span className="navbar-user-text">{this.props.username}</span>
               <svg className="navbar-user-icon icon-down-arrow icon-size-6" ></svg>
             </div>
-            <div className={this.state.settingclick ? "dropdown-items is-active" : "dropdown-items user"}>
+            <div className={this.state.settingclick ? 'dropdown-items is-active' : 'dropdown-items user'}>
               <Link to='/about'>เกี่ยวกับ</Link>
-              <a onClick={this.props.mockLogout}>ออกจากระบบ</a>
+              <a onClick={() => { CServiceObj.logout(() => { this.props.setUserAppAuth(false) }) }}>ออกจากระบบ</a>
               <a className="is-detail">เวอร์ชั่น 0.0.2</a>
             </div>
           </button>
