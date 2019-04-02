@@ -127,17 +127,21 @@ class WebDAO {
   }
 
   /* ===========[Score DAO]=================== */
-  getScoreByUsername (username) {
+
+  getAllExamByYear (year) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
         const db = client.db(dbName)
-        db.collection('User').findOne({ 'username': username }, { '_id': 0, 'password': 0 }, (err, data) => {
+        db.collection('Exam').find({ 'year': year }).limit(16).project({ '_id': 0, 'password': 0 }).toArray((err, data) => {
           if (err) { throw err }
           return resolve(data)
         })
       })
     })
   }
+  
+
+
 }
 
 module.exports = WebDAO

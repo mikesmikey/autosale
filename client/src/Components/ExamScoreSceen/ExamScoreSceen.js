@@ -7,12 +7,23 @@ import '../../StyleSheets/ExamScoreSceen.css'
 import ScoreTable from './ScoreTable'
 
 class ExamScoreSceen extends Component {
+
+  constructor (props) {
+    super(props)
+    
+    this.searchInput = ""
+  }
+
+  handleSearchButton () {
+    this.ScoreTable.loadDataBySubjectID(this.searchInput)
+  }
+
   render () {
     return (
       <div className="subcontent-main-div score-exam">
         <div className="score-exam-box box with-title is-round">
           <div className="box-title is-violet">
-                        ดูการสอบ
+                        ดูคะแนนสอบ
           </div>
           <div className="box-content">
             <div className="columns">
@@ -30,15 +41,18 @@ class ExamScoreSceen extends Component {
                                 &nbsp;&nbsp;&nbsp;
                 <div className="input-with-text">
                   <label className="label">รหัสวิชา : </label>
-                  <input className="input is-userId-width" type="text" id="userId" name="searchInput" onChange={this.handleInputChange} />
+                  <input className="input is-userId-width" type="text" id="subjectId" name="searchInput" onChange={this.handleInputChange} />
                 </div>
-
+                <div className="input-with-text">
+                    <button type="submit"><i className="fa fa-search height50" onClick={this.handleSearchButton}>
+                    </i></button>
+                  </div>
               </div>
 
             </div>
             <br></br>
             <div>
-              <span className="score-tab-is-15">วิชาที่ประกาศคะแนนสอบล่าสุด</span>
+              <span className="score-tab-is-15">วิชาที่ประกาศคะแนนสอบ</span>
             </div>
             <br></br>
             <div className="table-div columns is-stay-top">
@@ -50,10 +64,9 @@ class ExamScoreSceen extends Component {
                 />
               </div>
             </div>
-
           </div>
-
         </div>
+
       </div>
     )
   }

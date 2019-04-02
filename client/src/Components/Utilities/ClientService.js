@@ -97,6 +97,21 @@ class ClientService {
       }
     })
   }
+
+
+  getAllExamByYear(year) {
+    return new Promise((resolve, reject) => {
+      axios.get(`/exam/year/${year}`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+ 
+
+
 }
+
+
 
 export default ClientService

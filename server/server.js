@@ -111,6 +111,19 @@ app.get('/facultys', (req, res) => {
   })
 })
 
+app.get('/exam/year/:year', (req, res) => {
+  WebDAOObj.getAllExamByYear(req.params.year).then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+
+
+
 app.listen(port, () => {
   console.log(`App listening on ${port}`)
 })

@@ -2,17 +2,25 @@
 // eslint-disable-next-line no-unused-vars
 import React, { Component } from 'react'
 
-// import ClientService from '../Utilities/ClientService';
+import ClientService from '../Utilities/ClientService'
+
+const ServiceObj = new ClientService()
 
 class ScoreTable extends Component {
   constructor (props) {
     super(props)
 
+    this._isMounted = true
+
     this.state = {
       selectedRow: null,
       data: []
     }
+    this.id = 11111111
+    this.ScoreAll = []
+    this.selectedYear = 2562
 
+    this.loadData = this.loadData.bind(this)
     this.loadDataIntoTable = this.loadDataIntoTable.bind(this)
   }
 
@@ -27,43 +35,38 @@ class ScoreTable extends Component {
     )
   }
 
-  selectItem (e) {
-    const parent = e.target.parentElement
-    if (parent.classList.contains('user-table-item')) {
-      if (!parent.classList.contains('is-active')) {
-        if (this.state.selectedRow != null) {
-          this.state.selectedRow.classList.remove('is-active')
-        }
-        parent.classList.add('is-active')
-        this.setState({
-          selectedRow: parent
-        })
-        this.props.setSelectedUser(this.state.data[parent.getAttribute('index')])
-      }
-    }
+  loadDataByYear() {
+   // ServiceObj.getAllExamByYear().then((usersData) => {
+    //    this.setState({ data: usersData })
+    //})
   }
 
-  inspectItem (e) {
-    const parent = e.target.parentElement
-    if (parent.classList.contains('user-table-item')) {
-      this.props.showManageModal()
-      this.props.setSelectedUser(this.state.data[parent.getAttribute('index')])
-    }
+  loadDataBySubjectID(subjectId) {
+    
   }
 
   loadDataIntoTable () {
     var returnData = []
+    this.loadDataByYear()
     for (var i = 0; i < this.state.data.length; i++) {
-      returnData[i] = <ScoreTableItem
-        key={i}
-        selectItem={(e) => { this.selectItem(e) }}
-        inspectItem={(e) => { this.inspectItem(e) }}
-        itemIndex={i}
-        itemData={this.state.data[i]}
-      />
+      if(this.state.data[i].scoreAnoucementDay != "") {
+        for (var j = 0; j < this.state.data[i].ExamSeat.length; j++) {
+          if(this.state.data[i].ExamSeat[j].studentCode == this.id) {
+            returnData[i] = <ScoreTableItem
+            key={i}
+            itemIndex={i}
+            itemData={this.state.data[i]}
+            ScoreAll={this.state.data[i]}
+          />
+          }
+        }
+      }
     }
+
     return returnData
   }
+
+  
 
   render () {
     return (
@@ -87,13 +90,14 @@ class ScoreTableItem extends Component {
 
   renderItemByType () {
     return (
-      <tr className="score-table-item"
-        onClick={(e) => { this.props.selectItem(e) }}
+      <tr className="user-table-item"
         onDoubleClick={(e) => { this.props.inspectItem(e) }}
         index={this.props.itemIndex}
       >
-        <td id="tableUserId">55</td>
-
+        <td>{this.props.itemData.scoreAnoucementDay}</td>
+        <td>{this.props.itemData.subjectId}</td>
+        <td>{this.props.itemData.subjectId}</td>
+        <td>{this.props.itemData.category}</td>
       </tr>
     )
   }
