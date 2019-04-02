@@ -106,6 +106,32 @@ app.get('/facultys', (req, res) => {
   })
 })
 
+app.get('/subjects', (req, res) => {
+  WebDAOObj.getAllSubject().then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+app.get('/latestglobaldata', (req, res) => {
+  WebDAOObj.getLatestGlobalData().then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.post('/subject/course/add', (req, res) => {
+  WebDAOObj.insertCourse(req.body.courseData).then((pass) => {
+    res.send(pass)
+  })
+})
+
+
 app.post('/token', (req, res) => {
   WebServiceObj.verifyToken(req.body.token).then((verifyResult) => {
     if (verifyResult) {

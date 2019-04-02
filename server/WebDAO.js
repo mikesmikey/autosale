@@ -5,7 +5,7 @@ const dbName = 'ooad_kob'
 class WebDAO {
   /* ===========[User DAO]=================== */
 
-  getAllUser () {
+  getAllUser() {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
         const db = client.db(dbName)
@@ -17,7 +17,7 @@ class WebDAO {
     })
   }
 
-  getUserByUsername (username) {
+  getUserByUsername(username) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
         const db = client.db(dbName)
@@ -29,7 +29,7 @@ class WebDAO {
     })
   }
 
-  insertUser (user) {
+  insertUser(user) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
         const db = client.db(dbName)
@@ -45,8 +45,47 @@ class WebDAO {
       })
     })
   }
-
-  insertManyUsers (users) {
+  getLatestGlobalData() {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
+        const db = client.db(dbName)
+        db.collection('GlobalData').find({}).sort({ _id: -1 }).limit(1).toArray((err, data) => {
+          if (err) { throw err }
+          return resolve(data)
+        })
+      })
+    })
+  }
+  insertCourse(course) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
+        const db = client.db(dbName)
+        db.collection('Subject').findOne({ 'subject_id': course.subjectId }, (err, data) => {
+          if (err) { throw err }
+          if (!data) {
+            this.getLatestGlobalData().then((data) => {
+              db.collection('Subject').findOneAndUpdate({ 'subject_id': course.subjectId }, {
+                $push: {
+                  "courses":
+                  {
+                    "school_year": data.currentStudyYear,
+                    "courseId": getNextSequence('courseId'),
+                    "semester": data.currentStudyTerm,
+                    "max_students": course.students,
+                    "max_groups": course.groups
+                  }
+                }
+              }, (err, data) => {
+                if (err) { throw err }
+                return resolve(data)
+              })
+            })
+          } else { return resolve(false) }
+        })
+      })
+    })
+  }
+  insertManyUsers(users) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
         const db = client.db(dbName)
@@ -58,7 +97,7 @@ class WebDAO {
     })
   }
 
-  editUser (newUserData) {
+  editUser(newUserData) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
         const db = client.db(dbName)
@@ -72,7 +111,7 @@ class WebDAO {
     })
   }
 
-  deleteUserByUsername (username) {
+  deleteUserByUsername(username) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
         const db = client.db(dbName)
@@ -89,7 +128,7 @@ class WebDAO {
     })
   }
 
-  getAllUserByType (type) {
+  getAllUserByType(type) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
         const db = client.db(dbName)
@@ -101,7 +140,7 @@ class WebDAO {
     })
   }
 
-  getAllUserByTypeAndUsername (type, username) {
+  getAllUserByTypeAndUsername(type, username) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
         const db = client.db(dbName)
@@ -114,7 +153,7 @@ class WebDAO {
     })
   }
 
-  getAllFaculty () {
+  getAllFaculty() {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
         const db = client.db(dbName)
@@ -126,8 +165,19 @@ class WebDAO {
     })
   }
 
+  getAllSubject() {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
+        const db = client.db(dbName)
+        db.collection('Subject').find({}).toArray((err, data) => {
+          if (err) { throw err }
+          return resolve(data)
+        })
+      })
+    })
+  }
   /* ===========[Score DAO]=================== */
-  getScoreByUsername (username) {
+  getScoreByUsername(username) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
         const db = client.db(dbName)
