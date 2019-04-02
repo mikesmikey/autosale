@@ -29,9 +29,6 @@ class StudentExcelPopup extends Component {
     showInsertExcelModal() {
 
         this.getAllStudentsAndFaculties();
-
-        console.log('fa ',this.state.faculties)
-        console.log('st ', this.state.students)
         this.props.showModal();
     }
 
@@ -49,7 +46,6 @@ class StudentExcelPopup extends Component {
             })
         })
     }
-
     
 
     addManyStudent(JSON_object) {
@@ -143,7 +139,9 @@ class StudentExcelPopup extends Component {
     }
 
     render() {
-        //console.log('FileChanged', this.state.source);
+        console.log('fa ',this.state.faculties)
+        console.log('st ', this.state.students)
+        console.log('FileChanged', this.state.source);
         const fileText = this.state.fileName;
         let file = null;
         file = fileText
