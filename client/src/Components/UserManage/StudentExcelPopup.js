@@ -153,7 +153,10 @@ class StudentExcelPopup extends Component {
                             this.addManyStudent(users, rows.length - 1)
                         }
                         else {
-                            alert('ไม่มีข้อมูล')
+                            alert('ไม่มีข้อมูล!! อาจเป็นสาเหตุดังนี้\n'+
+                                  'รหัสนิสิต มีอยู่แล้ว\n'+
+                                  'ชั้นปี ไม่่ถูกต้อง\n'+
+                                  'คณะ หรือ สาขา ไม่ถูกต้อง')
                         } 
                         
                         // if (verifier)
