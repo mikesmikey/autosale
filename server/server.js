@@ -118,6 +118,22 @@ app.post('/token', (req, res) => {
   })
 })
 
+app.get("/yearAndTerm", (req, res) => {
+  WebDAOObj.getYearAndTerm().then(data => {
+    if (data != null) {
+      res.json(data);
+    } else {
+      res.sendStatus(404);
+    }
+  })
+})
+
+app.post('/yearAndTerm/edit', (req, res) => {
+  WebDAOObj.editYearAndTerm(req.body.globalData).then((pass) => {
+    res.send(pass)
+  })
+})
+
 app.listen(port, () => {
   console.log(`App listening on ${port}`)
 })

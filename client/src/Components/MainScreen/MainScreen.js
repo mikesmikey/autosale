@@ -14,12 +14,13 @@ import ExamSchedule from '../ExamSchedule/ExamSchedule'
 import ExamCreateScreen from '../ExamCreateSceen/ExamCreateScreen'
 import ExamScoreSceen from '../ExamScoreSceen/ExamScoreSceen'
 import UserManage from '../UserManage/UserManage'
+import YearAndTermManage from "../YearAndTermManage/YearAndTermManage";
 
 import '../../StyleSheets/mainScreen.css'
 import '../../StyleSheets/pageHelper.css'
 
 class MainScreen extends Component {
-  render () {
+  render() {
     return (
       <div className="main-screen">
         <MainNavBar
@@ -27,7 +28,7 @@ class MainScreen extends Component {
           username={this.props.user.firstName}
           handleHamburger={() => { this.mainMenuBar.handleHamburger() }}
         />
-        <MainMenuBar ref={ instance => { this.mainMenuBar = instance }}/>
+        <MainMenuBar ref={instance => { this.mainMenuBar = instance }} />
         <div className="main-subcontent">
           <Route exact path="/" render={(props) =>
             <Home />
@@ -43,6 +44,9 @@ class MainScreen extends Component {
           } />
           <Route path="/exam_score" render={(props) =>
             <ExamScoreSceen />
+          } />
+          <Route path="/year_and_term_manage" render={(props) =>
+            <YearAndTermManage />
           } />
         </div>
       </div>
