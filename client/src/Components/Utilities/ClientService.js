@@ -2,6 +2,7 @@ import axios from 'axios'
 import Student from '../../Objects/Student'
 import Professor from '../../Objects/Professor'
 import Staff from '../../Objects/Staff'
+import GlobalData from '../../Objects/GlobalData'
 
 class ClientService {
   loginUsernameCheck(username) {
@@ -153,6 +154,28 @@ class ClientService {
       }
     })
   }
+
+  /* ===========[GlobalData Service]=================== */
+  getYearAndTerm() {
+    return new Promise((resolve, reject) => {
+      axios.get(`/yearAndTerm`).then((result) => {
+        resolve(result.data);
+      })
+    })
+  }
+
+  createGlobalDataObject(globalData) {
+    return new GlobalData(globalData)
+  }
+
+  editGlobalData(newGlobalData) {
+    return new Promise((resolve, reject) => {
+      axios.post(`/yearAndTerm/edit`, { 'globalData': newGlobalData }).then((result) => {
+        resolve(result.data);
+      })
+    })
+  }
+
 }
 
 export default ClientService
