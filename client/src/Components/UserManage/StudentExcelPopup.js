@@ -19,6 +19,10 @@ class StudentExcelPopup extends Component {
         this.handleFileChange = this.handleFileChange.bind(this);
     }
 
+    componentDidMount() {
+        this.getAllStudentsAndFaculties();
+    }
+
     resetFile() {
         this.props.closeModal();
         this.setState({
@@ -27,31 +31,36 @@ class StudentExcelPopup extends Component {
         })
     }
     showInsertExcelModal() {
-
-        this.getAllStudentsAndFaculties();
         this.props.showModal();
     }
 
     getAllStudentsAndFaculties() {
-        
-        CServiceObj.getAllUserBySelectType('student').then((result) => {
+
+        CServiceObj.getAllFaculty().then((result) => {
             this.setState({
+
                 faculties: result
             })
         })
 
-        CServiceObj.getAllFaculty().then((result) => {
-            this.setState({
-                students: result
-            })
+        let studentsID = [];
+        CServiceObj.getAllUserBySelectType('student').then((result) => {
+            for (var i in result) {
+                studentsID.push({
+                    username: result[i].username
+                })
+            }
+        })
+        this.setState({
+            students: studentsID
         })
     }
-    
 
-    addManyStudent(JSON_object) {
+
+    addManyStudent(JSON_object, count_excel) {
         CServiceObj.addManyStudents(JSON_object).then((result) => {
             if (result) {
-                alert("เพิ่มสำเร็จ")
+                alert(`จากรายการข้อมูลนิสิตทั้งหมดใน excel : ${count_excel}\nเพิ่มสำเร็จ : ${JSON_object.length}`)
                 this.setState({
                     fileName: '',
                     source: null
@@ -76,27 +85,77 @@ class StudentExcelPopup extends Component {
                         rows[0][4] === 'สาขา' &&
                         rows[0][5] === 'ชั้นปี') {
 
-                        var users = [], verifier = false;
-                        for (var i = 1; i < rows.length; i++) {
-                            //console.log(typeof rows[i][0].toString())
-                            users.push({
-                                "username": rows[i][0].toString(),
-                                "password": "changenow",
-                                "firstName": rows[i][1],
-                                "lastName": rows[i][2],
-                                "facultyId": 0,
-                                "branchId": 1,
-                                "typeOfUser": "student",
-                                "year": rows[i][5],
-                                "isExaminer": false
-                            })
+                        var users = [];
+                        var checkFaculty_Branch = new Array(rows.length).fill(false);
+                        var checkID_Year = new Array(rows.length).fill(true);
+
+                        //true and true => push to database
+                        for (let i = 1; i < rows.length; i++) {
+
+                            // this.state.faculties.forEach(element => {
+                            //     if (rows[i][3] === element.facultyName) {
+                            //         rows[i][3] = element.facultyId
+                            //         element.branches.forEach(element => {
+                            //             if (rows[i][4] === element.branchName) {
+                            //                 rows[i][4] = element.branchId
+                            //                 checkFaculty_Branch[i] = true;
+                            //             }
+                            //         })
+                            //     }
+                            // });
+
+                            for (let j = 0; j < this.state.faculties.length; j++) {
+                                if (rows[i][3] === this.state.faculties[j].facultyName) {
+                                    rows[i][3] = this.state.faculties[j].facultyId
+                                    for (var k = 0; k < this.state.faculties[j].branches.length; k++) {
+                                        if (rows[i][4] === this.state.faculties[j].branches[k].branchName) {
+                                            rows[i][4] = this.state.faculties[j].branches[k].branchId
+                                            checkFaculty_Branch[i] = true;
+                                            break
+                                        }
+                                    }
+                                    break
+                                }
+                            }
+
+
+                            for (let j = 0; j < this.state.students.length; j++) {
+                                // console.log(typeof rows[i][0].toString(), typeof this.state.students[j].username)
+                                if (rows[i][0].toString() === this.state.students[j].username) {
+                                    checkID_Year[i] = false;
+                                }
+                            }
+
+
+                            checkID_Year[i] = (rows[i][5] > 0 && rows[i][5] < 7) && checkID_Year[i]
+
+
+                            if (checkFaculty_Branch[i] && checkID_Year[i]) {
+                                users.push({
+                                    "username": rows[i][0].toString(),
+                                    "password": "changenow",
+                                    "firstName": rows[i][1],
+                                    "lastName": rows[i][2],
+                                    "facultyId": rows[i][3],
+                                    "branchId": rows[i][4],
+                                    "typeOfUser": "student",
+                                    "year": rows[i][5],
+                                    "isExaminer": false
+                                })
+                            }
                         }
+                        console.log(checkFaculty_Branch, checkID_Year)
                         alert('OK')
-                    
+
                         // this.getAllStudents('student')
                         // console.log('users ',usersAlready)
-                        console.log(users)
-                        this.addManyStudent(users)
+                        if(users.length > 0) {
+                            this.addManyStudent(users, rows.length - 1)
+                        }
+                        else {
+                            alert('ไม่มีข้อมูล')
+                        } 
+                        
                         // if (verifier)
                         //     this.addManyStudent(users)
                         // else
@@ -113,8 +172,7 @@ class StudentExcelPopup extends Component {
                         source: null
                     })
                 }
-            }
-            )
+            })
         }
     }
     handleFileChange = (event) => {
@@ -139,9 +197,9 @@ class StudentExcelPopup extends Component {
     }
 
     render() {
-        console.log('fa ',this.state.faculties)
-        console.log('st ', this.state.students)
-        console.log('FileChanged', this.state.source);
+        // console.log('fa ',this.state.faculties)
+        // console.log('st ', this.state.students)
+        // console.log('FileChanged', this.state.source);
         const fileText = this.state.fileName;
         let file = null;
         file = fileText

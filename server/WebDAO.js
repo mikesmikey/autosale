@@ -47,11 +47,11 @@ class WebDAO {
         });
     }
 
-    insertManyStudents(students) {
+    addManyStudents(users) {
         return new Promise((resolve, reject) => {
             mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
                 const db = client.db(dbName)
-                db.collection('User').insertMany(students, (err, result) => {
+                db.collection('User').insertMany(users, (err, result) => {
                     if (err) { throw err }
                         return resolve(true);
                 });
@@ -120,8 +120,21 @@ class WebDAO {
         return new Promise((resolve, reject) => {
             mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
                 const db = client.db(dbName)
-                db.collection('Faculty').find({}).toArray((err, data) => {
+                db.collection('Faculty').find({}, {"_id": 0}).project({ "_id": 0}).toArray((err, data) => {
                     if (err) { throw err }
+                    return resolve(data);
+                });
+            });
+        });
+    }
+
+    getAllSubject() {
+        return new Promise((resolve, reject) => {
+            mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+                const db = client.db(dbName)
+                db.collection('Subject').find({}, {"_id": 0}).project({ "_id": 0}).toArray((err, data) => {
+                    if (err) { throw err }
+                    console.log(data)
                     return resolve(data);
                 });
             });

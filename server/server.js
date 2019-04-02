@@ -80,12 +80,6 @@ app.post('/user/add', (req, res) => {
   })
 })
 
-app.post('/user/addmany', (req, res) => {
-  WebDAOObj.insertManyUsers(req.body.userData).then((pass) => {
-    res.send(pass)
-  })
-})
-
 app.post('/user/edit', (req, res) => {
   WebDAOObj.editUser(req.body.userData).then((pass) => {
     res.send(pass)
@@ -108,6 +102,23 @@ app.get('/facultys', (req, res) => {
   })
 })
 
+app.post('/user/addmany', (req, res) => {
+  WebDAOObj.addManyStudents(req.body.usersData).then((pass) => {
+    res.send(pass)
+  })
+})
+
+app.get('/subjects', (req, res) => {
+  WebDAOObj.getAllSubject().then((data) => {
+    console.log(data)
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
 app.post('/token', (req, res) => {
   WebServiceObj.verifyToken(req.body.token).then((verifyResult) => {
     if (verifyResult) {
@@ -119,6 +130,7 @@ app.post('/token', (req, res) => {
     }
   })
 })
+
 
 app.listen(port, () => {
   console.log(`App listening on ${port}`)
