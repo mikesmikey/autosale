@@ -1,9 +1,11 @@
 const express = require('express')
+const exp_pretty = require('express-prettify')
 const bodyParser = require('body-parser')
 const app = express()
 const port = 5000
 // const cors= require('cors')
 app.use(bodyParser.json())
+app.use(exp_pretty({ query: 'pretty' }))
 // app.use(cors())
 
 // disable cors due to the server will not using cross origin feature.

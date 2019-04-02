@@ -10,8 +10,10 @@ class StudentExcelPopup extends Component {
         super(props);
 
         this.state = {
-            fileName: '',
-            source: null
+            fileName: this.props.fileName,
+            source: this.props.source,
+            faculties: [],
+            students: []
         }
 
         this.handleFileChange = this.handleFileChange.bind(this);
@@ -25,8 +27,30 @@ class StudentExcelPopup extends Component {
         })
     }
     showInsertExcelModal() {
+
+        this.getAllStudentsAndFaculties();
+
+        console.log('fa ',this.state.faculties)
+        console.log('st ', this.state.students)
         this.props.showModal();
     }
+
+    getAllStudentsAndFaculties() {
+        
+        CServiceObj.getAllUserBySelectType('student').then((result) => {
+            this.setState({
+                faculties: result
+            })
+        })
+
+        CServiceObj.getAllFaculty().then((result) => {
+            this.setState({
+                students: result
+            })
+        })
+    }
+
+    
 
     addManyStudent(JSON_object) {
         CServiceObj.addManyStudents(JSON_object).then((result) => {
@@ -56,31 +80,31 @@ class StudentExcelPopup extends Component {
                         rows[0][4] === 'สาขา' &&
                         rows[0][5] === 'ชั้นปี') {
 
-                        var users = [],verifier = false;
-
+                        var users = [], verifier = false;
                         for (var i = 1; i < rows.length; i++) {
-                            console.log(typeof rows[i][0].toString())
-                            // users.push({
-                            //     "username": rows[i][0].toString(),
-                            //     "password":"changenow",
-                            //     "firstName": rows[i][1],
-                            //     "lastName": rows[i][2],
-                            //     // "faculty": {
-                            //     //     "name": rows[i][3],
-                            //     //     "branch": rows[i][4]
-                            //     // },
-                            //     "facultyId":0,
-                            //     "branchId":1,
-                            //     "typeOfUser": "student",
-                            //     "year": rows[i][5],
-                            //     "isExaminer": false
-                            // })
+                            //console.log(typeof rows[i][0].toString())
+                            users.push({
+                                "username": rows[i][0].toString(),
+                                "password": "changenow",
+                                "firstName": rows[i][1],
+                                "lastName": rows[i][2],
+                                "facultyId": 0,
+                                "branchId": 1,
+                                "typeOfUser": "student",
+                                "year": rows[i][5],
+                                "isExaminer": false
+                            })
                         }
                         alert('OK')
-                        if(verifier)
-                            this.addManyStudent(users)
-                        else
-                            alert('เพิ่มไม่ได้')
+                    
+                        // this.getAllStudents('student')
+                        // console.log('users ',usersAlready)
+                        console.log(users)
+                        this.addManyStudent(users)
+                        // if (verifier)
+                        //     this.addManyStudent(users)
+                        // else
+                        // alert('เพิ่มไม่ได้')
                     }
                     else {
                         alert('คอลัมน์ในไฟล์ Excel ไม่ถูกต้อง')
@@ -93,8 +117,8 @@ class StudentExcelPopup extends Component {
                         source: null
                     })
                 }
-            })
-            //console.log('deleted-file ', this.state.source)
+            }
+            )
         }
     }
     handleFileChange = (event) => {
@@ -119,11 +143,11 @@ class StudentExcelPopup extends Component {
     }
 
     render() {
-        console.log('FileChanged', this.state.source);
-        const { fileName } = this.state;
+        //console.log('FileChanged', this.state.source);
+        const fileText = this.state.fileName;
         let file = null;
-        file = fileName
-            ? (<span>ไฟล์ที่เลือก - {fileName}</span>)
+        file = fileText
+            ? (<span>ไฟล์ที่เลือก - {fileText}</span>)
             : (<span>เลือกไฟล์ ...</span>);
         return (
             <div className="box is-user-popUp" style={{ width: "500px" }}>
@@ -134,7 +158,6 @@ class StudentExcelPopup extends Component {
                             className="input"
                             type="file"
                             multiple={false}
-                            type="file"
                             name="fileInput"
                             onChange={this.handleFileChange}
                         />
@@ -148,12 +171,16 @@ class StudentExcelPopup extends Component {
                     >
                         นำเข้าข้อมูลนิสิต
                     </button>
-                    <button className="button is-yentafo is-round" onClick={() => { this.resetFile() }}>ยกเลิก</button>
+                    <button
+                        className="button is-yentafo is-round"
+                        onClick={() => { this.resetFile() }}
+                    >
+                        ยกเลิก
+                    </button>
                 </div>
             </div>
         );
     }
 }
-
 
 export default StudentExcelPopup;

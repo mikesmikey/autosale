@@ -89,6 +89,12 @@ class MainScrenMenuBar extends Component {
               ดูคะแนนสอบ
             </NavLink>
           </li>
+          <li>
+            <NavLink to="/add_subject" activeClassName="is-active is-black-violet" onClick={this.handleButtonPointer}>
+              <i className="menu-icon-awesome fas fa-calendar-plus"></i>
+              เพิ่มรายวิชา
+            </NavLink>
+          </li>
           {/*
           <li>
             <NavLink to="/plate_license" activeClassName="is-active is-black-oros" onClick={this.handleButtonPointer}>

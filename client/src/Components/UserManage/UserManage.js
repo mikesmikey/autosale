@@ -162,6 +162,8 @@ class UserManage extends Component {
           <Modal ref={instance => { this.studentExcelModal = instance }} content={
             <StudentExcelPopUp
               ref={instance => { this.studentExcelPopup = instance }}
+              fileName={''}
+              source={null}
               closeModal={() => {
                 this.studentExcelModal.closeModal()
               }}
