@@ -138,6 +138,33 @@ class WebDAO {
       })
     })
   }
+
+  /* ===========[GlobalData DAO]=================== */
+  getYearAndTerm () {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
+        const db = client.db(dbName)
+        db.collection('GlobalData').find({}).toArray((err, data) => {
+          if (err) { throw err }
+          return resolve(data)
+        })
+      })
+    })
+  }
+
+  editYearAndTerm (newGlobalData) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
+        const db = client.db(dbName)
+        db.collection('GlobalData').findOneAndUpdate({}, { '$set': newGlobalData }, (err, result) => {
+          if (err) { throw err }
+          if (result.value) {
+            return resolve(true)
+          } else { return resolve(false) }
+        })
+      })
+    })
+  }
 }
 
 module.exports = WebDAO
