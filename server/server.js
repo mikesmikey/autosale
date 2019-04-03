@@ -131,12 +131,12 @@ app.post('/token', (req, res) => {
   })
 })
 
-app.get("/yearAndTerm", (req, res) => {
+app.get('/yearAndTerm', (req, res) => {
   WebDAOObj.getYearAndTerm().then(data => {
     if (data != null) {
-      res.json(data);
+      res.json(data)
     } else {
-      res.sendStatus(404);
+      res.sendStatus(404)
     }
   })
 })

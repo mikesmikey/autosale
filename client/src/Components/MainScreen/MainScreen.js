@@ -15,7 +15,7 @@ import ExamCreateScreen from '../ExamCreateSceen/ExamCreateScreen'
 import ExamScoreSceen from '../ExamScoreSceen/ExamScoreSceen'
 import UserManage from '../UserManage/UserManage'
 import AddNewSubject from '../AddNewSubject/AddNewSubject'
-import YearAndTermManage from "../YearAndTermManage/YearAndTermManage";
+import YearAndTermManage from "../YearAndTermManage/YearAndTermManage"
 
 import '../../StyleSheets/mainScreen.css'
 import '../../StyleSheets/pageHelper.css'

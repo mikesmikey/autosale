@@ -26,7 +26,7 @@ class WebService {
   }
 
   provideToken (userData) {
-    const token = jwt.sign({ username: userData.username }, secret, { expiresIn: 60 })
+    const token = jwt.sign({ username: userData.username }, secret, { expiresIn: 60*60 })
     return token
   }
 

@@ -6,7 +6,7 @@ class WebDAO {
 
   /*===========[User DAO]===================*/
 
-  getAllUser() {
+  getAllUser () {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
         const db = client.db(dbName)
@@ -18,7 +18,7 @@ class WebDAO {
     });
   }
 
-  getUserByUsername(username) {
+  getUserByUsername (username) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
         const db = client.db(dbName)
@@ -30,7 +30,7 @@ class WebDAO {
     });
   }
 
-  insertUser(user) {
+  insertUser (user) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
         const db = client.db(dbName)
@@ -74,7 +74,7 @@ class WebDAO {
     });
   }
 
-  deleteUserByUsername(username) {
+  deleteUserByUsername (username) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
         const db = client.db(dbName)
@@ -91,7 +91,7 @@ class WebDAO {
     });
   }
 
-  getAllUserByType(type) {
+  getAllUserByType (type) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
         const db = client.db(dbName)
@@ -103,7 +103,7 @@ class WebDAO {
     });
   }
 
-  getAllUserByTypeAndUsername(type, username) {
+  getAllUserByTypeAndUsername (type, username) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
         const db = client.db(dbName)
@@ -116,7 +116,7 @@ class WebDAO {
     });
   }
 
-  getAllFaculty() {
+  getAllFaculty () {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
         const db = client.db(dbName)
@@ -154,26 +154,26 @@ class WebDAO {
     });
   }
   /* ===========[GlobalData DAO]=================== */
-  getYearAndTerm() {
+  getYearAndTerm () {
     return new Promise((resolve, reject) => {
-      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
         const db = client.db(dbName)
         db.collection('GlobalData').find({}).toArray((err, data) => {
           if (err) { throw err }
-          return resolve(data);
+          return resolve(data)
         })
       })
     })
   }
 
-  editYearAndTerm(newGlobalData) {
+  editYearAndTerm (newGlobalData) {
     return new Promise((resolve, reject) => {
-      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
         const db = client.db(dbName)
         db.collection('GlobalData').findOneAndUpdate({ "id": newGlobalData.id }, { "$set": newGlobalData }, (err, result) => {
           if (err) { throw err }
           if (result.value) {
-            return resolve(true);
+            return resolve(true)
           } else { return resolve(false) }
         })
       })
