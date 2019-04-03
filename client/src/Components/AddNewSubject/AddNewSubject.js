@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import ClientService from '../Utilities/ClientService';
+import React, { Component } from 'react'
+import ClientService from '../Utilities/ClientService'
 
 import '../../StyleSheets/addNewSubject.css'
 
@@ -13,8 +13,9 @@ class AddNewSubject extends Component {
 
     handleInputChange(evt) {
         this.setState({
-            inputValue: evt.target.value
+            inputSubject: evt.target.value
         })
+        console.log(this.state.inputSubject)
     }
 
     render() {
@@ -50,4 +51,4 @@ class AddNewSubject extends Component {
     }
 }
 
-export default AddNewSubject;
+export default AddNewSubject

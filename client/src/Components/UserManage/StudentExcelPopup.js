@@ -1,17 +1,17 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
-import ClientService from '../Utilities/ClientService';
-import readXlsxFile from 'read-excel-file';
+import ClientService from '../Utilities/ClientService'
+import readXlsxFile from 'read-excel-file'
 
 const CServiceObj = new ClientService();
 
 class StudentExcelPopup extends Component {
+    _isMounted = false
     constructor(props) {
         super(props);
-
         this.state = {
-            fileName: this.props.fileName,
-            source: this.props.source,
+            fileName: '',
+            source: '',
             faculties: [],
             students: []
         }
@@ -20,40 +20,50 @@ class StudentExcelPopup extends Component {
     }
 
     componentDidMount() {
+        this._isMounted = true
         this.getAllStudentsAndFaculties();
     }
 
+    componentWillUnmount() {
+        this._isMounted = false
+    }
+
     resetFile() {
-        this.props.closeModal();
+        this.props.closeModal()
         this.setState({
             fileName: '',
             source: null
         })
     }
     showInsertExcelModal() {
-        this.props.showModal();
+        this.props.showModal()
     }
 
     getAllStudentsAndFaculties() {
 
         CServiceObj.getAllFaculty().then((result) => {
-            this.setState({
-
-                faculties: result
-            })
-        })
-
-        let studentsID = [];
-        CServiceObj.getAllUserBySelectType('student').then((result) => {
-            for (var i in result) {
-                studentsID.push({
-                    username: result[i].username
+            if (this._isMounted) {
+                this.setState({
+                    faculties: result
                 })
             }
         })
-        this.setState({
-            students: studentsID
+
+        let studentsID = []
+        CServiceObj.getAllUserBySelectType('student').then((result) => {
+            if (this._isMounted) {
+                for (var i in result) {
+                    studentsID.push({
+                        username: result[i].username
+                    })
+                }
+            }
         })
+        if (this._isMounted) {
+            this.setState({
+                students: studentsID
+            })
+        }
     }
 
 
@@ -85,9 +95,9 @@ class StudentExcelPopup extends Component {
                         rows[0][4] === 'สาขา' &&
                         rows[0][5] === 'ชั้นปี') {
 
-                        var users = [];
-                        var checkFaculty_Branch = new Array(rows.length).fill(false);
-                        var checkID_Year = new Array(rows.length).fill(true);
+                        var users = []
+                        var checkFaculty_Branch = new Array(rows.length).fill(false)
+                        var checkID_Year = new Array(rows.length).fill(true)
 
                         //true and true => push to database
                         for (let i = 1; i < rows.length; i++) {
@@ -110,7 +120,7 @@ class StudentExcelPopup extends Component {
                                     for (var k = 0; k < this.state.faculties[j].branches.length; k++) {
                                         if (rows[i][4] === this.state.faculties[j].branches[k].branchName) {
                                             rows[i][4] = this.state.faculties[j].branches[k].branchId
-                                            checkFaculty_Branch[i] = true;
+                                            checkFaculty_Branch[i] = true
                                             break
                                         }
                                     }
@@ -118,14 +128,12 @@ class StudentExcelPopup extends Component {
                                 }
                             }
 
-
                             for (let j = 0; j < this.state.students.length; j++) {
-                                // console.log(typeof rows[i][0].toString(), typeof this.state.students[j].username)
                                 if (rows[i][0].toString() === this.state.students[j].username) {
-                                    checkID_Year[i] = false;
+                                    checkID_Year[i] = false
+                                    break
                                 }
                             }
-
 
                             checkID_Year[i] = (rows[i][5] > 0 && rows[i][5] < 7) && checkID_Year[i]
 
@@ -149,20 +157,15 @@ class StudentExcelPopup extends Component {
 
                         // this.getAllStudents('student')
                         // console.log('users ',usersAlready)
-                        if(users.length > 0) {
+                        if (users.length > 0) {
                             this.addManyStudent(users, rows.length - 1)
                         }
                         else {
-                            alert('ไม่มีข้อมูล!! อาจเป็นสาเหตุดังนี้\n'+
-                                  'รหัสนิสิต มีอยู่แล้ว\n'+
-                                  'ชั้นปี ไม่่ถูกต้อง\n'+
-                                  'คณะ หรือ สาขา ไม่ถูกต้อง')
-                        } 
-                        
-                        // if (verifier)
-                        //     this.addManyStudent(users)
-                        // else
-                        // alert('เพิ่มไม่ได้')
+                            alert('ไม่มีข้อมูล!! อาจเป็นสาเหตุดังนี้\n' +
+                                'รหัสนิสิต มีอยู่แล้ว\n' +
+                                'ชั้นปี ไม่่ถูกต้อง\n' +
+                                'คณะ หรือ สาขา ไม่ถูกต้อง')
+                        }
                     }
                     else {
                         alert('คอลัมน์ในไฟล์ Excel ไม่ถูกต้อง')
@@ -180,8 +183,8 @@ class StudentExcelPopup extends Component {
     }
     handleFileChange = (event) => {
         try {
-            var fileExtension = '';
-            fileExtension = event.target.files[0].name.split('.').pop();
+            var fileExtension = ''
+            fileExtension = event.target.files[0].name.split('.').pop()
         } catch (error) { }
 
         if (fileExtension === 'xlsx') {

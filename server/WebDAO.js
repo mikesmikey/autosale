@@ -120,7 +120,7 @@ class WebDAO {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
         const db = client.db(dbName)
-        db.collection('Faculty').find({}, { "_id": 0 }).project({ "_id": 0 }).toArray((err, data) => {
+        db.collection('Faculty').find({}).project({ "_id": 0 }).toArray((err, data) => {
           if (err) { throw err }
           return resolve(data);
         });
@@ -132,7 +132,7 @@ class WebDAO {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
         const db = client.db(dbName)
-        db.collection('Subject').find({}, { "_id": 0 }).project({ "_id": 0 }).toArray((err, data) => {
+        db.collection('Subject').find({}).project({ "_id": 0 }).toArray((err, data) => {
           if (err) { throw err }
           console.log(data)
           return resolve(data);
