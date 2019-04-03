@@ -43,8 +43,8 @@ class YearAndTermManage extends Component {
             cStudyTerm = data[i].currentStudyTerm
             console.log(cStudyYear + " " + cStudyTerm)
         }
-        document.getElementById("showYear").innerHTML = "ปีการศึกษา : " + cStudyYear
-        document.getElementById("showTerm").innerHTML = "เทอม : " + cStudyTerm
+        // document.getElementById("showYear").innerHTML = "ปีการศึกษา : " + cStudyYear
+        // document.getElementById("showTerm").innerHTML = "เทอม : " + cStudyTerm
     }
 
 
