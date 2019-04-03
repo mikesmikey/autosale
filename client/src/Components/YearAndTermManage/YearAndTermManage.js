@@ -13,11 +13,14 @@ class YearAndTermManage extends Component {
         super(props)
   
         this.state = {
-            cStudyYear : 0,
-            cStudyTerm :0,
-            yearInput : 0,
+            cStudyYear : "-",
+            cStudyTerm :"-",
+            yearInput : "",
             termInput : 0
         }      
+        this.handleInputChange = this.handleInputChange.bind(this)
+        this.updateButtonHandle = this.updateButtonHandle.bind(this)
+
     }
 
     handleInputChange (e) {
@@ -33,30 +36,44 @@ class YearAndTermManage extends Component {
     loadYearAndTerm() {
         CServiceObj.getYearAndTerm().then((data) => {
            this.setYearAndTerm( data[0].currentStudyYear, data[0].currentStudyTerm)
-
         });
     }
 
-    setdYearAndTerm(year,term) {
+    setYearAndTerm(year,term) {
         this.setState({
             cStudyYear : year,
             cStudyTerm : term
         })
     }
 
-    updateButtonHandle() {
-        var newGlobalData = {};      
-        newGlobalData.currentStudyYear = this.state.cStudyYear
-        newGlobalData.currentStudyTerm = this.state.cStudyTerm
-
-        const globalObj = CServiceObj.createGlobalDataObject(newGlobalData)
-        CServiceObj.editGlobalData(globalObj.getGlobalObjectData()).then((result) => {
-            if (result) {
-                alert('อัพเดทสำเร็จ')
-            } else {
-                alert('อัพเดทไม่สำเร็จ!')
-            }
+    setYearAndTermInput(year,term) {
+        this.setState({
+            yearInput : year,
+            termInput : term
         })
+    }
+    updateButtonHandle() {
+        var yearInt = parseInt(this.state.yearInput)
+        if (yearInt <= 0 || isNaN(yearInt) || this.state.termInput == "0") {
+            alert('ควาย')
+        }else{
+            var newGlobalData = {};      
+            newGlobalData.currentStudyYear = this.state.yearInput
+            newGlobalData.currentStudyTerm = this.state.termInput
+    
+            const globalObj = CServiceObj.createGlobalDataObject(newGlobalData)
+            CServiceObj.editGlobalData(globalObj.getGlobalObjectData()).then((result) => {
+                if (result) {
+                    this.setYearAndTerm(this.state.yearInput,this.state.termInput)
+                    this.setYearAndTermInput("",0)
+                    alert('อัพเดทสำเร็จ')
+                    
+                } else {
+                    alert('อัพเดทไม่สำเร็จ!')
+                }
+            })
+        }
+       
     }
     componentDidMount() {
         this.loadYearAndTerm()
@@ -84,11 +101,11 @@ class YearAndTermManage extends Component {
                         <div className="columns">
                             <div className="column is-4 border-1">
                                 <div className="tab-is-1">
-                                    <label className="label font-size-1"></label>
+                                    <label className="label font-size-1">ปีการศึกษา : {this.state.cStudyYear}</label>
 
                                 </div>
                                 <div className="tab-is-1">
-                                    <label className="label font-size-1" id="showTerm"></label>
+                                    <label className="label font-size-1">เทอม : {this.state.cStudyTerm}</label>
 
                                 </div>
                             </div>
@@ -112,12 +129,13 @@ class YearAndTermManage extends Component {
                             <div className="column is-year border-2">
                                 <div className="tab-is-1">
                                     <label className="label font-size-1" >ปีการศึกษา : </label>
-                                    <input className="input is-year-width " type="text" id="input_year" />
+                                    <input className="input is-year-width " type="text" id="input_year" value={this.state.yearInput} name="yearInput" onChange={this.handleInputChange}/>
                                 </div>
                                 <div className="tab-is-1">
                                     <label className="label font-size-1 tab-is-16 ">เทอม : </label>
                                     <span className="tab-is-17"></span>
-                                    <select className="user-mange-select-box" id="select_term" >
+                                    <select className="user-mange-select-box" id="select_term" value={this.state.termInput} name="termInput" onChange={this.handleInputChange}>
+                                        <option value="0"></option>
                                         <option value="1">1</option>
                                         <option value="2">2</option>
                                         <option value="3">3</option>
