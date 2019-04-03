@@ -12,12 +12,12 @@ class MainScrenMenuBar extends Component {
 
     this.state = {
       buttonPointer: null,
-      hamburger : false
+      hamburger: false
     }
 
-    this.handleMenuDropDown = this.handleMenuDropDown.bind(this);
-    this.handleButtonPointer = this.handleButtonPointer.bind(this);
-    this.handleHamburger = this.handleHamburger.bind(this);
+    this.handleMenuDropDown = this.handleMenuDropDown.bind(this)
+    this.handleButtonPointer = this.handleButtonPointer.bind(this)
+    this.handleHamburger = this.handleHamburger.bind(this)
   }
 
   dropDownSwitch (id) {
@@ -48,15 +48,15 @@ class MainScrenMenuBar extends Component {
     })
   }
 
-  handleHamburger() {
+  handleHamburger () {
     this.setState({
-      hamburger : !this.state.hamburger
-    });
+      hamburger: !this.state.hamburger
+    })
   }
 
-  render() {
+  render () {
     return (
-      <aside className={`menu main-menu ${this.state.hamburger? "is-active" : ""}`}>
+      <aside className={`menu main-menu ${this.state.hamburger ? 'is-active' : ''}`}>
         <div className="menu-space"></div>
         <ul className="menu-list">
           <li>
