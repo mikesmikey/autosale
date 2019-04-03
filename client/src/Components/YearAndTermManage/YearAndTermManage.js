@@ -53,12 +53,13 @@ class YearAndTermManage extends Component {
   }
   updateButtonHandle () {
     var yearInt = parseInt(this.state.yearInput)
+    var termInt = parseInt(this.state.termInput)
     if (yearInt <= 0 || isNaN(yearInt) || this.state.termInput === '0') {
       alert('ควาย')
     } else {
       var newGlobalData = {}
-      newGlobalData.currentStudyYear = this.state.yearInput
-      newGlobalData.currentStudyTerm = this.state.termInput
+      newGlobalData.currentStudyYear = yearInt
+      newGlobalData.currentStudyTerm = termInt
 
       const globalObj = CServiceObj.createGlobalDataObject(newGlobalData)
       CServiceObj.editGlobalData(globalObj.getGlobalObjectData()).then((result) => {

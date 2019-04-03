@@ -26,7 +26,7 @@ class WebService {
   }
 
   provideToken (userData) {
-    const token = jwt.sign({ username: userData.username }, secret, { expiresIn: 60*60 })
+    const token = jwt.sign({ username: userData.username }, secret, { expiresIn: 60 * 60 })
     return token
   }
 
@@ -48,7 +48,7 @@ class WebService {
       const surnametable = ['จันอังคาร', 'จริงใจ', 'ใจดี', 'มูฮัมหมัด', 'ใจร้าย', 'บารัค', 'สมิธ', 'จอร์น', 'สมานฉันท์', 'ชินวัตร']
       const typeTable = ['student', 'professor', 'staff']
 
-      for (var i = 0; i < 100; i++) {
+      for (var i = 0; i < 10; i++) {
         var userData = {}
         userData.username = '59100' + i
         userData.password = Number.parseInt(Math.random() * 100000000)
@@ -58,12 +58,13 @@ class WebService {
         userData.isExaminer = Number.parseInt(Math.random() * 2) === 0
 
         if (userData.typeOfUser === 'student' || userData.typeOfUser === 'professor') {
-          userData.facultyId = 0
-          userData.branchId = Number.parseInt(Math.random() * 2)
+          userData.facultyId = Number.parseInt(Math.random() * 3) + 1
+          userData.branchId = 1
         }
 
         if (userData.typeOfUser === 'student') {
           userData.year = 3
+          userData.isScore = false
         }
 
         if (userData.typeOfUser === 'staff') {
