@@ -39,7 +39,15 @@ class ClientService {
 
   getAllFaculty() {
     return new Promise((resolve, reject) => {
-      axios.get(`/facultys`).then((result) => {
+      axios.get('/facultys').then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  getAllSubject() {
+    return new Promise((resolve, reject) => {
+      axios.get('/subjects').then((result) => {
         resolve(result.data)
       })
     })

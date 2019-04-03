@@ -84,7 +84,7 @@ class YearAndTermManage extends Component {
       <div className="subcontent-main-div global">
         <div className="box with-title is-round ">
           <div className="box-title is-violet">
-                        จัดการปีการศึกษา
+                จัดการปีการศึกษา
           </div>
           <div className="box-content">
             <div className="columns">

@@ -6,19 +6,18 @@ import readXlsxFile from 'read-excel-file'
 const CServiceObj = new ClientService();
 
 class StudentExcelPopup extends Component {
-    _isMounted = false
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             fileName: '',
             source: '',
             faculties: [],
             students: []
         }
-
         this.handleFileChange = this.handleFileChange.bind(this);
     }
-
+    _isMounted = false
+    
     componentDidMount() {
         this._isMounted = true
         this.getAllStudentsAndFaculties();
@@ -87,13 +86,15 @@ class StudentExcelPopup extends Component {
         }
         else {
             readXlsxFile(this.state.source).then((rows) => {
+                console.log(rows[0].length)
                 if (rows.length >= 1) {
                     if (rows[0][0] === 'รหัสนิสิต' &&
                         rows[0][1] === 'ชื่อ' &&
                         rows[0][2] === 'นามสกุล' &&
                         rows[0][3] === 'คณะ' &&
                         rows[0][4] === 'สาขา' &&
-                        rows[0][5] === 'ชั้นปี') {
+                        rows[0][5] === 'ชั้นปี' &&
+                        rows[0].length == 6) {
 
                         var users = []
                         var checkFaculty_Branch = new Array(rows.length).fill(false)
@@ -152,8 +153,8 @@ class StudentExcelPopup extends Component {
                                 })
                             }
                         }
-                        console.log(checkFaculty_Branch, checkID_Year)
-                        alert('OK')
+                        // console.log(checkFaculty_Branch, checkID_Year)
+                        alert('ok')
 
                         // this.getAllStudents('student')
                         // console.log('users ',usersAlready)
@@ -214,29 +215,30 @@ class StudentExcelPopup extends Component {
         return (
             <div className="box is-user-popUp" style={{ width: "500px" }}>
                 <h1 align="center">เลือกไฟล์</h1>
-                <div align="left">
-                    <label className="label is-fake">อัพโหลดไฟล์ (.xlsx)
-                        <input
-                            className="input"
-                            type="file"
-                            multiple={false}
-                            name="fileInput"
-                            onChange={this.handleFileChange}
-                        />
-                    </label>
-                    <label htmlFor="file">{file}</label>
+                <label className="label is-fake">อัพโหลดไฟล์ (.xlsx)
+                    <input
+                        className="input"
+                        type="file"
+                        multiple={false}
+                        name="fileInput"
+                        onChange={this.handleFileChange}
+                    />
+                </label>
+                <label htmlFor="file">{file}</label>
+
+                <div>
+                    <span className="adds-tab-is-15"></span>
                 </div>
-                <div align="right">
+
+                <div style={{ textAlign: "center" }}>
                     <button
-                        className="button is-oros is-free-size is-round"
-                        onClick={() => { this.validateDataFile() }}
-                    >
-                        นำเข้าข้อมูลนิสิต
+                        className="button is-oros is-round"
+                        onClick={() => { this.validateDataFile() }}>
+                        ยืนยัน
                     </button>
                     <button
                         className="button is-yentafo is-round"
-                        onClick={() => { this.resetFile() }}
-                    >
+                        onClick={() => { this.resetFile() }}>
                         ยกเลิก
                     </button>
                 </div>
