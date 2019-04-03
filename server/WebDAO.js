@@ -156,7 +156,7 @@ class WebDAO {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
         const db = client.db(dbName)
-        db.collection('GlobalData').findOneAndUpdate({ "id": newGlobalData.id }, { "$set": newGlobalData}, (err, result) => {
+        db.collection('GlobalData').findOneAndUpdate({}, { "$set": newGlobalData}, (err, result) => {
           if (err) { throw err }
           if (result.value) {
             return resolve(true);

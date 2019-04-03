@@ -1,6 +1,5 @@
 class GlobalData {
     constructor (form) {
-      this.id = form.id
       this.currentStudyYear = form.currentStudyYear
       this.currentStudyTerm = form.currentStudyTerm
     }

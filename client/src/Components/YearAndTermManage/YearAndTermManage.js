@@ -7,23 +7,47 @@ import ClientService from '../Utilities/ClientService';
 import '../../StyleSheets/home.css';
 import '../../StyleSheets/yearAndTermManage.css';
 const CServiceObj = new ClientService();
-var cStudyYear;
-var cStudyTerm;
+
 class YearAndTermManage extends Component {
+    constructor (props) {
+        super(props)
+  
+        this.state = {
+            cStudyYear : 0,
+            cStudyTerm :0,
+            yearInput : 0,
+            termInput : 0
+        }      
+    }
+
+    handleInputChange (e) {
+        const target = e.target
+        const name = target.name
+        const value = target.value
+    
+        this.setState({
+          [name]: value
+        })
+      }
 
     loadYearAndTerm() {
         CServiceObj.getYearAndTerm().then((data) => {
-            this.createGlobalData(data);
+           this.setYearAndTerm( data[0].currentStudyYear, data[0].currentStudyTerm)
+
         });
     }
 
+    setdYearAndTerm(year,term) {
+        this.setState({
+            cStudyYear : year,
+            cStudyTerm : term
+        })
+    }
+
     updateButtonHandle() {
-        var newGlobalData = {};
-        var yearInt = parseInt(document.getElementById("input_year").value)
-        var termInt = parseInt(document.getElementById("select_term").value)
-        newGlobalData.id = 1
-        newGlobalData.currentStudyYear = yearInt
-        newGlobalData.currentStudyTerm = termInt;
+        var newGlobalData = {};      
+        newGlobalData.currentStudyYear = this.state.cStudyYear
+        newGlobalData.currentStudyTerm = this.state.cStudyTerm
 
         const globalObj = CServiceObj.createGlobalDataObject(newGlobalData)
         CServiceObj.editGlobalData(globalObj.getGlobalObjectData()).then((result) => {
@@ -37,16 +61,6 @@ class YearAndTermManage extends Component {
     componentDidMount() {
         this.loadYearAndTerm()
     }
-    createGlobalData(data) {
-        for (let i = 0; i < data.length; i++) {
-            cStudyYear = data[i].currentStudyYear
-            cStudyTerm = data[i].currentStudyTerm
-            console.log(cStudyYear + " " + cStudyTerm)
-        }
-        document.getElementById("showYear").innerHTML = "ปีการศึกษา : " + cStudyYear
-        document.getElementById("showTerm").innerHTML = "เทอม : " + cStudyTerm
-    }
-
 
     render() {
         return (
@@ -70,7 +84,7 @@ class YearAndTermManage extends Component {
                         <div className="columns">
                             <div className="column is-4 border-1">
                                 <div className="tab-is-1">
-                                    <label className="label font-size-1" id="showYear"></label>
+                                    <label className="label font-size-1"></label>
 
                                 </div>
                                 <div className="tab-is-1">
