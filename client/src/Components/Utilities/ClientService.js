@@ -99,9 +99,25 @@ class ClientService {
   }
 
 
-  getAllExam() {
+  getAllExamByUsername (username) {
     return new Promise((resolve, reject) => {
-      axios.get(`/exam`).then((result) => {
+      axios.get(`/exam/${username}`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  getAllSubjectBySubjectId (SubjectId) {
+    return new Promise((resolve) => {
+      axios.get(`/subject/${SubjectId}`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  getAllSubject () {
+    return new Promise((resolve) => {
+      axios.get(`/subject`).then((result) => {
         resolve(result.data)
       })
     })

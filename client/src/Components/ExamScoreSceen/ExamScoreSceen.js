@@ -10,8 +10,35 @@ class ExamScoreSceen extends Component {
 
   constructor (props) {
     super(props)
-    
-    this.searchInput = ""
+
+    this.state = {
+      selectedYear: 2562,
+      idSelectedYear: 'YearSelect',
+      searchInput: ''
+    }
+
+    this.handleSelectYear = this.handleSelectYear.bind(this)
+    this.handleInputChange = this.handleInputChange.bind(this)
+    this.handleSearchButton = this.handleSearchButton.bind(this)
+  }
+
+  handleSelectYear (e) {
+    const target = e.target
+    const name = target.options[target.selectedIndex].value
+
+    this.setState({
+      selectedYear: name
+    })
+  }
+
+  handleInputChange (e) {
+    const target = e.target
+    const name = target.name
+    const value = target.value
+
+    this.setState({
+      [name]: value
+    })
   }
 
   handleSearchButton () {
@@ -32,10 +59,10 @@ class ExamScoreSceen extends Component {
                   <label className="label">ค้นหาคะแนนสอบ </label>
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   <label className="label">ปีการศึกษา </label>
-                  <select className="exam-score-select-box" >
-                    <option value="student">นิสิต</option>
-                    <option value="professor">อาจารย์</option>
-                    <option value="staff">เจ้าหน้าที่</option>
+                  <select className="exam-score-select-box"
+                    id="YearSelect"
+                    onChange={this.handleSelectYear} 
+                  >
                   </select>
                 </div>
                                 &nbsp;&nbsp;&nbsp;
@@ -44,9 +71,9 @@ class ExamScoreSceen extends Component {
                   <input className="input is-userId-width" type="text" id="subjectId" name="searchInput" onChange={this.handleInputChange} />
                 </div>
                 <div className="input-with-text">
-                    <button type="submit"><i className="fa fa-search height50" onClick={this.handleSearchButton}>
-                    </i></button>
-                  </div>
+                  <button type="submit"><i className="fa fa-search height50" onClick={this.handleSearchButton}>
+                  </i></button>
+                </div>
               </div>
 
             </div>
@@ -60,7 +87,8 @@ class ExamScoreSceen extends Component {
                 <ScoreTable
                   ref={instance => { this.scoreTable = instance }}
                   // showManageModal={() => { this.managePopup.showManageModal("view") }}
-
+                  selectedYear={this.state.selectedYear}
+                  idSelectedYear={this.state.idSelectedYear}
                 />
               </div>
             </div>

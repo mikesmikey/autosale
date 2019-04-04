@@ -111,8 +111,10 @@ app.get('/facultys', (req, res) => {
   })
 })
 
-app.get('/exam', (req, res) => {
-  WebDAOObj.getAllExam().then((data) => {
+
+
+app.get('/exam/:username', (req, res) => {
+  WebDAOObj.getAllExamByUsername(req.params.username).then((data) => {
     if (data != null) {
       res.json(data)
     } else {
@@ -121,6 +123,25 @@ app.get('/exam', (req, res) => {
   })
 })
 
+app.get('/subject', (req, res) => {
+  WebDAOObj.getAllSubject().then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.get('/subject/:SubjectId', (req, res) => {
+  WebDAOObj.getAllSubjectBySubjectId(req.params.SubjectId).then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
 
 
 

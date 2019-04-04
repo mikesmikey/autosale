@@ -13,15 +13,29 @@ class ScoreTable extends Component {
     this._isMounted = true
 
     this.state = {
-      selectedRow: null,
-      data: []
+      scoreAnoucementDay: '',
+      subjectId: 0,
+      subjectName: '',
+      category: '',
+      score: 0,
+      maxScore: 0,
+      couseId: 0,
+      year: 2561,
+      subjectNameArray: [],
+      data: [],
+      datata: []
     }
-    this.id = 11111111
-    this.ScoreAll = []
-    this.selectedYear = 2562
+    this.selectedRow = null
+    this.id = '11111111'
+    this.YearAll = []
+    this.check = 0
+    this.test = 'final'
+    this.testnum = 35
 
-    this.loadData = this.loadData.bind(this)
+
     this.loadDataIntoTable = this.loadDataIntoTable.bind(this)
+    this.loadDataByUsername = this.loadDataByUsername.bind(this)
+    this.loadDataBySubjectID = this.loadDataBySubjectID.bind(this)
   }
 
   renderTableHead () {
@@ -35,29 +49,66 @@ class ScoreTable extends Component {
     )
   }
 
-  loadData() {
-    ServiceObj.getAllExam().then((usersData) => {
-       this.setState({ data: usersData })
+  
+
+  loadDataByUsername (username) {
+    ServiceObj.getAllExamByUsername(username).then((exameData) => {
+      this.setState({ data: exameData })
+    })
+    ServiceObj.getAllSubject().then((SubjectData) => {
+      this.setState({ subjectNameArray: SubjectData })
     })
   }
 
-  loadDataBySubjectID(subjectId) {
+  loadDataBySubjectID (SubjectId) {
     
   }
 
+  
+
   loadDataIntoTable () {
     var returnData = []
-    this.loadData()
+    this.loadDataByUsername(this.id)
+    // console.log(this.state.datata)
+    var select = document.getElementById(this.props.idSelectedYear)
     for (var i = 0; i < this.state.data.length; i++) {
-      if(this.state.data[i].scoreAnoucementDay != "") {
-        for (var j = 0; j < this.state.data[i].ExamSeat.length; j++) {
-          if(this.state.data[i].ExamSeat[j].studentCode == this.id) {
-            returnData[i] = <ScoreTableItem
-            key={i}
-            itemIndex={i}
-            itemData={this.state.data[i]}
-            ScoreAll={this.state.data[i]}
-          />
+      for (var j = 0; j < this.state.subjectNameArray.length; j++) {
+        if (this.state.subjectNameArray[j].subject_id == this.state.data[i].subjectId) { // subject_id
+          for (var l = 0; l < this.state.subjectNameArray[j].courses.length; l++) {
+      
+            if (this.state.subjectNameArray[j].courses[l].courseId == this.state.data[i].courseId) { // addYearToSelect
+              var el = document.createElement('option')
+              el.value = this.state.subjectNameArray[j].courses[l].school_year
+              el.textContent = this.state.subjectNameArray[j].courses[l].school_year
+              let num = 0
+              for (var z = 0; z < this.YearAll.length; z++) {
+                if (this.YearAll[z] != this.state.subjectNameArray[j].courses[l].school_year) {
+                  num++
+                }
+              }
+              if (num == this.YearAll.length) {
+                select.appendChild(el)
+                this.YearAll.push(this.state.subjectNameArray[j].courses[l].school_year)
+              }
+            }
+
+            if (this.state.subjectNameArray[j].courses[l].school_year == this.props.selectedYear &&
+                      this.state.subjectNameArray[j].courses[l].courseId == this.state.data[i].courseId
+            ) {
+              returnData[i] = <ScoreTableItem
+                key={i}
+                itemIndex={i}
+                subject={this.state.subjectNameArray[j] }
+                itemData={this.state.data[i]}
+                ScoreAll={this.state.data[i]}
+              />
+              this.check = 1
+              break
+            }
+          }
+          if (this.check == 1) {
+            this.check = 0
+            break
           }
         }
       }
@@ -65,8 +116,6 @@ class ScoreTable extends Component {
 
     return returnData
   }
-
-  
 
   render () {
     return (
@@ -96,7 +145,7 @@ class ScoreTableItem extends Component {
       >
         <td>{this.props.itemData.scoreAnoucementDay}</td>
         <td>{this.props.itemData.subjectId}</td>
-        <td>{this.props.itemData.subjectId}</td>
+        <td>{this.props.subject.subject_name}</td>
         <td>{this.props.itemData.category}</td>
       </tr>
     )
