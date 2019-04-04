@@ -6,31 +6,31 @@ import Subject from '../../Objects/Subject'
 import GlobalData from '../../Objects/GlobalData'
 
 class ClientService {
-  loginUsernameCheck(username) {
+  loginUsernameCheck (username) {
     if (username === '') {
       return false
     }
     return true
   }
 
-  loginPasswordCheck(password) {
+  loginPasswordCheck (password) {
     if (password === '') {
       return false
     }
     return true
   }
 
-  userObjFormCheck(userObj) {
+  userObjFormCheck (userObj) {
     return userObj.validMethod()
   }
 
-  createUserObjectByType(userData) {
+  createUserObjectByType (userData) {
     if (userData.typeOfUser === 'student') return new Student(userData)
     if (userData.typeOfUser === 'professor') return new Professor(userData)
     if (userData.typeOfUser === 'staff') return new Staff(userData)
   }
 
-  getAllUserBySelectType(type) {
+  getAllUserBySelectType (type) {
     return new Promise((resolve, reject) => {
       axios.get(`/users/type/${type}`).then((result) => {
         resolve(result.data)
@@ -38,7 +38,7 @@ class ClientService {
     })
   }
 
-  getAllFaculty() {
+  getAllFaculty () {
     return new Promise((resolve, reject) => {
       axios.get('/facultys').then((result) => {
         resolve(result.data)
@@ -54,7 +54,7 @@ class ClientService {
     })
   }
 
-  searchAllUserByTypeAndUsername(type, userId) {
+  searchAllUserByTypeAndUsername (type, userId) {
     return new Promise((resolve, reject) => {
       var url = `/users/${userId.length === 0 ? `type/${type}` : `/${type}/${userId}`}`
       axios.get(url).then((result) => {
@@ -82,7 +82,7 @@ class ClientService {
     })
   }
 
-  getUserByToken(token) {
+  getUserByToken (token) {
     return new Promise((resolve, reject) => {
       axios.post(`/token`, { 'token': token }).then((result) => {
         resolve(result.data)
@@ -106,7 +106,7 @@ class ClientService {
     })
   }
 
-  editUser(newUserData) {
+  editUser (newUserData) {
     return new Promise((resolve, reject) => {
       axios.post(`/user/edit`, { 'userData': newUserData }).then((result) => {
         resolve(result.data)
@@ -114,7 +114,7 @@ class ClientService {
     })
   }
 
-  loginByToken(logoutCallBack) {
+  loginByToken (logoutCallBack) {
     return new Promise((resolve, reject) => {
       const token = this.getCurrentToken()
       if (token) {
@@ -130,7 +130,7 @@ class ClientService {
     })
   }
 
-  login(loginCallBack, data) {
+  login (loginCallBack, data) {
     if (data.token) {
       this.keepTokenInLocalStore(data.token)
     }
@@ -140,29 +140,29 @@ class ClientService {
     }
   }
 
-  logout(logoutCallBack) {
+  logout (logoutCallBack) {
     this.removeTokenFromLocalStore()
     if (logoutCallBack) {
       logoutCallBack()
     }
   }
 
-  getCurrentToken() {
+  getCurrentToken () {
     const token = localStorage.getItem('iAMToken')
     if (typeof (token) !== 'undefined' && token !== null) {
       return token
     } else { return false }
   }
 
-  keepTokenInLocalStore(token) {
+  keepTokenInLocalStore (token) {
     localStorage.setItem('iAMToken', token)
   }
 
-  removeTokenFromLocalStore() {
+  removeTokenFromLocalStore () {
     localStorage.removeItem('iAMToken')
   }
 
-  checkAuth(data) {
+  checkAuth (data) {
     return new Promise((resolve, reject) => {
       if (this.loginUsernameCheck(data.username) && this.loginPasswordCheck(data.password)) {
         const sendData = { 'loginInfo': data }
@@ -176,22 +176,22 @@ class ClientService {
   }
 
   /* ===========[GlobalData Service]=================== */
-  getYearAndTerm() {
+  getYearAndTerm () {
     return new Promise((resolve, reject) => {
       axios.get(`/yearAndTerm`).then((result) => {
-        resolve(result.data);
+        resolve(result.data)
       })
     })
   }
 
-  createGlobalDataObject(globalData) {
+  createGlobalDataObject (globalData) {
     return new GlobalData(globalData)
   }
 
-  editGlobalData(newGlobalData) {
+  editGlobalData (newGlobalData) {
     return new Promise((resolve, reject) => {
       axios.post(`/yearAndTerm/edit`, { 'globalData': newGlobalData }).then((result) => {
-        resolve(result.data);
+        resolve(result.data)
       })
     })
   }
