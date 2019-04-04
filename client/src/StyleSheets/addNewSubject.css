@@ -17,3 +17,11 @@
     display:inline-block; 
     margin-left: 40px; 
 }
+
+.input.is-subjectName-width {
+    width: 280px;
+}
+
+.input.is-subjectId-width {
+    width: 180px;
+}

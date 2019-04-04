@@ -2,6 +2,7 @@ import axios from 'axios'
 import Student from '../../Objects/Student'
 import Professor from '../../Objects/Professor'
 import Staff from '../../Objects/Staff'
+import Subject from '../../Objects/Subject'
 import GlobalData from '../../Objects/GlobalData'
 
 class ClientService {
@@ -61,6 +62,17 @@ class ClientService {
       })
     })
   }
+
+  searchAllSubjectBySubjectIdOrSubjectName(subjid, subjname) {
+    return new Promise((resolve, reject) => {
+      var url = `/subjects/${subjid.length === 0 ? `name/${subjname}` : `/id_${subjid}/${subjname}`}`
+      axios.get(url)
+        .then((result) => {
+          resolve(result.data)
+        })
+    })
+  }
+
 
   deleteUser(deleteUserId) {
     return new Promise((resolve, reject) => {
@@ -184,6 +196,13 @@ class ClientService {
     })
   }
 
+  addSubject(subjectData) {
+    return new Promise((resolve, reject) => {
+      axios.post(`/subject/add`, { 'subjectData': subjectData }).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
 }
 
 export default ClientService

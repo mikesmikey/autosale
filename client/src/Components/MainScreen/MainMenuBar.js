@@ -48,13 +48,13 @@ class MainScrenMenuBar extends Component {
     })
   }
 
-  handleHamburger () {
+  handleHamburger() {
     this.setState({
       hamburger: !this.state.hamburger
     });
   }
 
-  render () {
+  render() {
     return (
       <aside className={`menu main-menu ${this.state.hamburger ? "is-active" : ""}`}>
         <div className="menu-space"></div>
@@ -99,7 +99,7 @@ class MainScrenMenuBar extends Component {
             <NavLink to="/year_and_term_manage" activeClassName="is-active is-black-violet" onClick={this.handleButtonPointer}>
               <i className="menu-icon-awesome fa fa-calendar"></i>
               จัดการปีการศึกษา
-          </NavLink>
+            </NavLink>
           </li>
           {/*
           <li>

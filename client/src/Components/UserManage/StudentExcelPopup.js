@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import ClientService from '../Utilities/ClientService'
 import readXlsxFile from 'read-excel-file'
 
-const CServiceObj = new ClientService();
+const CServiceObj = new ClientService()
 
 class StudentExcelPopup extends Component {
     constructor(props) {
@@ -27,13 +27,14 @@ class StudentExcelPopup extends Component {
         this._isMounted = false
     }
 
-    resetFile() {
+    clearFileAndCloseModal() {
         this.props.closeModal()
         this.setState({
             fileName: '',
             source: null
         })
     }
+
     showInsertExcelModal() {
         this.props.showModal()
     }
@@ -94,7 +95,7 @@ class StudentExcelPopup extends Component {
                         rows[0][3] === 'คณะ' &&
                         rows[0][4] === 'สาขา' &&
                         rows[0][5] === 'ชั้นปี' &&
-                        rows[0].length == 6) {
+                        rows[0].length === 6) {
 
                         var users = []
                         var checkFaculty_Branch = new Array(rows.length).fill(false)
@@ -155,9 +156,6 @@ class StudentExcelPopup extends Component {
                         }
                         // console.log(checkFaculty_Branch, checkID_Year)
                         alert('ok')
-
-                        // this.getAllStudents('student')
-                        // console.log('users ',usersAlready)
                         if (users.length > 0) {
                             this.addManyStudent(users, rows.length - 1)
                         }
@@ -180,6 +178,7 @@ class StudentExcelPopup extends Component {
                     })
                 }
             })
+            this.clearFileAndCloseModal()
         }
     }
     handleFileChange = (event) => {
@@ -217,10 +216,10 @@ class StudentExcelPopup extends Component {
                 <h1 align="center">เลือกไฟล์</h1>
                 <label className="label is-fake">อัพโหลดไฟล์ (.xlsx)
                     <input
-                        className="input"
-                        type="file"
+                        className='input'
+                        type='file'
                         multiple={false}
-                        name="fileInput"
+                        value={''}
                         onChange={this.handleFileChange}
                     />
                 </label>
@@ -238,7 +237,7 @@ class StudentExcelPopup extends Component {
                     </button>
                     <button
                         className="button is-yentafo is-round"
-                        onClick={() => { this.resetFile() }}>
+                        onClick={() => { this.clearFileAndCloseModal() }}>
                         ยกเลิก
                     </button>
                 </div>

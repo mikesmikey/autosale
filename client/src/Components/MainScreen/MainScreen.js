@@ -14,7 +14,7 @@ import ExamSchedule from '../ExamSchedule/ExamSchedule'
 import ExamCreateScreen from '../ExamCreateSceen/ExamCreateScreen'
 import ExamScoreSceen from '../ExamScoreSceen/ExamScoreSceen'
 import UserManage from '../UserManage/UserManage'
-import AddNewSubject from '../AddNewSubject/AddNewSubject'
+import AddSubject from '../AddSubject/AddSubject'
 import YearAndTermManage from "../YearAndTermManage/YearAndTermManage"
 
 import '../../StyleSheets/mainScreen.css'
@@ -51,7 +51,7 @@ class MainScreen extends Component {
             <YearAndTermManage />
           } />
           <Route path="/add_subject" render={(props) =>
-            <AddNewSubject />
+            <AddSubject />
           } />
         </div>
       </div>
