@@ -14,13 +14,13 @@ import ExamSchedule from '../ExamSchedule/ExamSchedule'
 import ExamCreateScreen from '../ExamCreateSceen/ExamCreateScreen'
 import ExamScoreSceen from '../ExamScoreSceen/ExamScoreSceen'
 import UserManage from '../UserManage/UserManage'
-import YearAndTermManage from "../YearAndTermManage/YearAndTermManage";
+import YearAndTermManage from '../YearAndTermManage/YearAndTermManage'
 
 import '../../StyleSheets/mainScreen.css'
 import '../../StyleSheets/pageHelper.css'
 
 class MainScreen extends Component {
-  render() {
+  render () {
     return (
       <div className="main-screen">
         <MainNavBar
