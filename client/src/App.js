@@ -26,7 +26,7 @@ class App extends Component {
       user: {
         firstname: 'N/A'
       },
-      loadStatus: false
+      loadStatus: true
     }
 
     this.setUserAppAuth = this.setUserAppAuth.bind(this)
@@ -72,7 +72,7 @@ class App extends Component {
                 user={this.state.user}
                 setUserAppAuth={this.setUserAppAuth}
               />
-              : <Redirect to="/login" />
+              : this.state.loadStatus ? null : <Redirect to="/login" />
           } />
         </Switch>
       </div>
