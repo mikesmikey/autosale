@@ -122,7 +122,6 @@ class StudentExcelPopup extends Component {
                 className="input"
                 type="file"
                 multiple={false}
-                type="file"
                 name="fileInput"
                 onChange={this.handleFileChange}
               />

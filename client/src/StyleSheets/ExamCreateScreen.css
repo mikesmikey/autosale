@@ -1,3 +1,8 @@
 .exam-create-screen {
     width: 70%;
 }
+
+.exam-create-screen .table-area {
+    overflow-y: scroll;
+    height: 500px;
+}
