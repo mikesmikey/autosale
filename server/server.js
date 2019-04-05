@@ -113,7 +113,7 @@ app.get('/facultys', (req, res) => {
 
 
 
-app.get('/exam/:username', (req, res) => {
+app.get('/exam/username/:username', (req, res) => {
   WebDAOObj.getAllExamByUsername(req.params.username).then((data) => {
     if (data != null) {
       res.json(data)
@@ -133,7 +133,7 @@ app.get('/subject', (req, res) => {
   })
 })
 
-app.get('/subject/:username/:SubjectId', (req, res) => {
+app.get('/exam/:username/:SubjectId', (req, res) => {
   WebDAOObj.getAllExamBySubjectId(req.params.SubjectId, req.params.username).then((data) => {
     if (data != null) {
       res.json(data)

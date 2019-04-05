@@ -49,6 +49,10 @@ class ExamScoreSceen extends Component {
     })
   }
 
+  componentDidMount () {
+    this.scoreTable.loadDataBySubjectID(this.state.searchInput, this.state.Username)
+  }
+
   handleSearchButton () {
     this.scoreTable.loadDataBySubjectID(this.state.searchInput, this.state.Username)
   }
@@ -73,29 +77,31 @@ class ExamScoreSceen extends Component {
                         ดูคะแนนสอบ
           </div>
           <div className="box-content">
-            <div className="columns">
-              <div className="column is-8">
-                <div className="input-with-text">
-                  <label className="label">ค้นหาคะแนนสอบ </label>
+            <div className={`columns ${this.state.isDataLoading ? 'disabled' : ''}`}>
+              <div className="columns">
+                <div className="column is-8">
+                  <div className="input-with-text">
+                    <label className="label">ค้นหาคะแนนสอบ </label>
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  <label className="label">ปีการศึกษา </label>
-                  <select className="exam-score-select-box"
-                    id="YearSelect"
-                    onChange={this.handleSelectYear} 
-                  >
-                  </select>
-                </div>
+                    <label className="label">ปีการศึกษา </label>
+                    <select className="exam-score-select-box"
+                      id="YearSelect"
+                      onChange={this.handleSelectYear} 
+                    >
+                    </select>
+                  </div>
                                 &nbsp;&nbsp;&nbsp;
-                <div className="input-with-text">
-                  <label className="label">รหัสวิชา : </label>
-                  <input className="input is-userId-width" type="text" id="subjectId" name="searchInput" onChange={this.handleInputChange} />
+                  <div className="input-with-text">
+                    <label className="label">รหัสวิชา : </label>
+                    <input className="input is-userId-width" type="text" id="subjectId" name="searchInput" onChange={this.handleInputChange} />
+                  </div>
+                  <div className="input-with-text">
+                    <button type="submit"><i className="fa fa-search height50" onClick={this.handleSearchButton}>
+                    </i></button>
+                  </div>
                 </div>
-                <div className="input-with-text">
-                  <button type="submit"><i className="fa fa-search height50" onClick={this.handleSearchButton}>
-                  </i></button>
-                </div>
-              </div>
 
+              </div>
             </div>
             <br></br>
             <div>
@@ -108,6 +114,7 @@ class ExamScoreSceen extends Component {
                   ref={instance => { this.scoreTable = instance }}
                   // showManageModal={() => { this.managePopup.showManageModal("view") }}
                   username={this.state.Username}
+                  SearchInput={this.state.searchInput}
                   selectedYear={this.state.selectedYear}
                   idSelectedYear={this.state.idSelectedYear}
                   isDataLoading={this.state.isDataLoading}

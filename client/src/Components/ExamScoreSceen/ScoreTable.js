@@ -25,16 +25,15 @@ class ScoreTable extends Component {
       subjectNameArray: [],
       data: [],
       datata: [],
+      CheckLoad: true
     }
     this.selectedRow = null
     this.YearAll = []
     this.check = 0
     this.test = 'final'
     this.testnum = 35
-    this.CheckLoad = true
 
     this.loadDataIntoTable = this.loadDataIntoTable.bind(this)
-    this.loadDataByUsername = this.loadDataByUsername.bind(this)
     this.loadDataBySubjectID = this.loadDataBySubjectID.bind(this)
   }
 
@@ -49,47 +48,25 @@ class ScoreTable extends Component {
     )
   }
 
-  
 
-  loadDataByUsername (username) {
-    ServiceObj.getAllExamByUsername(username).then((exameData) => {
-      this.setState({ data: exameData })
+  loadDataBySubjectID (SubjectId, username) {
+    ServiceObj.getAllExamBySubjectId(SubjectId, username).then((usersData) => {
+      if (this._isMounted) {
+        this.props.setDataLoadingStatus(false)
+        this.setState({ data: usersData })
+        // console.log(this.state.data)
+      }
     })
     ServiceObj.getAllSubject().then((SubjectData) => {
       this.setState({ subjectNameArray: SubjectData })
     })
   }
 
-  loadDataBySubjectID (SubjectId, username) {
-    if (SubjectId == '') {
-      this.CheckLoad = true
-    } else {
-      this.CheckLoad = false
-      if (!this.props.isDataLoading) {
-        this.props.setDataLoadingStatus(true)
-        this.setState({
-          data: []
-        })
-  
-        ServiceObj.getAllExamBySubjectId(SubjectId, username).then((usersData) => {
-          if (this._isMounted) {
-            this.props.setDataLoadingStatus(false)
-            this.setState({ data: usersData })
-            console.log(this.state.data)
-          }
-        })
-      }
-    }
-  }
-
   
 
   loadDataIntoTable () {
     var returnData = []
-    if (this.CheckLoad) {
-      console.log(this.CheckLoad)
-      this.loadDataByUsername(this.props.username)
-    }
+    // this.loadDataBySubjectID(this.props.SearchInput, this.props.username)
     // console.log(this.state.datata)
     var select = document.getElementById(this.props.idSelectedYear)
     for (var i = 0; i < this.state.data.length; i++) {
