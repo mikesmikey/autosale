@@ -25,7 +25,6 @@ class ScoreTable extends Component {
       subjectNameArray: [],
       data: [],
       datata: [],
-      username: '11111111'
     }
     this.selectedRow = null
     this.YearAll = []
@@ -81,7 +80,7 @@ class ScoreTable extends Component {
 
   loadDataIntoTable () {
     var returnData = []
-    this.loadDataByUsername(this.state.username)
+    this.loadDataByUsername(this.props.username)
     // console.log(this.state.datata)
     var select = document.getElementById(this.props.idSelectedYear)
     for (var i = 0; i < this.state.data.length; i++) {

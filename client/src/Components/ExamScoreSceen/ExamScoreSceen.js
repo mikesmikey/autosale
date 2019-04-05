@@ -107,8 +107,11 @@ class ExamScoreSceen extends Component {
                 <ScoreTable
                   ref={instance => { this.scoreTable = instance }}
                   // showManageModal={() => { this.managePopup.showManageModal("view") }}
+                  username={this.state.Username}
                   selectedYear={this.state.selectedYear}
                   idSelectedYear={this.state.idSelectedYear}
+                  isDataLoading={this.state.isDataLoading}
+                  setDataLoadingStatus={this.setDataLoadingStatus}
                 />
               </div>
             </div>
