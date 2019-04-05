@@ -7,19 +7,27 @@ import '../../StyleSheets/ExamScoreSceen.css'
 import ScoreTable from './ScoreTable'
 
 class ExamScoreSceen extends Component {
+  
+  _isMounted = false;
 
   constructor (props) {
     super(props)
 
     this.state = {
+      Username: '11111111',
       selectedYear: 2562,
       idSelectedYear: 'YearSelect',
-      searchInput: ''
+      searchInput: '',
+      isDataLoading: false
     }
 
+    this._isMounted = true
+    
     this.handleSelectYear = this.handleSelectYear.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
     this.handleSearchButton = this.handleSearchButton.bind(this)
+    this.setDataLoadingStatus = this.setDataLoadingStatus.bind(this)
+    this.setUsername = this.setUsername.bind(this)
   }
 
   handleSelectYear (e) {
@@ -42,7 +50,19 @@ class ExamScoreSceen extends Component {
   }
 
   handleSearchButton () {
-    this.ScoreTable.loadDataBySubjectID(this.searchInput)
+    this.scoreTable.loadDataBySubjectID(this.state.searchInput, this.state.Username)
+  }
+
+  setDataLoadingStatus (status) {
+    this.setState({
+      isDataLoading: status
+    })
+  }
+
+  setUsername (User) {
+    this.setState({
+      Username: User
+    })
   }
 
   render () {

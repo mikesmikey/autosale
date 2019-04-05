@@ -143,11 +143,11 @@ class WebDAO {
   }
 
 
-  getAllSubjectBySubjectId (SubjectId) {
+  getAllSubjectBySubjectId (SubjectId, username) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
         const db = client.db(dbName)
-        db.collection('Subject').find({ 'subject_id': SubjectId }).project({ '_id': 0, 'password': 0 }).toArray((err, data) => {
+        db.collection('Subject').find({ 'subject_id': SubjectId, 'ExamSeat.studentCode': username }).project({ '_id': 0, 'password': 0 }).toArray((err, data) => {
           if (err) { throw err }
           return resolve(data)
         })

@@ -107,9 +107,9 @@ class ClientService {
     })
   }
 
-  getAllSubjectBySubjectId (SubjectId) {
+  getAllSubjectBySubjectId (SubjectId, username) {
     return new Promise((resolve) => {
-      axios.get(`/subject/${SubjectId}`).then((result) => {
+      axios.get(`/subject/${username}/${SubjectId}`).then((result) => {
         resolve(result.data)
       })
     })

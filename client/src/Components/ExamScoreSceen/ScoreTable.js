@@ -7,6 +7,7 @@ import ClientService from '../Utilities/ClientService'
 const ServiceObj = new ClientService()
 
 class ScoreTable extends Component {
+  _isMounted = false;
   constructor (props) {
     super(props)
 
@@ -23,10 +24,10 @@ class ScoreTable extends Component {
       year: 2561,
       subjectNameArray: [],
       data: [],
-      datata: []
+      datata: [],
+      username: '11111111'
     }
     this.selectedRow = null
-    this.id = '11111111'
     this.YearAll = []
     this.check = 0
     this.test = 'final'
@@ -60,15 +61,27 @@ class ScoreTable extends Component {
     })
   }
 
-  loadDataBySubjectID (SubjectId) {
-    
+  loadDataBySubjectID (SubjectId, username) {
+    if (!this.props.isDataLoading) {
+      this.props.setDataLoadingStatus(true)
+      this.setState({
+        data: []
+      })
+
+      ServiceObj.getAllSubjectBySubjectId(SubjectId, username).then((usersData) => {
+        if (this._isMounted) {
+          this.props.setDataLoadingStatus(false)
+          this.setState({ data: usersData })
+        }
+      })
+    }
   }
 
   
 
   loadDataIntoTable () {
     var returnData = []
-    this.loadDataByUsername(this.id)
+    this.loadDataByUsername(this.state.username)
     // console.log(this.state.datata)
     var select = document.getElementById(this.props.idSelectedYear)
     for (var i = 0; i < this.state.data.length; i++) {
