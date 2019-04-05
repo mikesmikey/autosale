@@ -12,7 +12,7 @@ const ServiceObj = new ClientService()
 class UserTable extends Component {
   _isMounted = false;
 
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this._isMounted = true
@@ -26,11 +26,11 @@ class UserTable extends Component {
     this.loadDataIntoTable = this.loadDataIntoTable.bind(this)
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     this._isMounted = false
   }
 
-  renderTableHead() {
+  renderTableHead () {
     return (
       <tr className="is-header">
         <th>รหัสประจำตัว</th>
@@ -42,7 +42,7 @@ class UserTable extends Component {
     )
   }
 
-  selectItem(e) {
+  selectItem (e) {
     const parent = e.target.parentElement
     if (parent.classList.contains('user-table-item')) {
       if (!parent.classList.contains('is-active')) {
@@ -58,7 +58,7 @@ class UserTable extends Component {
     }
   }
 
-  inspectItem(e) {
+  inspectItem (e) {
     const parent = e.target.parentElement
     if (parent.classList.contains('user-table-item')) {
       this.props.showManageModal()
@@ -66,7 +66,7 @@ class UserTable extends Component {
     }
   }
 
-  deleteSelectedItem() {
+  deleteSelectedItem () {
     const index = Number.parseInt(this.state.selectedRow.getAttribute('index'), 10)
     var arr = this.state.data
     arr.splice(index, 1)
@@ -75,7 +75,7 @@ class UserTable extends Component {
     })
   }
 
-  editSelectedItem(newData) {
+  editSelectedItem (newData) {
     var arr = this.state.data
     arr[this.state.selectedRow.getAttribute('index')] = newData
     this.setState({
@@ -83,7 +83,7 @@ class UserTable extends Component {
     })
   }
 
-  addItem(newData) {
+  addItem (newData) {
     var arr = this.state.data
     arr[arr.length] = newData
     this.setState({
@@ -91,7 +91,7 @@ class UserTable extends Component {
     })
   }
 
-  decideUserObject(data) {
+  decideUserObject (data) {
     if (data.typeOfUser === 'student') {
       return new Student(data)
     } else if (data.typeOfUser === 'professor') {
@@ -101,7 +101,7 @@ class UserTable extends Component {
     }
   }
 
-  loadDataIntoTable() {
+  loadDataIntoTable () {
     var returnData = []
     for (var i = 0; i < this.state.data.length; i++) {
       returnData[i] = <UserTableItem
@@ -117,7 +117,7 @@ class UserTable extends Component {
     return returnData
   }
 
-  loadDataByTypeAndUsername(typeInput, usernameInput) {
+  loadDataByTypeAndUsername (typeInput, usernameInput) {
     if (!this.props.isDataLoading) {
       this.props.setDataLoadingStatus(true)
       this.setState({
@@ -133,7 +133,7 @@ class UserTable extends Component {
     }
   }
 
-  render() {
+  render () {
     return (
       <table className="user-table" id="userTable" >
         <thead>
@@ -148,16 +148,15 @@ class UserTable extends Component {
 }
 
 class UserTableItem extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.renderItemByType = this.renderItemByType.bind(this)
   }
 
-  renderItemByType() {
+  renderItemByType () {
     return (
       this.props.facultys.length !== 0
-        ?
-        <tr className="user-table-item"
+        ? <tr className="user-table-item"
           onClick={(e) => { this.props.selectItem(e) }}
           onDoubleClick={(e) => { this.props.inspectItem(e) }}
           index={this.props.itemIndex}
@@ -173,7 +172,7 @@ class UserTableItem extends Component {
     )
   }
 
-  render() {
+  render () {
     return (this.renderItemByType())
   }
 }

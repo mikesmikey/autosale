@@ -20,21 +20,21 @@ class ExamTable extends Component {
 
   renderTableItem () {
     var items = []
-    for (var i=0;i<50;i++) {
-      items[i] = <ExamTableItem />
-      var jeff = "fdsaf"
-      
+    for (var i = 0; i < 50; i++) {
+      items[i] = <ExamTableItem key={i}/>
     }
-    return items;
+    return items
   }
 
   render () {
     return (
       <table className="exam-table">
         <thead>
-          <th>รหัสรายวิชา</th>
-          <th>ชื่อวิชา</th>
-          <th>สถานะ</th>
+          <tr className="is-header">
+            <th>รหัสรายวิชา</th>
+            <th>ชื่อวิชา</th>
+            <th>สถานะ</th>
+          </tr>
         </thead>
         <tbody>
           {this.renderTableItem()}

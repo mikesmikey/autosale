@@ -33,7 +33,9 @@ class ExamCreateScreen extends Component {
               </ExamTable>
             </div>
             <div className="button-area">
-              button
+              <button className="button is-3 is-oros is-round" style={{ width: '130px' }}>เพิ่มการสอบ</button>
+              <button className="button is-3 is-round" style={{ width: '130px' }}>เพิ่มข้อมูล</button>
+              <button className="button is-3 is-yentafo is-round" style={{ width: '130px' }}>ยกเลิกการสอบ</button>
             </div>
           </div>
         </div>
