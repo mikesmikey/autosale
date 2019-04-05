@@ -7,10 +7,18 @@
     justify-content: center;
 }
 
+.columns.is-stay-top {
+    align-items: flex-start;
+}
+
 .column {
     flex-basis: 0;
     flex-grow: 1;
     flex-shrink: 1;
+}
+
+.column.is-not-grow {
+    flex-grow: 0;
 }
 
 .column.is-1 {
@@ -51,10 +59,6 @@
 .column.is-8 {
     flex: none;
     width: 100%;
-}
-
-.columns.is-stay-top {
-    align-items: flex-start;
 }
 
 /*===============[text helper]===================*/
