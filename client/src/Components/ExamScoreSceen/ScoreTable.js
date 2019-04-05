@@ -31,7 +31,7 @@ class ScoreTable extends Component {
     this.check = 0
     this.test = 'final'
     this.testnum = 35
-
+    this.CheckLoad = true
 
     this.loadDataIntoTable = this.loadDataIntoTable.bind(this)
     this.loadDataByUsername = this.loadDataByUsername.bind(this)
@@ -61,19 +61,24 @@ class ScoreTable extends Component {
   }
 
   loadDataBySubjectID (SubjectId, username) {
-    if (!this.props.isDataLoading) {
-      this.props.setDataLoadingStatus(true)
-      this.setState({
-        data: []
-      })
-
-      ServiceObj.getAllExamBySubjectId(SubjectId, username).then((usersData) => {
-        if (this._isMounted) {
-          this.props.setDataLoadingStatus(false)
-          this.setState({ data: usersData })
-          console.log(this.state.data)
-        }
-      })
+    if (SubjectId == '') {
+      this.CheckLoad = true
+    } else {
+      this.CheckLoad = false
+      if (!this.props.isDataLoading) {
+        this.props.setDataLoadingStatus(true)
+        this.setState({
+          data: []
+        })
+  
+        ServiceObj.getAllExamBySubjectId(SubjectId, username).then((usersData) => {
+          if (this._isMounted) {
+            this.props.setDataLoadingStatus(false)
+            this.setState({ data: usersData })
+            console.log(this.state.data)
+          }
+        })
+      }
     }
   }
 
@@ -81,7 +86,10 @@ class ScoreTable extends Component {
 
   loadDataIntoTable () {
     var returnData = []
-    this.loadDataByUsername(this.props.username)
+    if (this.CheckLoad) {
+      console.log(this.CheckLoad)
+      this.loadDataByUsername(this.props.username)
+    }
     // console.log(this.state.datata)
     var select = document.getElementById(this.props.idSelectedYear)
     for (var i = 0; i < this.state.data.length; i++) {
