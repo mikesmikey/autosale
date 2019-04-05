@@ -67,10 +67,11 @@ class ScoreTable extends Component {
         data: []
       })
 
-      ServiceObj.getAllSubjectBySubjectId(SubjectId, username).then((usersData) => {
+      ServiceObj.getAllExamBySubjectId(SubjectId, username).then((usersData) => {
         if (this._isMounted) {
           this.props.setDataLoadingStatus(false)
           this.setState({ data: usersData })
+          console.log(this.state.data)
         }
       })
     }

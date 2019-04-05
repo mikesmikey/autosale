@@ -134,7 +134,7 @@ app.get('/subject', (req, res) => {
 })
 
 app.get('/subject/:username/:SubjectId', (req, res) => {
-  WebDAOObj.getAllSubjectBySubjectId(req.params.SubjectId, req.params.username).then((data) => {
+  WebDAOObj.getAllExamBySubjectId(req.params.SubjectId, req.params.username).then((data) => {
     if (data != null) {
       res.json(data)
     } else {
