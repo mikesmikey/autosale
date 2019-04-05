@@ -99,13 +99,6 @@ class ClientService {
   }
 
 
-  getAllExamByUsername (username) {
-    return new Promise((resolve, reject) => {
-      axios.get(`/exam/username/${username}`).then((result) => {
-        resolve(result.data)
-      })
-    })
-  }
 
   getAllExamBySubjectId (SubjectId, username) {
     return new Promise((resolve) => {
