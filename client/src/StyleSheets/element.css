@@ -248,3 +248,48 @@
     border-radius: 5px;
     font-size: 16px;
 }
+
+/*==============[Table]======================*/
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table,.exam-table  td,.exam-table  th {
+    border: none;
+}
+  
+.table {
+    border-collapse: collapse;
+    border-radius: 3px;
+    width: 100%;
+}
+  
+.table th{
+    height: 50px;
+}
+
+.table td:not(:first-child) {
+    border-left: 3px solid white;
+}
+
+.table td {
+    padding: 5px;
+}
+
+.table tr:not(.is-header) {
+    height: 30px;
+    background-color: #f2f2f2;
+}
+
+.table tr:not(.is-header):hover{ 
+    background: #c7afdd; 
+    color: white;
+    cursor: pointer;
+}
+
+.table thead{ 
+    background: #906cb2 !important; 
+    color: white;
+}

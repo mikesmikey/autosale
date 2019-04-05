@@ -3,6 +3,7 @@
 import React, { Component } from 'react'
 
 import ExamTable from './ExamTable'
+import DataAddModal from './DataAddModal'
 
 import '../../StyleSheets/ExamCreateScreen.css'
 
@@ -28,17 +29,17 @@ class ExamCreateScreen extends Component {
                 </div>
               </div>
             </div>
-            <div className="table-area">
-              <ExamTable>
-              </ExamTable>
+            <div className="exam-table-area">
+              <ExamTable />
             </div>
-            <div className="button-area">
-              <button className="button is-3 is-oros is-round" style={{ width: '130px' }}>เพิ่มการสอบ</button>
-              <button className="button is-3 is-round" style={{ width: '130px' }}>เพิ่มข้อมูล</button>
+            <div className="exam-button-area">
+              <button className="button is-3 is-oros is-round" style={{ width: '130px' }} onClick={() => { this.dataAddModal.showModal('dateModal') }}>เพิ่มการสอบ</button>
+              <button className="button is-3 is-orange is-round" style={{ width: '130px' }} onClick={() => { this.dataAddModal.showModal('roomsManageModal') }}>เพิ่มข้อมูล</button>
               <button className="button is-3 is-yentafo is-round" style={{ width: '130px' }}>ยกเลิกการสอบ</button>
             </div>
           </div>
         </div>
+        <DataAddModal ref={instance => { this.dataAddModal = instance }}/>
       </div>
     )
   }

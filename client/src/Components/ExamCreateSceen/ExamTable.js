@@ -1,8 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { Component } from 'react'
 
-import '../../StyleSheets/ExamTable.css'
-
 class ExamTable extends Component {
   _isMounted = false
   constructor (props) {
@@ -28,7 +26,7 @@ class ExamTable extends Component {
 
   render () {
     return (
-      <table className="exam-table">
+      <table className="table exam-table">
         <thead>
           <tr className="is-header">
             <th>รหัสรายวิชา</th>

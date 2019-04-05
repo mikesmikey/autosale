@@ -2,12 +2,12 @@
     width: 70%;
 }
 
-.exam-create-screen .table-area {
+.exam-create-screen .exam-table-area {
     overflow-y: scroll;
     height: 500px;
 }
 
-.exam-create-screen .button-area {
+.exam-create-screen .exam-button-area {
     display: flex;
     justify-content: center;
     margin: 30px 0;
