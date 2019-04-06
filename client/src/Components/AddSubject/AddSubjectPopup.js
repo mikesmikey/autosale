@@ -80,7 +80,7 @@ class AddSubjectPopup extends Component {
 
         if (e.target.name === 'subjectId') {
             if (!(/[0-9:]+/g).test(e.key)) {
-                e.preventDefault();
+                e.preventDefault()
             }
         }
         else if (e.target.name === 'subjectName') {
@@ -239,8 +239,8 @@ class AddSubjectPopup extends Component {
                     </div>
                 </div>
             </div>
-        );
+        )
     }
 }
 
-export default AddSubjectPopup;
+export default AddSubjectPopup

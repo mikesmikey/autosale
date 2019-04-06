@@ -2,7 +2,6 @@ import axios from 'axios'
 import Student from '../../Objects/Student'
 import Professor from '../../Objects/Professor'
 import Staff from '../../Objects/Staff'
-import Subject from '../../Objects/Subject'
 import GlobalData from '../../Objects/GlobalData'
 
 class ClientService {

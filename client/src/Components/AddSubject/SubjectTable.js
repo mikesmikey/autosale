@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-constructor */
 import React, { Component } from 'react'
 import ClientService from '../Utilities/ClientService'
 
@@ -84,7 +85,7 @@ class SubjectTable extends Component {
 class SubjectTableItem extends Component {
 
     constructor(props) {
-        super(props);
+        super(props)
     }
     
     renderSubjectField() {
@@ -98,11 +99,11 @@ class SubjectTableItem extends Component {
                 <td>{this.props.faculties[this.props.itemData.facultyId-1].branches[this.props.itemData.branchId-1].branchName}</td> 
                 <td>{this.props.itemData.credits}</td>
             </tr>
-        );
+        )
     }
 
     render() {
-        return (this.renderSubjectField());
+        return (this.renderSubjectField())
     }
 }
 
