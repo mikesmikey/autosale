@@ -1,5 +1,5 @@
 const mongoClient = require('mongodb').MongoClient
-const url = 'mongodb://hanami:hanami02@ds131765.mlab.com:31765/ooad_kob'
+const url = 'mongodb+srv://jeff:jeff123@cluster0-mumpe.mongodb.net/test?retryWrites=true'
 const dbName = 'ooad_kob'
 
 class WebDAO {
