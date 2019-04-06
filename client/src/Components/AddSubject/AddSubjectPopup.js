@@ -80,7 +80,7 @@ class AddSubjectPopup extends Component {
 
         if (e.target.name === 'subjectId') {
             if (!(/[0-9:]+/g).test(e.key)) {
-                e.preventDefault()
+                e.preventDefault();
             }
         }
         else if (e.target.name === 'subjectName') {
@@ -95,7 +95,7 @@ class AddSubjectPopup extends Component {
 
         if (this.state.subjectId.trim().length < 1 ||
             this.state.subjectName.trim().length < 1 ||
-            this.state.credits < 1) {
+            this.state.credits.length < 1) {
             valid = false;
         }
 
@@ -104,9 +104,9 @@ class AddSubjectPopup extends Component {
             var subjectJson = {
                 subject_id: this.state.subjectId,
                 subject_name: this.state.subjectName,
-                credits: this.state.credits,
-                facultyId: this.state.facultyIndex,
-                branchId: this.state.branchIndex,
+                credits: parseInt(this.state.credits, 10),
+                facultyId: parseInt(this.state.facultyIndex, 10),
+                branchId: parseInt(this.state.branchIndex, 10),
                 courses: []
             }
 
@@ -211,11 +211,8 @@ class AddSubjectPopup extends Component {
                         >
                             <option value="0"></option>
                             <option value="1">1</option>
-                            <option value="1.5">1.5</option>
                             <option value="2">2</option>
-                            <option value="2.5">2.5</option>
                             <option value="3">3</option>
-                            <option value="3.5">3.5</option>
                         </select>
                     </div>
                 </div>
@@ -243,4 +240,4 @@ class AddSubjectPopup extends Component {
     }
 }
 
-export default AddSubjectPopup
+export default AddSubjectPopup;

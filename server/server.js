@@ -130,7 +130,7 @@ app.get('/subjects', (req, res) => {
 })
 
 app.post('/subject/add', (req, res) => {
-  WebDAOObj.insertSubject(req.body.subjectdata).then((pass) => {
+  WebDAOObj.insertSubject(req.body.subjectData).then((pass) => {
     res.send(pass)
   })
 })

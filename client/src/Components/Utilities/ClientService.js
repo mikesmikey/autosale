@@ -64,6 +64,7 @@ class ClientService {
 
   searchAllSubjectBySubjectIdOrSubjectName(subjid, subjname) {
     return new Promise((resolve, reject) => {
+
       var url = `/subjects/${subjid.length === 0 ? `name/${subjname}` : `/id_${subjid}/${subjname}`}`
       axios.get(url)
         .then((result) => {

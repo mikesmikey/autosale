@@ -25,3 +25,7 @@
 .input.is-subjectId-width {
     width: 180px;
 }
+
+.add-subject-box {
+    min-height: 40vh;
+}

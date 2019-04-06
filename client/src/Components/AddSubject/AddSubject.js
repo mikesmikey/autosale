@@ -62,7 +62,7 @@ class AddSubject extends Component {
     render() {
         return (
             <div className="subcontent-main-div user-manage">
-                <div className="user-manage-box box with-title is-round">
+                <div className="add-subject-box box with-title is-round">
                     <div className="box-title is-violet">
                         เพิ่มรายวิชา
                     </div>
@@ -98,7 +98,7 @@ class AddSubject extends Component {
                             </div>
                         </div>
                         <div>
-                            <span className="user-tab-is-15"></span>
+                            <span className="adds-tab-is-15"></span>
                         </div>
                         <SubjectTable
                             ref={instance => { this.subTable = instance }}
