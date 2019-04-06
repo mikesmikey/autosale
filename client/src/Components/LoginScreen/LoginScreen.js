@@ -15,7 +15,8 @@ class LoginScreen extends Component {
 
     this.state = {
       username: '',
-      password: ''
+      password: '',
+      isLoading: false
     }
 
     this.handleInput = this.handleInput.bind(this)
@@ -23,18 +24,21 @@ class LoginScreen extends Component {
   }
 
   loginSubmit () {
-    const form = document.getElementById('loginForm')
-    form.classList.add('disabled')
+    this.setState({
+      isLoading: true
+    })
     const loginData = {
       username: this.state.username,
       password: this.state.password
     }
     ServiceObj.checkAuth(loginData).then((result) => {
       if (result) {
-        this.props.mockLogin(result)
+        ServiceObj.login(() => { this.props.setUserAppAuth(true, result.userData) }, result)
       } else {
         alert('ข้อมูลผู้ใช้ไม่ถูกต้อง โปรดระบุใหม่')
-        form.classList.remove('disabled')
+        this.setState({
+          isLoading: false
+        })
       }
     })
   }
@@ -60,9 +64,9 @@ class LoginScreen extends Component {
             <div className="login-box box">
               <img className="login-box-image" src={keyIcon} alt="key-img" />
               <span className="label is-1" style={{ marginBottom: '2rem' }}>เข้าสู่ระบบ</span>
-              <form id="loginForm" className="login-form">
+              <form className={`login-form ${this.state.isLoading ? 'disabled' : ''}`}>
                 <input className="input is-full-width" type="text" placeholder="Username" name="username" onChange={this.handleInput}/>
-                <input className="input is-full-width" type="text" placeholder="Password" name="password" onChange={this.handleInput}/>
+                <input className="input is-full-width" type="password" placeholder="Password" name="password" onChange={this.handleInput}/>
                 <button
                   className="button is-orange is-round"
                   style={{ width: '10rem' }}
