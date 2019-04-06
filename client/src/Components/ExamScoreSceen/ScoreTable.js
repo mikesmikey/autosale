@@ -37,6 +37,42 @@ class ScoreTable extends Component {
     this.loadDataBySubjectID = this.loadDataBySubjectID.bind(this)
   }
 
+  selectItem (e) {
+    const parent = e.target.parentElement
+    if (parent.classList.contains('score-table-item')) {
+      if (!parent.classList.contains('is-active')) {
+        if (this.state.selectedRow != null) {
+          this.state.selectedRow.classList.remove('is-active')
+        }
+        parent.classList.add('is-active')
+        this.setState({
+          selectedRow: parent
+        })
+        this.props.setSelectedScore(this.state.data[parent.getAttribute('index')])
+        for (var j = 0; j < this.state.subjectNameArray.length; j++) {
+          if (this.state.subjectNameArray[j].subject_id == this.state.data[parent.getAttribute('index')].subjectId) {
+            this.props.setSelectedSubject(this.state.subjectNameArray[j])
+            break
+          }
+        }
+      }
+    }
+  }
+
+  inspectItem (e) {
+    const parent = e.target.parentElement
+    if (parent.classList.contains('score-table-item')) {
+      this.props.showManageModal()
+      this.props.setSelectedScore(this.state.data[parent.getAttribute('index')])
+      for (var j = 0; j < this.state.subjectNameArray.length; j++) {
+        if (this.state.subjectNameArray[j].subject_id == this.state.data[parent.getAttribute('index')].subjectId) {
+          this.props.setSelectedSubject(this.state.subjectNameArray[j])
+          break
+        }
+      }
+    }
+  }
+
   renderTableHead () {
     return (
       <tr className="is-header">
@@ -47,7 +83,6 @@ class ScoreTable extends Component {
       </tr>
     )
   }
-
 
   loadDataBySubjectID (SubjectId, username) {
     ServiceObj.getAllExamBySubjectId(SubjectId, username).then((usersData) => {
@@ -61,8 +96,6 @@ class ScoreTable extends Component {
       this.setState({ subjectNameArray: SubjectData })
     })
   }
-
-  
 
   loadDataIntoTable () {
     var returnData = []
@@ -96,6 +129,8 @@ class ScoreTable extends Component {
               returnData[i] = <ScoreTableItem
                 key={i}
                 itemIndex={i}
+                selectItem={(e) => { this.selectItem(e) }}
+                inspectItem={(e) => { this.inspectItem(e) }}
                 subject={this.state.subjectNameArray[j] }
                 itemData={this.state.data[i]}
                 ScoreAll={this.state.data[i]}
@@ -137,7 +172,8 @@ class ScoreTableItem extends Component {
 
   renderItemByType () {
     return (
-      <tr className="user-table-item"
+      <tr className="score-table-item"
+        onClick={(e) => { this.props.selectItem(e) }}
         onDoubleClick={(e) => { this.props.inspectItem(e) }}
         index={this.props.itemIndex}
       >

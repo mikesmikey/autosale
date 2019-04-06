@@ -3,8 +3,10 @@ import React, { Component } from 'react'
 
 import '../../StyleSheets/ExamScoreSceen.css'
 
-// import Modal from '../Utilities/Modal';
+
+import Modal from '../Utilities/Modal'
 import ScoreTable from './ScoreTable'
+import ExamScorePopUp from './ExamScorePopUp'
 
 class ExamScoreSceen extends Component {
   
@@ -18,7 +20,9 @@ class ExamScoreSceen extends Component {
       selectedYear: 2562,
       idSelectedYear: 'YearSelect',
       searchInput: '',
-      isDataLoading: false
+      isDataLoading: false,
+      SelectedScore: false,
+      SelectedSubject: false
     }
 
     this._isMounted = true
@@ -27,7 +31,21 @@ class ExamScoreSceen extends Component {
     this.handleInputChange = this.handleInputChange.bind(this)
     this.handleSearchButton = this.handleSearchButton.bind(this)
     this.setDataLoadingStatus = this.setDataLoadingStatus.bind(this)
+    this.setSelectedScore = this.setSelectedScore.bind(this)
+    this.setSelectedSubject = this.setSelectedSubject.bind(this)
     this.setUsername = this.setUsername.bind(this)
+  }
+
+  setSelectedScore (score) {
+    this.setState({
+      SelectedScore: score
+    })
+  }
+
+  setSelectedSubject (Subjecte) {
+    this.setState({
+      SelectedSubject: Subjecte
+    })
   }
 
   handleSelectYear (e) {
@@ -112,19 +130,37 @@ class ExamScoreSceen extends Component {
               <div className="column is-8 user-column-table">
                 <ScoreTable
                   ref={instance => { this.scoreTable = instance }}
-                  // showManageModal={() => { this.managePopup.showManageModal("view") }}
+                  showManageModal={() => { this.managePopup.showManageModal('view') }}
                   username={this.state.Username}
                   SearchInput={this.state.searchInput}
                   selectedYear={this.state.selectedYear}
                   idSelectedYear={this.state.idSelectedYear}
                   isDataLoading={this.state.isDataLoading}
                   setDataLoadingStatus={this.setDataLoadingStatus}
+                  setSelectedScore={this.setSelectedScore}
+                  setSelectedSubject={this.setSelectedSubject}
                 />
               </div>
             </div>
           </div>
         </div>
-
+        <Modal ref={instance => { this.manageUserModal = instance }} content={
+          <ExamScorePopUp
+            ref={instance => { this.managePopup = instance }}
+            closeModal={() => {
+              this.manageUserModal.closeModal()
+            }}
+            showModal={() => {
+              this.manageUserModal.showModal()
+            }}
+            username={this.state.Username}
+            SelectedScore={this.state.SelectedScore}
+            SelectedSubject={this.state.SelectedSubject}
+            isDataLoading={this.state.isDataLoading}
+            setDataLoadingStatus={this.setDataLoadingStatus}
+          />
+        }
+        />
       </div>
     )
   }
