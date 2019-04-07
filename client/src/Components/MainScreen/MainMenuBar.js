@@ -89,7 +89,12 @@ class MainScrenMenuBar extends Component {
               ดูคะแนนสอบ
             </NavLink>
           </li>
-<<<<<<< HEAD
+          <li>
+            <NavLink to="/build_add" activeClassName="is-active is-black-violet" onClick={this.handleButtonPointer}>
+              <i className="menu-icon-awesome fa fa-calendar"></i>
+              เพิ่มการเรียน
+            </NavLink>
+          </li>
           <li>
             <NavLink to="/year_and_term_manage" activeClassName="is-active is-black-violet" onClick={this.handleButtonPointer}>
               <i className="menu-icon-awesome fa fa-calendar"></i>
@@ -97,9 +102,6 @@ class MainScrenMenuBar extends Component {
             </NavLink>
           </li>
           {/*
-=======
-         
->>>>>>> 087512195cb8660fd03ec9322772f4f84165ac37
           <li>
             <NavLink to="/build_add" activeClassName="is-active is-black-oros" onClick={this.handleButtonPointer}>
             <i className="menu-icon icon-license-plate icon-size-6" ></i>

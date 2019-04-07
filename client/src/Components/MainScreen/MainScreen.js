@@ -14,12 +14,9 @@ import ExamSchedule from '../ExamSchedule/ExamSchedule'
 import ExamCreateScreen from '../ExamCreateSceen/ExamCreateScreen'
 import ExamScoreSceen from '../ExamScoreSceen/ExamScoreSceen'
 import UserManage from '../UserManage/UserManage'
-<<<<<<< HEAD
 import YearAndTermManage from '../YearAndTermManage/YearAndTermManage'
-
-=======
 import BuildAdd from '../Build/ฺBuildAdd'
->>>>>>> 087512195cb8660fd03ec9322772f4f84165ac37
+
 import '../../StyleSheets/mainScreen.css'
 import '../../StyleSheets/pageHelper.css'
 

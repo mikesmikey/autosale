@@ -26,10 +26,34 @@ class SubjectList extends Component {
       this.loadDataIntoTable = this.loadDataIntoTable.bind(this)
     }
 
-    componentWillUnmount () {
-      this._isMounted = false
+
+    componentDidMount () {
+      this.searchData()
     }
 
+    
+    searchData () {
+      ServiceObj.getAllFaculty().then((data) => {
+        this.setFaculty(data[0].facultyName, data[0].branches)
+        console.log(data)
+      })
+    }
+    
+    setFaculty (faculty, branch) {
+      this.setState({
+        facultyName: faculty,
+        branchName: branch
+      })
+    }
+
+
+    
+    // componentWillUnmount () {
+    //   this._isMounted = false
+    // }
+
+
+    
     renderTableHead () {
       return (
         <tr className="is-header">
@@ -146,6 +170,8 @@ class SubjectList extends Component {
       )
     }
 }
+
+
 
 class UserTableItem extends Component {
 
