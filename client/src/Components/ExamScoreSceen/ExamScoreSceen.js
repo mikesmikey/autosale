@@ -17,7 +17,7 @@ class ExamScoreSceen extends Component {
 
     this.state = {
       Username: '11111111',
-      selectedYear: 2562,
+      selectedYear: '2562',
       idSelectedYear: 'YearSelect',
       searchInput: '',
       isDataLoading: false,
@@ -34,6 +34,7 @@ class ExamScoreSceen extends Component {
     this.setSelectedScore = this.setSelectedScore.bind(this)
     this.setSelectedSubject = this.setSelectedSubject.bind(this)
     this.setUsername = this.setUsername.bind(this)
+    this.setSelectedYear = this.setSelectedYear.bind(this)
   }
 
   setSelectedScore (score) {
@@ -84,6 +85,12 @@ class ExamScoreSceen extends Component {
   setUsername (User) {
     this.setState({
       Username: User
+    })
+  }
+
+  setSelectedYear (Year) {
+    this.setState({
+      selectedYear: Year
     })
   }
 

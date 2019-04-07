@@ -1,0 +1,62 @@
+.room-select-box{
+    width: 150px;
+    height: 32px;
+    padding: 5px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    font-size: 16px;
+}
+.input-with-text {
+    display: inline-block;
+    margin: 3px 5px;
+}
+.room-tab-is-15 { 
+    display:inline-block; 
+    margin-left: 1px; 
+}
+.user-column-table {
+    margin-right: 20px;
+   
+}
+.room-table,.room-table  td,.room-table  th {
+    border: none;
+}
+  
+.room-table {
+    border-collapse: collapse;
+    border-radius: 3px;
+    width: 100%;
+}
+  
+.room-table th{
+    height: 50px;
+}
+
+.room-table td:not(:first-child) {
+    border-left: 3px solid white;
+}
+
+.room-table td {
+    padding: 5px;
+}
+
+.room-table tr:not(.is-header) {
+    height: 30px;
+    background-color: #f2f2f2;
+}
+
+.room-table tr:not(.is-header):hover{ 
+    background: #c7afdd; 
+    color: white;
+}
+
+.room-table thead{ 
+    background: #906cb2 !important; 
+    color: white;
+}
+.room-exam {
+    width: 80%;
+}
+.room-exam-box {
+    min-height: 80vh;
+}

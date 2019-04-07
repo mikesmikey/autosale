@@ -196,6 +196,32 @@ class WebDAO {
     })
   }
 
+  /* ===========[Room DAO]=================== */
+  getAllBuilding () {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
+        const db = client.db(dbName)
+        db.collection('Building').find({}).project({ '_id': 0, 'password': 0 }).toArray((err, data) => {
+          if (err) { throw err }
+          return resolve(data)
+        })
+      })
+    })
+  }
+
+  getAllBuildingByRoom (buildingname, roomname) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
+        const db = client.db(dbName)
+        const regex = new RegExp(`${roomname}`)
+        db.collection('Building').find({ 'building_name': buildingname, 'Rooms.room': regex }).project({ '_id': 0, 'password': 0 }).toArray((err, data) => {
+          if (err) { throw err }
+          return resolve(data)
+        })
+      })
+    })
+  }
+
 }
 
 module.exports = WebDAO

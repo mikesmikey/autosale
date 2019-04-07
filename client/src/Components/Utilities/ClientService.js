@@ -199,6 +199,22 @@ class ClientService {
     })
   }
 
+  getAllBuildingByRoom (buildingname,room) {
+    return new Promise((resolve) => {
+      var url = `/building/${room.length === 0 ? `/${buildingname}` : `/${buildingname}/${room}`}`
+      axios.get(url).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  getAllBuilding () {
+    return new Promise((resolve) => {
+      axios.get(`/building`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
 
  }
 

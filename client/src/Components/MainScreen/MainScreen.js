@@ -13,6 +13,7 @@ import Home from '../Home/Home'
 import ExamSchedule from '../ExamSchedule/ExamSchedule'
 import ExamCreateScreen from '../ExamCreateSceen/ExamCreateScreen'
 import ExamScoreSceen from '../ExamScoreSceen/ExamScoreSceen'
+import ManageRoom from '../ManageRoom/ManageRoom'
 import UserManage from '../UserManage/UserManage'
 import YearAndTermManage from '../YearAndTermManage/YearAndTermManage'
 
@@ -44,6 +45,9 @@ class MainScreen extends Component {
           } />
           <Route path="/exam_score" render={(props) =>
             <ExamScoreSceen />
+          } />
+          <Route path="/manage_room" render={(props) =>
+            <ManageRoom />
           } />
           <Route path="/year_and_term_manage" render={(props) =>
             <YearAndTermManage />

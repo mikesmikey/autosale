@@ -6,8 +6,10 @@ import '../../StyleSheets/loginScreen.css'
 import keyIcon from '../../Resources/colored_Icons/keys.svg'
 import loginImage from '../../Resources/imgs/login_image.svg'
 import ClientService from '../Utilities/ClientService'
+import ExamScoreSceen from '../ExamScoreSceen/ExamScoreSceen'
 
 const ServiceObj = new ClientService()
+
 
 class LoginScreen extends Component {
   constructor (props) {
