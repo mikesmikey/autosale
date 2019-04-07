@@ -9,7 +9,7 @@ import '../../StyleSheets/yearAndTermManage.css'
 const CServiceObj = new ClientService()
 
 class YearAndTermManage extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.state = {
@@ -22,7 +22,7 @@ class YearAndTermManage extends Component {
     this.updateButtonHandle = this.updateButtonHandle.bind(this)
   }
 
-  handleInputChange(e) {
+  handleInputChange (e) {
     const target = e.target
     const name = target.name
     const value = target.value
@@ -32,26 +32,26 @@ class YearAndTermManage extends Component {
     })
   }
 
-  loadYearAndTerm() {
+  loadYearAndTerm () {
     CServiceObj.getYearAndTerm().then((data) => {
       this.setYearAndTerm(data[0].currentStudyYear, data[0].currentStudyTerm)
     })
   }
 
-  setYearAndTerm(year, term) {
+  setYearAndTerm (year, term) {
     this.setState({
       cStudyYear: year,
       cStudyTerm: term
     })
   }
 
-  setYearAndTermInput(year, term) {
+  setYearAndTermInput (year, term) {
     this.setState({
       yearInput: year,
       termInput: term
     })
   }
-  updateButtonHandle() {
+  updateButtonHandle () {
     // eslint-disable-next-line radix
     var yearInt = parseInt(this.state.yearInput)
     // eslint-disable-next-line radix
@@ -72,20 +72,23 @@ class YearAndTermManage extends Component {
         } else {
           alert('อัพเดทไม่สำเร็จ!')
         }
+        // document.getElementById("showYear").innerHTML = "ปีการศึกษา : " + cStudyYear
+        // document.getElementById("showTerm").innerHTML = "เทอม : " + cStudyTerm
       })
     }
   }
-  componentDidMount() {
+  componentDidMount () {
     this.loadYearAndTerm()
   }
 
-  render() {
+  render () {
     return (
 
       <div className="subcontent-main-div global">
         <div className="box with-title is-round ">
           <div className="box-title is-violet">
-            จัดการปีการศึกษา
+          จัดการปีการศึกษา
+
           </div>
           <div className="box-content">
             <div className="columns">

@@ -3,6 +3,7 @@
 import React, { Component } from 'react'
 
 import ExamTable from './ExamTable'
+import DataAddModal from './DataAddModal'
 
 import '../../StyleSheets/ExamCreateScreen.css'
 
@@ -16,27 +17,37 @@ class ExamCreateScreen extends Component {
           </div>
           <div className="box-content">
             <div className="search-area">
-              <div className="columns">
+              <div className="columns is-stay-top">
                 <div className="column is-1">
-                  <p className="label is-2">รหัสวิชา</p>
+                  <p className="label is-3" style={{ marginTop: '0' }}>รหัสวิชา</p>
                 </div>
                 <div className="column">
                   <input className="input is-full-width" type="text" placeholder="ค้นหา" />
+                  <span className="input-set">
+                    <input type="radio"/>
+                    <p className="label is-3">แบบสุ่ม</p>
+                  </span>
+                  <span className="input-set">
+                    <input type="radio"/>
+                    <p className="label is-3">แบบเรียง</p>
+                  </span>
                 </div>
                 <div className="column is-not-grow">
-                  <button className="button is-oros is-round">ค้นหา</button>
+                  <button className="button is-oros is-round" style={{ marginTop: '0' }}>ค้นหา</button>
                 </div>
               </div>
             </div>
-            <div className="table-area">
-              <ExamTable>
-              </ExamTable>
+            <div className="exam-table-area">
+              <ExamTable />
             </div>
-            <div className="button-area">
-              button
+            <div className="exam-button-area">
+              <button className="button is-3 is-oros is-round" style={{ width: '130px' }} onClick={() => { this.dataAddModal.showModal('dateModal') }}>เพิ่มการสอบ</button>
+              <button className="button is-3 is-orange is-round" style={{ width: '130px' }} onClick={() => { this.dataAddModal.showModal('examinersManageModal') }}>เพิ่มข้อมูล</button>
+              <button className="button is-3 is-yentafo is-round" style={{ width: '130px' }}>ยกเลิกการสอบ</button>
             </div>
           </div>
         </div>
+        <DataAddModal ref={instance => { this.dataAddModal = instance }}/>
       </div>
     )
   }

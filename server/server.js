@@ -1,9 +1,11 @@
 const express = require('express')
+const expPretty = require('express-prettify')
 const bodyParser = require('body-parser')
 const app = express()
 const port = 5000
 // const cors= require('cors')
 app.use(bodyParser.json())
+app.use(expPretty({ query: 'pretty' }))
 // app.use(cors())
 
 // disable cors due to the server will not using cross origin feature.
@@ -36,6 +38,16 @@ app.get('/users/type/:userType', (req, res) => {
 
 app.get('/users/:type/:username', (req, res) => {
   WebDAOObj.getAllUserByTypeAndUsername(req.params.type, req.params.username).then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.get('/subjects/id_:subjid/:subjname', (req, res) => {
+  WebDAOObj.getAllSubjectBySubjectIdOrSubjectName(req.params.subjid, req.params.subjname).then((data) => {
     if (data != null) {
       res.json(data)
     } else {
@@ -78,12 +90,6 @@ app.post('/user/add', (req, res) => {
   })
 })
 
-app.post('/user/addmany', (req, res) => {
-  WebDAOObj.insertManyUsers(req.body.userData).then((pass) => {
-    res.send(pass)
-  })
-})
-
 app.post('/user/edit', (req, res) => {
   WebDAOObj.editUser(req.body.userData).then((pass) => {
     res.send(pass)
@@ -103,6 +109,29 @@ app.get('/facultys', (req, res) => {
     } else {
       res.sendStatus(404)
     }
+  })
+})
+
+app.post('/user/addmany', (req, res) => {
+  WebDAOObj.addManyStudents(req.body.usersData).then((pass) => {
+    res.send(pass)
+  })
+})
+
+app.get('/subjects', (req, res) => {
+  WebDAOObj.getAllSubject().then((data) => {
+    console.log(data)
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.post('/subject/add', (req, res) => {
+  WebDAOObj.insertSubject(req.body.subjectData).then((pass) => {
+    res.send(pass)
   })
 })
 
