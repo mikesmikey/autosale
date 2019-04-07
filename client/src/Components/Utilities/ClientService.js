@@ -3,6 +3,7 @@ import Student from '../../Objects/Student'
 import Professor from '../../Objects/Professor'
 import Staff from '../../Objects/Staff'
 import GlobalData from '../../Objects/GlobalData'
+import BuildingData from '../../Objects/BuildingData'
 
 class ClientService {
   // ==========[Auth Service]=================
@@ -224,6 +225,43 @@ class ClientService {
         axios.get(`/courses/${timeData.currentStudyYear}/${timeData.currentStudyTerm}`).then((result) => {
           resolve(result.data)
         })
+      })
+    })
+  }
+
+  /* ===========[Building Service]=================== */
+  getBuilding () {
+    return new Promise((resolve, reject) => {
+      axios.get(`/building`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  createBuildingDataObject (buildingData) {
+    return new BuildingData(buildingData)
+  }
+
+  addBuilding (buildingData) {
+    return new Promise((resolve, reject) => {
+      axios.post(`/building/add`, { 'buildingData': buildingData }).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  deleteBuilding (shortname) {
+    return new Promise((resolve, reject) => {
+      axios.post(`/building/remove/${shortname}`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  searchBuilding (shortname) {
+    return new Promise((resolve, reject) => {
+      axios.get(`/building/${shortname}`).then((result) => {
+        resolve(result.data)
       })
     })
   }
