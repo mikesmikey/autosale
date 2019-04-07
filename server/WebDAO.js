@@ -1,7 +1,7 @@
 /* eslint-disable handle-callback-err */
 const mongoClient = require('mongodb').MongoClient
-// const url = 'mongodb+srv://jeff:jeff123@cluster0-mumpe.mongodb.net/test?retryWrites=true'
-const url = 'mongodb://<dbuser>:<dbpassword>@ds131765.mlab.com:31765/ooad_kob'
+const url = 'mongodb+srv://jeff:jeff123@cluster0-mumpe.mongodb.net/test?retryWrites=true'
+//const url = 'mongodb://<dbuser>:<dbpassword>@ds131765.mlab.com:31765/ooad_kob'
 const dbName = 'ooad_kob'
 
 class WebDAO {
