@@ -9,7 +9,7 @@ import '../../StyleSheets/yearAndTermManage.css'
 const CServiceObj = new ClientService()
 
 class YearAndTermManage extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
@@ -22,7 +22,7 @@ class YearAndTermManage extends Component {
     this.updateButtonHandle = this.updateButtonHandle.bind(this)
   }
 
-  handleInputChange (e) {
+  handleInputChange(e) {
     const target = e.target
     const name = target.name
     const value = target.value
@@ -32,30 +32,32 @@ class YearAndTermManage extends Component {
     })
   }
 
-  loadYearAndTerm () {
+  loadYearAndTerm() {
     CServiceObj.getYearAndTerm().then((data) => {
       this.setYearAndTerm(data[0].currentStudyYear, data[0].currentStudyTerm)
     })
   }
 
-  setYearAndTerm (year, term) {
+  setYearAndTerm(year, term) {
     this.setState({
       cStudyYear: year,
       cStudyTerm: term
     })
   }
 
-  setYearAndTermInput (year, term) {
+  setYearAndTermInput(year, term) {
     this.setState({
       yearInput: year,
       termInput: term
     })
   }
-  updateButtonHandle () {
+  updateButtonHandle() {
+    // eslint-disable-next-line radix
     var yearInt = parseInt(this.state.yearInput)
+    // eslint-disable-next-line radix
     var termInt = parseInt(this.state.termInput)
     if (yearInt <= 0 || isNaN(yearInt) || this.state.termInput === '0') {
-      alert('ควาย')
+      alert('กรุณาใส่ข้อมูลให้ถูกต้อง')
     } else {
       var newGlobalData = {}
       newGlobalData.currentStudyYear = yearInt
@@ -73,17 +75,17 @@ class YearAndTermManage extends Component {
       })
     }
   }
-  componentDidMount () {
+  componentDidMount() {
     this.loadYearAndTerm()
   }
 
-  render () {
+  render() {
     return (
 
       <div className="subcontent-main-div global">
         <div className="box with-title is-round ">
           <div className="box-title is-violet">
-                        จัดการปีการศึกษา
+            จัดการปีการศึกษา
           </div>
           <div className="box-content">
             <div className="columns">
@@ -127,7 +129,7 @@ class YearAndTermManage extends Component {
               <div className="column is-year border-2">
                 <div className="tab-is-1">
                   <label className="label font-size-1" >ปีการศึกษา : </label>
-                  <input className="input is-year-width " type="text" id="input_year" value={this.state.yearInput} name="yearInput" onChange={this.handleInputChange}/>
+                  <input className="input is-year-width " type="text" id="input_year" value={this.state.yearInput} name="yearInput" onChange={this.handleInputChange} />
                 </div>
                 <div className="tab-is-1">
                   <label className="label font-size-1 tab-is-16 ">เทอม : </label>

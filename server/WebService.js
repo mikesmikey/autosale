@@ -48,18 +48,19 @@ class WebService {
       const surnametable = ['จันอังคาร', 'จริงใจ', 'ใจดี', 'มูฮัมหมัด', 'ใจร้าย', 'บารัค', 'สมิธ', 'จอร์น', 'สมานฉันท์', 'ชินวัตร']
       const typeTable = ['student', 'professor', 'staff']
 
-      for (var i = 0; i < 10; i++) {
+      var users = []
+      for (var i = 0; i < 100; i++) {
         var userData = {}
         userData.username = '59100' + i
-        userData.password = Number.parseInt(Math.random() * 100000000)
+        userData.password = Number.parseInt(Math.random() * 100000000).toString()
         userData.firstName = nameTable[Number.parseInt(Math.random() * 10)]
         userData.lastName = surnametable[Number.parseInt(Math.random() * 10)]
         userData.typeOfUser = typeTable[Number.parseInt(Math.random() * 3)]
-        userData.isExaminer = Number.parseInt(Math.random() * 2) === 0
+        userData.isExaminer = false
 
         if (userData.typeOfUser === 'student' || userData.typeOfUser === 'professor') {
-          userData.facultyId = Number.parseInt(Math.random() * 3) + 1
-          userData.branchId = 1
+          userData.facultyId = 1 + Number.parseInt(Math.random() * 3)
+          userData.branchId = 1 + Number.parseInt(Math.random() * 3)
         }
 
         if (userData.typeOfUser === 'student') {
@@ -70,11 +71,14 @@ class WebService {
         if (userData.typeOfUser === 'staff') {
           userData.standing = 'แม่บ้าน'
         }
-
-        DAO.insertUser(userData).then((result) => { if (!result) return resolve(false) })
+        users[i] = userData
       }
-
-      return resolve(true)
+      DAO.insertManyUsers(users).then((result) => {
+        if (result) {
+          return resolve(true)
+        }
+        return resolve(false)
+      })
     })
   }
 }
