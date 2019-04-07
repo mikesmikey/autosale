@@ -106,7 +106,7 @@ class UserManage extends Component {
               <div className="column is-6">
                 <div className="input-with-text">
                   <label className="label">ผู้ใช้ : </label>
-                  <select className="user-mange-select-box" onChange={this.handleSelectType} value={this.state.selectedType}>
+                  <select className="select user-mange-select-box" onChange={this.handleSelectType} value={this.state.selectedType}>
                     <option value="student">นิสิต</option>
                     <option value="professor">อาจารย์</option>
                     <option value="staff">เจ้าหน้าที่</option>

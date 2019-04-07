@@ -20,7 +20,7 @@
     overflow-y: scroll;
 }
 
-.input-set * {
+.exam-rooms-modal .input-set * {
     display: inline-block;
     margin: 5px 5px;
 }
@@ -39,7 +39,7 @@
     background-color: #dbdbdb;
 }
 
-.exit-button {
+.exam-rooms-modal .exit-button {
     margin-right: 10px;
     cursor: pointer;
 
@@ -49,6 +49,6 @@
     color: white;
 }
 
-.exit-button:hover {
+.exam-rooms-modal .exit-button:hover {
     color: gray;
 }

@@ -34,7 +34,7 @@ class ExamCreateScreen extends Component {
             </div>
             <div className="exam-button-area">
               <button className="button is-3 is-oros is-round" style={{ width: '130px' }} onClick={() => { this.dataAddModal.showModal('dateModal') }}>เพิ่มการสอบ</button>
-              <button className="button is-3 is-orange is-round" style={{ width: '130px' }} onClick={() => { this.dataAddModal.showModal('roomsManageModal') }}>เพิ่มข้อมูล</button>
+              <button className="button is-3 is-orange is-round" style={{ width: '130px' }} onClick={() => { this.dataAddModal.showModal('examinersManageModal') }}>เพิ่มข้อมูล</button>
               <button className="button is-3 is-yentafo is-round" style={{ width: '130px' }}>ยกเลิกการสอบ</button>
             </div>
           </div>

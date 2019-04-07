@@ -5,6 +5,8 @@ import Modal from '../Utilities/Modal'
 
 import ExamSelectDate from './ExamSelectDate'
 import ExamRoomsManage from './ExamRoomsManage'
+import AddRoomDetail from './AddRoomDetail'
+import ExaminersManage from './ExaminersManage'
 
 class DataAddModal extends Component {
   constructor (props) {
@@ -37,7 +39,9 @@ class DataAddModal extends Component {
   decideModal () {
     const decideTable = {
       'dateModal': <ExamSelectDate closeModal={this.closeModal}/>,
-      'roomsManageModal': <ExamRoomsManage closeModal={this.closeModal}/>
+      'roomsManageModal': <ExamRoomsManage closeModal={this.closeModal}/>,
+      'addRoomDetailModal': <AddRoomDetail closeModal={this.closeModal}/>,
+      'examinersManageModal': <ExaminersManage closeModal={this.closeModal}/>
     }
 
     return decideTable[this.state.currentModal]
