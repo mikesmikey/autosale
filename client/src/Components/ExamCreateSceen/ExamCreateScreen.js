@@ -8,6 +8,46 @@ import DataAddModal from './DataAddModal'
 import '../../StyleSheets/ExamCreateScreen.css'
 
 class ExamCreateScreen extends Component {
+  _isMounted = false
+
+  constructor (props) {
+    super(props)
+
+    this.state = {
+      termRadioValue: 'middle'
+    }
+
+    this._isMounted = true
+
+    this.handleRadioInput = this.handleRadioInput.bind(this)
+    this.handleInputChange = this.handleInputChange.bind(this)
+  }
+
+  componentWillUnmount () {
+    this._isMounted = false
+  }
+
+  handleInputChange (e) {
+    const target = e.target
+    const name = target.name
+    const value = target.value
+
+    this.setState({
+      [name]: value
+    })
+  }
+
+  handleRadioInput (e) {
+    const target = e.target
+    const name = target.name
+
+    console.log(name)
+
+    this.setState({
+      termRadioValue: name
+    })
+  }
+
   render () {
     return (
       <div className="subcontent-main-div exam-create-screen">
@@ -24,11 +64,11 @@ class ExamCreateScreen extends Component {
                 <div className="column">
                   <input className="input is-full-width" type="text" placeholder="ค้นหา" />
                   <span className="input-set">
-                    <input type="radio"/>
+                    <input type="radio" name="middle" onChange={this.handleRadioInput} checked={this.state.termRadioValue === 'middle'}/>
                     <p className="label is-3">กลางภาค</p>
                   </span>
                   <span className="input-set">
-                    <input type="radio"/>
+                    <input type="radio" name="final" onChange={this.handleRadioInput} checked={this.state.termRadioValue === 'final'}/>
                     <p className="label is-3">ปลายภาค</p>
                   </span>
                 </div>
