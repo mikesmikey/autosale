@@ -17,11 +17,12 @@ class ExamTable extends Component {
   }
 
   renderTableItem () {
-    var items = []
-    for (var i = 0; i < 50; i++) {
-      items[i] = <ExamTableItem key={i}/>
+    if (this.props.courses) {
+      return this.props.courses.map((course) => {
+        return <ExamTableItem course={course} />
+      })
     }
-    return items
+    return null
   }
 
   render () {
@@ -46,9 +47,9 @@ class ExamTableItem extends Component {
   render () {
     return (
       <tr className="exam-table-item">
-        <td>jeff</td>
-        <td>jeff</td>
-        <td>jeff</td>
+        <td>{this.props.course.SubjectId}</td>
+        <td>{this.props.course.SubjectName}</td>
+        <td>{this.props.course.Status}</td>
       </tr>
     )
   }

@@ -163,6 +163,16 @@ app.post('/yearAndTerm/edit', (req, res) => {
   })
 })
 
+app.get('/courses/:year/:semester', (req, res) => {
+  WebDAOObj.getAllCourseByYearAndSemester(req.params.year, req.params.semester).then(data => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
 app.listen(port, () => {
   console.log(`App listening on ${port}`)
 })

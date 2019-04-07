@@ -89,7 +89,7 @@ class ClientService {
 
   searchAllUserByTypeAndUsername (type, userId) {
     return new Promise((resolve, reject) => {
-      var url = `/users/${userId.length === 0 ? `type/${type}` : `/${type}/${userId}`}`
+      var url = `/users/${userId.length === 0 ? `type/${type}` : `${type}/${userId}`}`
       axios.get(url).then((result) => {
         resolve(result.data)
       })
@@ -210,6 +210,20 @@ class ClientService {
     return new Promise((resolve, reject) => {
       axios.post(`/yearAndTerm/edit`, { 'globalData': newGlobalData }).then((result) => {
         resolve(result.data)
+      })
+    })
+  }
+
+  // ==========[Course Service]=================
+
+  // coming with subject id, name :)
+  getAllCurrentCourse () {
+    return new Promise((resolve, reject) => {
+      this.getYearAndTerm().then((timeData) => {
+        if (!timeData) return null
+        axios.get(`/courses/${timeData.currentStudyYear}/${timeData.currentStudyTerm}`).then((result) => {
+          resolve(result.data)
+        })
       })
     })
   }

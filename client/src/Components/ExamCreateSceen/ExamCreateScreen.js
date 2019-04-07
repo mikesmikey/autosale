@@ -2,6 +2,8 @@
 // eslint-disable-next-line no-unused-vars
 import React, { Component } from 'react'
 
+import ClientService from '../Utilities/ClientService'
+
 import ExamTable from './ExamTable'
 import DataAddModal from './DataAddModal'
 
@@ -14,17 +16,32 @@ class ExamCreateScreen extends Component {
     super(props)
 
     this.state = {
-      termRadioValue: 'middle'
+      termRadioValue: 'middle',
+      subjects: []
     }
 
     this._isMounted = true
 
     this.handleRadioInput = this.handleRadioInput.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
+    this.loadAllSubject = this.loadAllSubject.bind(this)
+  }
+
+  componentDidMount () {
+    this.loadAllSubject()
   }
 
   componentWillUnmount () {
     this._isMounted = false
+  }
+
+  loadAllCurrentCourse () {
+    new ClientService().getAllSubject().then((result) => {
+      this.setState({
+        subjects: result
+      })
+      console.log(this.state.subjects)
+    })
   }
 
   handleInputChange (e) {
