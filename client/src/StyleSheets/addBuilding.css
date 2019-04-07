@@ -1,0 +1,35 @@
+.input-with-find-building {
+    display: inline-block;
+    margin: 3px 5px;
+}
+
+.input.is-building-width {
+    width: 220px;
+}
+
+.is-pulled-left {
+    float: left !important;
+}
+
+.column.is-building-button {
+    margin-left: 35%;
+}
+
+.space-bottom{
+    margin-bottom: 3%
+}
+
+.building-table-auto{
+    height:450px; 
+    overflow:auto;
+}
+
+.column.is-building-popup {
+    flex: none;
+    width: 21%;
+}
+
+.input.is-building-popup-width {
+    width: 100%;
+}
+

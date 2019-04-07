@@ -3,6 +3,7 @@ import Student from '../../Objects/Student'
 import Professor from '../../Objects/Professor'
 import Staff from '../../Objects/Staff'
 import GlobalData from '../../Objects/GlobalData'
+import BuildingData from '../../Objects/BuildingData'
 
 class ClientService {
   loginUsernameCheck (username) {
@@ -45,7 +46,7 @@ class ClientService {
     })
   }
 
-  getAllSubject() {
+  getAllSubject () {
     return new Promise((resolve, reject) => {
       axios.get('/subjects').then((result) => {
         resolve(result.data)
@@ -62,9 +63,8 @@ class ClientService {
     })
   }
 
-  searchAllSubjectBySubjectIdOrSubjectName(subjid, subjname) {
+  searchAllSubjectBySubjectIdOrSubjectName (subjid, subjname) {
     return new Promise((resolve, reject) => {
-
       var url = `/subjects/${subjid.length === 0 ? `name/${subjname}` : `/id_${subjid}/${subjname}`}`
       axios.get(url)
         .then((result) => {
@@ -73,8 +73,7 @@ class ClientService {
     })
   }
 
-
-  deleteUser(deleteUserId) {
+  deleteUser (deleteUserId) {
     return new Promise((resolve, reject) => {
       axios.post(`/user/remove/${deleteUserId}`).then((result) => {
         resolve(result.data)
@@ -90,15 +89,15 @@ class ClientService {
     })
   }
 
-  addManyStudents(users) {
+  addManyStudents (users) {
     return new Promise((resolve, reject) => {
-      axios.post(`/user/addmany`, { "usersData": users }).then((result) => {
-        resolve(result.data);
+      axios.post(`/user/addmany`, { 'usersData': users }).then((result) => {
+        resolve(result.data)
       })
     })
   }
 
-  addUser(userData) {
+  addUser (userData) {
     return new Promise((resolve, reject) => {
       axios.post(`/user/add`, { 'userData': userData }).then((result) => {
         resolve(result.data)
@@ -196,7 +195,43 @@ class ClientService {
     })
   }
 
-  addSubject(subjectData) {
+  /* ===========[GlobalData Service]=================== */
+  getBuilding () {
+    return new Promise((resolve, reject) => {
+      axios.get(`/building`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  createBuildingDataObject (buildingData) {
+    return new BuildingData(buildingData)
+  }
+
+  addBuilding (buildingData) {
+    return new Promise((resolve, reject) => {
+      axios.post(`/building/add`, { 'buildingData': buildingData }).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  deleteBuilding (shortname) {
+    return new Promise((resolve, reject) => {
+      axios.post(`/building/remove/${shortname}`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  searchBuilding (shortname) {
+    return new Promise((resolve, reject) => {
+      axios.get(`/building/${shortname}`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+  addSubject (subjectData) {
     return new Promise((resolve, reject) => {
       axios.post(`/subject/add`, { 'subjectData': subjectData }).then((result) => {
         resolve(result.data)

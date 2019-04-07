@@ -165,6 +165,65 @@ class WebDAO {
     })
   }
 
+  /* ===========[Building DAO]=================== */
+  getBuilding () {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
+        const db = client.db(dbName)
+        db.collection('Building').find({}).toArray((err, data) => {
+          if (err) { throw err }
+          return resolve(data)
+        })
+      })
+    })
+  }
+
+  insertBuilding (building) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
+        const db = client.db(dbName)
+        db.collection('Building').findOne({ 'short_name': building.short_name }, (err, data) => {
+          if (err) { throw err }
+          if (!data) {
+            db.collection('Building').insertOne(building, (err, result) => {
+              if (err) { throw err }
+              return resolve(true)
+            })
+          } else { return resolve(false) }
+        })
+      })
+    })
+  }
+
+  deleteBuildingByShortName (shortname) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
+        const db = client.db(dbName)
+        db.collection('Building').findOne({ 'short_name': shortname }, (err, data) => {
+          if (err) { throw err }
+          if (data) {
+            db.collection('Building').deleteOne({ 'short_name': shortname }, (err, result) => {
+              if (err) { throw err }
+              return resolve(true)
+            })
+          } else { return resolve(false) }
+        })
+      })
+    })
+  }
+
+  getBuildingByShortName (shortname) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
+        const db = client.db(dbName)
+        const regex = new RegExp(`${shortname}`)
+        db.collection('Building').find({ 'short_name': regex }).toArray((err, data) => {
+          if (err) { throw err }
+          return resolve(data)
+        })
+      })
+    })
+  }
   /* ===========[Subject DAO]=================== */
   getAllSubjectBySubjectIdOrSubjectName (subjid, subjname) {
     return new Promise((resolve, reject) => {
