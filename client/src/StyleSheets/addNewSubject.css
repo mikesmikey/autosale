@@ -1,0 +1,31 @@
+.add-subject {
+    width: 60%;
+}
+
+.add-subject .search-area {
+    width: 70%;
+}
+.adds-tab-is-20 { 
+    display:inline-block; 
+    margin-left: 10px; 
+}
+.adds-tab-is-15 { 
+    display:inline-block; 
+    margin-left: 1px; 
+}
+.adds-tab-is-40 { 
+    display:inline-block; 
+    margin-left: 40px; 
+}
+
+.input.is-subjectName-width {
+    width: 280px;
+}
+
+.input.is-subjectId-width {
+    width: 180px;
+}
+
+.add-subject-box {
+    min-height: 40vh;
+}

@@ -69,6 +69,8 @@ class YearAndTermManage extends Component {
         } else {
           alert('อัพเดทไม่สำเร็จ!')
         }
+        // document.getElementById("showYear").innerHTML = "ปีการศึกษา : " + cStudyYear
+        // document.getElementById("showTerm").innerHTML = "เทอม : " + cStudyTerm
       })
     }
   }
@@ -82,7 +84,7 @@ class YearAndTermManage extends Component {
       <div className="subcontent-main-div global">
         <div className="box with-title is-round ">
           <div className="box-title is-violet">
-                        จัดการปีการศึกษา
+                จัดการปีการศึกษา
           </div>
           <div className="box-content">
             <div className="columns">

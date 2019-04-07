@@ -14,17 +14,19 @@ import ExamSchedule from '../ExamSchedule/ExamSchedule'
 import ExamCreateScreen from '../ExamCreateSceen/ExamCreateScreen'
 import ExamScoreSceen from '../ExamScoreSceen/ExamScoreSceen'
 import UserManage from '../UserManage/UserManage'
-import YearAndTermManage from '../YearAndTermManage/YearAndTermManage'
+import AddSubject from '../AddSubject/AddSubject'
+import YearAndTermManage from "../YearAndTermManage/YearAndTermManage"
 
 import '../../StyleSheets/mainScreen.css'
 import '../../StyleSheets/pageHelper.css'
 
 class MainScreen extends Component {
-  render () {
+
+  render() {
     return (
       <div className="main-screen">
         <MainNavBar
-          setUserAppAuth={this.props.setUserAppAuth}
+          mockLogout={this.props.mockLogout}
           username={this.props.user.firstName}
           handleHamburger={() => { this.mainMenuBar.handleHamburger() }}
         />
@@ -48,9 +50,12 @@ class MainScreen extends Component {
           <Route path="/year_and_term_manage" render={(props) =>
             <YearAndTermManage />
           } />
+          <Route path="/add_subject" render={(props) =>
+            <AddSubject />
+          } />
         </div>
       </div>
-    )
+    );
   }
 }
 

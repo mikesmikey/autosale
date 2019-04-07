@@ -35,7 +35,11 @@ class UserManage extends Component {
     this.setDataLoadingStatus = this.setDataLoadingStatus.bind(this)
   }
 
+<<<<<<< HEAD
   handleSelectType (e) {
+=======
+  handleSelectType(e) {
+>>>>>>> f2d21b013f8e896cf0f37b526e48e84f7a8782e3
     const target = e.target
     const name = target.options[target.selectedIndex].value
 
@@ -45,16 +49,28 @@ class UserManage extends Component {
     this.userTable.loadDataByTypeAndUsername(name, this.state.searchInput)
   }
 
+<<<<<<< HEAD
   componentDidMount () {
+=======
+  componentDidMount() {
+>>>>>>> f2d21b013f8e896cf0f37b526e48e84f7a8782e3
     this.userTable.loadDataByTypeAndUsername(this.state.selectedType, this.state.searchInput)
     this.loadFacultyData()
   }
 
+<<<<<<< HEAD
   componentWillUnmount () {
     this._isMounted = false
   }
 
   handleInputChange (e) {
+=======
+  componentWillUnmount() {
+    this._isMounted = false
+  }
+
+  handleInputChange(e) {
+>>>>>>> f2d21b013f8e896cf0f37b526e48e84f7a8782e3
     const target = e.target
     const name = target.name
     const value = target.value
@@ -64,23 +80,39 @@ class UserManage extends Component {
     })
   }
 
+<<<<<<< HEAD
   setSelectedUser (user) {
+=======
+  setSelectedUser(user) {
+>>>>>>> f2d21b013f8e896cf0f37b526e48e84f7a8782e3
     this.setState({
       selectedUser: user
     })
   }
 
+<<<<<<< HEAD
   setDataLoadingStatus (status) {
+=======
+  setDataLoadingStatus(status) {
+>>>>>>> f2d21b013f8e896cf0f37b526e48e84f7a8782e3
     this.setState({
       isDataLoading: status
     })
   }
 
+<<<<<<< HEAD
   handleSearchButton () {
     this.userTable.loadDataByTypeAndUsername(this.state.selectedType, this.state.searchInput)
   }
 
   loadFacultyData () {
+=======
+  handleSearchButton() {
+    this.userTable.loadDataByTypeAndUsername(this.state.selectedType, this.state.searchInput)
+  }
+
+  loadFacultyData() {
+>>>>>>> f2d21b013f8e896cf0f37b526e48e84f7a8782e3
     if (!this.state.isDataLoading) {
       this.setDataLoadingStatus(true)
       ServiceObj.getAllFaculty().then((data) => {
@@ -94,19 +126,31 @@ class UserManage extends Component {
     }
   }
 
+<<<<<<< HEAD
   render () {
+=======
+  render() {
+>>>>>>> f2d21b013f8e896cf0f37b526e48e84f7a8782e3
     return (
       <div className="subcontent-main-div user-manage">
         <div className="user-manage-box box with-title is-round">
           <div className="box-title is-violet">
             จัดการผู้ใช้
+<<<<<<< HEAD
           </div>
+=======
+            </div>
+>>>>>>> f2d21b013f8e896cf0f37b526e48e84f7a8782e3
           <div className="box-content">
             <div className={`columns ${this.state.isDataLoading ? 'disabled' : ''}`}>
               <div className="column is-6">
                 <div className="input-with-text">
                   <label className="label">ผู้ใช้ : </label>
+<<<<<<< HEAD
                   <select className="select user-mange-select-box" onChange={this.handleSelectType} value={this.state.selectedType}>
+=======
+                  <select className="user-mange-select-box" onChange={this.handleSelectType} value={this.state.selectedType}>
+>>>>>>> f2d21b013f8e896cf0f37b526e48e84f7a8782e3
                     <option value="student">นิสิต</option>
                     <option value="professor">อาจารย์</option>
                     <option value="staff">เจ้าหน้าที่</option>
@@ -124,6 +168,7 @@ class UserManage extends Component {
                 <button className="button is-yentafo is-round is-free-size is-pulled-right" onClick={() => { this.studentExcelPopup.showInsertExcelModal() }}>นำเข้าผู้ใช้โดย Excel</button>
                 <button className="button is-oros is-round is-pulled-right" onClick={() => { this.managePopup.showManageModal('insert') }}>เพิ่มผู้ใช้</button>
               </div>
+<<<<<<< HEAD
             </div>
             <div className="user-table-div">
               <UserTable
@@ -136,6 +181,21 @@ class UserManage extends Component {
                 setDataLoadingStatus={this.setDataLoadingStatus}
               />
             </div>
+=======
+            </div>
+            <div>
+              <span className="user-tab-is-15"></span>
+            </div>
+            <UserTable
+              ref={instance => { this.userTable = instance }}
+              showManageModal={() => { this.managePopup.showManageModal('view') }}
+              selectedType={this.state.selectedType}
+              setSelectedUser={this.setSelectedUser}
+              facultys={this.state.facultys}
+              isDataLoading={this.state.isDataLoading}
+              setDataLoadingStatus={this.setDataLoadingStatus}
+            />
+>>>>>>> f2d21b013f8e896cf0f37b526e48e84f7a8782e3
           </div>
         </div>
         <Modal ref={instance => { this.manageUserModal = instance }} content={
@@ -158,7 +218,11 @@ class UserManage extends Component {
           />
         }
         />
+<<<<<<< HEAD
         <Modal ref={instance => { this.studentExcelModal = instance }} content={
+=======
+       <Modal ref={instance => { this.studentExcelModal = instance }} content={
+>>>>>>> f2d21b013f8e896cf0f37b526e48e84f7a8782e3
           <StudentExcelPopUp
             ref={instance => { this.studentExcelPopup = instance }}
             closeModal={() => {
