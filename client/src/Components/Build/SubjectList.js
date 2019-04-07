@@ -34,7 +34,7 @@ class SubjectList extends Component {
     
     searchData () {
       ServiceObj.getAllFaculty().then((data) => {
-        this.setFaculty(data[0].facultyName, data[0].branches)
+        this.setFaculty(data[0].facultyName)
         console.log(data)
       })
     }
