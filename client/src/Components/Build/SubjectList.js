@@ -24,8 +24,12 @@ class SubjectList extends Component {
 
       this.loadDataByTypeAndUsername = this.loadDataByTypeAndUsername.bind(this)
       this.loadDataIntoTable = this.loadDataIntoTable.bind(this)
+      this.handleSelect = this.handleSelect.bind(this)
     }
 
+    handleSelect(event){
+      console.log(event.target[event.target.selectedIndex].getAttribute('facultyName'))
+    }
 
     componentDidMount () {
       this.searchData()
@@ -35,7 +39,7 @@ class SubjectList extends Component {
     searchData () {
       ServiceObj.getAllFaculty().then((data) => {
         this.setFaculty(data[0].facultyName)
-        console.log(data)
+        console.log(data[1].facultyName)
       })
     }
     
@@ -171,6 +175,30 @@ class SubjectList extends Component {
     }
 }
 
+class search extends Component{
+
+  render() {
+
+    var options = [];
+    this.props.data.map((data) => {
+        options.push(<option value={data.facultyName} key={data.facultyName} >{data.facultyName}</option>);
+     });
+
+    return (
+        <div>
+            <label>Filter Single Select</label>
+            <div>
+                <select className="form-control" onChange={this.handleChange} value={this.props.sortBy}>
+                    {options}
+                </select>
+            </div>
+        </div>
+    );
+}
+
+
+
+}
 
 
 class UserTableItem extends Component {
