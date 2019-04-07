@@ -39,7 +39,15 @@ class ClientService {
 
   getAllFaculty () {
     return new Promise((resolve, reject) => {
-      axios.get(`/facultys`).then((result) => {
+      axios.get('/facultys').then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  getAllSubject() {
+    return new Promise((resolve, reject) => {
+      axios.get('/subjects').then((result) => {
         resolve(result.data)
       })
     })
@@ -54,7 +62,19 @@ class ClientService {
     })
   }
 
-  deleteUser (deleteUserId) {
+  searchAllSubjectBySubjectIdOrSubjectName(subjid, subjname) {
+    return new Promise((resolve, reject) => {
+
+      var url = `/subjects/${subjid.length === 0 ? `name/${subjname}` : `/id_${subjid}/${subjname}`}`
+      axios.get(url)
+        .then((result) => {
+          resolve(result.data)
+        })
+    })
+  }
+
+
+  deleteUser(deleteUserId) {
     return new Promise((resolve, reject) => {
       axios.post(`/user/remove/${deleteUserId}`).then((result) => {
         resolve(result.data)
@@ -70,17 +90,17 @@ class ClientService {
     })
   }
 
-  addUser (userData) {
+  addManyStudents(users) {
     return new Promise((resolve, reject) => {
-      axios.post(`/user/add`, { 'userData': userData }).then((result) => {
-        resolve(result.data)
+      axios.post(`/user/addmany`, { "usersData": users }).then((result) => {
+        resolve(result.data);
       })
     })
   }
 
-  addManyUsers (userData) {
+  addUser(userData) {
     return new Promise((resolve, reject) => {
-      axios.post(`/user/addmany`, { 'userData': userData }).then((result) => {
+      axios.post(`/user/add`, { 'userData': userData }).then((result) => {
         resolve(result.data)
       })
     })
@@ -171,6 +191,14 @@ class ClientService {
   editGlobalData (newGlobalData) {
     return new Promise((resolve, reject) => {
       axios.post(`/yearAndTerm/edit`, { 'globalData': newGlobalData }).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  addSubject(subjectData) {
+    return new Promise((resolve, reject) => {
+      axios.post(`/subject/add`, { 'subjectData': subjectData }).then((result) => {
         resolve(result.data)
       })
     })

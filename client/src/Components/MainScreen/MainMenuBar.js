@@ -7,7 +7,7 @@ import {
 import '../../StyleSheets/mainMenuBar.css'
 
 class MainScrenMenuBar extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
@@ -20,7 +20,7 @@ class MainScrenMenuBar extends Component {
     this.handleHamburger = this.handleHamburger.bind(this)
   }
 
-  dropDownSwitch (id) {
+  dropDownSwitch(id) {
     var element = document.getElementById(id)
 
     if (element.classList.contains('dropdown-hide')) {
@@ -32,7 +32,7 @@ class MainScrenMenuBar extends Component {
     }
   }
 
-  handleMenuDropDown (e) {
+  handleMenuDropDown(e) {
     if (e.target.id === 'car_manage_button' && this.state.buttonPointer !== 'sub_car_manage') {
       this.dropDownSwitch('car_manage_list')
     } else if (e.target.id === 'fix_manage_button' && this.state.buttonPointer !== 'sub_fix_manage') {
@@ -42,21 +42,21 @@ class MainScrenMenuBar extends Component {
     }
   }
 
-  handleButtonPointer (e) {
+  handleButtonPointer(e) {
     this.setState({
       buttonPointer: e.target.type
     })
   }
 
-  handleHamburger () {
+  handleHamburger() {
     this.setState({
       hamburger: !this.state.hamburger
-    })
+    });
   }
 
-  render () {
+  render() {
     return (
-      <aside className={`menu main-menu ${this.state.hamburger ? 'is-active' : ''}`}>
+      <aside className={`menu main-menu ${this.state.hamburger ? "is-active" : ""}`}>
         <div className="menu-space"></div>
         <ul className="menu-list">
           <li>
@@ -87,6 +87,12 @@ class MainScrenMenuBar extends Component {
             <NavLink to="/exam_score" activeClassName="is-active is-black-violet" onClick={this.handleButtonPointer}>
               <i className="menu-icon-awesome fas fa-users"></i>
               ดูคะแนนสอบ
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/add_subject" activeClassName="is-active is-black-violet" onClick={this.handleButtonPointer}>
+              <i className="menu-icon-awesome fas fa-calendar-plus"></i>
+              เพิ่มรายวิชา
             </NavLink>
           </li>
           <li>

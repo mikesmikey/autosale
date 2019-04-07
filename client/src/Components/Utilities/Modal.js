@@ -5,7 +5,6 @@ import '../../StyleSheets/modal.css'
 class Modal extends Component {
   constructor (props) {
     super(props)
-
     this.state = {
       status: false
     }

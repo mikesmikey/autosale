@@ -100,7 +100,7 @@ class UserTable extends Component {
         return new Staff(data)
       }
     }
-
+    
     loadDataIntoTable () {
       var returnData = []
       for (var i = 0; i < this.state.data.length; i++) {
