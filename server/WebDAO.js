@@ -9,11 +9,15 @@ class WebDAO {
   getAllUser () {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+
         const db = client.db(dbName)
         db.collection('User').find({}).project({ '_id': 0, 'password': 0 }).toArray((err, data) => {
           if (err) { throw err }
+          client.close()
           return resolve(data)
         })
+        client.close()
       })
     })
   }
@@ -37,15 +41,21 @@ class WebDAO {
   insertUser (user) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+
         const db = client.db(dbName)
         db.collection('User').findOne({ 'username': user.username }, (err, data) => {
           if (err) { throw err }
           if (!data) {
             db.collection('User').insertOne(user, (err, result) => {
               if (err) { throw err }
+              client.close()
               return resolve(true)
             })
-          } else { return resolve(false) }
+          } else {
+            client.close()
+            return resolve(false)
+          }
         })
       })
     })
@@ -54,11 +64,15 @@ class WebDAO {
   addManyStudents (users) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+
         const db = client.db(dbName)
         db.collection('User').insertMany(users, (err, result) => {
           if (err) { throw err }
+          client.close()
           return resolve(true)
         })
+        client.close()
       })
     })
   }
@@ -66,12 +80,18 @@ class WebDAO {
   editUser (newUserData) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+
         const db = client.db(dbName)
         db.collection('User').findOneAndUpdate({ 'username': newUserData.username }, { '$set': newUserData }, (err, result) => {
           if (err) { throw err }
           if (result.value) {
+            client.close()
             return resolve(true)
-          } else { return resolve(false) }
+          } else {
+            client.close()
+            return resolve(false)
+          }
         })
       })
     })
@@ -80,15 +100,21 @@ class WebDAO {
   deleteUserByUsername (username) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+
         const db = client.db(dbName)
         db.collection('User').findOne({ 'username': username }, (err, data) => {
           if (err) { throw err }
           if (data) {
             db.collection('User').deleteOne({ username }, (err, result) => {
               if (err) { throw err }
+              client.close()
               return resolve(true)
             })
-          } else { return resolve(false) }
+          } else {
+            client.close()
+            return resolve(false)
+          }
         })
       })
     })
@@ -159,7 +185,7 @@ class WebDAO {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
         const db = client.db(dbName)
-        db.collection('GlobalData').find({}).toArray((err, data) => {
+        db.collection('GlobalData').findOne({}, (err, data) => {
           if (err) { throw err }
           return resolve(data)
         })
@@ -289,7 +315,6 @@ class WebDAO {
 
   getAllCourseByYearAndSemester (year, semester) {
     return new Promise((resolve, reject) => {
-      console.log(`${year} ${semester}`)
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
         if (err) { resolve(null) }
 

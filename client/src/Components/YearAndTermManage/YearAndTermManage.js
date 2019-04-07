@@ -34,7 +34,7 @@ class YearAndTermManage extends Component {
 
   loadYearAndTerm () {
     CServiceObj.getYearAndTerm().then((data) => {
-      this.setYearAndTerm(data[0].currentStudyYear, data[0].currentStudyTerm)
+      this.setYearAndTerm(data.currentStudyYear, data.currentStudyTerm)
     })
   }
 

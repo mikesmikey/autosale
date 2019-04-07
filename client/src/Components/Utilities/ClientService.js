@@ -221,6 +221,7 @@ class ClientService {
   getAllCurrentCourse () {
     return new Promise((resolve, reject) => {
       this.getYearAndTerm().then((timeData) => {
+        console.log(timeData)
         if (!timeData) return null
         axios.get(`/courses/${timeData.currentStudyYear}/${timeData.currentStudyTerm}`).then((result) => {
           resolve(result.data)
@@ -265,6 +266,9 @@ class ClientService {
       })
     })
   }
+
+  // ==========[Exam Service]=================
+
 }
 
 export default ClientService

@@ -17,31 +17,30 @@ class ExamCreateScreen extends Component {
 
     this.state = {
       termRadioValue: 'middle',
-      subjects: []
+      subjects: [],
+      searchInput: '',
+      isLoading: false
     }
 
     this._isMounted = true
 
     this.handleRadioInput = this.handleRadioInput.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
-    this.loadAllSubject = this.loadAllSubject.bind(this)
+    this.loadAllCurrentCourse = this.loadAllCurrentCourse.bind(this)
   }
 
   componentDidMount () {
-    this.loadAllSubject()
+    this.loadAllCurrentCourse()
   }
 
   componentWillUnmount () {
     this._isMounted = false
   }
 
-  loadAllCurrentCourse () {
-    new ClientService().getAllSubject().then((result) => {
-      this.setState({
-        subjects: result
-      })
-      console.log(this.state.subjects)
-    })
+  componentDidUpdate (prevProps, prevStates) {
+    if (prevStates.termRadioValue !== this.state.termRadioValue) {
+
+    } 
   }
 
   handleInputChange (e) {
@@ -65,6 +64,26 @@ class ExamCreateScreen extends Component {
     })
   }
 
+  loadAllCurrentCourse () {
+    this.setState({
+      isLoading: true
+    })
+    new ClientService().getAllCurrentCourse().then((result) => {
+      if (this._isMounted) {
+        this.setState({
+          subjects: result
+        })
+      }
+      this.setState({
+        isLoading: false
+      })
+    })
+  }
+
+  loadExams () {
+    
+  }
+
   render () {
     return (
       <div className="subcontent-main-div exam-create-screen">
@@ -72,14 +91,20 @@ class ExamCreateScreen extends Component {
           <div className="box-title is-violet">
             เพิ่มการสอบ
           </div>
-          <div className="box-content">
+          <div className={`box-content ${this.state.isLoading ? 'disabled' : ''}`}>
             <div className="search-area">
               <div className="columns is-stay-top">
                 <div className="column is-1">
                   <p className="label is-3" style={{ marginTop: '0' }}>รหัสวิชา</p>
                 </div>
                 <div className="column">
-                  <input className="input is-full-width" type="text" placeholder="ค้นหา" />
+                  <input
+                    className="input is-full-width"
+                    type="text"
+                    placeholder="ค้นหา"
+                    name="searchInput"
+                    onChange={this.handleInputChange}
+                  />
                   <span className="input-set">
                     <input type="radio" name="middle" onChange={this.handleRadioInput} checked={this.state.termRadioValue === 'middle'}/>
                     <p className="label is-3">กลางภาค</p>
@@ -95,7 +120,9 @@ class ExamCreateScreen extends Component {
               </div>
             </div>
             <div className="exam-table-area">
-              <ExamTable />
+              <ExamTable
+                subjects={this.state.subjects}
+              />
             </div>
             <div className="exam-button-area">
               <button className="button is-3 is-oros is-round" style={{ width: '130px' }} onClick={() => { this.dataAddModal.showModal('dateModal') }}>เพิ่มการสอบ</button>
