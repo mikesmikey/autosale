@@ -17,3 +17,8 @@
     margin-left: 30px;
     margin-right: 30px;
 }
+
+.exam-create-screen .input-set * {
+    display: inline-block;
+    margin: 5px 5px;
+}
