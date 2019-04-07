@@ -1,10 +1,8 @@
 /* eslint-disable no-unused-vars */
 import React, { Component } from 'react'
 
-import '../../StyleSheets/ExamTable.css'
-
 class ExamTable extends Component {
-  _isMounted = false;
+  _isMounted = false
   constructor (props) {
     super(props)
 
@@ -18,22 +16,28 @@ class ExamTable extends Component {
     this._isMounted = false
   }
 
-  renderTableHead () {
-
-  }
-
   renderTableItem () {
-
+    var items = []
+    for (var i = 0; i < 50; i++) {
+      items[i] = <ExamTableItem key={i}/>
+    }
+    return items
   }
 
   render () {
     return (
-      <div className="exam-table">
-        <div className="table-column">
-        </div>
-        <div className="table-body">
-        </div>
-      </div>
+      <table className="table exam-table">
+        <thead>
+          <tr className="is-header">
+            <th>รหัสรายวิชา</th>
+            <th>ชื่อวิชา</th>
+            <th>สถานะ</th>
+          </tr>
+        </thead>
+        <tbody>
+          {this.renderTableItem()}
+        </tbody>
+      </table>
     )
   }
 }
@@ -41,11 +45,10 @@ class ExamTable extends Component {
 class ExamTableItem extends Component {
   render () {
     return (
-      <tr>
-        <td>dsfsdafsadfsadfsdasfda</td>
-        <td>dsfsdafsadfsadfsdasfda</td>
-        <td>dsfsdafsadfsadfsdasfda</td>
-        <td>dsfsdafsadfsadfsdasfda</td>
+      <tr className="exam-table-item">
+        <td>jeff</td>
+        <td>jeff</td>
+        <td>jeff</td>
       </tr>
     )
   }

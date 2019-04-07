@@ -1,3 +1,19 @@
 .exam-create-screen {
     width: 70%;
 }
+
+.exam-create-screen .exam-table-area {
+    overflow-y: scroll;
+    height: 500px;
+}
+
+.exam-create-screen .exam-button-area {
+    display: flex;
+    justify-content: center;
+    margin: 30px 0;
+}
+
+.exam-create-screen .button-area .button:not(:first-child):not(:last-child) {
+    margin-left: 30px;
+    margin-right: 30px;
+}

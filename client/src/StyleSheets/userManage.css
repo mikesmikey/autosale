@@ -3,30 +3,11 @@
 }
 .user-mange-select-box{
     width: 180px;
-    height: 32px;
-    padding: 5px;
-    border: 1px solid gray;
-    border-radius: 5px;
-    font-size: 16px;
 }
 .user-mange-select-box-popUp{
     width: 100%;
-    height: 32px;
-    padding: 5px;
-    border: 1px solid gray;
-    border-radius: 5px;
-    font-size: 16px;
+}
 
-    box-sizing: border-box;
-}
-.user-tab-is-20 { 
-    display:inline-block; 
-    margin-left: 10px; 
-}
-.user-tab-is-40 { 
-    display:inline-block; 
-    margin-left: 40px; 
-}
 div.border-user-1{
     border:1px solid gray;
 }
@@ -62,6 +43,11 @@ div.border-user-1{
 
 .user-table,.user-table  td,.user-table  th {
     border: none;
+}
+
+.user-table-div {
+    overflow-y: scroll;
+    height: 500px;
 }
   
 .user-table {
