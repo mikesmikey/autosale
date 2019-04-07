@@ -15,38 +15,27 @@ class ExaminersManage extends Component {
           <div className="columns is-stay-top" style={{ width: '100%' }}>
             <div className="main-column column">
               <p className="label is-2">ค้นหาผู้คุมสอบ</p>
-              <div className="columns">
-                <div className="column is-6">
-                  <div className="columns">
-                    <div className="column is-2">
-                      <p className="label is-3">ประเภท</p>
-                    </div>
-                    <div className="column">
-                      <select className="select">
-                        <option>jeff</option>
-                        <option>jeff</option>
-                      </select>
-                    </div>
+              <div className="search-area">
+                <div className="columns">
+                  <div className="column is-2">
+                    <p className="label is-3">ประเภท</p>
+                  </div>
+                  <div className="column">
+                    <select className="select">
+                      <option>jeff</option>
+                      <option>jeff</option>
+                    </select>
                   </div>
                 </div>
-                <div className="column">
-
-                </div>
-              </div>
-              <div className="columns">
-                <div className="column is-6">
-                  <div className="columns">
-                    <div className="column is-2">
-                      <p className="label is-3">ประเภท</p>
-                    </div>
-                    <div className="column">
-                      <input className="input is-full-width" type="text"/>
-                    </div>
+                <div className="columns">
+                  <div className="column is-2">
+                    <p className="label is-3">ชื่อ</p>
+                  </div>
+                  <div className="column">
+                    <input className="input is-full-width" type="text"/>
                   </div>
                 </div>
-                <div className="column">
-                  <button className="button is-oros is-round">ค้นหา</button>
-                </div>
+                <button className="button is-oros is-round is-3" style={{ marginLeft: 'auto' }}>ค้นหา</button>
               </div>
               <div className="examiner-table-area">
                 <ExaminerTable />
