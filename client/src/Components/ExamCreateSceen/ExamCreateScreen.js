@@ -25,11 +25,11 @@ class ExamCreateScreen extends Component {
                   <input className="input is-full-width" type="text" placeholder="ค้นหา" />
                   <span className="input-set">
                     <input type="radio"/>
-                    <p className="label is-3">แบบสุ่ม</p>
+                    <p className="label is-3">กลางภาค</p>
                   </span>
                   <span className="input-set">
                     <input type="radio"/>
-                    <p className="label is-3">แบบเรียง</p>
+                    <p className="label is-3">ปลายภาค</p>
                   </span>
                 </div>
                 <div className="column is-not-grow">
