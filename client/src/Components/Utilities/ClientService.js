@@ -3,6 +3,7 @@ import Student from '../../Objects/Student'
 import Professor from '../../Objects/Professor'
 import Staff from '../../Objects/Staff'
 import GlobalData from '../../Objects/GlobalData'
+import Building from '../../Objects/Building'
 import BuildingData from '../../Objects/BuildingData'
 
 class ClientService {
@@ -240,10 +241,20 @@ class ClientService {
     })
   }
 
-  /* ===========[Building Service]=================== */
-  getBuilding () {
-    return new Promise((resolve, reject) => {
-      axios.get(`/building`).then((result) => {
+  // ==========[Building Service]=================
+
+  getAllBuildingByRoom (buildingname, room) {
+    return new Promise((resolve) => {
+      var url = `/building/${room.length === 0 ? `/${buildingname}` : `/${buildingname}/${room}`}`
+      axios.get(url).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  getAllBuilding () {
+    return new Promise((resolve) => {
+      axios.get(`/buildings`).then((result) => {
         resolve(result.data)
       })
     })
@@ -269,10 +280,23 @@ class ClientService {
     })
   }
 
+  createBuilding (BuildingData) {
+    return new Building(BuildingData)
+  }
+
   searchBuilding (shortname) {
     return new Promise((resolve, reject) => {
       axios.get(`/building/${shortname}`).then((result) => {
         resolve(result.data)
+      })
+    })
+  }
+
+  // ==========[Room Service]=================
+
+  editRoom (newBuildingData) {
+    return new Promise((resolve, reject) => {
+      axios.post(`/building/edit`, { 'BuildingData': newBuildingData }).then((result) => {
       })
     })
   }
@@ -282,6 +306,15 @@ class ClientService {
   getAllExamBySubjectAndCourse (subjectId, courseId) {
     return new Promise((resolve, reject) => {
       axios.get(`/exams/${subjectId}/${courseId}`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  getAllExamBySubjectId (SubjectId, username) {
+    return new Promise((resolve) => {
+      var url = `/exam/${SubjectId.length === 0 ? `username/${username}` : `/${username}/${SubjectId}`}`
+      axios.get(url).then((result) => {
         resolve(result.data)
       })
     })

@@ -157,6 +157,72 @@ app.get('/yearAndTerm', (req, res) => {
   })
 })
 
+app.get('/subject', (req, res) => {
+  WebDAOObj.getAllSubject().then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.get('/exam/username/:username', (req, res) => {
+  WebDAOObj.getAllExamByUsername(req.params.username).then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.get('/exam/:username/:SubjectId', (req, res) => {
+  WebDAOObj.getAllExamBySubjectId(req.params.SubjectId, req.params.username).then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.get('/building', (req, res) => {
+  WebDAOObj.getAllBuilding().then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.get('/building/:building', (req, res) => {
+  WebDAOObj.getAllBuilding().then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.get('/building/:buildingname/:room', (req, res) => {
+  WebDAOObj.getAllBuildingByRoom(req.params.buildingname, req.params.room).then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.post('/building/edit', (req, res) => {
+  WebDAOObj.editRoom(req.body.BuildingData).then((pass) => {
+    res.send(pass)
+  })
+})
+
 app.post('/yearAndTerm/edit', (req, res) => {
   WebDAOObj.editYearAndTerm(req.body.globalData).then((pass) => {
     res.send(pass)
@@ -183,7 +249,7 @@ app.get('/courses/:year/:semester/:subjectId', (req, res) => {
   })
 })
 
-app.get('/building', (req, res) => {
+app.get('/buildings', (req, res) => {
   WebDAOObj.getBuilding().then(data => {
     if (data != null) {
       res.json(data)

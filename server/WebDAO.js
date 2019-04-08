@@ -169,17 +169,38 @@ class WebDAO {
     })
   }
   /* ===========[Score DAO]=================== */
-  getScoreByUsername (username) {
+
+  getAllExamByUsername (username) {
     return new Promise((resolve, reject) => {
-      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
+        if (_err) { resolve(null) }
         const db = client.db(dbName)
-        db.collection('User').findOne({ 'username': username }, { '_id': 0, 'password': 0 }, (err, data) => {
+        db.collection('Exam').find({ 'ExamSeat.studentCode': username }).project({ '_id': 0, 'password': 0 }).toArray((err, data) => {
           if (err) { throw err }
+          client.close()
           return resolve(data)
         })
+        client.close()
       })
     })
   }
+
+  getAllExamBySubjectId (SubjectId, username) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
+        if (_err) { resolve(null) }
+        const db = client.db(dbName)
+        const regex = new RegExp(`${SubjectId}`)
+        db.collection('Exam').find({ 'subjectId': regex, 'ExamSeat.studentCode': username }).project({ '_id': 0, 'password': 0 }).toArray((err, data) => {
+          if (err) { throw err }
+          client.close()
+          return resolve(data)
+        })
+        client.close()
+      })
+    })
+  }
+
   /* ===========[GlobalData DAO]=================== */
   getYearAndTerm () {
     return new Promise((resolve, reject) => {
@@ -203,6 +224,38 @@ class WebDAO {
             return resolve(true)
           } else { return resolve(false) }
         })
+      })
+    })
+  }
+
+  /* ===========[Room DAO]=================== */
+
+  getAllBuilding () {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
+        if (_err) { resolve(null) }
+        const db = client.db(dbName)
+        db.collection('Building').find({}).project({ '_id': 0, 'password': 0 }).toArray((err, data) => {
+          if (err) { throw err }
+          client.close()
+          return resolve(data)
+        })
+        client.close()
+      })
+    })
+  }
+
+  editRoom (newBuildingData) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
+        const db = client.db(dbName)
+        db.collection('Building').findOneAndUpdate({ 'building_name': newBuildingData.building_name }, { '$set': newBuildingData }, (err, result) => {
+          if (err) { throw err }
+          if (result.value) {
+            return resolve(true)
+          } else { return resolve(false) }
+        })
+        client.close()
       })
     })
   }
@@ -266,6 +319,23 @@ class WebDAO {
       })
     })
   }
+
+  getAllBuildingByRoom (buildingname, roomname) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
+        if (_err) { resolve(null) }
+        const db = client.db(dbName)
+        const regex = new RegExp(`${roomname}`)
+        db.collection('Building').find({ 'building_name': buildingname, 'Rooms.room': regex }).project({ '_id': 0, 'password': 0 }).toArray((err, data) => {
+          if (err) { throw err }
+          client.close()
+          return resolve(data)
+        })
+        client.close()
+      })
+    })
+  }
+
   /* ===========[Subject DAO]=================== */
 
   getAllSubjectBySubjectIdOrSubjectName (subjid, subjname) {
