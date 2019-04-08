@@ -201,20 +201,6 @@ class WebDAO {
     })
   }
 
-  getAllSubject () {
-    return new Promise((resolve, reject) => {
-      mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
-        if (_err) { resolve(null) }
-        const db = client.db(dbName)
-        db.collection('Subject').find({}).toArray((err, data) => {
-          if (err) { throw err }
-          client.close()
-          return resolve(data)
-        })
-        client.close()
-      })
-    })
-  }
   /* ===========[GlobalData DAO]=================== */
   getYearAndTerm () {
     return new Promise((resolve, reject) => {
@@ -273,7 +259,7 @@ class WebDAO {
       })
     })
   }
-  
+
   /* ===========[Building DAO]=================== */
   getBuilding () {
     return new Promise((resolve, reject) => {
