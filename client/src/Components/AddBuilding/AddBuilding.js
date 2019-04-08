@@ -144,9 +144,6 @@ class AddBuilding extends Component {
               </div>
             </div>
           </div>
-          <BuildingTableItem
-            ref={instance => { this.buildingTable = instance }}
-          />
         </div>
         <Modal ref={instance => { this.manageBuildingPopUp = instance }} content={
           <BuildingPopUp closeBuildingPopUp={() => { this.manageBuildingPopUp.closeModal() }}
