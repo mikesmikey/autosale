@@ -12,8 +12,10 @@ class WebDAO {
         const db = client.db(dbName)
         db.collection('User').find({}).project({ '_id': 0, 'password': 0 }).toArray((err, data) => {
           if (err) { throw err }
+          client.close()
           return resolve(data)
         })
+        client.close()
       })
     })
   }
@@ -24,8 +26,10 @@ class WebDAO {
         const db = client.db(dbName)
         db.collection('User').findOne({ 'username': username }, { '_id': 0, 'password': 0 }, (err, data) => {
           if (err) { throw err }
+          client.close()
           return resolve(data)
         })
+        client.close()
       })
     })
   }
@@ -39,10 +43,12 @@ class WebDAO {
           if (!data) {
             db.collection('User').insertOne(user, (err, result) => {
               if (err) { throw err }
+              client.close()
               return resolve(true)
             })
-          } else { return resolve(false) }
+          } else { client.close(); return resolve(false) }
         })
+        client.close()
       })
     })
   }
@@ -53,8 +59,10 @@ class WebDAO {
         const db = client.db(dbName)
         db.collection('User').insertMany(users, (err, result) => {
           if (err) { throw err }
+          client.close()
           return resolve(true)
         })
+        client.close()
       })
     })
   }
@@ -66,9 +74,11 @@ class WebDAO {
         db.collection('User').findOneAndUpdate({ 'username': newUserData.username }, { '$set': newUserData }, (err, result) => {
           if (err) { throw err }
           if (result.value) {
+            client.close()
             return resolve(true)
-          } else { return resolve(false) }
+          } else { client.close(); return resolve(false) }
         })
+        client.close()
       })
     })
   }
@@ -82,10 +92,12 @@ class WebDAO {
           if (data) {
             db.collection('User').deleteOne({ username }, (err, result) => {
               if (err) { throw err }
+              client.close()
               return resolve(true)
             })
-          } else { return resolve(false) }
+          } else { client.close(); return resolve(false) }
         })
+        client.close()
       })
     })
   }
@@ -96,8 +108,10 @@ class WebDAO {
         const db = client.db(dbName)
         db.collection('User').find({ 'typeOfUser': type }).limit(16).project({ '_id': 0, 'password': 0 }).toArray((err, data) => {
           if (err) { throw err }
+          client.close()
           return resolve(data)
         })
+        client.close()
       })
     })
   }
@@ -109,8 +123,10 @@ class WebDAO {
         const regex = new RegExp(`${username}`)
         db.collection('User').find({ 'username': regex, 'typeOfUser': type }).limit(16).project({ '_id': 0, 'password': 0 }).toArray((err, data) => {
           if (err) { throw err }
+          client.close()
           return resolve(data)
         })
+        client.close()
       })
     })
   }
@@ -121,8 +137,10 @@ class WebDAO {
         const db = client.db(dbName)
         db.collection('Faculty').find({}).project({ '_id': 0 }).toArray((err, data) => {
           if (err) { throw err }
+          client.close()
           return resolve(data)
         })
+        client.close()
       })
     })
   }
@@ -133,8 +151,10 @@ class WebDAO {
         const db = client.db(dbName)
         db.collection('User').findOne({ 'username': username }, { '_id': 0, 'password': 0 }, (err, data) => {
           if (err) { throw err }
+          client.close()
           return resolve(data)
         })
+        client.close()
       })
     })
   }
@@ -145,8 +165,10 @@ class WebDAO {
         const db = client.db(dbName)
         db.collection('GlobalData').find({}).toArray((err, data) => {
           if (err) { throw err }
+          client.close()
           return resolve(data)
         })
+        client.close()
       })
     })
   }
@@ -158,9 +180,11 @@ class WebDAO {
         db.collection('GlobalData').findOneAndUpdate({ 'id': newGlobalData.id }, { '$set': newGlobalData }, (err, result) => {
           if (err) { throw err }
           if (result.value) {
+            client.close()
             return resolve(true)
-          } else { return resolve(false) }
+          } else { client.close(); return resolve(false) }
         })
+        client.close()
       })
     })
   }
@@ -172,8 +196,10 @@ class WebDAO {
         const db = client.db(dbName)
         db.collection('Building').find({}).toArray((err, data) => {
           if (err) { throw err }
+          client.close()
           return resolve(data)
         })
+        client.close()
       })
     })
   }
@@ -187,10 +213,12 @@ class WebDAO {
           if (!data) {
             db.collection('Building').insertOne(building, (err, result) => {
               if (err) { throw err }
+              client.close()
               return resolve(true)
             })
-          } else { return resolve(false) }
+          } else { client.close(); return resolve(false) }
         })
+        client.close()
       })
     })
   }
@@ -204,10 +232,12 @@ class WebDAO {
           if (data) {
             db.collection('Building').deleteOne({ 'short_name': shortname }, (err, result) => {
               if (err) { throw err }
+              client.close()
               return resolve(true)
             })
-          } else { return resolve(false) }
+          } else { client.close(); return resolve(false) }
         })
+        client.close()
       })
     })
   }
@@ -219,8 +249,10 @@ class WebDAO {
         const regex = new RegExp(`${shortname}`)
         db.collection('Building').find({ 'short_name': regex }).toArray((err, data) => {
           if (err) { throw err }
+          client.close()
           return resolve(data)
         })
+        client.close()
       })
     })
   }
@@ -229,10 +261,12 @@ class WebDAO {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
         const db = client.db(dbName)
-        db.collection('Subject').find({ '$or': [{ 'subject_id': subjid }, { 'subject_name': subjname }] }).limit(16).project({ '_id': 0 }).toArray((err, data) => {
+        db.collection('Subject').find({ '$or': [{ 'subjectId': subjid }, { 'subjectName': subjname }] }).limit(16).project({ '_id': 0 }).toArray((err, data) => {
           if (err) { throw err }
+          client.close()
           return resolve(data)
         })
+        client.close()
       })
     })
   }
@@ -243,9 +277,10 @@ class WebDAO {
         const db = client.db(dbName)
         db.collection('Subject').find({}).project({ '_id': 0 }).toArray((err, data) => {
           if (err) { throw err }
-          console.log(data)
+          client.close()
           return resolve(data)
         })
+        client.close()
       })
     })
   }
@@ -254,15 +289,17 @@ class WebDAO {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
         const db = client.db(dbName)
-        db.collection('Subject').findOne({ '$or': [{ 'subject_id': subject.subject_id }, { 'subject_name': subject.subject_name }] }, (err, data) => {
+        db.collection('Subject').findOne({ '$or': [{ 'subjectId': subject.subjectId }, { 'subjectName': subject.subjectName }] }, (err, data) => {
           if (err) { throw err }
           if (!data) {
             db.collection('Subject').insertOne(subject, (err, result) => {
               if (err) { throw err }
+              client.close()
               return resolve(true)
             })
-          } else { return resolve(false) }
+          } else { client.close(); return resolve(false) }
         })
+        client.close()
       })
     })
   }
