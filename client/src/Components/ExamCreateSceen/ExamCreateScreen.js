@@ -7,6 +7,8 @@ import ClientService from '../Utilities/ClientService'
 import ExamTable from './ExamTable'
 import DataAddModal from './DataAddModal'
 
+import Exam from '../../Objects/Exam'
+
 import '../../StyleSheets/ExamCreateScreen.css'
 
 const CServiceObj = new ClientService()
@@ -18,7 +20,7 @@ class ExamCreateScreen extends Component {
     super(props)
 
     this.state = {
-      semesterRadioValue: 'middle',
+      examTypeRadioValue: 'middle',
       subjects: [],
       exams: [],
       searchInput: '',
@@ -29,10 +31,11 @@ class ExamCreateScreen extends Component {
 
     this.handleRadioInput = this.handleRadioInput.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
+    this.searchButtonHandle = this.searchButtonHandle.bind(this)
   }
 
   componentDidMount () {
-    this.loadExams()
+    this.loadAllExam()
   }
 
   componentWillUnmount () {
@@ -40,9 +43,9 @@ class ExamCreateScreen extends Component {
   }
 
   componentDidUpdate (prevProps, prevStates) {
-    if (prevStates.semesterRadioValue !== this.state.semesterRadioValue) {
+    if (prevStates.examTypeRadioValue !== this.state.examTypeRadioValue) {
 
-    } 
+    }
   }
 
   handleInputChange (e) {
@@ -60,36 +63,60 @@ class ExamCreateScreen extends Component {
     const name = target.name
 
     this.setState({
-      semesterRadioValue: name
+      examTypeRadioValue: name
     })
 
-    this.loadExams()
+    this.loadAllExam()
   }
 
-  handleLoading() {
-    
-  }
-
-  loadExams () {
+  loadAllExam (subjectId) {
     this.setState({
-      isLoading: true
+      isLoading: true,
+      exams: []
     })
-    CServiceObj.getAllCurrentCourse().then((result) => {
+
+    var newexams = []
+    CServiceObj.searchAllCurrentCourseBySubjectId(subjectId || '').then((result) => {
+      if (result.length === 0) {
+        this.setState({
+          isLoading: false
+        })
+      }
+
       result.forEach(element => {
         element.courses.forEach((course) => {
+          var isHasExam = false
           CServiceObj.getAllExamBySubjectAndCourse(element.subject_id, course.courseId).then((result) => {
             result.forEach((exam) => {
-              if (exam.category === this.state.semesterRadioValue) {
-                console.log("yes")
+              if (exam.category === this.state.examTypeRadioValue) {
+                isHasExam = true
+                exam.subjectName = element.subject_name
+                const examobj = new Exam(exam)
+                newexams.push(examobj)
               }
+            })
+            if (!isHasExam) {
+              const noExamData = {
+                subjectId: element.subject_id,
+                subjectName: element.subject_name
+              }
+              const examobj = new Exam(noExamData)
+              newexams.push(examobj)
+            }
+            if (this._isMounted) {
               this.setState({
+                exams: newexams,
                 isLoading: false
               })
-            })
+            }
           })
         })
       })
     })
+  }
+
+  searchButtonHandle () {
+    this.loadAllExam(this.state.searchInput)
   }
 
   render () {
@@ -114,22 +141,23 @@ class ExamCreateScreen extends Component {
                     onChange={this.handleInputChange}
                   />
                   <span className="input-set">
-                    <input type="radio" name="middle" onChange={this.handleRadioInput} checked={this.state.semesterRadioValue === 'middle'}/>
+                    <input type="radio" name="middle" onChange={this.handleRadioInput} checked={this.state.examTypeRadioValue === 'middle'}/>
                     <p className="label is-3">กลางภาค</p>
                   </span>
                   <span className="input-set">
-                    <input type="radio" name="final" onChange={this.handleRadioInput} checked={this.state.semesterRadioValue === 'final'}/>
+                    <input type="radio" name="final" onChange={this.handleRadioInput} checked={this.state.examTypeRadioValue === 'final'}/>
                     <p className="label is-3">ปลายภาค</p>
                   </span>
                 </div>
                 <div className="column is-not-grow">
-                  <button className="button is-oros is-round" style={{ marginTop: '0' }}>ค้นหา</button>
+                  <button className="button is-oros is-round" style={{ marginTop: '0' }} onClick={this.searchButtonHandle}>ค้นหา</button>
                 </div>
               </div>
             </div>
             <div className="exam-table-area">
               <ExamTable
                 subjects={this.state.subjects}
+                exams={this.state.exams}
               />
             </div>
             <div className="exam-button-area">

@@ -18,22 +18,12 @@ class ExamTable extends Component {
 
   renderTableItem () {
     if (this.props.subjects) {
-      var allElements = []
-      this.props.subjects.forEach((subject) => {
-        const elements = subject.courses.map((course) => {
-          var courseData = {}
-          courseData.subjectId = subject.subject_id
-          courseData.subjectName = subject.subject_name
-          courseData.status = false
-          courseData.course = course
-          return <ExamTableItem
-            key={`${subject.subject_id}_${course.courseId}`}
-            courseData={courseData}
-          />
-        })
-        allElements = allElements.concat(elements)
+      return this.props.exams.map((exam) => {
+        return <ExamTableItem
+          key={`${exam.subjectId}_${exam.courseId}`}
+          examData={exam}
+        />
       })
-      return allElements
     }
     return null
   }
@@ -60,9 +50,9 @@ class ExamTableItem extends Component {
   render () {
     return (
       <tr className="exam-table-item">
-        <td>{this.props.courseData.subjectId}</td>
-        <td>{this.props.courseData.subjectName}</td>
-        <td>{this.props.courseData.status ? 'เยส' : 'โน'}</td>
+        <td>{this.props.examData.subjectId}</td>
+        <td>{this.props.examData.subjectName}</td>
+        <td>{this.props.examData.status}</td>
       </tr>
     )
   }

@@ -221,9 +221,19 @@ class ClientService {
   getAllCurrentCourse () {
     return new Promise((resolve, reject) => {
       this.getYearAndTerm().then((timeData) => {
-        console.log(timeData)
         if (!timeData) return null
         axios.get(`/courses/${timeData.currentStudyYear}/${timeData.currentStudyTerm}`).then((result) => {
+          resolve(result.data)
+        })
+      })
+    })
+  }
+
+  searchAllCurrentCourseBySubjectId (subjectId) {
+    return new Promise((resolve, reject) => {
+      this.getYearAndTerm().then((timeData) => {
+        if (!timeData) return null
+        axios.get(`/courses/${timeData.currentStudyYear}/${timeData.currentStudyTerm}/${subjectId}`).then((result) => {
           resolve(result.data)
         })
       })
@@ -268,7 +278,7 @@ class ClientService {
   }
 
   // ==========[Exam Service]=================
-  
+
   getAllExamBySubjectAndCourse (subjectId, courseId) {
     return new Promise((resolve, reject) => {
       axios.get(`/exams/${subjectId}/${courseId}`).then((result) => {

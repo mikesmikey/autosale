@@ -313,6 +313,7 @@ class WebDAO {
   /* ===========[Course DAO]=================== */
   // coming with subject name, subject id
 
+  // ******* [BUG?] NEED MATCH OPERATOR TO RETREVE ONLY MATCH OBJECT *******
   getAllCourseByYearAndSemester (year, semester) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
@@ -349,16 +350,66 @@ class WebDAO {
     })
   }
 
+  getAllCourseByYearSemesterAndSubjectId (year, semester, subjectId) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+
+        const db = client.db(dbName)
+
+        const regex = new RegExp(`${subjectId}`)
+        db.collection('Subject').aggregate(
+          [
+            {
+              '$match': { '$and':
+              [
+                { 'subject_id': { '$regex': regex } },
+                { 'courses.school_year': Number.parseInt(year) },
+                { 'courses.semester': Number.parseInt(semester) }
+              ] }
+            },
+            {
+              '$project': {
+                '_id': 0,
+                'subject_id': 1,
+                'subject_name': 1,
+                'courses': {
+                  '$filter': {
+                    'input': '$courses',
+                    'as': 'course',
+                    'cond': { '$and': [
+                      { '$eq': [ '$$course.school_year', Number.parseInt(year) ] },
+                      { '$eq': [ '$$course.semester', Number.parseInt(semester) ] }
+                    ] }
+                  }
+                }
+              }
+            }
+          ]
+        ).toArray((err, data) => {
+          if (err) { throw err }
+          client.close()
+          return resolve(data)
+        })
+        client.close()
+      })
+    })
+  }
+
   /* ===========[Exam DAO]=================== */
 
   getAllExamBySubjectIdAndCourseId (subjectId, courseId) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+
         const db = client.db(dbName)
         db.collection('Exam').find({ '$and': [{ 'subjectId': Number.parseInt(subjectId) }, { 'courseId': Number.parseInt(courseId) }] }).project({ '_id': 0 }).toArray((err, data) => {
           if (err) { throw err }
+          client.close()
           return resolve(data)
         })
+        client.close()
       })
     })
   }
