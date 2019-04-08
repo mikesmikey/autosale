@@ -9,11 +9,15 @@ class WebDAO {
   getAllUser () {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+
         const db = client.db(dbName)
         db.collection('User').find({}).project({ '_id': 0, 'password': 0 }).toArray((err, data) => {
           if (err) { throw err }
+          client.close()
           return resolve(data)
         })
+        client.close()
       })
     })
   }
@@ -21,11 +25,15 @@ class WebDAO {
   getUserByUsername (username) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+
         const db = client.db(dbName)
         db.collection('User').findOne({ 'username': username }, { '_id': 0, 'password': 0 }, (err, data) => {
           if (err) { throw err }
+          client.close()
           return resolve(data)
         })
+        client.close()
       })
     })
   }
@@ -33,15 +41,21 @@ class WebDAO {
   insertUser (user) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+
         const db = client.db(dbName)
         db.collection('User').findOne({ 'username': user.username }, (err, data) => {
           if (err) { throw err }
           if (!data) {
             db.collection('User').insertOne(user, (err, result) => {
               if (err) { throw err }
+              client.close()
               return resolve(true)
             })
-          } else { return resolve(false) }
+          } else {
+            client.close()
+            return resolve(false)
+          }
         })
       })
     })
@@ -50,11 +64,15 @@ class WebDAO {
   addManyStudents (users) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+
         const db = client.db(dbName)
         db.collection('User').insertMany(users, (err, result) => {
           if (err) { throw err }
+          client.close()
           return resolve(true)
         })
+        client.close()
       })
     })
   }
@@ -62,12 +80,18 @@ class WebDAO {
   editUser (newUserData) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+
         const db = client.db(dbName)
         db.collection('User').findOneAndUpdate({ 'username': newUserData.username }, { '$set': newUserData }, (err, result) => {
           if (err) { throw err }
           if (result.value) {
+            client.close()
             return resolve(true)
-          } else { return resolve(false) }
+          } else {
+            client.close()
+            return resolve(false)
+          }
         })
       })
     })
@@ -76,15 +100,21 @@ class WebDAO {
   deleteUserByUsername (username) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+
         const db = client.db(dbName)
         db.collection('User').findOne({ 'username': username }, (err, data) => {
           if (err) { throw err }
           if (data) {
             db.collection('User').deleteOne({ username }, (err, result) => {
               if (err) { throw err }
+              client.close()
               return resolve(true)
             })
-          } else { return resolve(false) }
+          } else {
+            client.close()
+            return resolve(false)
+          }
         })
       })
     })
@@ -93,11 +123,15 @@ class WebDAO {
   getAllUserByType (type) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+
         const db = client.db(dbName)
-        db.collection('User').find({ 'typeOfUser': type }).limit(16).project({ '_id': 0, 'password': 0 }).toArray((err, data) => {
+        db.collection('User').find({ 'typeOfUser': type }).project({ '_id': 0, 'password': 0 }).toArray((err, data) => {
           if (err) { throw err }
+          client.close()
           return resolve(data)
         })
+        client.close()
       })
     })
   }
@@ -105,12 +139,16 @@ class WebDAO {
   getAllUserByTypeAndUsername (type, username) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+
         const db = client.db(dbName)
         const regex = new RegExp(`${username}`)
-        db.collection('User').find({ 'username': regex, 'typeOfUser': type }).limit(16).project({ '_id': 0, 'password': 0 }).toArray((err, data) => {
+        db.collection('User').find({ 'username': regex, 'typeOfUser': type }).project({ '_id': 0, 'password': 0 }).toArray((err, data) => {
           if (err) { throw err }
+          client.close()
           return resolve(data)
         })
+        client.close()
       })
     })
   }
@@ -118,11 +156,15 @@ class WebDAO {
   getAllFaculty () {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+
         const db = client.db(dbName)
         db.collection('Faculty').find({}).project({ '_id': 0 }).toArray((err, data) => {
           if (err) { throw err }
+          client.close()
           return resolve(data)
         })
+        client.close()
       })
     })
   }
@@ -143,7 +185,7 @@ class WebDAO {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
         const db = client.db(dbName)
-        db.collection('GlobalData').find({}).toArray((err, data) => {
+        db.collection('GlobalData').findOne({}, (err, data) => {
           if (err) { throw err }
           return resolve(data)
         })
@@ -225,11 +267,12 @@ class WebDAO {
     })
   }
   /* ===========[Subject DAO]=================== */
+
   getAllSubjectBySubjectIdOrSubjectName (subjid, subjname) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
         const db = client.db(dbName)
-        db.collection('Subject').find({ '$or': [{ 'subject_id': subjid }, { 'subject_name': subjname }] }).limit(16).project({ '_id': 0 }).toArray((err, data) => {
+        db.collection('Subject').find({ '$or': [{ 'subject_id': subjid }, { 'subject_name': subjname }] }).project({ '_id': 0 }).toArray((err, data) => {
           if (err) { throw err }
           return resolve(data)
         })
@@ -263,6 +306,110 @@ class WebDAO {
             })
           } else { return resolve(false) }
         })
+      })
+    })
+  }
+
+  /* ===========[Course DAO]=================== */
+  // coming with subject name, subject id
+
+  // ******* [BUG?] NEED MATCH OPERATOR TO RETREVE ONLY MATCH OBJECT *******
+  getAllCourseByYearAndSemester (year, semester) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+
+        const db = client.db(dbName)
+        db.collection('Subject').aggregate(
+          [
+            {
+              '$project': {
+                '_id': 0,
+                'subject_id': 1,
+                'subject_name': 1,
+                'courses': {
+                  '$filter': {
+                    'input': '$courses',
+                    'as': 'course',
+                    'cond': { '$and': [
+                      { '$eq': [ '$$course.school_year', Number.parseInt(year) ] },
+                      { '$eq': [ '$$course.semester', Number.parseInt(semester) ] }
+                    ] }
+                  }
+                }
+              }
+            }
+          ]
+        ).toArray((err, data) => {
+          if (err) { throw err }
+          client.close()
+          return resolve(data)
+        })
+        client.close()
+      })
+    })
+  }
+
+  getAllCourseByYearSemesterAndSubjectId (year, semester, subjectId) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+
+        const db = client.db(dbName)
+
+        const regex = new RegExp(`${subjectId}`)
+        db.collection('Subject').aggregate(
+          [
+            {
+              '$match': { '$and':
+              [
+                { 'subject_id': { '$regex': regex } },
+                { 'courses.school_year': Number.parseInt(year) },
+                { 'courses.semester': Number.parseInt(semester) }
+              ] }
+            },
+            {
+              '$project': {
+                '_id': 0,
+                'subject_id': 1,
+                'subject_name': 1,
+                'courses': {
+                  '$filter': {
+                    'input': '$courses',
+                    'as': 'course',
+                    'cond': { '$and': [
+                      { '$eq': [ '$$course.school_year', Number.parseInt(year) ] },
+                      { '$eq': [ '$$course.semester', Number.parseInt(semester) ] }
+                    ] }
+                  }
+                }
+              }
+            }
+          ]
+        ).toArray((err, data) => {
+          if (err) { throw err }
+          client.close()
+          return resolve(data)
+        })
+        client.close()
+      })
+    })
+  }
+
+  /* ===========[Exam DAO]=================== */
+
+  getAllExamBySubjectIdAndCourseId (subjectId, courseId) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+
+        const db = client.db(dbName)
+        db.collection('Exam').find({ '$and': [{ 'subjectId': Number.parseInt(subjectId) }, { 'courseId': Number.parseInt(courseId) }] }).project({ '_id': 0 }).toArray((err, data) => {
+          if (err) { throw err }
+          client.close()
+          return resolve(data)
+        })
+        client.close()
       })
     })
   }
