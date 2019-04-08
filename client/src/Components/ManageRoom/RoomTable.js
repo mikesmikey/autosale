@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 
 import ClientService from '../Utilities/ClientService'
 import '../../StyleSheets/RoomTable.css'
+
 const ServiceObj = new ClientService()
 
 class RoomTable extends Component {
@@ -32,6 +33,7 @@ class RoomTable extends Component {
     this.loadData = this.loadData.bind(this)
   }
 
+
   renderTableHead () {
     return (
       <tr className="is-header">
@@ -41,6 +43,53 @@ class RoomTable extends Component {
         <th >จำนวนนิสิต</th>
       </tr>
     )
+  }
+
+  selectItem (e) {
+    const parent = e.target.parentElement
+    if (parent.classList.contains('score-table-item')) {
+      if (!parent.classList.contains('is-active')) {
+        if (this.state.selectedRow != null) {
+          this.state.selectedRow.classList.remove('is-active')
+        }
+        parent.classList.add('is-active')
+        this.setState({
+          selectedRow: parent
+        })
+
+        for(var i = 0;i < this.state.data.length;i++){
+          if(this.state.data[i].building_name == this.props.SelectedBuildingname){
+            this.props.setSelectedBuilding(this.state.data[i])
+            this.props.setSelectedRoom(this.state.data[i].Rooms[parent.getAttribute('index')])
+          }
+        }
+
+      }
+    }
+  }
+
+  inspectItem (e) {
+    const parent = e.target.parentElement
+    if (parent.classList.contains('room-table-item')) {
+      this.props.showDeleteModal()
+
+      for(var i = 0;i < this.state.data.length;i++){
+          if(this.state.data[i].building_name == this.props.SelectedBuildingname){
+            this.props.setSelectedBuilding(this.state.data[i])
+            this.props.setSelectedRoom(this.state.data[i].Rooms[parent.getAttribute('index')])
+          }
+        }
+
+    }
+  }
+
+  deleteSelectedItem () {
+    const index = Number.parseInt(this.state.selectedRow.getAttribute('index'), 10)
+    var arr = this.state.data
+    arr.splice(index, 1)
+    this.setState({
+      data: arr
+    })
   }
 
   loadData () {
@@ -75,7 +124,7 @@ class RoomTable extends Component {
       el.textContent = this.state.data[i].building_name
       let num = 0
       if(this.BuildingAll.length == 0){
-        this.props.setSelectedBuilding(this.state.data[i].building_name)
+        this.props.setSelectedBuildingname(this.state.data[i].building_name)
       }
       for (var z = 0; z < this.BuildingAll.length; z++) {
         if (this.BuildingAll[z] != this.state.data[i].building_name) {
@@ -88,6 +137,7 @@ class RoomTable extends Component {
       }
       
       if(this.state.data[i].building_name == this.props.SelectedBuildingname){
+        //this.props.setSelectedRoomUpdate(this.state.data[i])
         for(var j =0; j<this.state.data[i].Rooms.length;j++){
           this.check = 0
           this.checkK = 0
@@ -106,8 +156,8 @@ class RoomTable extends Component {
               returnData[j] = <RoomTableItem
               key={j}
               itemIndex={j}
-              //selectItem={(e) => { this.selectItem(e) }}
-              //inspectItem={(e) => { this.inspectItem(e) }}
+              selectItem={(e) => { this.selectItem(e) }}
+              inspectItem={(e) => { this.inspectItem(e) }}
               itemData={this.state.data[i].Rooms[j]}
             />
             }
@@ -142,8 +192,9 @@ class RoomTableItem extends Component {
 
   renderItemByType () {
     return (
-      <tr className="score-table-item"
+      <tr className="room-table-item"
         onClick={(e) => { this.props.selectItem(e) }}
+        onDoubleClick={(e) => { this.props.inspectItem(e) }}
         index={this.props.itemIndex}
       >
         <td>{this.props.itemData.room}</td>

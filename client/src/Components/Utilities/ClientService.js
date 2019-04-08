@@ -3,6 +3,7 @@ import Student from '../../Objects/Student'
 import Professor from '../../Objects/Professor'
 import Staff from '../../Objects/Staff'
 import GlobalData from '../../Objects/GlobalData'
+import Building from '../../Objects/Building'
 
 class ClientService {
   loginUsernameCheck (username) {
@@ -214,6 +215,18 @@ class ClientService {
         resolve(result.data)
       })
     })
+  }
+
+  editRoom (newBuildingData) {
+    return new Promise((resolve, reject) => {
+      axios.post(`/building/edit`, { 'BuildingData': newBuildingData }).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  createBuilding (BuildingData) {
+    return new Building(BuildingData)
   }
 
  }

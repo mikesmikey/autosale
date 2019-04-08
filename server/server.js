@@ -195,6 +195,11 @@ app.get('/building/:buildingname/:room', (req, res) => {
   })
 })
 
+app.post('/building/edit', (req, res) => {
+  WebDAOObj.editRoom(req.body.BuildingData).then((pass) => {
+    res.send(pass)
+  })
+})
 
 app.post('/yearAndTerm/edit', (req, res) => {
   WebDAOObj.editYearAndTerm(req.body.globalData).then((pass) => {

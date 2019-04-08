@@ -222,6 +222,20 @@ class WebDAO {
     })
   }
 
+  editRoom (newBuildingData) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
+        const db = client.db(dbName)
+        db.collection('Building').findOneAndUpdate({ 'building_name': newBuildingData.building_name }, { '$set': newBuildingData }, (err, result) => {
+          if (err) { throw err }
+          if (result.value) {
+            return resolve(true)
+          } else { return resolve(false) }
+        })
+      })
+    })
+  }
+
 }
 
 module.exports = WebDAO

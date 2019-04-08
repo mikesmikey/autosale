@@ -7,6 +7,7 @@ import '../../StyleSheets/userManage.css'
 import Modal from '../Utilities/Modal'
 import RoomTable from './RoomTable'
 import RoomPopUp from './RoomPopUp'
+import DeleteRoomPopup from './DeleteRoomPopup'
 
 class ManageRoom extends Component {
   
@@ -20,8 +21,8 @@ class ManageRoom extends Component {
       idSelectedBuilding: 'BuildingSelect',
       searchInput: '',
       isDataLoading: false,
-      SelectedScore: false,
-      SelectedSubject: false
+      SelectedBuilding: false,
+      SelectedRoom: false
     }
 
     this._isMounted = true
@@ -29,6 +30,9 @@ class ManageRoom extends Component {
     this.handleSelectBuilding = this.handleSelectBuilding.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
     this.handleSearchButton = this.handleSearchButton.bind(this)
+    this.setSelectedBuildingname = this.setSelectedBuildingname.bind(this)
+    this.setSelectedRoom = this.setSelectedRoom.bind(this)
+    this.setDataLoadingStatus = this.setDataLoadingStatus.bind(this)
     this.setSelectedBuilding = this.setSelectedBuilding.bind(this)
   }
 
@@ -60,10 +64,28 @@ class ManageRoom extends Component {
       [name]: value
     })
   }
+
+  setDataLoadingStatus (status) {
+    this.setState({
+      isDataLoading: status
+    })
+  }
   
-  setSelectedBuilding (name) {
+  setSelectedBuildingname (name) {
     this.setState({
       selectedBuildingname: name
+    })
+  }
+
+  setSelectedRoom (room) {
+    this.setState({
+      SelectedRoom: room
+    })
+  }
+
+  setSelectedBuilding (room) {
+    this.setState({
+      SelectedBuilding: room
     })
   }
 
@@ -80,7 +102,6 @@ class ManageRoom extends Component {
                 <div className="column is-8">
                   <div className="input-with-text">
                     <label className="label">ตึก : </label>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <select className="exam-score-select-box"
                       id="BuildingSelect"
                       onChange={this.handleSelectBuilding} 
@@ -95,6 +116,9 @@ class ManageRoom extends Component {
                   <div className="input-with-text">
                     <button type="submit"><i className="fa fa-search height50" onClick={this.handleSearchButton}>
                     </i></button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button className="button is-oros is-round is-pulled-right" onClick={() => { this.deleteRoomPopupModal.showModal() }}>เพิ่มห้อง</button>
                   </div>
                 </div>
 
@@ -103,24 +127,43 @@ class ManageRoom extends Component {
             <br></br>
             <div>
             </div>
-            <br></br>
             <div className="table-div columns is-stay-top">
               <div className="column is-8 user-column-table">
               <RoomTable
                   ref={instance => { this.roomTable = instance }}
-                  showManageModal={() => { this.managePopup.showManageModal('view') }}
+                  showDeleteModal={() => { this.deleteRoomPopupModal.showModal() }}
                   idSelectedBuilding={this.state.idSelectedBuilding}
                   SelectedBuildingname={this.state.selectedBuildingname}
+                  setSelectedBuildingname={this.setSelectedBuildingname}
                   setSelectedBuilding={this.setSelectedBuilding}
+                  setSelectedRoom={this.setSelectedRoom}
                 />
 
               </div>
             </div>
           </div>
         </div>
-        
-
+        <Modal ref={instance => { this.deleteRoomPopupModal = instance }} content={
+            <DeleteRoomPopup
+              ref={instance => { this.deleteRoomPopup = instance }}
+              closeModal={() => {
+                this.deleteRoomPopupModal.closeModal()
+              }}
+              showModal={() => {
+                this.deleteRoomPopupModal.showModal()
+              }}
+              deleteSelectedItem={() => { this.roomTable.deleteSelectedItem() }}
+              reloadTable={() => { this.roomTable.loadDataByRoomID(this.state.selectedBuildingname,this.state.searchInput) }}
+              selectedBuilding={this.state.SelectedBuilding}
+              selectedRoom={this.state.SelectedRoom}
+              setSelectedBuilding={this.setSelectedBuilding}
+              isDataLoading={this.state.isDataLoading}
+              setDataLoadingStatus={this.setDataLoadingStatus}
+            />
+          }
+          />
       </div>
+
     )
   }
 }
