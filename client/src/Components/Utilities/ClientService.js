@@ -268,7 +268,14 @@ class ClientService {
   }
 
   // ==========[Exam Service]=================
-
+  
+  getAllExamBySubjectAndCourse (subjectId, courseId) {
+    return new Promise((resolve, reject) => {
+      axios.get(`/exams/${subjectId}/${courseId}`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
 }
 
 export default ClientService

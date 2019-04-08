@@ -205,6 +205,16 @@ app.get('/building/:short_name', (req, res) => {
   })
 })
 
+app.get('/exams/:subjectId/:courseId', (req, res) => {
+  WebDAOObj.getAllExamBySubjectIdAndCourseId(req.params.subjectId, req.params.courseId).then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
 app.listen(port, () => {
   console.log(`App listening on ${port}`)
 })

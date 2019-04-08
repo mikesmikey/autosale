@@ -9,6 +9,8 @@ import DataAddModal from './DataAddModal'
 
 import '../../StyleSheets/ExamCreateScreen.css'
 
+const CServiceObj = new ClientService()
+
 class ExamCreateScreen extends Component {
   _isMounted = false
 
@@ -16,8 +18,9 @@ class ExamCreateScreen extends Component {
     super(props)
 
     this.state = {
-      termRadioValue: 'middle',
+      semesterRadioValue: 'middle',
       subjects: [],
+      exams: [],
       searchInput: '',
       isLoading: false
     }
@@ -26,11 +29,10 @@ class ExamCreateScreen extends Component {
 
     this.handleRadioInput = this.handleRadioInput.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
-    this.loadAllCurrentCourse = this.loadAllCurrentCourse.bind(this)
   }
 
   componentDidMount () {
-    this.loadAllCurrentCourse()
+    this.loadExams()
   }
 
   componentWillUnmount () {
@@ -38,7 +40,7 @@ class ExamCreateScreen extends Component {
   }
 
   componentDidUpdate (prevProps, prevStates) {
-    if (prevStates.termRadioValue !== this.state.termRadioValue) {
+    if (prevStates.semesterRadioValue !== this.state.semesterRadioValue) {
 
     } 
   }
@@ -57,31 +59,37 @@ class ExamCreateScreen extends Component {
     const target = e.target
     const name = target.name
 
-    console.log(name)
-
     this.setState({
-      termRadioValue: name
+      semesterRadioValue: name
     })
+
+    this.loadExams()
   }
 
-  loadAllCurrentCourse () {
-    this.setState({
-      isLoading: true
-    })
-    new ClientService().getAllCurrentCourse().then((result) => {
-      if (this._isMounted) {
-        this.setState({
-          subjects: result
-        })
-      }
-      this.setState({
-        isLoading: false
-      })
-    })
+  handleLoading() {
+    
   }
 
   loadExams () {
-    
+    this.setState({
+      isLoading: true
+    })
+    CServiceObj.getAllCurrentCourse().then((result) => {
+      result.forEach(element => {
+        element.courses.forEach((course) => {
+          CServiceObj.getAllExamBySubjectAndCourse(element.subject_id, course.courseId).then((result) => {
+            result.forEach((exam) => {
+              if (exam.category === this.state.semesterRadioValue) {
+                console.log("yes")
+              }
+              this.setState({
+                isLoading: false
+              })
+            })
+          })
+        })
+      })
+    })
   }
 
   render () {
@@ -106,11 +114,11 @@ class ExamCreateScreen extends Component {
                     onChange={this.handleInputChange}
                   />
                   <span className="input-set">
-                    <input type="radio" name="middle" onChange={this.handleRadioInput} checked={this.state.termRadioValue === 'middle'}/>
+                    <input type="radio" name="middle" onChange={this.handleRadioInput} checked={this.state.semesterRadioValue === 'middle'}/>
                     <p className="label is-3">กลางภาค</p>
                   </span>
                   <span className="input-set">
-                    <input type="radio" name="final" onChange={this.handleRadioInput} checked={this.state.termRadioValue === 'final'}/>
+                    <input type="radio" name="final" onChange={this.handleRadioInput} checked={this.state.semesterRadioValue === 'final'}/>
                     <p className="label is-3">ปลายภาค</p>
                   </span>
                 </div>

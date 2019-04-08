@@ -348,6 +348,20 @@ class WebDAO {
       })
     })
   }
+
+  /* ===========[Exam DAO]=================== */
+
+  getAllExamBySubjectIdAndCourseId (subjectId, courseId) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        const db = client.db(dbName)
+        db.collection('Exam').find({ '$and': [{ 'subjectId': Number.parseInt(subjectId) }, { 'courseId': Number.parseInt(courseId) }] }).project({ '_id': 0 }).toArray((err, data) => {
+          if (err) { throw err }
+          return resolve(data)
+        })
+      })
+    })
+  }
 }
 
 module.exports = WebDAO
