@@ -22,6 +22,7 @@ class ManageRoom extends Component {
       searchInput: '',
       isDataLoading: false,
       SelectedBuilding: false,
+      SelectedBuildingTable: false,
       SelectedRoom: false
     }
 
@@ -34,6 +35,7 @@ class ManageRoom extends Component {
     this.setSelectedRoom = this.setSelectedRoom.bind(this)
     this.setDataLoadingStatus = this.setDataLoadingStatus.bind(this)
     this.setSelectedBuilding = this.setSelectedBuilding.bind(this)
+    this.setSelectedBuildingTable = this.setSelectedBuildingTable.bind(this)
   }
 
   componentDidMount () {
@@ -86,6 +88,12 @@ class ManageRoom extends Component {
   setSelectedBuilding (room) {
     this.setState({
       SelectedBuilding: room
+    })
+  }
+
+  setSelectedBuildingTable (room) {
+    this.setState({
+      SelectedBuildingTable: room
     })
   }
 

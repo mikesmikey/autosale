@@ -21,7 +21,7 @@ class RoomTable extends Component {
       Input: '',
       isDataLoading: false,
       SelectedScore: false,
-      SelectedSubject: false,
+      SelectedSubject: false
     }
 
     this._isMounted = true

@@ -32,7 +32,7 @@ class DeleteRoomPopup extends Component {
   }
 
   currentFormObject () {
-    var newData =  this.props.selectedBuilding  
+    var newData =  []
     var roomArray = []
     newData.building_name = this.props.selectedBuilding.building_name
     newData.short_name = this.props.selectedBuilding.short_name
@@ -51,9 +51,10 @@ class DeleteRoomPopup extends Component {
   deleteButtonHandle () {
     //console.log(this.props.selectedBuilding)
     //console.log(this.props.selectedRoom)
+    
     const BuildingObj = ServiceObj.createBuilding(this.currentFormObject())
     //console.log(BuildingObj)
-    
+
     this.props.setDataLoadingStatus(true)
 
     ServiceObj.editRoom(BuildingObj.getUserObjectData()).then((result) => {
