@@ -90,11 +90,6 @@ class MainScrenMenuBar extends Component {
             </NavLink>
           </li>
           <li>
-<<<<<<< HEAD
-            <NavLink to="/build_add" activeClassName="is-active is-black-violet" onClick={this.handleButtonPointer}>
-              <i className="menu-icon-awesome fa fa-calendar"></i>
-              เพิ่มการเรียน
-=======
             <NavLink to="/manage_room" activeClassName="is-active is-black-violet" onClick={this.handleButtonPointer}>
               <i className="menu-icon-awesome fas fa-users"></i>
               จัดการห้อง
@@ -110,13 +105,18 @@ class MainScrenMenuBar extends Component {
             <NavLink to="/add_subject" activeClassName="is-active is-black-violet" onClick={this.handleButtonPointer}>
               <i className="menu-icon-awesome fas fa-calendar-plus"></i>
                 เพิ่มรายวิชา
->>>>>>> 7a02e42f773f09aeee94b03ea7773aa69f8a57bc
             </NavLink>
           </li>
           <li>
             <NavLink to="/year_and_term_manage" activeClassName="is-active is-black-violet" onClick={this.handleButtonPointer}>
               <i className="menu-icon-awesome fa fa-calendar"></i>
                 จัดการปีการศึกษา
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/manage_course" activeClassName="is-active is-black-violet" onClick={this.handleButtonPointer}>
+              <i className="menu-icon-awesome fa fa-calendar"></i>
+                การเรียน
             </NavLink>
           </li>
           {/*
