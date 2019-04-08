@@ -128,8 +128,6 @@ class WebDAO {
 
   /* ===========[Score DAO]=================== */
 
-  
-
   getAllExamByUsername (username) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
@@ -144,7 +142,6 @@ class WebDAO {
       })
     })
   }
-
 
   getAllExamBySubjectId (SubjectId, username) {
     return new Promise((resolve, reject) => {
@@ -161,7 +158,7 @@ class WebDAO {
       })
     })
   }
-  
+
   getAllSubject () {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
@@ -176,7 +173,6 @@ class WebDAO {
       })
     })
   }
-
 
   /* ===========[GlobalData DAO]=================== */
   getYearAndTerm () {
@@ -251,7 +247,6 @@ class WebDAO {
       })
     })
   }
-
 }
 
 module.exports = WebDAO

@@ -106,8 +106,6 @@ app.get('/facultys', (req, res) => {
   })
 })
 
-
-
 app.post('/token', (req, res) => {
   WebServiceObj.verifyToken(req.body.token).then((verifyResult) => {
     if (verifyResult) {
@@ -116,15 +114,12 @@ app.post('/token', (req, res) => {
       })
     } else {
       res.send(verifyResult)
-
     }
   })
 })
 
-
 app.get('/yearAndTerm', (req, res) => {
   WebDAOObj.getYearAndTerm().then(data => {
-
     if (data != null) {
       res.json(data)
     } else {
@@ -153,7 +148,6 @@ app.get('/exam/username/:username', (req, res) => {
   })
 })
 
-
 app.get('/exam/:username/:SubjectId', (req, res) => {
   WebDAOObj.getAllExamBySubjectId(req.params.SubjectId, req.params.username).then((data) => {
     if (data != null) {
@@ -163,7 +157,6 @@ app.get('/exam/:username/:SubjectId', (req, res) => {
     }
   })
 })
-
 
 app.get('/building', (req, res) => {
   WebDAOObj.getAllBuilding().then((data) => {
@@ -206,7 +199,6 @@ app.post('/yearAndTerm/edit', (req, res) => {
     res.send(pass)
   })
 })
-
 
 app.listen(port, () => {
   console.log(`App listening on ${port}`)
