@@ -44,6 +44,7 @@ class RoomPopUp extends Component {
     this.numRoom = ''
     this.numFloor = 1
     this.checkID = []
+    this.repetitiveRoom = 0
 
     this.setFloorSelect = this.setFloorSelect.bind(this)
     this.setBSelect = this.setBSelect.bind(this)
@@ -56,19 +57,33 @@ class RoomPopUp extends Component {
   }
 
   addButtonHandle () {
-    const BuildingObj = ServiceObj.createBuilding(this.currentFormObject())
-    //console.log(BuildingObj)
+    ServiceObj.getAllBuildingByRoom(this.state.stringBuilding, this.room).then((usersData) => {
 
-    this.props.setDataLoadingStatus(true)
-
-    ServiceObj.editRoom(BuildingObj.getUserObjectData()).then((result) => {
-      if (result) {
-        this.props.reloadTable()
-        this.props.closeModal()
-      } else {
+      this.repetitiveRoom = usersData.length
+      if(this.state.numberRow*this.state.numberStudent != 0 
+        && this.numRoom != 0
+        && this.state.stringRoom != ''
+        && this.state.stringRow != ''
+        && this.state.stringStudent != ''
+        && this.repetitiveRoom == 0
+      ){
+        const BuildingObj = ServiceObj.createBuilding(this.currentFormObject())
+        //console.log(BuildingObj)
+    
+        this.props.setDataLoadingStatus(true)
+    
+        ServiceObj.editRoom(BuildingObj.getUserObjectData()).then((result) => {
+          if (result) {
+            this.props.reloadTable()
+            this.props.closeModal()
+          } else {
+            alert('เพิ่มไม่สำเร็จ!')
+          }
+          this.props.setDataLoadingStatus(false)
+        })  
+      }else{
         alert('เพิ่มไม่สำเร็จ!')
       }
-      this.props.setDataLoadingStatus(false)
     })
   }
 
