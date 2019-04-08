@@ -8,7 +8,26 @@ class ExamTable extends Component {
 
     this.state = {
       columns: [],
-      rows: []
+      rows: [],
+      selectedRow: null
+    }
+
+    this.selectItem = this.selectItem.bind(this)
+  }
+
+  selectItem (e, examData) {
+    const parent = e.target.parentElement
+    if (parent.classList.contains('exam-table-item')) {
+      if (!parent.classList.contains('is-active')) {
+        if (this.state.selectedRow != null) {
+          this.state.selectedRow.classList.remove('is-active')
+        }
+        parent.classList.add('is-active')
+        console.log(examData)
+        this.setState({
+          selectedRow: parent
+        })
+      }
     }
   }
 
@@ -22,6 +41,7 @@ class ExamTable extends Component {
         return <ExamTableItem
           key={`${exam.subjectId}_${exam.courseId}`}
           examData={exam}
+          selectItem={(e, examData) => { this.selectItem(e, examData) }}
         />
       })
     }
@@ -49,7 +69,7 @@ class ExamTable extends Component {
 class ExamTableItem extends Component {
   render () {
     return (
-      <tr className="exam-table-item">
+      <tr className="exam-table-item" onClick={(e) => { this.props.selectItem(e, this.props.examData) }}>
         <td>{this.props.examData.subjectId}</td>
         <td>{this.props.examData.subjectName}</td>
         <td>{this.props.examData.status}</td>
