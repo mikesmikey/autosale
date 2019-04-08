@@ -16,12 +16,8 @@ import ExamScoreSceen from '../ExamScoreSceen/ExamScoreSceen'
 import ManageRoom from '../ManageRoom/ManageRoom'
 import UserManage from '../UserManage/UserManage'
 import YearAndTermManage from '../YearAndTermManage/YearAndTermManage'
-<<<<<<< HEAD
-import BuildAdd from '../Build/ฺBuildAdd'
-=======
 import AddBuilding from '../AddBuilding/AddBuilding'
 import AddSubject from '../AddSubject/AddSubject'
->>>>>>> 7a02e42f773f09aeee94b03ea7773aa69f8a57bc
 
 import '../../StyleSheets/mainScreen.css'
 import '../../StyleSheets/pageHelper.css'
@@ -52,9 +48,6 @@ class MainScreen extends Component {
           <Route path="/exam_score" render={(prop) =>
           <ExamScoreSceen/>
           }/>
-          <Route path="/build_add" render={(props) =>
-            <BuildAdd />
-          } />
           <Route path="/manage_room" render={(props) =>
             <ManageRoom />
           } />
@@ -66,6 +59,9 @@ class MainScreen extends Component {
           } />
           <Route path="/add_subject" render={(props) =>
             <AddSubject />
+          } />
+          <Route path="/manage_course" render={(props) =>
+            <ManageCourse />
           } />
         </div>
       </div>

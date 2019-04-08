@@ -116,7 +116,7 @@ class MainScrenMenuBar extends Component {
           <li>
             <NavLink to="/manage_course" activeClassName="is-active is-black-violet" onClick={this.handleButtonPointer}>
               <i className="menu-icon-awesome fa fa-calendar"></i>
-                การเรียน
+                จัดการการเรียน
             </NavLink>
           </li>
           {/*
