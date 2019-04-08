@@ -28,6 +28,7 @@ class RoomTable extends Component {
     this.BuildingAll = []
     this.check = 0
     this.checkK = 0
+    
     this.loadDataIntoTable = this.loadDataIntoTable.bind(this)
     this.loadDataByRoomID = this.loadDataByRoomID.bind(this)
     this.loadData = this.loadData.bind(this)

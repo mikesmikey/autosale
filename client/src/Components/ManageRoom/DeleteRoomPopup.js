@@ -17,8 +17,6 @@ class DeleteRoomPopup extends Component {
     super(props)
 
     this.state = {
-      isDataLoading: false,
-      SelectedScore: false,
       building_name: '',
       short_name: '',
       floors: 0,

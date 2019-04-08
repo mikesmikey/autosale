@@ -143,9 +143,14 @@ class RoomPopUp extends Component {
     this.floor = '1'
     this.type = 'C'
     this.room = this.shortname + this.line + this.floor + this.type
+    this.numFloor = 1
+    this.setState(
+      { stringType: 'Lecture'}
+    )
     this.clearInput()
     document.getElementById('TypeOfRoom').selectedIndex = 0
     document.getElementById('roomSpan').innerHTML = this.room
+    
 
     this.setFloorSelect()
   }
