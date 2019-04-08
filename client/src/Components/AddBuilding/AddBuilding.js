@@ -29,7 +29,7 @@ class AddBuilding extends Component {
   }
 
   loadBuilding () {
-    CServiceObj.getBuilding().then((data) => {
+    CServiceObj.getAllBuilding().then((data) => {
       this.setDataBuilding(data)
     })
   }
