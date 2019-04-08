@@ -163,6 +163,38 @@ app.post('/yearAndTerm/edit', (req, res) => {
   })
 })
 
+app.get('/building', (req, res) => {
+  WebDAOObj.getBuilding().then(data => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.post('/building/add', (req, res) => {
+  WebDAOObj.insertBuilding(req.body.buildingData).then((pass) => {
+    res.send(pass)
+  })
+})
+
+app.post('/building/remove/:short_name', (req, res) => {
+  WebDAOObj.deleteBuildingByShortName(req.params.short_name).then((pass) => {
+    res.send(pass)
+  })
+})
+
+app.get('/building/:short_name', (req, res) => {
+  WebDAOObj.getBuildingByShortName(req.params.short_name).then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
 app.listen(port, () => {
   console.log(`App listening on ${port}`)
 })

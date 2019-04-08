@@ -1,6 +1,5 @@
 class Subject {
-  constructor(form) {
-
+  constructor (form) {
     this.facultyId = form.facultyId ? form.facultyId : 0
     this.branchId = form.branchId ? form.branchId : 0
     this.subjectId = form.subject_id ? form.subject_id : ''

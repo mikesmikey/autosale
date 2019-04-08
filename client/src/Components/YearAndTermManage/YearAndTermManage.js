@@ -52,13 +52,16 @@ class YearAndTermManage extends Component {
     })
   }
   updateButtonHandle () {
+    // eslint-disable-next-line radix
     var yearInt = parseInt(this.state.yearInput)
+    // eslint-disable-next-line radix
+    var termInt = parseInt(this.state.termInput)
     if (yearInt <= 0 || isNaN(yearInt) || this.state.termInput === '0') {
-      alert('ควาย')
+      alert('กรุณาใส่ข้อมูลให้ถูกต้อง')
     } else {
       var newGlobalData = {}
-      newGlobalData.currentStudyYear = this.state.yearInput
-      newGlobalData.currentStudyTerm = this.state.termInput
+      newGlobalData.currentStudyYear = yearInt
+      newGlobalData.currentStudyTerm = termInt
 
       const globalObj = CServiceObj.createGlobalDataObject(newGlobalData)
       CServiceObj.editGlobalData(globalObj.getGlobalObjectData()).then((result) => {
@@ -84,7 +87,8 @@ class YearAndTermManage extends Component {
       <div className="subcontent-main-div global">
         <div className="box with-title is-round ">
           <div className="box-title is-violet">
-                จัดการปีการศึกษา
+          จัดการปีการศึกษา
+
           </div>
           <div className="box-content">
             <div className="columns">
@@ -128,7 +132,7 @@ class YearAndTermManage extends Component {
               <div className="column is-year border-2">
                 <div className="tab-is-1">
                   <label className="label font-size-1" >ปีการศึกษา : </label>
-                  <input className="input is-year-width " type="text" id="input_year" value={this.state.yearInput} name="yearInput" onChange={this.handleInputChange}/>
+                  <input className="input is-year-width " type="text" id="input_year" value={this.state.yearInput} name="yearInput" onChange={this.handleInputChange} />
                 </div>
                 <div className="tab-is-1">
                   <label className="label font-size-1 tab-is-16 ">เทอม : </label>
