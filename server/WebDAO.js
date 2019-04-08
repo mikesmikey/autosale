@@ -421,8 +421,8 @@ class WebDAO {
             {
               '$project': {
                 '_id': 0,
-                'subject_id': 1,
-                'subject_name': 1,
+                'subjectId': 1,
+                'subjectName': 1,
                 'courses': {
                   '$filter': {
                     'input': '$courses',
@@ -459,7 +459,7 @@ class WebDAO {
             {
               '$match': { '$and':
               [
-                { 'subject_id': { '$regex': regex } },
+                { 'subjectId': { '$regex': regex } },
                 { 'courses.school_year': Number.parseInt(year) },
                 { 'courses.semester': Number.parseInt(semester) }
               ] }
@@ -467,8 +467,8 @@ class WebDAO {
             {
               '$project': {
                 '_id': 0,
-                'subject_id': 1,
-                'subject_name': 1,
+                'subjectId': 1,
+                'subjectName': 1,
                 'courses': {
                   '$filter': {
                     'input': '$courses',

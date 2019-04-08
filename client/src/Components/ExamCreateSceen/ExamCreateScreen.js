@@ -86,19 +86,19 @@ class ExamCreateScreen extends Component {
       result.forEach(element => {
         element.courses.forEach((course) => {
           var isHasExam = false
-          CServiceObj.getAllExamBySubjectAndCourse(element.subject_id, course.courseId).then((result) => {
+          CServiceObj.getAllExamBySubjectAndCourse(element.subjectId, course.courseId).then((result) => {
             result.forEach((exam) => {
               if (exam.category === this.state.examTypeRadioValue) {
                 isHasExam = true
-                exam.subjectName = element.subject_name
+                exam.subjectName = element.subjectName
                 const examobj = new Exam(exam)
                 newexams.push(examobj)
               }
             })
             if (!isHasExam) {
               const noExamData = {
-                subjectId: element.subject_id,
-                subjectName: element.subject_name
+                subjectId: element.subjectId,
+                subjectName: element.subjectName
               }
               const examobj = new Exam(noExamData)
               newexams.push(examobj)
