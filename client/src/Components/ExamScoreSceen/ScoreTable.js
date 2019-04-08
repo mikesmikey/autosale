@@ -50,7 +50,7 @@ class ScoreTable extends Component {
         })
         this.props.setSelectedScore(this.state.data[parent.getAttribute('index')])
         for (var j = 0; j < this.state.subjectNameArray.length; j++) {
-          if (this.state.subjectNameArray[j].subject_id == this.state.data[parent.getAttribute('index')].subjectId) {
+          if (this.state.subjectNameArray[j].subjectId == this.state.data[parent.getAttribute('index')].subjectId) {
             this.props.setSelectedSubject(this.state.subjectNameArray[j])
             break
           }
@@ -65,7 +65,7 @@ class ScoreTable extends Component {
       this.props.showManageModal()
       this.props.setSelectedScore(this.state.data[parent.getAttribute('index')])
       for (var j = 0; j < this.state.subjectNameArray.length; j++) {
-        if (this.state.subjectNameArray[j].subject_id == this.state.data[parent.getAttribute('index')].subjectId) {
+        if (this.state.subjectNameArray[j].subjectId == this.state.data[parent.getAttribute('index')].subjectId) {
           this.props.setSelectedSubject(this.state.subjectNameArray[j])
           break
         }
@@ -104,7 +104,7 @@ class ScoreTable extends Component {
     var select = document.getElementById(this.props.idSelectedYear)
     for (var i = 0; i < this.state.data.length; i++) {
       for (var j = 0; j < this.state.subjectNameArray.length; j++) {
-        if (this.state.subjectNameArray[j].subject_id == this.state.data[i].subjectId) { // subject_id
+        if (this.state.subjectNameArray[j].subjectId == this.state.data[i].subjectId) { // subjectId
           for (var l = 0; l < this.state.subjectNameArray[j].courses.length; l++) {
       
             if (this.state.subjectNameArray[j].courses[l].courseId == this.state.data[i].courseId) { // addYearToSelect
@@ -179,7 +179,7 @@ class ScoreTableItem extends Component {
       >
         <td>{this.props.itemData.scoreAnoucementDay}</td>
         <td>{this.props.itemData.subjectId}</td>
-        <td>{this.props.subject.subject_name}</td>
+        <td>{this.props.subject.subjectName}</td>
         <td>{this.props.itemData.category}</td>
       </tr>
     )

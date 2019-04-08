@@ -37,7 +37,7 @@ class ExamScorePopUp extends Component {
       }
     }
     this.setState({
-      subjectName: this.props.SelectedSubject.subject_name
+      subjectName: this.props.SelectedSubject.subjectName
     })
   }
 
