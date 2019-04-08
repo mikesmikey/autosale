@@ -7,7 +7,7 @@ const CServiceObj = new ClientService()
 class ExamScorePopUp extends Component {
   constructor (props) {
     super(props)
-  
+
     this.state = {
       popupStatus: 'view',
       scoreAnoucementDay: '',
@@ -18,7 +18,7 @@ class ExamScorePopUp extends Component {
       scoreMax: 0,
       score: 0
     }
-  
+
 
     this.loadScoreInput = this.loadScoreInput.bind(this)
   }
@@ -46,7 +46,7 @@ class ExamScorePopUp extends Component {
     this.loadScoreInput()
     this.props.showModal()
   }
-  
+
   render () {
     return (
       <div className="box is-user-popUp" style={{ width: '500px' }}>
@@ -64,7 +64,7 @@ class ExamScorePopUp extends Component {
               />
             </div>
           </div>
-  
+
           <div className="columns input-div">
             <div className="column is-2">
               <label className="label">ชื่อวิชา</label>
@@ -125,6 +125,6 @@ class ExamScorePopUp extends Component {
     )
   }
 }
-  
+
 export default ExamScorePopUp
-  
+
