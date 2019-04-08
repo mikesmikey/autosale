@@ -205,11 +205,14 @@ class WebDAO {
   getYearAndTerm () {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
         const db = client.db(dbName)
         db.collection('GlobalData').findOne({}, (err, data) => {
           if (err) { throw err }
+          client.close()
           return resolve(data)
         })
+        client.close()
       })
     })
   }
@@ -217,12 +220,17 @@ class WebDAO {
   editYearAndTerm (newGlobalData) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
         const db = client.db(dbName)
         db.collection('GlobalData').findOneAndUpdate({ 'id': newGlobalData.id }, { '$set': newGlobalData }, (err, result) => {
           if (err) { throw err }
           if (result.value) {
+            client.close()
             return resolve(true)
-          } else { return resolve(false) }
+          } else {
+            client.close()
+            return resolve(false)
+          }
         })
       })
     })
@@ -263,28 +271,36 @@ class WebDAO {
   /* ===========[Building DAO]=================== */
   getBuilding () {
     return new Promise((resolve, reject) => {
-      mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
         const db = client.db(dbName)
         db.collection('Building').find({}).toArray((err, data) => {
           if (err) { throw err }
+          client.close()
           return resolve(data)
         })
+        client.close()
       })
     })
   }
 
   insertBuilding (building) {
     return new Promise((resolve, reject) => {
-      mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
         const db = client.db(dbName)
         db.collection('Building').findOne({ 'short_name': building.short_name }, (err, data) => {
           if (err) { throw err }
           if (!data) {
             db.collection('Building').insertOne(building, (err, result) => {
               if (err) { throw err }
+              client.close()
               return resolve(true)
             })
-          } else { return resolve(false) }
+          } else {
+            client.close()
+            return resolve(false)
+          }
         })
       })
     })
@@ -292,16 +308,21 @@ class WebDAO {
 
   deleteBuildingByShortName (shortname) {
     return new Promise((resolve, reject) => {
-      mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
         const db = client.db(dbName)
         db.collection('Building').findOne({ 'short_name': shortname }, (err, data) => {
           if (err) { throw err }
           if (data) {
             db.collection('Building').deleteOne({ 'short_name': shortname }, (err, result) => {
               if (err) { throw err }
+              client.close()
               return resolve(true)
             })
-          } else { return resolve(false) }
+          } else {
+            client.close()
+            return resolve(false)
+          }
         })
       })
     })
@@ -309,13 +330,16 @@ class WebDAO {
 
   getBuildingByShortName (shortname) {
     return new Promise((resolve, reject) => {
-      mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
         const db = client.db(dbName)
         const regex = new RegExp(`${shortname}`)
         db.collection('Building').find({ 'short_name': regex }).toArray((err, data) => {
           if (err) { throw err }
+          client.close()
           return resolve(data)
         })
+        client.close()
       })
     })
   }
