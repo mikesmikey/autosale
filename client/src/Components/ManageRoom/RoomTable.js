@@ -92,11 +92,20 @@ class RoomTable extends Component {
     })
   }
 
+  dataMainUpdate () {
+    ServiceObj.getAllBuilding().then((usersData) => {
+      if (this._isMounted) {
+        this.props.setdataMain(usersData)
+      }
+    })
+  }
+
   loadData () {
     ServiceObj.getAllBuilding().then((usersData) => {
       if (this._isMounted) {
         //this.props.setDataLoadingStatus(false)
         this.setState({ data: usersData })
+        this.props.setdataMain(usersData)
         // console.log(this.state.data)
       }
     })
@@ -125,6 +134,7 @@ class RoomTable extends Component {
       let num = 0
       if(this.BuildingAll.length == 0){
         this.props.setSelectedBuildingname(this.state.data[i].building_name)
+        this.props.setBuildingPopUp(this.state.data[i].building_name)
       }
       for (var z = 0; z < this.BuildingAll.length; z++) {
         if (this.BuildingAll[z] != this.state.data[i].building_name) {
@@ -134,6 +144,7 @@ class RoomTable extends Component {
       if (num == this.BuildingAll.length) {
         select.appendChild(el)
         this.BuildingAll.push(this.state.data[i].building_name)
+        this.props.buildingAll.push(this.state.data[i].building_name)
       }
       
       if(this.state.data[i].building_name == this.props.SelectedBuildingname){

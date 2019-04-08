@@ -133,11 +133,14 @@ class WebDAO {
   getAllExamByUsername (username) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
+        if (_err) { resolve(null) }
         const db = client.db(dbName)
         db.collection('Exam').find({ 'ExamSeat.studentCode': username }).project({ '_id': 0, 'password': 0 }).toArray((err, data) => {
           if (err) { throw err }
+          client.close()
           return resolve(data)
         })
+        client.close()
       })
     })
   }
@@ -146,12 +149,15 @@ class WebDAO {
   getAllExamBySubjectId (SubjectId, username) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
+        if (_err) { resolve(null) }
         const db = client.db(dbName)
         const regex = new RegExp(`${SubjectId}`)
         db.collection('Exam').find({ 'subjectId': regex, 'ExamSeat.studentCode': username }).project({ '_id': 0, 'password': 0 }).toArray((err, data) => {
           if (err) { throw err }
+          client.close()
           return resolve(data)
         })
+        client.close()
       })
     })
   }
@@ -159,11 +165,14 @@ class WebDAO {
   getAllSubject () {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
+        if (_err) { resolve(null) }
         const db = client.db(dbName)
         db.collection('Subject').find({}).toArray((err, data) => {
           if (err) { throw err }
+          client.close()
           return resolve(data)
         })
+        client.close()
       })
     })
   }
@@ -200,11 +209,14 @@ class WebDAO {
   getAllBuilding () {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
+        if (_err) { resolve(null) }
         const db = client.db(dbName)
         db.collection('Building').find({}).project({ '_id': 0, 'password': 0 }).toArray((err, data) => {
           if (err) { throw err }
+          client.close()
           return resolve(data)
         })
+        client.close()
       })
     })
   }
@@ -212,12 +224,15 @@ class WebDAO {
   getAllBuildingByRoom (buildingname, roomname) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
+        if (_err) { resolve(null) }
         const db = client.db(dbName)
         const regex = new RegExp(`${roomname}`)
         db.collection('Building').find({ 'building_name': buildingname, 'Rooms.room': regex }).project({ '_id': 0, 'password': 0 }).toArray((err, data) => {
           if (err) { throw err }
+          client.close()
           return resolve(data)
         })
+        client.close()
       })
     })
   }
@@ -232,6 +247,7 @@ class WebDAO {
             return resolve(true)
           } else { return resolve(false) }
         })
+        client.close()
       })
     })
   }

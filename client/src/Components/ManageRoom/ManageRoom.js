@@ -23,8 +23,11 @@ class ManageRoom extends Component {
       isDataLoading: false,
       SelectedBuilding: false,
       SelectedBuildingTable: false,
-      SelectedRoom: false
+      SelectedRoom: false,
+      buildingPopUp: false,
+      dataMain: []
     }
+    this.BuildingAll = []
 
     this._isMounted = true
     
@@ -36,6 +39,8 @@ class ManageRoom extends Component {
     this.setDataLoadingStatus = this.setDataLoadingStatus.bind(this)
     this.setSelectedBuilding = this.setSelectedBuilding.bind(this)
     this.setSelectedBuildingTable = this.setSelectedBuildingTable.bind(this)
+    this.setdataMain = this.setdataMain.bind(this)
+    this.setBuildingPopUp = this.setBuildingPopUp.bind(this)
   }
 
   componentDidMount () {
@@ -70,6 +75,18 @@ class ManageRoom extends Component {
   setDataLoadingStatus (status) {
     this.setState({
       isDataLoading: status
+    })
+  }
+
+  setdataMain (data) {
+    this.setState({
+      dataMain: data
+    })
+  }
+
+  setBuildingPopUp (data) {
+    this.setState({
+      buildingPopUp: data
     })
   }
   
@@ -126,7 +143,7 @@ class ManageRoom extends Component {
                     </i></button>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <button className="button is-oros is-round is-pulled-right" onClick={() => { this.deleteRoomPopupModal.showModal() }}>เพิ่มห้อง</button>
+                    <button className="button is-oros is-round is-pulled-right" onClick={() => { this.roomPopup.addDataToPopUp() }}>เพิ่มห้อง</button>
                   </div>
                 </div>
 
@@ -145,6 +162,9 @@ class ManageRoom extends Component {
                   setSelectedBuildingname={this.setSelectedBuildingname}
                   setSelectedBuilding={this.setSelectedBuilding}
                   setSelectedRoom={this.setSelectedRoom}
+                  setBuildingPopUp={this.setBuildingPopUp}
+                  buildingAll={this.BuildingAll}
+                  setdataMain={this.setdataMain}
                 />
 
               </div>
@@ -167,6 +187,29 @@ class ManageRoom extends Component {
               setSelectedBuilding={this.setSelectedBuilding}
               isDataLoading={this.state.isDataLoading}
               setDataLoadingStatus={this.setDataLoadingStatus}
+            />
+          }
+          />
+        <Modal ref={instance => { this.roomPopupModal = instance }} content={
+            <RoomPopUp
+              ref={instance => { this.roomPopup = instance }}
+              closeModal={() => {
+                this.roomPopupModal.closeModal()
+              }}
+              showModal={() => {
+                this.roomPopupModal.showModal()
+              }}
+              reloadTable={() => { this.roomTable.loadDataByRoomID(this.state.selectedBuildingname,this.state.searchInput) }}
+              dataMainUpDate={() => { this.roomTable.dataMainUpdate() }}
+              selectedBuilding={this.state.SelectedBuilding}
+              selectedRoom={this.state.SelectedRoom}
+              setSelectedBuilding={this.setSelectedBuilding}
+              isDataLoading={this.state.isDataLoading}
+              setDataLoadingStatus={this.setDataLoadingStatus}
+              buildingAll={this.BuildingAll}
+              dataMain={this.state.dataMain}
+              setBuildingPopUp={this.setBuildingPopUp}
+              buildingPopUp={this.state.buildingPopUp}
             />
           }
           />
