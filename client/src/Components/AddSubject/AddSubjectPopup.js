@@ -102,8 +102,8 @@ class AddSubjectPopup extends Component {
         //done 
         if (valid) {
             var subjectJson = {
-                subject_id: this.state.subjectId,
-                subject_name: this.state.subjectName,
+                subjectId: this.state.subjectId,
+                subjectName: this.state.subjectName,
                 credits: parseInt(this.state.credits, 10),
                 facultyId: parseInt(this.state.facultyIndex, 10),
                 branchId: parseInt(this.state.branchIndex, 10),
@@ -167,7 +167,7 @@ class AddSubjectPopup extends Component {
                     </div>
                     <div className="column">
                         <select
-                            className="user-mange-select-box-popUp is-full-width"
+                            className="select user-mange-select-box-popUp is-full-width"
                             type="text"
                             id="popAddUserFaculty"
                             name="facultyIndex"
@@ -185,7 +185,7 @@ class AddSubjectPopup extends Component {
                     </div>
                     <div className="column">
                         <select
-                            className="user-mange-select-box-popUp is-full-width"
+                            className="select user-mange-select-box-popUp is-full-width"
                             type="text"
                             id="popAddUserBranch"
                             name="branchIndex"
@@ -203,7 +203,7 @@ class AddSubjectPopup extends Component {
                     </div>
                     <div className="column">
                         <select
-                            className="user-mange-select-box-popUp is-full-width"
+                            className="select user-mange-select-box-popUp is-full-width"
                             id="popAddYear"
                             name="credits"
                             onChange={this.handleInputChange}
