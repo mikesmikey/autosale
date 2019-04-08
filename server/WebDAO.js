@@ -356,7 +356,6 @@ class WebDAO {
         const db = client.db(dbName)
         db.collection('Subject').find({}).project({ '_id': 0 }).toArray((err, data) => {
           if (err) { throw err }
-          console.log(data)
           return resolve(data)
         })
       })
