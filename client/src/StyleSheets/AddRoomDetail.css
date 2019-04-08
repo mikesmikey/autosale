@@ -1,0 +1,55 @@
+.add-room-detail {
+    width: 900px;
+}
+
+.add-room-detail .box-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.add-room-detail .box-content {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.add-room-detail .exit-button {
+    margin-right: 10px;
+    cursor: pointer;
+
+    border: none;
+    border-radius: 5px;
+    background-color: #542f77;
+    color: white;
+}
+
+.add-room-detail .exit-button:hover {
+    color: gray;
+}
+
+.add-room-detail .input-set * {
+    display: inline-block;
+    margin: 5px 5px;
+}
+
+.time-select-table-area {
+    width: 100%;
+    height: 300px;
+    overflow-y: scroll;
+}
+
+.room-data-input-area {
+    width: 100%;
+}
+.room-data-input-area .column {
+
+    height: 130px;
+    margin: 15px 5px;
+    padding: 10px;
+    box-sizing: border-box;
+
+    border-radius: 5px;
+
+    background-color: #dbdbdb;
+}
