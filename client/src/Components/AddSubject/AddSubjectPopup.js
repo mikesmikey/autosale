@@ -102,8 +102,8 @@ class AddSubjectPopup extends Component {
         //done 
         if (valid) {
             var subjectJson = {
-                subject_id: this.state.subjectId,
-                subject_name: this.state.subjectName,
+                subjectId: this.state.subjectId,
+                subjectName: this.state.subjectName,
                 credits: parseInt(this.state.credits, 10),
                 facultyId: parseInt(this.state.facultyIndex, 10),
                 branchId: parseInt(this.state.branchIndex, 10),
