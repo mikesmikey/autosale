@@ -319,6 +319,80 @@ class ClientService {
       })
     })
   }
+
+  // ==============[Course Service]====================
+  getNameteacherFormRegisterCourseBySubjectId (subjecId) {
+    return new Promise((resolve, reject) => {
+      axios.get(`/registerCourse/teachar/${subjecId}`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+  AddTeacherNameSubjectCurrent () {
+    return new Promise((resolve, reject) => {
+      this.getAllSubjectCurrent().then((ArrayObj) => {
+        if (ArrayObj.length > 1) {
+          ArrayObj.forEach(element => {
+            this.getNameteacherFormRegisterCourseBySubjectId(element[0].subjectNumber).then((result) => {
+              element[0].teacherName.push(result)
+              resolve(true)
+            })
+          })
+          console.log(ArrayObj)
+          resolve(ArrayObj)
+        }
+        resolve(ArrayObj)
+      })
+    // this.getNameteacherFormRegisterCourseBySubjectId(ArrayObj[i][0].subjectNumber).then((NameTeacher) => {
+    //   console.log(NameTeacher)
+    //   ArrayObj[i][0].teacherName.push(NameTeacher)
+    // })
+    })
+  }
+
+  getAllSubjectCurrent () {
+    return new Promise((resolve, reject) => {
+      axios.get('/subbjec/current').then((result) => {
+        var listCourse = []
+        for (var i = 0; i < result.data.length - 1; i++) {
+          var indexCourse = result.data[i].indexCouresCurrent
+          var objarray = [{
+            subjectNumber: result.data[i].subjectId,
+            subjectName: result.data[i].subjectName,
+            students: result.data[i].courses[indexCourse].max_students,
+            status: this.getstatusCourseRegister(result.data[i].subject_id),
+            courseId: result.data[i].courses[indexCourse].courseId,
+            groups: result.data[i].courses[indexCourse].max_groups,
+            year: result.data[result.data.length - 1][0],
+            semater: result.data[result.data.length - 1][1],
+            teacherName: [],
+            studentRegister: this.getstatusCourseRegister(result.data[i].subject_id)
+          }]
+          listCourse.push(objarray)
+        }
+        resolve(listCourse)
+      })
+    })
+  }
+
+  getstatusCourseRegister (subjecId) {
+    var teacher = this.getNameteacherFormRegisterCourseBySubjectId(subjecId)
+    var studentRegisterCourse = this.getCountRegisterCourseStudentBySubjectId(subjecId)
+    var result = ''
+    if (teacher.length !== 0 && studentRegisterCourse > 0) {
+      result = 'ข้อมูลสมบูรณ์'
+    } else {
+      result = 'ข้อมูลยังไม่สมบูรณ์'
+    }
+    return result
+  }
+  getCountRegisterCourseStudentBySubjectId (subjecId) {
+    return new Promise((resolve, reject) => {
+      axios.get(`/registerCourse/student/:${subjecId}`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
 }
 
 export default ClientService

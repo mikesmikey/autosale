@@ -291,6 +291,36 @@ app.get('/exams/:subjectId/:courseId', (req, res) => {
   })
 })
 
+app.get('/registerCourse/teachar/:subjecId', (req, res) => {
+  WebDAOObj.getNameTeacherInRegisterCourseBySubjectId(req.params.subjecId).then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.get('/registerCourse/student/:subjecId', (req, res) => {
+  WebDAOObj.getCountRegisterCourseStudentBySubjectId(req.params.subjecId).then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.get('/subbjec/current', (req, res) => {
+  WebDAOObj.getAllSubjectCurrent().then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
 app.listen(port, () => {
   console.log(`App listening on ${port}`)
 })
