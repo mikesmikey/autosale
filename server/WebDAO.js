@@ -325,22 +325,6 @@ class WebDAO {
     })
   }
 
-  getBuildingByShortName (shortname) {
-    return new Promise((resolve, reject) => {
-      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
-        if (err) { resolve(null) }
-        const db = client.db(dbName)
-        const regex = new RegExp(`${shortname}`)
-        db.collection('Building').find({ 'short_name': regex }).toArray((err, data) => {
-          if (err) { throw err }
-          client.close()
-          return resolve(data)
-        })
-        client.close()
-      })
-    })
-  }
-
   getAllBuildingByRoom (buildingname, roomname) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {

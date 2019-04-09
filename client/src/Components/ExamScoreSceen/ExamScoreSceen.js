@@ -146,6 +146,7 @@ class ExamScoreSceen extends Component {
                   setDataLoadingStatus={this.setDataLoadingStatus}
                   setSelectedScore={this.setSelectedScore}
                   setSelectedSubject={this.setSelectedSubject}
+                  setSelectedYear = {this.setSelectedYear}
                 />
               </div>
             </div>

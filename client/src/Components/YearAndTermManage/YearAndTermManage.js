@@ -9,9 +9,10 @@ import '../../StyleSheets/yearAndTermManage.css'
 const CServiceObj = new ClientService()
 
 class YearAndTermManage extends Component {
+  _isMounted = false;
   constructor (props) {
     super(props)
-
+    this._isMounted = true
     this.state = {
       cStudyYear: '-',
       cStudyTerm: '-',
@@ -20,6 +21,10 @@ class YearAndTermManage extends Component {
     }
     this.handleInputChange = this.handleInputChange.bind(this)
     this.updateButtonHandle = this.updateButtonHandle.bind(this)
+  }
+
+  componentWillUnmount () {
+    this._isMounted = false
   }
 
   handleInputChange (e) {
@@ -39,17 +44,21 @@ class YearAndTermManage extends Component {
   }
 
   setYearAndTerm (year, term) {
-    this.setState({
-      cStudyYear: year,
-      cStudyTerm: term
-    })
+    if (this._isMounted) {
+      this.setState({
+        cStudyYear: year,
+        cStudyTerm: term
+      })
+    }
   }
 
   setYearAndTermInput (year, term) {
-    this.setState({
-      yearInput: year,
-      termInput: term
-    })
+    if (this._isMounted) {
+      this.setState({
+        yearInput: year,
+        termInput: term
+      })
+    }
   }
   updateButtonHandle () {
     // eslint-disable-next-line radix
