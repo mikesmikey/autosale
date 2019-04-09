@@ -271,16 +271,6 @@ app.post('/building/remove/:short_name', (req, res) => {
   })
 })
 
-app.get('/building/:short_name', (req, res) => {
-  WebDAOObj.getBuildingByShortName(req.params.short_name).then((data) => {
-    if (data != null) {
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
-
 app.get('/exams/:subjectId/:courseId', (req, res) => {
   WebDAOObj.getAllExamBySubjectIdAndCourseId(req.params.subjectId, req.params.courseId).then((data) => {
     if (data != null) {
