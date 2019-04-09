@@ -19,7 +19,6 @@ class ExamScorePopUp extends Component {
       score: 0
     }
 
-
     this.loadScoreInput = this.loadScoreInput.bind(this)
   }
 
@@ -127,4 +126,3 @@ class ExamScorePopUp extends Component {
 }
 
 export default ExamScorePopUp
-

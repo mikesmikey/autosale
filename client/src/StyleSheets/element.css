@@ -272,6 +272,11 @@
     height: 50px;
 }
 
+.table tr.is-active {
+    background-color: #c7afdd !important; 
+    color: white;
+}
+
 .table td:not(:first-child) {
     border-left: 3px solid white;
 }
