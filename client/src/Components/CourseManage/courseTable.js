@@ -87,17 +87,10 @@ class courseTable extends Component {
   }
 
   deleteButtonHandle () {
-    console.log(this.state.selectedRow)
     if (this.state.selectedRow === null) {
       alert('กรุณาเลือกกการเรียนที่ต้องการก่อน')
     } else {
-      console.log(this.state.data[this.state.selectedRow.getAttribute('index')][0])
-      console.log(this.state.data[this.state.selectedRow.getAttribute('index')][0].subjectNumber)
-      console.log(this.state.data[this.state.selectedRow.getAttribute('index')][0].courseId)
-      ServiceObj.deleteCourse(this.state.data[this.state.selectedRow.getAttribute('index')][0].subjectNumber,
-        this.state.data[this.state.selectedRow.getAttribute('index')][0].courseId).then((data) => {
-        console.log(data)
-      })
+      this.props.showDeleteModal()
     }
   }
   render () {

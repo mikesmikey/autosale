@@ -1,11 +1,10 @@
 class CourseData {
   constructor (form) {
-    this.subjectNumber = form.subjectNumber
-    this.subjectName = form.subjectName
-    this.students = form.students
-    this.status = form.status
+    this.school_year = form.school_year
     this.courseId = form.courseId
-    this.groups = form.groups
+    this.semester = form.semester
+    this.max_students = form.max_students
+    this.max_groups = form.max_groups
   }
 
   getCourseObjectData () {

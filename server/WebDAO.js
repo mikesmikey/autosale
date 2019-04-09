@@ -588,11 +588,13 @@ class WebDAO {
         // eslint-disable-next-line no-undef
         console.log(sjid, cid)
         // eslint-disable-next-line no-undef
-        db.collection('Subject').findOne({ '_id': ObjectId('5ca8d0c05921809dd0e9fde1') }, { $pull: { 'courses': { 'courseId': 1 } } }, (err, data) => {
+        db.collection('Subject').updateMany({ subjectId: sjid }, { $pull: { courses: { courseId: Number.parseInt(cid) } } }, (err, data) => {
           if (err) { throw err }
-          client.close()
-          console.log(data)
-          return resolve(data)
+          db.collection('User').updateMany({ '$or': [{ typeOfUser: 'professor' }, { typeOfUser: 'student' }] }, { $pull: { RegisteredCourse: { subjectId: sjid } } }, (err, data) => {
+            if (err) { throw err }
+            client.close()
+            return resolve(true)
+          })
         })
         // client.close()
       })

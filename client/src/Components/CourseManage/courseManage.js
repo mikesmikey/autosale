@@ -9,6 +9,7 @@ import Modal from '../Utilities/Modal'
 import CourseTable from './courseTable.js'
 // eslint-disable-next-line no-unused-vars
 import CoursePopup from './coursePopup.js'
+import CoureseDeletePopup from './courseDeletePopup'
 
 import ClientService from '../Utilities/ClientService'
 const CServiceObj = new ClientService()
@@ -31,9 +32,17 @@ class App extends Component {
       selectedCourse: course
     })
   }
+  setDataDelete () {
+    // for (var i; i < this.courseTable.state.data.leaght; i++) {
+    //   if (this.courseTable.state.data[i][0].subjectNumber === this.state.selectedCourse.subjectNumber) {
+    //     this.courseTable.data.splice(i, 1)
+    //   }
+    // }
+  }
   componentDidMount () {
     this.courseTable.loadAllDataCourse()
     this.loadYearAndTerm()
+    console.log(this.courseTable.state.data)
   }
   componentWillUnmount () {
     this._isMounted = false
@@ -49,22 +58,6 @@ class App extends Component {
       cStudyTerm: term
     })
   }
-  // deleteButtonHandle () {
-  //   console.log(this.state.selectedUser)
-  //   if (this.state.selectedUser === null) {
-  //     alert('กรุณาเลือกกการเรียนที่ต้องการก่อน')
-  //   } else {
-  //     console.log(this.state.selectedUser)
-  //     console.log(this.state.selectedUser.subjectNumber)
-  //     console.log(this.state.selectedUser.courseId)
-  //   }
-  // CServiceObj.deleteCourse(this.selectedUser.subjectNumber, this.selectedUser.courseId).then((data) => {
-  //   if (data) {
-  //     alert(data)
-  //   }
-  //   alert(data)
-  // })
-  // }
   render () {
     return (
       <div className="subcontent-main-div coures">
@@ -89,10 +82,26 @@ class App extends Component {
             <div className="wigth100">
               <CourseTable ref={instance => { this.courseTable = instance }}
                 setSelectedCourse={this.setSelectedCourse}
-                showManageModal={() => { this.managePopup.showManageModal() }}/>
+                showManageModal={() => { this.managePopup.showManageModal() }}
+                showDeleteModal={() => { this.CoureseDeletePopup.showModal() }}
+              />
             </div>
           </div>
         </div>
+        <Modal ref={instance => { this.CoureseDeletePopup = instance }} content={
+          <CoureseDeletePopup
+            ref={instance => { this.CoureseDeletePopup = instance }}
+            closeModal={() => {
+              this.CoureseDeletePopup.closeModal()
+            }}
+            showModal={() => {
+              this.CoureseDeletePopup.showModal()
+            }}
+            selectedCourse={this.state.selectedCourse}
+            loadNewTable={this.setDataDelete()}
+          />
+        }
+        />
         <Modal ref={instance => { this.manageCourseModal = instance }} content={
           <CoursePopup
             ref={instance => { this.managePopup = instance }}
@@ -100,13 +109,9 @@ class App extends Component {
             closeModal={() => {
               this.manageCourseModal.closeModal()
             }}
-
             showModal={() => {
               this.manageCourseModal.showModal()
             }}
-            selectedType={this.state.selectedType}
-            selectedUser={this.state.selectedUser}
-            setDataLoadingStatus={this.setDataLoadingStatus}
           />
         }
         />

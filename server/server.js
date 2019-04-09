@@ -321,13 +321,10 @@ app.get('/subbjec/current', (req, res) => {
   })
 })
 
-app.post('/Mytest02/:a/:b', (req, res) => {
+app.post('/course/delete/:a/:b', (req, res) => {
   WebDAOObj.deleteCourse(req.params.a, req.params.b).then((data) => {
-    if (data != null) {
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
+    console.log(data)
+    res.send(data)
   })
 })
 

@@ -323,7 +323,8 @@ class ClientService {
   // ==============[Course Service]====================
   deleteCourse (a, b) {
     return new Promise((resolve, reject) => {
-      axios.post(`/Mytest02/${a}/${b}`).then((result) => {
+      axios.post(`/course/delete/${a}/${b}`).then((result) => {
+        resolve(result.data)
       })
     })
   }
