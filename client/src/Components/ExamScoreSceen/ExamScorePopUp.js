@@ -1,8 +1,5 @@
 import React, { Component } from 'react'
 
-import ClientService from '../Utilities/ClientService'
-
-const CServiceObj = new ClientService()
 
 class ExamScorePopUp extends Component {
   constructor (props) {
@@ -29,7 +26,7 @@ class ExamScorePopUp extends Component {
       scoreMax: this.props.SelectedScore.maxScore
     })
     for (var j = 0; j < this.props.SelectedScore.ExamSeat.length; j++) {
-      if (this.props.SelectedScore.ExamSeat[j].studentCode == this.props.username) {
+      if (this.props.SelectedScore.ExamSeat[j].studentCode === this.props.username) {
         this.setState({
           score: this.props.SelectedScore.ExamSeat[j].score
         })

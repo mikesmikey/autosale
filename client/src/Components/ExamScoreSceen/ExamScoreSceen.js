@@ -17,7 +17,7 @@ class ExamScoreSceen extends Component {
 
     this.state = {
       Username: '11111111',
-      selectedYear: '2562',
+      selectedYear: 0,
       idSelectedYear: 'YearSelect',
       searchInput: '',
       isDataLoading: false,
@@ -54,7 +54,7 @@ class ExamScoreSceen extends Component {
     const name = target.options[target.selectedIndex].value
 
     this.setState({
-      selectedYear: name
+      selectedYear: parseInt(name)
     })
   }
 
@@ -146,7 +146,7 @@ class ExamScoreSceen extends Component {
                   setDataLoadingStatus={this.setDataLoadingStatus}
                   setSelectedScore={this.setSelectedScore}
                   setSelectedSubject={this.setSelectedSubject}
-                  setSelectedYear = {this.setSelectedYear}
+                  setSelectedYear={this.setSelectedYear}
                 />
               </div>
             </div>
