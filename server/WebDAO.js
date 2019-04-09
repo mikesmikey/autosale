@@ -498,7 +498,6 @@ class WebDAO {
         if (err) { resolve(null) }
         const db = client.db(dbName)
         this.getYearAndTerm().then((NowCurrent) => {
-          console.log(NowCurrent.currentStudyYear)
           db.collection('Subject').find({ 'courses': { $elemMatch: { school_year: NowCurrent.currentStudyYear, semester: NowCurrent.currentStudyTerm } } }).toArray((err, data) => {
             if (err) { throw err }
             for (var i = 0; i < data.length; i++) {
@@ -512,8 +511,32 @@ class WebDAO {
             var date = [NowCurrent.currentStudyYear, NowCurrent.currentStudyTerm]
             data.push(date)
             client.close()
-            console.log(data)
             return resolve(data)
+          })
+        })
+        // client.close()
+      })
+    })
+  }
+
+  getObjectRegisterCourseBySubjectId (id) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+        const db = client.db(dbName)
+        db.collection('User').find({ typeOfUser: 'student', 'RegisteredCourse': { $elemMatch: { subjectId: id } } }).count((err, StudentData) => {
+          if (err) { throw err }
+          db.collection('User').find({ typeOfUser: 'professor', 'RegisteredCourse': { $elemMatch: { subjectId: id } } }).toArray((err, TeacherData) => {
+            if (err) { throw err }
+            client.close()
+            let ObjectData = []
+            ObjectData.push({ student: StudentData })
+            let listTecher = []
+            for (var i = 0; i < TeacherData.length; i++) {
+              listTecher.push({ firstName: TeacherData[i].firstName, lastName: TeacherData[i].lastName })
+            }
+            ObjectData.push(listTecher)
+            return resolve(ObjectData)
           })
         })
         // client.close()
@@ -551,6 +574,24 @@ class WebDAO {
         db.collection('User').find({ typeOfUser: 'student', 'RegisteredCourse': { $elemMatch: { subjectId: id } } }).count((err, data) => {
           if (err) { throw err }
           client.close()
+          return resolve(true)
+        })
+        // client.close()
+      })
+    })
+  }
+  deleteCourse (sjid, cid) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+        const db = client.db(dbName)
+        // eslint-disable-next-line no-undef
+        console.log(sjid, cid)
+        // eslint-disable-next-line no-undef
+        db.collection('Subject').findOne({ '_id': ObjectId('5ca8d0c05921809dd0e9fde1') }, { $pull: { 'courses': { 'courseId': 1 } } }, (err, data) => {
+          if (err) { throw err }
+          client.close()
+          console.log(data)
           return resolve(data)
         })
         // client.close()

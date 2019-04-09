@@ -21,24 +21,21 @@ class courseTable extends Component {
     this.loadDataIntoTable = this.loadDataIntoTable.bind(this)
     this.inspectItem = this.inspectItem.bind(this)
   }
-
   componentWillUnmount () {
     this._isMounted = false
   }
-
   renderTableHead () {
     return (
       <tr className="is-header">
         <th>รหัสวิชา</th>
         <th >ชื่อวิชา</th>
         <th >จำนวนนิสิต</th>
-        <th >สถานะ</th>
       </tr>
     )
   }
 
   loadAllDataCourse () {
-    ServiceObj.AddTeacherNameSubjectCurrent().then((courseData) => {
+    ServiceObj.getAllDataCoures().then((courseData) => {
       if (this._isMounted) {
         this.setState({ data: courseData })
       }
@@ -47,7 +44,16 @@ class courseTable extends Component {
   selectItem (e) {
     const parent = e.target.parentElement
     if (parent.classList.contains('course-table-item')) {
-      this.props.setSelectedCourse(this.state.data[parent.getAttribute('index')][0])
+      if (!parent.classList.contains('is-active')) {
+        if (this.state.selectedRow != null) {
+          this.state.selectedRow.classList.remove('is-active')
+        }
+        parent.classList.add('is-active')
+        this.setState({
+          selectedRow: parent
+        })
+        this.props.setSelectedCourse(this.state.data[parent.getAttribute('index')][0])
+      }
     }
   }
   inspectItem (e) {
@@ -80,16 +86,37 @@ class courseTable extends Component {
     return DataObj
   }
 
+  deleteButtonHandle () {
+    console.log(this.state.selectedRow)
+    if (this.state.selectedRow === null) {
+      alert('กรุณาเลือกกการเรียนที่ต้องการก่อน')
+    } else {
+      console.log(this.state.data[this.state.selectedRow.getAttribute('index')][0])
+      console.log(this.state.data[this.state.selectedRow.getAttribute('index')][0].subjectNumber)
+      console.log(this.state.data[this.state.selectedRow.getAttribute('index')][0].courseId)
+      ServiceObj.deleteCourse(this.state.data[this.state.selectedRow.getAttribute('index')][0].subjectNumber,
+        this.state.data[this.state.selectedRow.getAttribute('index')][0].courseId).then((data) => {
+        console.log(data)
+      })
+    }
+  }
   render () {
     return (
-      <table className="user-table" id="courseTable" >
-        <thead>
-          {this.renderTableHead()}
-        </thead>
-        <tbody>
-          {this.loadDataIntoTable()}
-        </tbody>
-      </table>
+      <div>
+        <table className="user-table" id="courseTable" >
+          <thead>
+            {this.renderTableHead()}
+          </thead>
+          <tbody>
+            {this.loadDataIntoTable()}
+          </tbody>
+        </table>
+        <div className='columns box-content'>
+          <button className="button is-oros is-round is-pulled-right" >เพิ่มการเรียน</button>
+          <button className="button is-oros is-round is-pulled-right" >เพิ่มข้อมูล</button>
+          <button className="button is-oros is-round is-pulled-right" onClick={() => { this.deleteButtonHandle() }} >ลบการเรียน</button>
+        </div>
+      </div>
     )
   }
 }
@@ -110,7 +137,6 @@ class CourseTableItem extends Component {
         <td id="tableUserId">{this.props.itemData.subjectNumber}</td>
         <td>{this.props.itemData.subjectName}</td>
         <td>{this.props.itemData.students}</td>
-        <td>{this.props.itemData.status}</td>
       </tr>
 
     )

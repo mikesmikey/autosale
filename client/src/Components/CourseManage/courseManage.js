@@ -3,17 +3,24 @@ import React, { Component } from 'react'
 
 import '../../StyleSheets/home.css'
 import '../../StyleSheets/courseManager.css'
-
+// eslint-disable-next-line no-unused-vars
 import Modal from '../Utilities/Modal'
+// eslint-disable-next-line no-unused-vars
 import CourseTable from './courseTable.js'
+// eslint-disable-next-line no-unused-vars
 import CoursePopup from './coursePopup.js'
+
+import ClientService from '../Utilities/ClientService'
+const CServiceObj = new ClientService()
 
 class App extends Component {
   constructor (props) {
     super(props)
 
     this.state = {
-      selectedCourse: false
+      selectedCourse: null,
+      cStudyYear: '-',
+      cStudyTerm: '-'
     }
     this._isMounted = true
 
@@ -24,14 +31,40 @@ class App extends Component {
       selectedCourse: course
     })
   }
-
   componentDidMount () {
     this.courseTable.loadAllDataCourse()
+    this.loadYearAndTerm()
   }
-
   componentWillUnmount () {
     this._isMounted = false
   }
+  loadYearAndTerm () {
+    CServiceObj.getYearAndTerm().then((data) => {
+      this.setYearAndTerm(data.currentStudyYear, data.currentStudyTerm)
+    })
+  }
+  setYearAndTerm (year, term) {
+    this.setState({
+      cStudyYear: year,
+      cStudyTerm: term
+    })
+  }
+  // deleteButtonHandle () {
+  //   console.log(this.state.selectedUser)
+  //   if (this.state.selectedUser === null) {
+  //     alert('กรุณาเลือกกการเรียนที่ต้องการก่อน')
+  //   } else {
+  //     console.log(this.state.selectedUser)
+  //     console.log(this.state.selectedUser.subjectNumber)
+  //     console.log(this.state.selectedUser.courseId)
+  //   }
+  // CServiceObj.deleteCourse(this.selectedUser.subjectNumber, this.selectedUser.courseId).then((data) => {
+  //   if (data) {
+  //     alert(data)
+  //   }
+  //   alert(data)
+  // })
+  // }
   render () {
     return (
       <div className="subcontent-main-div coures">
@@ -42,22 +75,22 @@ class App extends Component {
           <div className="box-content">
             <div className="columns">
               <div className='column is-2'>
-                <label className="label font-size-2" >รหัสวิชา</label>
+                <label className="label font-size-2" >ตารางการเรียน</label>
+              </div>
+              <div className='column is-2'>
+                <label className="label font-size-2" >ปีการศึกษา {this.state.cStudyYear}</label>
+              </div>
+              <div className='column is-2'>
+                <label className="label font-size-2" >ภาคเรียน {this.state.cStudyTerm}</label>
               </div>
               <div className='column'>
               </div>
             </div>
-            <div className="columns box-content">
+            <div className="wigth100">
               <CourseTable ref={instance => { this.courseTable = instance }}
                 setSelectedCourse={this.setSelectedCourse}
                 showManageModal={() => { this.managePopup.showManageModal() }}/>
             </div>
-            <div className='columns box-content'>
-              <button className="button is-oros is-round is-pulled-right" >เพิ่มการเรียน</button>
-              <button className="button is-oros is-round is-pulled-right" >เพิ่มข้อมูล</button>
-              <button className="button is-oros is-round is-pulled-right" >ลบการเรียน</button>
-            </div>
-
           </div>
         </div>
         <Modal ref={instance => { this.manageCourseModal = instance }} content={

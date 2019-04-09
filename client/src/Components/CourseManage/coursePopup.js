@@ -1,16 +1,12 @@
+/* eslint-disable no-tabs */
 // eslint-disable-next-line no-unused-vars
 
 import React, { Component } from 'react'
 
-import ClientService from '../Utilities/ClientService'
-
-const ServiceObj = new ClientService()
-
 class ManageUserPopUp extends Component {
-  _isMounted = false;
+  _isMounted = true;
   constructor (props) {
     super(props)
-
     this.state = {
       year: '',
       semester: '',
@@ -19,11 +15,10 @@ class ManageUserPopUp extends Component {
       teacherName: [],
       groups: '',
       students: '',
-      studentsRegister: '',
+      studentsRegister: 0,
       status: ''
     }
     this.loadData = this.loadData.bind(this)
-    this.getDataformDatabase = this.getDataformDatabase.bind(this)
     this.loadNameTeacher = this.loadNameTeacher.bind(this)
   }
   componentWillUnmount () {
@@ -35,44 +30,35 @@ class ManageUserPopUp extends Component {
       semester: this.props.selectedCourse.semater,
       subjectCode: this.props.selectedCourse.subjectNumber,
       subjectName: this.props.selectedCourse.subjectName,
-      // teacherName ต้องดึงจากฐานข้อมูล
+      teacherName: this.props.selectedCourse.teacherName,
       groups: this.props.selectedCourse.groups,
       students: this.props.selectedCourse.students,
-      status: this.props.selectedCourse.status
-      // studentsRegister ต้องดึง
+      status: this.props.selectedCourse.status,
+      studentsRegister: this.props.selectedCourse.studentRegister
     })
-    this.getDataformDatabase(this.state.subjectCode)
-  }
-  getDataformDatabase () {
-    ServiceObj.getNameteacherFormRegisterCourseBySubjectId('88624459').then((NameData) => {
-      this.setState({ teacherName: NameData })
-    })
+    console.log(this.state.studentsRegister)
   }
 
   showManageModal () {
-    console.log(this.props.selectedCourse)
     this.loadData()
-    console.log(this.state.teacherName)
     this.props.showModal()
   }
   loadNameTeacher () {
     var DataObj = []
-    if (this.state.teacherName.length !== 0) {
-      console.log(this.state.teacherName)
+    if (this.state.teacherName.length !== 0 || this.state.teacherName != null) {
       for (var i = 0; i < this.state.teacherName.length; i++) {
-        // let arr = { text: 'x' }
+        let result = [{ index: i }]
+        result.push(this.state.teacherName[i])
         DataObj[i] = <ListTeacherName
           key={i}
-          objData={this.state.teacherName[i]}
+          objData={result}
           itemIndex={i}
         />
       }
     } else {
-      let arr = { text: '' }
-      DataObj[0] = <ListTeacherName
-        key={0}
-        objData={arr}
-        itemIndex={i}
+      // eslint-disable-next-line no-unused-expressions
+      <ListTeacherName
+        objData = {null}
       />
     }
     return DataObj
@@ -82,25 +68,39 @@ class ManageUserPopUp extends Component {
       <div className="box is-user-popUp" style={{ width: '500px' }}>
         <div>
           <h1 align="center">รายละเอียดข้อมูล</h1>
-          <div >
-            <p>ปีการศึกษา {this.state.year}</p>
-            <p>ภาคการศึกษา {this.state.semester}</p>
-            <p>รหัสวิชา {this.state.subjectCode}</p>
-            <p>ชื่อวิชา {this.state.subjectName}</p>
+          <div className='columns'>
+            <div className='column is-4' >
+              <p>ปีการศึกษา</p>
+              <p>ภาคการศึกษา</p>
+              <p>รหัสวิชา</p>
+              <p>ชื่อวิชา</p>
+            </div>
+            <div className='column'>
+              <p>{this.state.year}</p>
+              <p>{this.state.semester}</p>
+              <p>{this.state.subjectCode}</p>
+              <p>{this.state.subjectName}</p>
+            </div>
           </div>
           <div className="columns">
-            <div className="column is-3">
+            <div className="column is-1">
               <p>ชื่อครู</p>
             </div>
-            <div className="column">
+            <div className='column'>
               {this.loadNameTeacher()}
             </div>
           </div>
-          <div>
-            <p>จำนวนกลุ่ม {this.state.groups}</p>
-            <p>จำนวนนิสิตทั้งหมด {this.state.students}</p>
-            <p>จำหน่อยนิสิตที่ลงทะเบียนแล้ว {this.state.studentsRegister}</p>
-            <p>สถานนะ	{this.state.status}</p>
+          <div className="columns">
+            <div className='column is-4'>
+              <p>จำนวนกลุ่ม</p>
+              <p>จำนวนนิสิตทั้งหมด</p>
+              <p>จำหน่อยนิสิตที่ลงทะเบียนแล้ว</p>
+            </div>
+            <div className='column'>
+              <p>{this.state.groups}</p>
+              <p>{this.state.students}</p>
+              <p>{this.state.studentsRegister}</p>
+            </div>
           </div>
           <div className="columns" style={{ textAlign: 'center' }}>
             <button className="button is-yentafo is-round" onClick={this.props.closeModal}>ตกลง</button>
@@ -112,6 +112,7 @@ class ManageUserPopUp extends Component {
   }
 }
 
+// eslint-disable-next-line no-unused-vars
 class ListTeacherName extends Component {
   // eslint-disable-next-line no-useless-constructor
   constructor (props) {
@@ -119,9 +120,12 @@ class ListTeacherName extends Component {
   }
   render () {
     return (
-      <div>
-        {this.props.objData.firstName !== null ? <p>{this.props.objData.firstName} {this.props.objData.lastName}</p> : ''}
-      </div>
+      this.props.objData !== null
+        ? <div className='columns' style={{ textAlign: 'left' }}>
+          {this.props.objData[0].index + 1}. {this.props.objData[1].firstName} {this.props.objData[1].lastName}
+          <br></br>
+        </div>
+        : <div> </div>
     )
   }
 }

@@ -301,8 +301,8 @@ app.get('/registerCourse/teachar/:subjecId', (req, res) => {
   })
 })
 
-app.get('/registerCourse/student/:subjecId', (req, res) => {
-  WebDAOObj.getCountRegisterCourseStudentBySubjectId(req.params.subjecId).then((data) => {
+app.get('/registerCourse/:subjecId', (req, res) => {
+  WebDAOObj.getObjectRegisterCourseBySubjectId(req.params.subjecId).then((data) => {
     if (data != null) {
       res.json(data)
     } else {
@@ -313,6 +313,16 @@ app.get('/registerCourse/student/:subjecId', (req, res) => {
 
 app.get('/subbjec/current', (req, res) => {
   WebDAOObj.getAllSubjectCurrent().then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.post('/Mytest02/:a/:b', (req, res) => {
+  WebDAOObj.deleteCourse(req.params.a, req.params.b).then((data) => {
     if (data != null) {
       res.json(data)
     } else {

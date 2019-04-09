@@ -62,3 +62,13 @@
     width: 80%;
     
 }
+.course-table-item{
+    cursor: pointer;
+}
+.course-table-item.is-active {
+    background-color: #c7afdd !important; 
+    color: white;
+}
+.wigth100 {
+    width: 100%
+}

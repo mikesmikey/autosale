@@ -321,6 +321,13 @@ class ClientService {
   }
 
   // ==============[Course Service]====================
+  deleteCourse (a, b) {
+    return new Promise((resolve, reject) => {
+      axios.post(`/Mytest02/${a}/${b}`).then((result) => {
+      })
+    })
+  }
+
   getNameteacherFormRegisterCourseBySubjectId (subjecId) {
     return new Promise((resolve, reject) => {
       axios.get(`/registerCourse/teachar/${subjecId}`).then((result) => {
@@ -328,29 +335,23 @@ class ClientService {
       })
     })
   }
-  AddTeacherNameSubjectCurrent () {
+  getAllDataCoures () {
     return new Promise((resolve, reject) => {
-      this.getAllSubjectCurrent().then((ArrayObj) => {
+      this.getAllCouresCurrent().then((ArrayObj) => {
         if (ArrayObj.length > 1) {
           ArrayObj.forEach(element => {
-            this.getNameteacherFormRegisterCourseBySubjectId(element[0].subjectNumber).then((result) => {
-              element[0].teacherName.push(result)
-              resolve(true)
+            this.getObjectCountRegisterCourseBySubjectId(element[0].subjectNumber).then((result) => {
+              element[0].studentRegister = result[0].student
+              element[0].teacherName = result[1]
             })
           })
-          console.log(ArrayObj)
-          resolve(ArrayObj)
         }
         resolve(ArrayObj)
       })
-    // this.getNameteacherFormRegisterCourseBySubjectId(ArrayObj[i][0].subjectNumber).then((NameTeacher) => {
-    //   console.log(NameTeacher)
-    //   ArrayObj[i][0].teacherName.push(NameTeacher)
-    // })
     })
   }
 
-  getAllSubjectCurrent () {
+  getAllCouresCurrent () {
     return new Promise((resolve, reject) => {
       axios.get('/subbjec/current').then((result) => {
         var listCourse = []
@@ -360,13 +361,12 @@ class ClientService {
             subjectNumber: result.data[i].subjectId,
             subjectName: result.data[i].subjectName,
             students: result.data[i].courses[indexCourse].max_students,
-            status: this.getstatusCourseRegister(result.data[i].subject_id),
             courseId: result.data[i].courses[indexCourse].courseId,
             groups: result.data[i].courses[indexCourse].max_groups,
             year: result.data[result.data.length - 1][0],
             semater: result.data[result.data.length - 1][1],
             teacherName: [],
-            studentRegister: this.getstatusCourseRegister(result.data[i].subject_id)
+            studentRegister: 0
           }]
           listCourse.push(objarray)
         }
@@ -374,21 +374,9 @@ class ClientService {
       })
     })
   }
-
-  getstatusCourseRegister (subjecId) {
-    var teacher = this.getNameteacherFormRegisterCourseBySubjectId(subjecId)
-    var studentRegisterCourse = this.getCountRegisterCourseStudentBySubjectId(subjecId)
-    var result = ''
-    if (teacher.length !== 0 && studentRegisterCourse > 0) {
-      result = 'ข้อมูลสมบูรณ์'
-    } else {
-      result = 'ข้อมูลยังไม่สมบูรณ์'
-    }
-    return result
-  }
-  getCountRegisterCourseStudentBySubjectId (subjecId) {
+  getObjectCountRegisterCourseBySubjectId (subjecId) {
     return new Promise((resolve, reject) => {
-      axios.get(`/registerCourse/student/:${subjecId}`).then((result) => {
+      axios.get(`/registerCourse/${subjecId}`).then((result) => {
         resolve(result.data)
       })
     })

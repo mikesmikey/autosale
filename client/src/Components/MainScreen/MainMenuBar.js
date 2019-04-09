@@ -125,7 +125,7 @@ class MainScrenMenuBar extends Component {
             <a id="course_manage_button"
               onClick={this.handleMenuDropDown}
             >
-              <svg className="menu-icon icon-car-part icon-size-6" ></svg>
+              <svg className="menu-icon icon-BookCourse icon-size-6" ></svg>
               จัดการการเรียน
             </a>
             <ul id="part_manage_list" className="dropdown-hide">
