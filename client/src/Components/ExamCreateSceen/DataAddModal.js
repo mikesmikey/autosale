@@ -38,9 +38,20 @@ class DataAddModal extends Component {
 
   decideModal () {
     const decideTable = {
-      'dateModal': <ExamSelectDate closeModal={this.closeModal}/>,
-      'roomsManageModal': <ExamRoomsManage closeModal={this.closeModal}/>,
-      'addRoomDetailModal': <AddRoomDetail closeModal={this.closeModal}/>,
+      'dateModal': <ExamSelectDate
+        closeModal={this.closeModal}
+        selectedExam={this.props.selectedExam}
+        setSelectedExam={this.props.setSelectedExam}
+      />,
+      'roomsManageModal': <ExamRoomsManage
+        closeModal={this.closeModal}
+        showModal={this.showModal}
+        selectedExam={this.props.selectedExam}
+      />,
+      'addRoomDetailModal': <AddRoomDetail
+        closeModal={this.closeModal}
+        selectedExam={this.props.selectedExam}
+      />,
       'examinersManageModal': <ExaminersManage closeModal={this.closeModal}/>
     }
 

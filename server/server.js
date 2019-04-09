@@ -281,8 +281,31 @@ app.get('/building/:short_name', (req, res) => {
   })
 })
 
-app.get('/exams/:subjectId/:courseId', (req, res) => {
+app.get('/exams/subject=:subjectId/course=:courseId', (req, res) => {
   WebDAOObj.getAllExamBySubjectIdAndCourseId(req.params.subjectId, req.params.courseId).then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.post('/exam', (req, res) => {
+  WebDAOObj.insertExam(req.body.examData).then((pass) => {
+    res.send(pass)
+  })
+})
+
+app.delete('/exam/:objectid', (req, res) => {
+  WebDAOObj.deleteExam(req.params.objectid).then((pass) => {
+    res.send(pass)
+  })
+})
+
+app.get('/exams/date=:day/:month/:year/room=:roomId', (req, res) => {
+  const strDate = `${req.params.day}/${req.params.month}/${req.params.year}`
+  WebDAOObj.getAllExamBySubjectIdAndCourseId(strDate, req.params.roomId).then((data) => {
     if (data != null) {
       res.json(data)
     } else {
