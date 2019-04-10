@@ -284,14 +284,6 @@ class ClientService {
     return new Building(BuildingData)
   }
 
-  searchBuilding (shortname) {
-    return new Promise((resolve, reject) => {
-      axios.get(`/building/${shortname}`).then((result) => {
-        resolve(result.data)
-      })
-    })
-  }
-
   // ==========[Room Service]=================
 
   editRoom (newBuildingData) {

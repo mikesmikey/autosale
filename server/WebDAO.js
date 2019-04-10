@@ -109,7 +109,6 @@ class WebDAO {
             })
           } else { client.close(); return resolve(false) }
         })
-        client.close()
       })
     })
   }
@@ -297,7 +296,6 @@ class WebDAO {
             return resolve(false)
           }
         })
-        client.close()
       })
     })
   }
@@ -320,23 +318,6 @@ class WebDAO {
             return resolve(false)
           }
         })
-        client.close()
-      })
-    })
-  }
-
-  getBuildingByShortName (shortname) {
-    return new Promise((resolve, reject) => {
-      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
-        if (err) { resolve(null) }
-        const db = client.db(dbName)
-        const regex = new RegExp(`${shortname}`)
-        db.collection('Building').find({ 'short_name': regex }).toArray((err, data) => {
-          if (err) { throw err }
-          client.close()
-          return resolve(data)
-        })
-        client.close()
       })
     })
   }
