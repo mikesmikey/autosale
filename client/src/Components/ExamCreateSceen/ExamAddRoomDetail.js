@@ -176,7 +176,6 @@ class AddRoomDetail extends Component {
         let count = 0
         for (let i = selectedSchedule.time; i <= 20; i++) {
           if (this.state.schedules[i].maxHour) {
-            console.log(this.state.schedules[i].maxHour)
             break
           }
           count++
