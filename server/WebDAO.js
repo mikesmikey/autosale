@@ -492,6 +492,114 @@ class WebDAO {
     })
   }
 
+  getAllSubjectCurrent () {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+        const db = client.db(dbName)
+        this.getYearAndTerm().then((NowCurrent) => {
+          db.collection('Subject').find({ 'courses': { $elemMatch: { school_year: NowCurrent.currentStudyYear, semester: NowCurrent.currentStudyTerm } } }).toArray((err, data) => {
+            if (err) { throw err }
+            for (var i = 0; i < data.length; i++) {
+              for (var j = 0; j < data[i].courses.length; j++) {
+                if (data[i].courses[j].school_year === NowCurrent.currentStudyYear &&
+                  data[i].courses[j].semester === NowCurrent.currentStudyTerm) {
+                  data[i].indexCouresCurrent = data[i].courses[j].courseId - 1
+                }
+              }
+            }
+            var date = [NowCurrent.currentStudyYear, NowCurrent.currentStudyTerm]
+            data.push(date)
+            client.close()
+            return resolve(data)
+          })
+        })
+        // client.close()
+      })
+    })
+  }
+
+  getObjectRegisterCourseBySubjectId (id) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+        const db = client.db(dbName)
+        db.collection('User').find({ typeOfUser: 'student', 'RegisteredCourse': { $elemMatch: { subjectId: id } } }).count((err, StudentData) => {
+          if (err) { throw err }
+          db.collection('User').find({ typeOfUser: 'professor', 'RegisteredCourse': { $elemMatch: { subjectId: id } } }).toArray((err, TeacherData) => {
+            if (err) { throw err }
+            client.close()
+            let ObjectData = []
+            ObjectData.push({ student: StudentData })
+            let listTecher = []
+            for (var i = 0; i < TeacherData.length; i++) {
+              listTecher.push({ firstName: TeacherData[i].firstName, lastName: TeacherData[i].lastName })
+            }
+            ObjectData.push(listTecher)
+            return resolve(ObjectData)
+          })
+        })
+        // client.close()
+      })
+    })
+  }
+
+  getNameTeacherInRegisterCourseBySubjectId (type) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+        const db = client.db(dbName)
+        db.collection('User').find(
+          { typeOfUser: 'professor', 'RegisteredCourse': { $elemMatch: { subjectId: type } } }).toArray((err, data) => {
+          if (err) { throw err }
+          var listData = []
+          for (var i = 0; i < data.length; i++) {
+            var obj = { firstName: data[i].firstName, lastName: data[i].lastName }
+            listData.push(obj)
+          }
+          client.close()
+          return resolve(listData)
+        })
+        // eslint-disable-next-line no-unused-expressions
+        // client.close()
+      })
+    })
+  }
+
+  getCountRegisterCourseStudentBySubjectId (id) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+        const db = client.db(dbName)
+        db.collection('User').find({ typeOfUser: 'student', 'RegisteredCourse': { $elemMatch: { subjectId: id } } }).count((err, data) => {
+          if (err) { throw err }
+          client.close()
+          return resolve(true)
+        })
+        // client.close()
+      })
+    })
+  }
+  deleteCourse (sjid, cid) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+        const db = client.db(dbName)
+        // eslint-disable-next-line no-undef
+        console.log(sjid, cid)
+        // eslint-disable-next-line no-undef
+        db.collection('Subject').updateMany({ subjectId: sjid }, { $pull: { courses: { courseId: Number.parseInt(cid) } } }, (err, data) => {
+          if (err) { throw err }
+          db.collection('User').updateMany({ '$or': [{ typeOfUser: 'professor' }, { typeOfUser: 'student' }] }, { $pull: { RegisteredCourse: { subjectId: sjid } } }, (err, data) => {
+            if (err) { throw err }
+            client.close()
+            return resolve(true)
+          })
+        })
+        // client.close()
+      })
+    })
+  }
   /* ===========[Exam DAO]=================== */
 
   getAllExamBySubjectIdAndCourseId (subjectId, courseId) {

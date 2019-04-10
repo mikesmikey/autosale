@@ -39,6 +39,8 @@ class MainScrenMenuBar extends Component {
       this.dropDownSwitch('fix_manage_list')
     } else if (e.target.id === 'part_manage_button' && this.state.buttonPointer !== 'sub_part_manage') {
       this.dropDownSwitch('part_manage_list')
+    } else if (e.target.id === 'course_manage_button' && this.state.buttonPointer !== 'sub_course_manage') {
+      this.dropDownSwitch('part_manage_list')
     }
   }
 
@@ -112,6 +114,26 @@ class MainScrenMenuBar extends Component {
               <i className="menu-icon-awesome fa fa-calendar"></i>
                 จัดการปีการศึกษา
             </NavLink>
+          </li>
+          <li>
+            <a id="course_manage_button"
+              onClick={this.handleMenuDropDown}
+            >
+              <svg className="menu-icon icon-BookCourse icon-size-6" ></svg>
+              จัดการการเรียน
+            </a>
+            <ul id="part_manage_list" className="dropdown-hide">
+              <li>
+                <NavLink to="/course_manage" activeClassName="is-active is-black-oros" type="sub_course_manage" onClick={this.handleButtonPointer}>
+                  จัดการการเรียน
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/Test" activeClassName="is-active is-black-oros" type="sub_course_manage" onClick={this.handleButtonPointer}>
+                  เพิ่มการเรียน
+                </NavLink>
+              </li>
+            </ul>
           </li>
           {/*
           <li>

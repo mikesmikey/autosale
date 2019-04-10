@@ -291,6 +291,36 @@ app.get('/exams/subject=:subjectId/course=:courseId', (req, res) => {
   })
 })
 
+app.get('/registerCourse/teachar/:subjecId', (req, res) => {
+  WebDAOObj.getNameTeacherInRegisterCourseBySubjectId(req.params.subjecId).then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.get('/registerCourse/:subjecId', (req, res) => {
+  WebDAOObj.getObjectRegisterCourseBySubjectId(req.params.subjecId).then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.get('/subbjec/current', (req, res) => {
+  WebDAOObj.getAllSubjectCurrent().then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
 app.post('/exam', (req, res) => {
   WebDAOObj.insertExam(req.body.examData).then((pass) => {
     res.send(pass)
@@ -314,6 +344,12 @@ app.get('/exams/date=:day/:month/:year/room=:roomId', (req, res) => {
   })
 })
 
+app.post('/course/delete/:a/:b', (req, res) => {
+  WebDAOObj.deleteCourse(req.params.a, req.params.b).then((data) => {
+    console.log(data)
+    res.send(data)
+  })
+})
 app.post('/exam/room', (req, res) => {
   WebDAOObj.addRoomIntoExam(req.body.examId, req.body.roomData).then((pass) => {
     if (pass) {

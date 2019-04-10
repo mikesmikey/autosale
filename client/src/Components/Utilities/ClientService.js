@@ -320,6 +320,14 @@ class ClientService {
     })
   }
 
+  // ==============[Course Service]====================
+  deleteCourse (a, b) {
+    return new Promise((resolve, reject) => {
+      axios.post(`/course/delete/${a}/${b}`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
   createExam (examData) {
     return new Promise((resolve) => {
       axios.post(`/exam`, { 'examData': examData }).then((result) => {
@@ -328,6 +336,13 @@ class ClientService {
     })
   }
 
+  getNameteacherFormRegisterCourseBySubjectId (subjecId) {
+    return new Promise((resolve, reject) => {
+      axios.get(`/registerCourse/teachar/${subjecId}`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
   deleteExam (objectId) {
     return new Promise((resolve) => {
       axios.delete(`/exam/${objectId}`).then((result) => {
@@ -335,7 +350,52 @@ class ClientService {
       })
     })
   }
+  getAllDataCoures () {
+    return new Promise((resolve, reject) => {
+      this.getAllCouresCurrent().then((ArrayObj) => {
+        if (ArrayObj.length > 1) {
+          ArrayObj.forEach(element => {
+            this.getObjectCountRegisterCourseBySubjectId(element[0].subjectNumber).then((result) => {
+              element[0].studentRegister = result[0].student
+              element[0].teacherName = result[1]
+            })
+          })
+        }
+        resolve(ArrayObj)
+      })
+    })
+  }
 
+  getAllCouresCurrent () {
+    return new Promise((resolve, reject) => {
+      axios.get('/subbjec/current').then((result) => {
+        var listCourse = []
+        for (var i = 0; i < result.data.length - 1; i++) {
+          var indexCourse = result.data[i].indexCouresCurrent
+          var objarray = [{
+            subjectNumber: result.data[i].subjectId,
+            subjectName: result.data[i].subjectName,
+            students: result.data[i].courses[indexCourse].max_students,
+            courseId: result.data[i].courses[indexCourse].courseId,
+            groups: result.data[i].courses[indexCourse].max_groups,
+            year: result.data[result.data.length - 1][0],
+            semater: result.data[result.data.length - 1][1],
+            teacherName: [],
+            studentRegister: 0
+          }]
+          listCourse.push(objarray)
+        }
+        resolve(listCourse)
+      })
+    })
+  }
+  getObjectCountRegisterCourseBySubjectId (subjecId) {
+    return new Promise((resolve, reject) => {
+      axios.get(`/registerCourse/${subjecId}`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
   getAllExamOnCurrentDateAndRoom (date, roomId) {
     return new Promise((resolve, reject) => {
       axios.get(`/exams/date=${date}/room=${roomId}`).then((result) => {

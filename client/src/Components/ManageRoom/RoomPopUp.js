@@ -9,7 +9,6 @@ const ServiceObj = new ClientService()
 
 // eslint-disable-next-line react/require-render-return
 class RoomPopUp extends Component {
-  
   _isMounted = false;
 
   constructor (props) {
@@ -58,20 +57,19 @@ class RoomPopUp extends Component {
 
   addButtonHandle () {
     ServiceObj.getAllBuildingByRoom(this.state.stringBuilding, this.room).then((usersData) => {
-
       this.repetitiveRoom = usersData.length
-      if(this.state.numberRow*this.state.numberStudent != 0 
-        && this.numRoom != 0
-        && this.state.stringRoom != ''
-        && this.state.stringRow != ''
-        && this.state.stringStudent != ''
-        && this.repetitiveRoom == 0
-      ){
+      if (this.state.numberRow * this.state.numberStudent != 0
+        && this.numRoom != 0 &&
+        this.state.stringRoom != '' &&
+        this.state.stringRow != '' &&
+        this.state.stringStudent != '' &&
+        this.repetitiveRoom == 0
+      ) {
         const BuildingObj = ServiceObj.createBuilding(this.currentFormObject())
         //console.log(BuildingObj)
-    
+
         this.props.setDataLoadingStatus(true)
-    
+
         ServiceObj.editRoom(BuildingObj.getUserObjectData()).then((result) => {
           if (result) {
             this.props.reloadTable()
@@ -80,8 +78,8 @@ class RoomPopUp extends Component {
             alert('เพิ่มไม่สำเร็จ!')
           }
           this.props.setDataLoadingStatus(false)
-        })  
-      }else{
+        })
+      }else {
         alert('เพิ่มไม่สำเร็จ!')
       }
     })
@@ -92,44 +90,43 @@ class RoomPopUp extends Component {
     const name = target.name
     const value = target.value
 
-
     this.setState({
       [name]: value
     })
 
-    if(name == "stringType"){
-      if(value.toString() == 'Lecture'){
+    if (name == 'stringType') {
+      if (value.toString() == 'Lecture') {
         this.type = 'C'
-      }else{
+      } else{
         this.type = 'L'
       }
     }
-    if(name == "stringRoom"){
-        this.numRoom = value.toString()
+    if (name == 'stringRoom') {
+      this.numRoom = value.toString()
     }
-    if(name == "stringFloor"){
+    if (name == 'stringFloor') {
       this.numFloor = parseInt(value)
       this.floor = value.toString()
     }
-    if(name == "stringRow"){
+    if (name == 'stringRow') {
       this.setState({
         numberRow: value
       })
     }
-    if(name == "stringStudent"){
+    if (name == 'stringStudent') {
       this.setState({
         numberStudent: value
       })
     }
 
-    if(this.numRoom == ''){
+    if (this.numRoom == '') {
       this.room = this.shortname + this.line + this.floor + this.type
-    }else if(this.numRoom.length < 2){
+    } else if (this.numRoom.length < 2) {
       this.room = this.shortname + this.line + this.floor + this.type + this.zero + this.numRoom
-    }else{
+    }else {
       this.room = this.shortname + this.line + this.floor + this.type + this.numRoom
     }
-    
+
     document.getElementById('roomSpan').innerHTML = this.room
   }
 
@@ -147,10 +144,10 @@ class RoomPopUp extends Component {
     const name = target.options[target.selectedIndex].value
 
     this.PositionFloor = target.selectedIndex
-    this.setState({stringBuilding: name})
+    this.setState({ stringBuilding: name })
 
     for (var i = 0; i < this.props.dataMain.length; i++) {
-      if(this.props.dataMain[i].building_name == name){
+      if (this.props.dataMain[i].building_name == name) {
         this.shortname = this.props.dataMain[i].short_name
         break
       }
@@ -160,36 +157,35 @@ class RoomPopUp extends Component {
     this.room = this.shortname + this.line + this.floor + this.type
     this.numFloor = 1
     this.setState(
-      { stringType: 'Lecture'}
+      { stringType: 'Lecture' }
     )
     this.clearInput()
     document.getElementById('TypeOfRoom').selectedIndex = 0
     document.getElementById('roomSpan').innerHTML = this.room
-    
+
 
     this.setFloorSelect()
   }
 
-  setFloorSelect(){
+  setFloorSelect () {
     var selectFloor = document.getElementById('FloorSelectPopUp')
 
-    //console.log(this.props.buildingPopUp)
+    // console.log(this.props.buildingPopUp)
 
-    if(this.state.NumberFloor != 0){
-      document.getElementById('FloorSelectPopUp').options.length=0;
+    if (this.state.NumberFloor != 0) {
+      document.getElementById('FloorSelectPopUp').options.length = 0
     }
 
-    this.setState({NumberFloor: this.floorPopUp[this.PositionFloor]})
+    this.setState({ NumberFloor: this.floorPopUp[this.PositionFloor] })
     for (var j = 0; j < this.floorPopUp[this.PositionFloor]; j++) {
       var el = document.createElement('option')
-      el.value = j+1
-      el.textContent = j+1
+      el.value = j + 1
+      el.textContent = j + 1
       selectFloor.appendChild(el)
     }
-
   }
 
-  setBSelect(){
+  setBSelect () {
     var select = document.getElementById('BuildingSelectPopUp')
     for (var z = 0; z < this.props.buildingAll.length; z++) {
       var el = document.createElement('option')
@@ -197,9 +193,8 @@ class RoomPopUp extends Component {
       el.textContent = this.props.buildingAll[z]
       let num = 0
 
-
-      if(z == 0){
-        this.setState({stringBuilding: this.props.buildingAll[z]})
+      if (z == 0) {
+        this.setState({ stringBuilding: this.props.buildingAll[z] })
       }
       for (var i = 0; i < this.buildingSelectPopUp.length; i++) {
         if (this.buildingSelectPopUp[i] != this.props.buildingAll[z]) {
@@ -214,53 +209,51 @@ class RoomPopUp extends Component {
       }
     }
 
-
-    //console.log(this.props.buildingPopUp)
+    // console.log(this.props.buildingPopUp)
   }
 
   currentFormObject () {
-    var newData =  []
+    var newData = []
     var roomArray = []
     var maxId = 0
 
     newData.building_name = this.state.stringBuilding
     for (var i = 0; i < this.props.dataMain.length; i++) {
-      if(this.props.dataMain[i].building_name == this.state.stringBuilding){
+      if (this.props.dataMain[i].building_name == this.state.stringBuilding) {
         newData.short_name = this.props.dataMain[i].short_name
         newData.floors = this.props.dataMain[i].floors
-        for(var j = 0;j < this.props.dataMain[i].Rooms.length;j++){
+        for (var j = 0; j < this.props.dataMain[i].Rooms.length; j++) {
           roomArray.push(this.props.dataMain[i].Rooms[j])
-          if(this.props.dataMain[i].Rooms[j].roomId > maxId){
+          if (this.props.dataMain[i].Rooms[j].roomId > maxId) {
             maxId = this.props.dataMain[i].Rooms[j].roomId
           }
         }
         roomArray.push({
-          roomId: maxId+1, 
-          floor: this.numFloor, 
+          roomId: maxId + 1,
+          floor: this.numFloor,
           room: this.room,
           roomType: this.state.stringType,
-          numberOfSeat:this.state.numberRow*this.state.numberStudent
+          numberOfSeat: this.state.numberRow * this.state.numberStudent
         }
         )
       }
     }
-    
+
 
     newData.Rooms = roomArray
-    //console.log(newData)
+    // console.log(newData)
     return newData
   }
 
   addDataToPopUp () {
-    //console.log(this.props.buildingAll)
+    // console.log(this.props.buildingAll)
     this.props.dataMainUpDate()
-    //console.log(this.props.dataMain)
+    // console.log(this.props.dataMain)
     this.setBSelect()
     this.setFloorSelect()
 
-
     for (var k = 0; k < this.props.dataMain.length; k++) {
-      if(this.props.dataMain[k].building_name == this.buildingSelectPopUp[0]){
+      if (this.props.dataMain[k].building_name == this.buildingSelectPopUp[0]) {
         this.shortname = this.props.dataMain[k].short_name
         break
       }
@@ -287,26 +280,26 @@ class RoomPopUp extends Component {
               <label className="label">ตึก</label>
             </div>
             <div className="column">
-            <select className="room-popup-select-box"
-                      id="BuildingSelectPopUp"
-                      name="stringBuilding"
-                      onChange={this.handleSelectBuilding} 
-                    >
-            </select>
+              <select className="room-popup-select-box"
+                id="BuildingSelectPopUp"
+                name="stringBuilding"
+                onChange={this.handleSelectBuilding}
+              >
+              </select>
             </div>
           </div>
-  
+
           <div className="columns input-div">
             <div className="column is-2">
               <label className="label">ชั้น</label>
             </div>
             <div className="column">
-            <select className="room-popup-select-box"
-                      id="FloorSelectPopUp"
-                      name="stringFloor"
-                      onChange={this.handleInputChange} 
-                    >
-            </select>
+              <select className="room-popup-select-box"
+                id="FloorSelectPopUp"
+                name="stringFloor"
+                onChange={this.handleInputChange}
+              >
+              </select>
             </div>
           </div>
 
@@ -315,14 +308,14 @@ class RoomPopUp extends Component {
               <label className="label">ชนิดห้อง</label>
             </div>
             <div className="column">
-            <select className="room-popup-select-box"
-                      id="TypeOfRoom"
-                      name="stringType"
-                      onChange={this.handleInputChange} 
-                    >
-                    <option value="Lecture" >Lecture</option>
-                    <option value="Lab">Lab</option>
-            </select>
+              <select className="room-popup-select-box"
+                id="TypeOfRoom"
+                name="stringType"
+                onChange={this.handleInputChange}
+              >
+                <option value="Lecture" >Lecture</option>
+                <option value="Lab">Lab</option>
+              </select>
             </div>
           </div>
 
@@ -336,7 +329,7 @@ class RoomPopUp extends Component {
                 type="text"
                 name="stringRoom"
                 value={this.state.stringRoom}
-                onChange={this.handleInputChange} 
+                onChange={this.handleInputChange}
               />
             </div>
           </div>
@@ -351,7 +344,7 @@ class RoomPopUp extends Component {
                 type="text"
                 name="stringRow"
                 value={this.state.stringRow}
-                onChange={this.handleInputChange} 
+                onChange={this.handleInputChange}
               />
             </div>
           </div>
@@ -366,7 +359,7 @@ class RoomPopUp extends Component {
                 type="text"
                 name="stringStudent"
                 value={this.state.stringStudent}
-                onChange={this.handleInputChange} 
+                onChange={this.handleInputChange}
               />
             </div>
           </div>
@@ -379,7 +372,7 @@ class RoomPopUp extends Component {
 
           <br></br>
           <center>
-          <button className="button is-oros is-round" onClick={() => { this.addButtonHandle() }}>เพิ่มห้อง</button>
+            <button className="button is-oros is-round" onClick={() => { this.addButtonHandle() }}>เพิ่มห้อง</button>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <button className="button is-yentafo is-round" onClick={this.props.closeModal}>ออก</button>
           </center>
