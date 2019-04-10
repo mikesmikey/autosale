@@ -120,7 +120,7 @@ app.post('/user/addmany', (req, res) => {
 
 app.get('/subjects', (req, res) => {
   WebDAOObj.getAllSubject().then((data) => {
-    console.log(data)
+    // console.log(data)
     if (data != null) {
       res.json(data)
     } else {
@@ -157,9 +157,204 @@ app.get('/yearAndTerm', (req, res) => {
   })
 })
 
+app.get('/subject', (req, res) => {
+  WebDAOObj.getAllSubject().then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.get('/exam/username/:username', (req, res) => {
+  WebDAOObj.getAllExamByUsername(req.params.username).then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.get('/exam/:username/:SubjectId', (req, res) => {
+  WebDAOObj.getAllExamBySubjectId(req.params.SubjectId, req.params.username).then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.get('/building', (req, res) => {
+  WebDAOObj.getAllBuilding().then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.get('/building/:building', (req, res) => {
+  WebDAOObj.getAllBuilding().then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.get('/building/:buildingname/:room', (req, res) => {
+  WebDAOObj.getAllBuildingByRoom(req.params.buildingname, req.params.room).then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.post('/building/edit', (req, res) => {
+  WebDAOObj.editRoom(req.body.BuildingData).then((pass) => {
+    res.send(pass)
+  })
+})
+
 app.post('/yearAndTerm/edit', (req, res) => {
   WebDAOObj.editYearAndTerm(req.body.globalData).then((pass) => {
     res.send(pass)
+  })
+})
+
+app.get('/courses/:year/:semester', (req, res) => {
+  WebDAOObj.getAllCourseByYearAndSemester(req.params.year, req.params.semester).then(data => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.get('/courses/:year/:semester/:subjectId', (req, res) => {
+  WebDAOObj.getAllCourseByYearSemesterAndSubjectId(req.params.year, req.params.semester, req.params.subjectId).then(data => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.get('/buildings', (req, res) => {
+  WebDAOObj.getBuilding().then(data => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.post('/building/add', (req, res) => {
+  WebDAOObj.insertBuilding(req.body.buildingData).then((pass) => {
+    res.send(pass)
+  })
+})
+
+app.post('/building/remove/:short_name', (req, res) => {
+  WebDAOObj.deleteBuildingByShortName(req.params.short_name).then((pass) => {
+    res.send(pass)
+  })
+})
+
+app.get('/building/:short_name', (req, res) => {
+  WebDAOObj.getBuildingByShortName(req.params.short_name).then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.get('/exams/subject=:subjectId/course=:courseId', (req, res) => {
+  WebDAOObj.getAllExamBySubjectIdAndCourseId(req.params.subjectId, req.params.courseId).then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.get('/registerCourse/teachar/:subjecId', (req, res) => {
+  WebDAOObj.getNameTeacherInRegisterCourseBySubjectId(req.params.subjecId).then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.get('/registerCourse/:subjecId', (req, res) => {
+  WebDAOObj.getObjectRegisterCourseBySubjectId(req.params.subjecId).then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.get('/subbjec/current', (req, res) => {
+  WebDAOObj.getAllSubjectCurrent().then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.post('/exam', (req, res) => {
+  WebDAOObj.insertExam(req.body.examData).then((pass) => {
+    res.send(pass)
+  })
+})
+
+app.delete('/exam/:objectid', (req, res) => {
+  WebDAOObj.deleteExam(req.params.objectid).then((pass) => {
+    res.send(pass)
+  })
+})
+
+app.get('/exams/date=:day/:month/:year/room=:roomId', (req, res) => {
+  const strDate = `${req.params.day}/${req.params.month}/${req.params.year}`
+  WebDAOObj.getAllExamByDateAndRoom(strDate, req.params.roomId).then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.post('/course/delete/:a/:b', (req, res) => {
+  WebDAOObj.deleteCourse(req.params.a, req.params.b).then((data) => {
+    console.log(data)
+    res.send(data)
+  })
+})
+app.post('/exam/room', (req, res) => {
+  WebDAOObj.addRoomIntoExam(req.body.examId, req.body.roomData).then((pass) => {
+    if (pass) {
+      res.send(pass)
+    }
   })
 })
 

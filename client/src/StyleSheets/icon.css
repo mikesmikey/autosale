@@ -11,6 +11,17 @@
     background-color: currentColor;
 }
 
+.icon-BookCourse {
+    mask-image: url('../Icons/courseManager.svg');
+    mask-position: center center;
+    mask-repeat: no-repeat;
+
+    width: 50px;
+    height: 50px;
+
+    background-color: currentColor;
+}
+
 /*Icon made by [https://www.flaticon.com/authors/google] from www.flaticon.com */
 .icon-down-arrow {
     mask-image: url('../Icons/down-chevron.svg');

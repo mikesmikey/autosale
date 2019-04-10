@@ -13,16 +13,18 @@ import Home from '../Home/Home'
 import ExamSchedule from '../ExamSchedule/ExamSchedule'
 import ExamCreateScreen from '../ExamCreateSceen/ExamCreateScreen'
 import ExamScoreSceen from '../ExamScoreSceen/ExamScoreSceen'
+import ManageRoom from '../ManageRoom/ManageRoom'
 import UserManage from '../UserManage/UserManage'
+import YearAndTermManage from '../YearAndTermManage/YearAndTermManage'
+import AddBuilding from '../AddBuilding/AddBuilding'
 import AddSubject from '../AddSubject/AddSubject'
-import YearAndTermManage from "../YearAndTermManage/YearAndTermManage"
+import CourseManage from '../CourseManage/courseManage'
 
 import '../../StyleSheets/mainScreen.css'
 import '../../StyleSheets/pageHelper.css'
 
 class MainScreen extends Component {
-
-  render() {
+  render () {
     return (
       <div className="main-screen">
         <MainNavBar
@@ -47,15 +49,24 @@ class MainScreen extends Component {
           <Route path="/exam_score" render={(props) =>
             <ExamScoreSceen />
           } />
+          <Route path="/manage_room" render={(props) =>
+            <ManageRoom />
+          } />
           <Route path="/year_and_term_manage" render={(props) =>
             <YearAndTermManage />
+          } />
+          <Route path="/add_building" render={(props) =>
+            <AddBuilding />
           } />
           <Route path="/add_subject" render={(props) =>
             <AddSubject />
           } />
+          <Route path="/course_manage" render={(props) =>
+            <CourseManage />
+          } />
         </div>
       </div>
-    );
+    )
   }
 }
 

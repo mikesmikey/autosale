@@ -65,6 +65,7 @@ class WebService {
 
         if (userData.typeOfUser === 'student') {
           userData.year = 3
+          userData.isScore = false
         }
 
         if (userData.typeOfUser === 'staff') {
@@ -81,5 +82,4 @@ class WebService {
     })
   }
 }
-
 module.exports = WebService

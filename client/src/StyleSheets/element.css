@@ -205,6 +205,8 @@
     border: 1px solid gray;
     border-radius: 5px;
 
+    padding: 5px;
+
     font-size: 16px;
 }
 
@@ -247,4 +249,66 @@
     width: 100%;
     border-radius: 5px;
     font-size: 16px;
+}
+
+/*==============[Table]======================*/
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table,.exam-table  td,.exam-table  th {
+    border: none;
+}
+  
+.table {
+    border-collapse: collapse;
+    border-radius: 3px;
+    width: 100%;
+}
+  
+.table th{
+    height: 50px;
+}
+
+.table tr.is-active {
+    background-color: #c7afdd !important; 
+    color: white;
+}
+
+.table td:not(:first-child) {
+    border-left: 3px solid white;
+}
+
+.table td {
+    padding: 5px;
+    white-space: pre;
+}
+
+.table td.is-ignore {
+    background-color: #d3d3d3 !important; 
+    color: black !important;
+    cursor: default;
+}
+
+.table th.is-ignore {
+    background-color: #8966a8 !important; 
+    cursor: default;
+}
+
+.table tr:not(.is-header) {
+    height: 30px;
+    background-color: #f2f2f2;
+}
+
+.table tr:not(.is-header):hover{ 
+    background: #c7afdd; 
+    color: white;
+    cursor: pointer;
+}
+
+.table thead{ 
+    background: #906cb2 !important; 
+    color: white;
 }
