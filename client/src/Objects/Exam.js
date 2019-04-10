@@ -1,12 +1,13 @@
 class Exam {
   constructor (form) {
-    this.examId = form.examId
+    this._id = form._id
     this.subjectId = form.subjectId
     this.subjectName = form.subjectName
     this.category = form.category
     this.courseId = form.courseId
     this.creatorId = form.creatorId
     this.date = form.date
+    this.startTime = form.startTime
     this.rooms = form.rooms
     this.roomConfirm = form.roomConfirm
     this.examiners = form.examiners
@@ -20,7 +21,7 @@ class Exam {
   }
 
   decideExamStatus () {
-    if (!this.examId) {
+    if (!this.date) {
       return 'noExamData'
     } else if (!this.roomConfirm) {
       return 'noRoomData'
@@ -29,6 +30,19 @@ class Exam {
     } else {
       return 'complete'
     }
+  }
+
+  setExamData (key, value) {
+    this[key] = value
+    this.status = this.decideExamStatus()
+  }
+
+  getExamObjectdata () {
+    var objData = {}
+    Object.keys(this).forEach(key => {
+      objData[key] = this[key]
+    })
+    return objData
   }
 }
 

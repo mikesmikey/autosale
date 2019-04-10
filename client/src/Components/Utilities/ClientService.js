@@ -305,7 +305,7 @@ class ClientService {
 
   getAllExamBySubjectAndCourse (subjectId, courseId) {
     return new Promise((resolve, reject) => {
-      axios.get(`/exams/${subjectId}/${courseId}`).then((result) => {
+      axios.get(`/exams/subject=${subjectId}/course=${courseId}`).then((result) => {
         resolve(result.data)
       })
     })
@@ -328,10 +328,24 @@ class ClientService {
       })
     })
   }
+  createExam (examData) {
+    return new Promise((resolve) => {
+      axios.post(`/exam`, { 'examData': examData }).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
 
   getNameteacherFormRegisterCourseBySubjectId (subjecId) {
     return new Promise((resolve, reject) => {
       axios.get(`/registerCourse/teachar/${subjecId}`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+  deleteExam (objectId) {
+    return new Promise((resolve) => {
+      axios.delete(`/exam/${objectId}`).then((result) => {
         resolve(result.data)
       })
     })
@@ -378,6 +392,21 @@ class ClientService {
   getObjectCountRegisterCourseBySubjectId (subjecId) {
     return new Promise((resolve, reject) => {
       axios.get(`/registerCourse/${subjecId}`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+  getAllExamOnCurrentDateAndRoom (date, roomId) {
+    return new Promise((resolve, reject) => {
+      axios.get(`/exams/date=${date}/room=${roomId}`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  insertRoomIntoExam (examId, roomData) {
+    return new Promise((resolve) => {
+      axios.post(`/exam/room`, { 'examId': examId, 'roomData': roomData }).then((result) => {
         resolve(result.data)
       })
     })

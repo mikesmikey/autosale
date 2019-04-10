@@ -23,10 +23,10 @@ class ExamTable extends Component {
           this.state.selectedRow.classList.remove('is-active')
         }
         parent.classList.add('is-active')
-        console.log(examData)
         this.setState({
           selectedRow: parent
         })
+        this.props.setSelectedExam(examData)
       }
     }
   }
@@ -38,7 +38,6 @@ class ExamTable extends Component {
   renderTableItem () {
     if (this.props.subjects) {
       return this.props.exams.map((exam) => {
-        console.log(exam)
         return <ExamTableItem
           key={`${exam.subjectId}_${exam.courseId}`}
           examData={exam}
