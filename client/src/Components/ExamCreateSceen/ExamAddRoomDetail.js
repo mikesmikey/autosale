@@ -239,9 +239,8 @@ class AddRoomDetail extends Component {
     if (this.state.selectedMinute === '') {
       return false
     }
-    console.log(Number.parseInt(this.state.selectedHour) + (Number.parseInt(this.state.selectedMinute) / 100))
+
     const totalTime = Number.parseInt(this.state.selectedHour) + (Number.parseInt(this.state.selectedMinute) / 100)
-    console.log(this.state.maxSelectHour)
     if (totalTime > this.state.maxSelectHour) {
       return false
     }
@@ -256,9 +255,6 @@ class AddRoomDetail extends Component {
 
   handleSubmitButton () {
     if (this.validSubmit()) {
-      console.log(this.props.selectedExam)
-      console.log(this.state.selectedSchedule)
-
       var roomData = {}
       roomData.roomId = this.state.selectedRoom
       roomData.startTime = this.state.selectedSchedule.time
