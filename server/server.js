@@ -305,11 +305,19 @@ app.delete('/exam/:objectid', (req, res) => {
 
 app.get('/exams/date=:day/:month/:year/room=:roomId', (req, res) => {
   const strDate = `${req.params.day}/${req.params.month}/${req.params.year}`
-  WebDAOObj.getAllExamBySubjectIdAndCourseId(strDate, req.params.roomId).then((data) => {
+  WebDAOObj.getAllExamByDateAndRoom(strDate, req.params.roomId).then((data) => {
     if (data != null) {
       res.json(data)
     } else {
       res.sendStatus(404)
+    }
+  })
+})
+
+app.post('/exam/room', (req, res) => {
+  WebDAOObj.addRoomIntoExam(req.body.examId, req.body.roomData).then((pass) => {
+    if (pass) {
+      res.send(pass)
     }
   })
 })

@@ -29,7 +29,7 @@ class ExamDateModal extends Component {
     if (this.props.selectedExam.status === 'noExamData') {
       if (this.props.selectedExam) {
         var newExam = this.props.selectedExam
-        newExam.setExamData('date', this.state.date)
+        newExam.setExamData('date', this.state.date.toLocaleDateString())
         CServiceObj.createExam(newExam.getExamObjectdata()).then((result) => {
           if (result) {
             newExam.setExamData('_id', result)

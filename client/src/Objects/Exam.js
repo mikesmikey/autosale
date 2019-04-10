@@ -7,6 +7,7 @@ class Exam {
     this.courseId = form.courseId
     this.creatorId = form.creatorId
     this.date = form.date
+    this.startTime = form.startTime
     this.rooms = form.rooms
     this.roomConfirm = form.roomConfirm
     this.examiners = form.examiners
@@ -40,9 +41,6 @@ class Exam {
     var objData = {}
     Object.keys(this).forEach(key => {
       objData[key] = this[key]
-      if (key === 'date') {
-        objData[key] = this[key].toLocaleDateString()
-      }
     })
     return objData
   }

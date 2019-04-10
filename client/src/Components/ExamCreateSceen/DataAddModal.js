@@ -5,7 +5,7 @@ import Modal from '../Utilities/Modal'
 
 import ExamSelectDate from './ExamSelectDate'
 import ExamRoomsManage from './ExamRoomsManage'
-import AddRoomDetail from './AddRoomDetail'
+import ExamAddRoomDetail from './ExamAddRoomDetail'
 import ExaminersManage from './ExaminersManage'
 
 class DataAddModal extends Component {
@@ -48,8 +48,9 @@ class DataAddModal extends Component {
         showModal={this.showModal}
         selectedExam={this.props.selectedExam}
       />,
-      'addRoomDetailModal': <AddRoomDetail
+      'addRoomDetailModal': <ExamAddRoomDetail
         closeModal={this.closeModal}
+        showModal={(modal) => { this.showModal(modal) }}
         selectedExam={this.props.selectedExam}
       />,
       'examinersManageModal': <ExaminersManage closeModal={this.closeModal}/>

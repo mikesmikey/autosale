@@ -26,7 +26,6 @@ class ExamTable extends Component {
         this.setState({
           selectedRow: parent
         })
-
         this.props.setSelectedExam(examData)
       }
     }

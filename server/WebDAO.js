@@ -553,21 +553,18 @@ class WebDAO {
 
         const db = client.db(dbName)
 
-        db.collection('Subject').aggregate(
+        db.collection('Exam').aggregate(
           [
             {
               '$match': { '$and':
               [
-                { 'courses.school_year': date },
+                { 'date': date },
                 { 'rooms.roomId': roomId }
               ] }
             },
             {
-              '$project': {
-                '_id': 0,
-                'subjectId': 1,
-                'subjectName': 1,
-                'courses': {
+              '$addFields': {
+                'rooms': {
                   '$filter': {
                     'input': '$rooms',
                     'as': 'room',
@@ -581,6 +578,23 @@ class WebDAO {
           if (err) { throw err }
           client.close()
           return resolve(data)
+        })
+        client.close()
+      })
+    })
+  }
+
+  addRoomIntoExam (examId, roomData) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+        const db = client.db(dbName)
+        db.collection('Exam').findOneAndUpdate({ '_id': new ObjectId(examId) }, { '$push': { 'rooms': roomData } }, (err, result) => {
+          if (err) { throw err }
+          if (result) {
+            client.close()
+            return resolve(true)
+          } else { return resolve(false) }
         })
         client.close()
       })
