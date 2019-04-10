@@ -167,14 +167,16 @@ class AddRoomDetail extends Component {
           maxSelectHour: selectedSchedule.maxHour
         })
       } else {
-        for (let i = selectedSchedule.time; i <= 20; i++) {
+        let count = 1
+        for (let i = selectedSchedule.time; i < 20; i++) {
           if (this.state.schedules[i].maxHour) {
-            this.setState({
-              maxSelectHour: this.state.schedules[i].time - selectedSchedule.time
-            })
             break
           }
+          count++
         }
+        this.setState({
+          maxSelectHour: count
+        })
       }
     }
   }
@@ -199,18 +201,18 @@ class AddRoomDetail extends Component {
           </option>
         }
       } else {
+        let count = 1
         for (let i = selectedSchedule.time; i <= 20; i++) {
           if (this.state.schedules[i].maxHour) {
-            for (let k = 1; k <= this.state.schedules[i].time - selectedSchedule.time; k++) {
-              optionSet[k] = <option
-                key={k}
-                value={k}
-              >
-                {k}
-              </option>
-            }
             break
           }
+          optionSet[count] = <option
+            key={count}
+            value={count}
+          >
+            {count}
+          </option>
+          count++
         }
       }
     }
@@ -231,7 +233,9 @@ class AddRoomDetail extends Component {
     if (this.state.selectedMinute === '') {
       return false
     }
+    console.log(Number.parseInt(this.state.selectedHour) + (Number.parseInt(this.state.selectedMinute) / 100))
     const totalTime = Number.parseInt(this.state.selectedHour) + (Number.parseInt(this.state.selectedMinute) / 100)
+    console.log(this.state.maxSelectHour)
     if (totalTime > this.state.maxSelectHour) {
       return false
     }
@@ -470,7 +474,7 @@ class RoomScheduleTable extends Component {
               const startTime = exam.rooms[i].startTime
               const maxHour = Math.ceil(exam.rooms[i].hours)
               const finishTime = exam.rooms[i].startTime + maxHour
-              for (let i = startTime + 1; i <= finishTime; i++) {
+              for (let i = startTime + 1; i < finishTime; i++) {
                 newSchedules[i].isMergeRow = true
               }
               newScheduleItem.maxHour = maxHour
@@ -541,7 +545,7 @@ class RoomScheduleTable extends Component {
 
 class RoomScheduleTableItem extends Component {
   render () {
-    const hourSpan = !isNaN(this.props.scheduleData.maxHour) ? this.props.scheduleData.maxHour + 1 : 1
+    const hourSpan = !isNaN(this.props.scheduleData.maxHour) ? this.props.scheduleData.maxHour : 1
     return (
       <tr className="room-schedule-item" onClick={(e) => { this.props.selectItem(e, this.props.scheduleData) }}>
         <td className="is-ignore">{`${this.props.scheduleData.time}:00`}</td>
