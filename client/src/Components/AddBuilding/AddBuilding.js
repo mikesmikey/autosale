@@ -10,9 +10,10 @@ import '../../StyleSheets/addBuilding.css'
 
 const CServiceObj = new ClientService()
 class AddBuilding extends Component {
+  _isMounted = false;
   constructor (props) {
     super(props)
-
+    this._isMounted = true
     this.state = {
       selectedRow: null,
       selectedBuilding: null,
@@ -22,6 +23,11 @@ class AddBuilding extends Component {
     this.loadDataIntoTable = this.loadDataIntoTable.bind(this)
     this.setSelectedBuilding = this.setSelectedBuilding.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
+    this.loadBuildingByShortName = this.loadBuildingByShortName.bind(this)
+  }
+
+  componentWillUnmount () {
+    this._isMounted = false
   }
 
   componentDidMount () {
@@ -34,10 +40,41 @@ class AddBuilding extends Component {
     })
   }
 
-  loadBuildingByShortName (searchShortName) {
-    CServiceObj.searchBuilding(searchShortName).then((data) => {
-      console.log(data)
+  loadBuildingByShortName () {
+    console.log('finding')
+    CServiceObj.getAllBuilding().then((data) => {
+      this.searchBuildingByShortName(data)
     })
+  }
+
+  appendObjTo (thatArray, newObj) {
+    var frozenObj = Object.freeze(newObj)
+    return Object.freeze(thatArray.concat(frozenObj))
+  }
+
+  searchBuildingByShortName (data) {
+    if (this.state.searchShortName === '') {
+      this.setDataBuilding(data)
+    } else {
+      var myArray = []
+      var newArray = []
+      var txtLower = this.state.searchShortName.toLowerCase()
+      var checkFind = false
+      for (let i = 0; i < data.length; i++) {
+        var shortNameToLower = data[i].short_name.toLowerCase()
+        if (shortNameToLower.includes(txtLower)) {
+          newArray = this.appendObjTo(myArray, data[i])
+          myArray = newArray
+          checkFind = true
+        }
+      }
+      console.log(myArray)
+      if (checkFind === false) {
+        this.setDataBuilding(myArray)
+      } else {
+        this.setDataBuilding(myArray)
+      }
+    }
   }
 
   handleInputChange (e) {
@@ -51,11 +88,11 @@ class AddBuilding extends Component {
   }
 
   setDataBuilding (data) {
-    this.setState({
-      dataBuilding: data
-    })
-    var test = this.state.dataBuilding
-    console.log(test)
+    if (this._isMounted) {
+      this.setState({
+        dataBuilding: data
+      })
+    }
   }
 
   renderTableHead () {
@@ -109,7 +146,7 @@ class AddBuilding extends Component {
       <div className="subcontent-main-div home">
         <div className="box with-title is-round">
           <div className="box-title is-violet">
-                        จัดการตึก
+            จัดการตึก
           </div>
           <div className="box-content">
             <div className="columns">
@@ -147,11 +184,13 @@ class AddBuilding extends Component {
         </div>
         <Modal ref={instance => { this.manageBuildingPopUp = instance }} content={
           <BuildingPopUp closeBuildingPopUp={() => { this.manageBuildingPopUp.closeModal() }}
+            reloadTable={() => { this.loadBuilding() }}
           />}
         />
         <Modal ref={instance => { this.deleteBuildingPopUp = instance }} content={
           <DeleteBuildingPopUp closeDeleteBuildingPopUp={() => { this.deleteBuildingPopUp.closeModal() }}
             selectedBuilding={this.state.selectedBuilding}
+            reloadTable={() => { this.loadBuilding() }}
           />}
         />
       </div>
@@ -231,6 +270,7 @@ class BuildingPopUp extends Component {
         if (result) {
           alert('เพิ่มสำเร็จ')
           this.setBuldingInput('', '', '')
+          this.props.reloadTable()
         } else {
           alert('เพิ่มไม่สำเร็จ!')
         }
@@ -302,6 +342,7 @@ class DeleteBuildingPopUp extends Component {
       if (result) {
         alert('ลบสำเร็จ')
         this.props.closeDeleteBuildingPopUp()
+        this.props.reloadTable()
       } else {
         alert('ลบไม่สำเร็จ!')
       }
