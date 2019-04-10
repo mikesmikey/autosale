@@ -8,6 +8,8 @@ import ClientService from '../Utilities/ClientService'
 const CServiceObj = new ClientService()
 
 class AddRoomDetail extends Component {
+  _isMounted = false
+
   constructor (props) {
     super(props)
 
@@ -37,6 +39,7 @@ class AddRoomDetail extends Component {
   }
 
   componentDidMount () {
+    this._isMounted = true
     this.loadBuilding()
   }
 
@@ -47,6 +50,10 @@ class AddRoomDetail extends Component {
     if (prevStates.selectedSchedule !== this.state.selectedSchedule) {
       this.calculateMaxSelectHour()
     }
+  }
+
+  componentWillUnmount () {
+    this._isMounted = false
   }
 
   handleInputChange (e) {
@@ -156,7 +163,6 @@ class AddRoomDetail extends Component {
     this.setState({
       selectedSchedule: schedule
     })
-    console.log(schedule)
   }
 
   calculateMaxSelectHour () {
