@@ -55,7 +55,6 @@ class WebDAO {
             })
           } else { client.close(); return resolve(false) }
         })
-        client.close()
       })
     })
   }
