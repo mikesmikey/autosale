@@ -99,7 +99,7 @@ class AddSubjectPopup extends Component {
             valid = false;
         }
 
-        //done 
+        //done
         if (valid) {
             var subjectJson = {
                 subjectId: this.state.subjectId,

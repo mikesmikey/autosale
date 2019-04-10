@@ -109,7 +109,7 @@ class ScoreTable extends Component {
               el.value = this.state.subjectNameArray[j].courses[l].school_year
               el.textContent = this.state.subjectNameArray[j].courses[l].school_year
 
-              if (this.YearAll.length == 0) {
+              if (this.YearAll.length === 0) {
                 this.props.setSelectedYear(this.state.subjectNameArray[j].courses[l].school_year)
               }
 

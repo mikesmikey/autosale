@@ -167,7 +167,15 @@ class ClientService {
         })
     })
   }
-
+  searchAllSubjectBySubjectId(subjname) {
+    return new Promise((resolve, reject) => {
+      var url = `/subjects/${subjname}`
+      axios.get(url)
+        .then((result) => {
+          resolve(result.data)
+        })
+    })
+  }
   // ==========[Student Service]=================
 
   addManyStudents (users) {

@@ -19,6 +19,8 @@ import YearAndTermManage from '../YearAndTermManage/YearAndTermManage'
 import AddBuilding from '../AddBuilding/AddBuilding'
 import AddSubject from '../AddSubject/AddSubject'
 import CourseManage from '../CourseManage/courseManage'
+import AddCourse from '../CourseManage/AddCourse'
+
 
 import '../../StyleSheets/mainScreen.css'
 import '../../StyleSheets/pageHelper.css'
@@ -63,6 +65,9 @@ class MainScreen extends Component {
           } />
           <Route path="/course_manage" render={(props) =>
             <CourseManage />
+          } />
+           <Route path="/add_course" render={(props) =>
+            <AddCourse />
           } />
         </div>
       </div>

@@ -129,6 +129,16 @@ app.get('/subjects', (req, res) => {
   })
 })
 
+app.get('/subjects/:name', (req, res) => {
+  WebDAOObj.getAllSubjectBySubjectId(req.params.name).then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
 app.post('/subject/add', (req, res) => {
   WebDAOObj.insertSubject(req.body.subjectData).then((pass) => {
     res.send(pass)
