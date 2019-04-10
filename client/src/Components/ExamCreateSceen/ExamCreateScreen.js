@@ -24,6 +24,7 @@ class ExamCreateScreen extends Component {
       subjects: [],
       exams: [],
       searchInput: '',
+      selectedExam: null,
       isLoading: false
     }
 
@@ -32,20 +33,19 @@ class ExamCreateScreen extends Component {
     this.handleRadioInput = this.handleRadioInput.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
     this.searchButtonHandle = this.searchButtonHandle.bind(this)
+    this.setSelectedExam = this.setSelectedExam.bind(this)
   }
 
   componentDidMount () {
     this.loadAllExam()
   }
 
-  componentWillUnmount () {
-    this._isMounted = false
+  componentDidUpdate () {
+    // console.log('update')
   }
 
-  componentDidUpdate (prevProps, prevStates) {
-    if (prevStates.examTypeRadioValue !== this.state.examTypeRadioValue) {
-
-    }
+  componentWillUnmount () {
+    this._isMounted = false
   }
 
   handleInputChange (e) {
@@ -67,6 +67,16 @@ class ExamCreateScreen extends Component {
     })
 
     this.loadAllExam()
+  }
+
+  setSelectedExam (exam) {
+    this.setState({
+      selectedExam: exam
+    })
+  }
+
+  sortExamBySubjectId (exam1, exam2) {
+    return exam1.subjectId - exam2.subjectId
   }
 
   loadAllExam (subjectId) {
@@ -98,11 +108,16 @@ class ExamCreateScreen extends Component {
             if (!isHasExam) {
               const noExamData = {
                 subjectId: element.subjectId,
-                subjectName: element.subjectName
+                subjectName: element.subjectName,
+                courseId: course.courseId,
+                category: this.state.examTypeRadioValue
               }
               const examobj = new Exam(noExamData)
               newexams.push(examobj)
             }
+
+            newexams.sort(this.sortExamBySubjectId)
+
             if (this._isMounted) {
               this.setState({
                 exams: newexams,
@@ -117,6 +132,64 @@ class ExamCreateScreen extends Component {
 
   searchButtonHandle () {
     this.loadAllExam(this.state.searchInput)
+  }
+
+  handleCreateExamButtonStyle () {
+    if (this.state.selectedExam && this.state.selectedExam.status !== 'noExamData') {
+      return 'disabled'
+    } else { return '' }
+  }
+
+  handleExamManageButtonStyle () {
+    if (this.state.selectedExam && this.state.selectedExam.status === 'noExamData') {
+      return 'disabled'
+    } else { return '' }
+  }
+
+  decideAddDataModal () {
+    const decideTable = {
+      'noRoomData': 'roomsManageModal',
+      'noExaminerData': 'examinersManageModal'
+    }
+
+    if (this.state.selectedExam) {
+      return decideTable[this.state.selectedExam.status]
+    }
+  }
+
+  handleDeleteExamButton () {
+    if (this.state.selectedExam) {
+      this.setState({
+        isLoading: true
+      })
+      CServiceObj.deleteExam(this.state.selectedExam._id).then((result) => {
+        const noExamData = {
+          subjectId: this.state.selectedExam.subjectId,
+          subjectName: this.state.selectedExam.subjectName,
+          courseId: this.state.selectedExam.courseId,
+          category: this.state.examTypeRadioValue
+        }
+        const examobj = new Exam(noExamData)
+        var newExamsArray = this.state.exams
+        newExamsArray[this.state.exams.indexOf(this.state.selectedExam)] = examobj
+        this.setState({
+          exams: newExamsArray,
+          isLoading: false
+        })
+        this.setSelectedExam(examobj)
+        alert('ลบการสอบสำเร็จ')
+      })
+    } else {
+      alert('กรุณาเลือกการสอบก่อนที่จะลบ')
+    }
+  }
+
+  handleAddDataButton () {
+    if (this.state.selectedExam) {
+      this.dataAddModal.showModal(this.decideAddDataModal())
+    } else {
+      alert('กรุณาเลือกการสอบก่อนที่จะเพิ่มข้อมูล')
+    }
   }
 
   render () {
@@ -158,16 +231,39 @@ class ExamCreateScreen extends Component {
               <ExamTable
                 subjects={this.state.subjects}
                 exams={this.state.exams}
+                setSelectedExam={this.setSelectedExam}
               />
             </div>
             <div className="exam-button-area">
-              <button className="button is-3 is-oros is-round" style={{ width: '130px' }} onClick={() => { this.dataAddModal.showModal('dateModal') }}>เพิ่มการสอบ</button>
-              <button className="button is-3 is-orange is-round" style={{ width: '130px' }} onClick={() => { this.dataAddModal.showModal('examinersManageModal') }}>เพิ่มข้อมูล</button>
-              <button className="button is-3 is-yentafo is-round" style={{ width: '130px' }}>ยกเลิกการสอบ</button>
+              <button
+                className={`button is-3 is-oros is-round ${this.handleCreateExamButtonStyle()}`}
+                style={{ width: '130px' }}
+                onClick={() => { this.dataAddModal.showModal('dateModal') }}
+              >
+                เพิ่มการสอบ
+              </button>
+              <button
+                className={`button is-3 is-orange is-round ${this.handleExamManageButtonStyle()}`}
+                style={{ width: '130px' }}
+                onClick={() => { this.handleAddDataButton() }}
+              >
+                เพิ่มข้อมูล
+              </button>
+              <button
+                className={`button is-3 is-yentafo is-round ${this.handleExamManageButtonStyle()}`}
+                style={{ width: '130px' }}
+                onClick={() => { this.handleDeleteExamButton() }}
+              >
+                ยกเลิกการสอบ
+              </button>
             </div>
           </div>
         </div>
-        <DataAddModal ref={instance => { this.dataAddModal = instance }}/>
+        <DataAddModal
+          ref={instance => { this.dataAddModal = instance }}
+          selectedExam={this.state.selectedExam}
+          setSelectedExam={this.setSelectedExam}
+        />
       </div>
     )
   }
