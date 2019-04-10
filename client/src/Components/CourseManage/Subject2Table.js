@@ -12,7 +12,7 @@ class Subject2Table extends Component {
         super(props)
         this.state = {
             data: [],
-            subjects: []    //store subject
+            subjects: []   //store subject
         }
 
         this.loadDataBySubjectId = this.loadDataBySubjectId.bind(this)
@@ -51,7 +51,7 @@ class Subject2Table extends Component {
 
     loadDataIntoTable () {
         var returnData = []
-        for (var i = 0; i < this.state.data.length; i++) {
+        for (var i = 0; i < this.state.data.length - 1; i++) {
           returnData[i] = <SubjectTableItem
             key={i}
             // selectItem={(e) => { this.selectItem(e) }}
@@ -67,7 +67,7 @@ class Subject2Table extends Component {
 
     render() {
         return (
-            <table className="user-table" id="userTable" >
+            <table className="user-table" id="userTable">
                 <thead>
                     {this.renderTableHead()}
                 </thead>

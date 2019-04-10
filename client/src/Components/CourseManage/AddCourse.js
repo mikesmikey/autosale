@@ -1,33 +1,63 @@
-import React, { Component } from 'react'
+/* eslint-disable no-unused-vars */
+import React, { Component } from 'react';
 import ClientService from '../Utilities/ClientService'
-import Subject2Table from '../CourseManage/Subject2Table'
+
+// Components
+import '../../StyleSheets/userManage.css'
 import '../../StyleSheets/addNewSubject.css'
 import '../../StyleSheets/addCourse.css'
+import Subject2Table from './Subject2Table'
 
 const CServiceObj = new ClientService()
 class AddCourse extends Component {
-
     constructor(props) {
         super(props)
         this.state = {
+            studentNum: '',
+            groupNum: '',
+            selectSubId: '',
             facultyIndex: 1,
             branchIndex: 1,
-            selectSubId: '',
-            faculties: []
+            faculties: [],
+            subjects: [],
+            hasFound: true,
+            currentYandT: []
         }
         this.handleSearchButton = this.handleSearchButton.bind(this)
         this.handleInputChange = this.handleInputChange.bind(this)
-        this.handleSearchButton = this.handleSearchButton.bind(this)
+        this.validateData = this.validateData.bind(this)
+
     }
     _isMounted = false
 
     componentDidMount() {
         this._isMounted = true
         this.loadFacultyData()
+        this.loadYearAndTerm()
+        this.loadAllSubject()
     }
 
     componentWillUnmount() {
         this._isMounted = false
+    }
+
+    loadYearAndTerm() {
+        CServiceObj.getAllYearAndTerm().then((result) => {
+            if (this._isMounted) {
+                this.setState({
+                    currentYandT: result
+                })
+            }
+        })
+    }
+    loadAllSubject() {
+        CServiceObj.getAllSubject().then((result) => {
+            if (this._isMounted) {
+                this.setState({
+                    subjects: result
+                })
+            }
+        })
     }
 
     loadFacultyData() {
@@ -38,6 +68,37 @@ class AddCourse extends Component {
                 })
             }
         })
+    }
+
+    handleSearchButton() {
+        this.subTable.loadDataBySubjectId(this.state.selectSubId)
+        CServiceObj.searchAllSubjectBySubjectId(this.state.selectSubId).then((result) => {
+            if (this._isMounted) {
+                if (result.length === 2) {
+                    this.setState({ hasFound: result[1].found })
+                }
+                else {
+                    this.setState({ hasFound: false })
+                }
+            }
+        })
+    }
+
+    handleInputChange(e) {
+        const target = e.target
+        const name = target.name
+        const value = target.value
+
+        this.setState({
+            [name]: value
+        })
+
+    }
+
+    handleInputValidate = (e) => {
+        if (!(/[0-9:]+/g).test(e.key)) {
+            e.preventDefault();
+        }
     }
 
     renderFacultyComponent() {
@@ -56,39 +117,136 @@ class AddCourse extends Component {
         return returnArr
     }
 
-    handleInputChange(e) {
-        const target = e.target
-        const name = target.name
-        const value = target.value
+    validateData() {
+        var hasAssigned = false, hasNull = false, markThisSubjectId = 0
+        var currryt = this.state.currentYandT
+        var packY = 0, packT = 0, maxpacY = 0, maxpacT = 0
 
-        this.setState({
-            [name]: value
-        })
-    }
+        //find current year and term
+        for (var i = 0; i < currryt.length; i++) {
 
-    handleInputValidate = (e) => {
-        if (!(/[0-9:]+/g).test(e.key)) {
-            e.preventDefault();
+            if (i === 0) {
+                packY = currryt[i].currentStudyYear
+                packT = currryt[i].currentStudyTerm
+            }
+            else {
+                if (packY === currryt[i].currentStudyYear &&
+                    packT === currryt[i].currentStudyTerm ) {
+                }
+                else {
+                    packY = currryt[i].currentStudyYear
+                    packT = currryt[i].currentStudyTerm
+                }
+            }
+
+            if (packY >= maxpacY && packT > maxpacT) {
+                maxpacY = packY
+                maxpacT = packT
+            }
+
+        }
+        if (packY === currryt[currryt.length - 1].currentStudyYear &&
+            packT === currryt[currryt.length - 1].currentStudyTerm ) {
+            packY = currryt[currryt.length - 1].currentStudyYear
+            packT = currryt[currryt.length - 1].currentStudyTerm
+            if (packY >= maxpacY && packT > maxpacT) {
+                maxpacY = packY
+                maxpacT = packT
+            }
+        }
+
+        //check this course has not assigned this year and term
+        // console.log('current year =>', maxpacY, 'current term => ', maxpacT)
+        for (let i in this.state.subjects) {
+            var courses = this.state.subjects[i].courses
+            if (this.state.subjects[i].subjectId === this.state.selectSubId) {
+                markThisSubjectId = i
+                for (let j in courses) {
+                    if (courses[j].school_year === maxpacY &&
+                        courses[j].semester === maxpacT) {
+                        hasAssigned = true
+                        break
+                    }
+                }
+                break
+            }
+        }
+
+        //check null form
+        if (!hasAssigned) {
+            if (this.state.groupNum.length < 1 ||
+                this.state.studentNum.trim().length < 1 ||
+                !this.state.hasFound) {
+                hasNull = true
+            }
+        }
+
+        if (hasNull) {
+            alert('กรุณากรอกข้อมูลให้ครบ')
+        }
+        else if (hasAssigned) {
+            alert('รหัสวิชานี้ได้ถูกเพิ่มไปแล้ว')
+        }
+        else {
+            alert('ok')
+
+            //find max course id in this select subject
+            var maxCourseId = 0
+            for (let j in courses) {
+                if (this.state.subjects[markThisSubjectId].courses[j].courseId > maxCourseId) {
+                    maxCourseId = this.state.subjects[markThisSubjectId].courses[j].courseId
+                }
+            }
+
+            var courseData = {
+                courseId: parseInt( maxCourseId + 1 ),
+                max_groups: parseInt( this.state.groupNum, 10 ),
+                max_students: parseInt( this.state.studentNum, 10 ),
+                school_year: parseInt( maxpacY, 10 ),
+                semester: parseInt( maxpacT, 10 )
+            }
+
+
+            CServiceObj.addCourseToThisSubject(this.state.selectSubId, courseData).then((result) => {
+                if (result) {
+                    alert('เพิ่มสำเร็จ')
+                    this.clearData()
+                }
+                else {
+                    alert('เพิ่มไม่สำเร็จ')
+                }
+            })
         }
     }
 
-    handleSearchButton() {
-        this.subTable.loadDataBySubjectId(this.state.selectSubId, this.state.selectSubName)
+    clearData() {
+        this.setState({
+            studentNum: '',
+            groupNum: '',
+            selectSubId: '',
+            facultyIndex: 1,
+            branchIndex: 1,
+            hasFound: true
+        })
+        this.loadFacultyData()
+        this.loadYearAndTerm()
+        this.loadAllSubject()
+        this.renderFacultyComponent()
+        this.renderFacultyBranchComponent()
     }
-
     render() {
         return (
-            <div className="subcontent-main-div user-manage">
+            <div className="subcontent-main-div add-course">
                 <div className="add-subject-box box with-title is-round">
                     <div className="box-title is-violet">
                         เพิ่มการเรียน
                     </div>
                     <div className="box-content">
-                        <div className='columns'>
-                            <div className="column is-3">
+                        <div className="columns">
+                            <div className="column is-4">
                                 <div className="columns input-div">
                                     <div className="column is-2">
-                                        <label className="label">คณะ</label>
+                                        <label className="label">คณะ :</label>
                                     </div>
                                     <div className="column">
                                         <select
@@ -106,7 +264,7 @@ class AddCourse extends Component {
 
                                 <div className="columns input-div">
                                     <div className="column is-2">
-                                        <label className="label">สาขา</label>
+                                        <label className="label">สาขา : </label>
                                     </div>
                                     <div className="column">
                                         <select
@@ -121,20 +279,21 @@ class AddCourse extends Component {
                                         </select>
                                     </div>
                                 </div>
+
                                 <div className="columns input-div">
                                     <div className="column is-2">
-                                        <label className="label">รหัสวิชา</label>
+                                        <label className="label">รหัสวิชา : </label>
                                     </div>
                                     <div className="column">
                                         <input
-                                            className="input is-subjectId-width"
+                                            className="input is-subjectIdNew-width"
                                             type="text"
                                             id="userId"
-                                            name="subjectIdSearch"
+                                            name="selectSubId"
+                                            value={this.state.selectSubId}
                                             onChange={this.handleInputChange}
                                             onKeyPress={this.handleInputValidate.bind(this)} />
                                     </div>
-
                                     <div className="input-with-text">
                                         <button
                                             type="submit">
@@ -146,19 +305,79 @@ class AddCourse extends Component {
                                     </div>
                                 </div>
 
+                                <div className={`columns input-div ${!this.state.hasFound ? '' : 'is-hiding'}`}>
+                                    <div className="column is-2" style={{ color: 'red' }}>
+                                        <label className="label">ไม่พบรายการ</label>
+                                    </div>
+                                </div>
+
+
+                                <div className="columns input-div">
+                                    <Subject2Table
+                                        ref={instance => { this.subTable = instance }}
+                                        selectSubId={this.state.selectSubId}
+                                        faculties={this.state.faculties}
+                                    />
+                                </div>
+                            </div>
+                            <div className="column">
+                                <h2 style={{ color: "#814ab5" }} align="center">รายละเอียด</h2>
+                                <div style={{ borderStyle: "solid", borderColor: "#814ab5" }}>
+                                    <div className="columns input-div" style={{ marginTop: "40px" }}>
+                                        <div className="column is-2">
+                                            <label className="label">กลุ่มเรียนทั้งหมด :</label>
+                                        </div>
+                                        <div className="column is-4">
+                                            <select
+                                                className="select user-mange-select-box-popUp is-full-width"
+                                                type="text"
+                                                id="groupNum"
+                                                name="groupNum"
+                                                onChange={this.handleInputChange}
+                                                value={this.state.groupNum}
+                                            >
+                                                <option value="0"></option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div className="columns input-div" style={{ marginBottom: "40px" }}>
+                                        <div className="column is-2">
+                                            <label className="label">นักเรียนทั้งหมด : </label>
+                                        </div>
+                                        <div className="column is-4">
+                                            <input
+                                                className="input is-StudentNum-width"
+                                                type="text"
+                                                id="studentNumId"
+                                                name="studentNum"
+                                                value={this.state.studentNum}
+                                                onChange={this.handleInputChange}
+                                                maxLength={3}
+                                                onKeyPress={this.handleInputValidate.bind(this)} />
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div>
                                     <span className="adds-tab-is-15"></span>
                                 </div>
 
-                                <Subject2Table
-                                    ref={instance => { this.subTable = instance }}
-                                    selectSubId={this.state.selectSubId}
-                                    selectSubName={this.state.selectSubName}
-                                    faculties={this.state.faculties}
-                                />
-                            </div>
-                            <div className="column is-3">
-
+                                <div style={{ textAlign: "center" }}>
+                                    <button
+                                        className="button is-oros is-round"
+                                        onClick={this.validateData}>
+                                        ยืนยัน
+                                    </button>
+                                    <button
+                                        className="button is-yentafo is-round"
+                                        onClick={() => { this.clearData() }}>
+                                        ยกเลิก
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -129,8 +129,19 @@ app.get('/subjects', (req, res) => {
   })
 })
 
-app.get('/subjects/:name', (req, res) => {
-  WebDAOObj.getAllSubjectBySubjectId(req.params.name).then((data) => {
+app.get('/subjects/id_:subjid', (req, res) => {
+  WebDAOObj.getAllSubjectBySubjectId(req.params.subjid).then((data) => {
+    if (data != null) {
+      data.push({ found: true })
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.get('//subject/:subjname/courses/', (req, res) => {
+  WebDAOObj.getAllCourseByThisSubject(req.params.subjname).then((data) => {
     if (data != null) {
       res.json(data)
     } else {
@@ -141,6 +152,12 @@ app.get('/subjects/:name', (req, res) => {
 
 app.post('/subject/add', (req, res) => {
   WebDAOObj.insertSubject(req.body.subjectData).then((pass) => {
+    res.send(pass)
+  })
+})
+
+app.post('/subject/id_:subjid/course/add', (req, res) => {
+  WebDAOObj.insertCourseByThisSubject(req.params.subjid, req.body.courseData).then((pass) => {
     res.send(pass)
   })
 })
@@ -159,6 +176,16 @@ app.post('/token', (req, res) => {
 
 app.get('/yearAndTerm', (req, res) => {
   WebDAOObj.getYearAndTerm().then(data => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.get('/yearAndTerms', (req, res) => {
+  WebDAOObj.getAllYearAndTerm().then(data => {
     if (data != null) {
       res.json(data)
     } else {
