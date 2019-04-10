@@ -10,7 +10,6 @@ const ServiceObj = new ClientService()
 
 // eslint-disable-next-line react/require-render-return
 class DeleteRoomPopup extends Component {
-  
   _isMounted = false;
 
   constructor (props) {
@@ -25,21 +24,21 @@ class DeleteRoomPopup extends Component {
     }
 
     this._isMounted = true
-    
+
     this.currentFormObject = this.currentFormObject.bind(this)
   }
 
   currentFormObject () {
-    var newData =  []
+    var newData = []
     var roomArray = []
     newData.building_name = this.props.selectedBuilding.building_name
     newData.short_name = this.props.selectedBuilding.short_name
     newData.floors = this.props.selectedBuilding.floors
 
-    for(var i = 0;i < this.props.selectedBuilding.Rooms.length;i++){
-        if(this.props.selectedBuilding.Rooms[i].room != this.props.selectedRoom.room){
-            roomArray.push(this.props.selectedBuilding.Rooms[i])
-        }
+    for (var i = 0; i < this.props.selectedBuilding.Rooms.length; i++) {
+      if (this.props.selectedBuilding.Rooms[i].room !== this.props.selectedRoom.room) {
+        roomArray.push(this.props.selectedBuilding.Rooms[i])
+      }
     }
 
     newData.Rooms = roomArray
@@ -47,11 +46,11 @@ class DeleteRoomPopup extends Component {
   }
 
   deleteButtonHandle () {
-    //console.log(this.props.selectedBuilding)
-    //console.log(this.props.selectedRoom)
-    
+    // console.log(this.props.selectedBuilding)
+    // console.log(this.props.selectedRoom)
+
     const BuildingObj = ServiceObj.createBuilding(this.currentFormObject())
-    //console.log(BuildingObj)
+    // console.log(BuildingObj)
 
     this.props.setDataLoadingStatus(true)
 
@@ -66,19 +65,18 @@ class DeleteRoomPopup extends Component {
     })
   }
 
-
   render () {
-    return(
-<div className="box is-user-popUp" style={{ width: '500px' }}>
-    <div>
+    return (
+      <div className="box is-user-popUp" style={{ width: '500px' }}>
+        <div>
           <h1 align="center">ต้องการลบหรือไม่</h1>
-    <div style={{ textAlign: 'center' }}>
-                <button className="button is-oros is-round" onClick={() => { this.deleteButtonHandle() }}>ลบห้อง</button>
+          <div style={{ textAlign: 'center' }}>
+            <button className="button is-oros is-round" onClick={() => { this.deleteButtonHandle() }}>ลบห้อง</button>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <button className="button is-yentafo is-round" onClick={this.props.closeModal}>ยกเลิก</button>
-    </div>
-    </div>
-</div>
+            <button className="button is-yentafo is-round" onClick={this.props.closeModal}>ยกเลิก</button>
+          </div>
+        </div>
+      </div>
     )
   }
 }

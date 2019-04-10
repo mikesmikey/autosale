@@ -41,16 +41,13 @@ class ScoreTable extends Component {
     const parent = e.target.parentElement
     if (parent.classList.contains('score-table-item')) {
       if (!parent.classList.contains('is-active')) {
-        if (this.state.selectedRow != null) {
-          this.state.selectedRow.classList.remove('is-active')
-        }
         parent.classList.add('is-active')
         this.setState({
           selectedRow: parent
         })
         this.props.setSelectedScore(this.state.data[parent.getAttribute('index')])
         for (var j = 0; j < this.state.subjectNameArray.length; j++) {
-          if (this.state.subjectNameArray[j].subjectId == this.state.data[parent.getAttribute('index')].subjectId) {
+          if (this.state.subjectNameArray[j].subjectId === this.state.data[parent.getAttribute('index')].subjectId) {
             this.props.setSelectedSubject(this.state.subjectNameArray[j])
             break
           }
@@ -65,7 +62,7 @@ class ScoreTable extends Component {
       this.props.showManageModal()
       this.props.setSelectedScore(this.state.data[parent.getAttribute('index')])
       for (var j = 0; j < this.state.subjectNameArray.length; j++) {
-        if (this.state.subjectNameArray[j].subjectId == this.state.data[parent.getAttribute('index')].subjectId) {
+        if (this.state.subjectNameArray[j].subjectId === this.state.data[parent.getAttribute('index')].subjectId) {
           this.props.setSelectedSubject(this.state.subjectNameArray[j])
           break
         }
@@ -100,31 +97,34 @@ class ScoreTable extends Component {
   loadDataIntoTable () {
     var returnData = []
     // this.loadDataBySubjectID(this.props.SearchInput, this.props.username)
-    // console.log(this.state.datata)
+    // console.log(this.state.data)
     var select = document.getElementById(this.props.idSelectedYear)
     for (var i = 0; i < this.state.data.length; i++) {
       for (var j = 0; j < this.state.subjectNameArray.length; j++) {
-        if (this.state.subjectNameArray[j].subjectId == this.state.data[i].subjectId) { // subjectId
+        if (this.state.subjectNameArray[j].subjectId === this.state.data[i].subjectId) { // subjectId
           for (var l = 0; l < this.state.subjectNameArray[j].courses.length; l++) {
-      
-            if (this.state.subjectNameArray[j].courses[l].courseId == this.state.data[i].courseId) { // addYearToSelect
+            if (this.state.subjectNameArray[j].courses[l].courseId === this.state.data[i].courseId) { // addYearToSelect
+              
               var el = document.createElement('option')
               el.value = this.state.subjectNameArray[j].courses[l].school_year
               el.textContent = this.state.subjectNameArray[j].courses[l].school_year
               let num = 0
+              if (this.YearAll.length === 0) {
+                this.props.setSelectedYear(this.state.subjectNameArray[j].courses[l].school_year)
+              }
               for (var z = 0; z < this.YearAll.length; z++) {
-                if (this.YearAll[z] != this.state.subjectNameArray[j].courses[l].school_year) {
+                if (this.YearAll[z] !== this.state.subjectNameArray[j].courses[l].school_year) {
                   num++
                 }
               }
-              if (num == this.YearAll.length) {
+              if (num === this.YearAll.length) {
                 select.appendChild(el)
                 this.YearAll.push(this.state.subjectNameArray[j].courses[l].school_year)
               }
             }
 
-            if (this.state.subjectNameArray[j].courses[l].school_year == this.props.selectedYear &&
-                      this.state.subjectNameArray[j].courses[l].courseId == this.state.data[i].courseId
+            if (this.state.subjectNameArray[j].courses[l].school_year === this.props.selectedYear &&
+                      this.state.subjectNameArray[j].courses[l].courseId === this.state.data[i].courseId
             ) {
               returnData[i] = <ScoreTableItem
                 key={i}
@@ -139,7 +139,7 @@ class ScoreTable extends Component {
               break
             }
           }
-          if (this.check == 1) {
+          if (this.check === 1) {
             this.check = 0
             break
           }

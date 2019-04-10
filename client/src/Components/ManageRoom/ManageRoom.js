@@ -10,7 +10,6 @@ import RoomPopUp from './RoomPopUp'
 import DeleteRoomPopup from './DeleteRoomPopup'
 
 class ManageRoom extends Component {
-  
   _isMounted = false;
 
   constructor (props) {
@@ -30,7 +29,7 @@ class ManageRoom extends Component {
     this.BuildingAll = []
 
     this._isMounted = true
-    
+
     this.handleSelectBuilding = this.handleSelectBuilding.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
     this.handleSearchButton = this.handleSearchButton.bind(this)
@@ -48,10 +47,10 @@ class ManageRoom extends Component {
   }
 
   handleSearchButton () {
-    this.roomTable.loadDataByRoomID(this.state.selectedBuildingname,this.state.searchInput)
+    this.roomTable.loadDataByRoomID(this.state.selectedBuildingname, this.state.searchInput)
   }
 
- handleSelectBuilding (e) {
+  handleSelectBuilding (e) {
     const target = e.target
     const name = target.options[target.selectedIndex].value
 
@@ -59,7 +58,7 @@ class ManageRoom extends Component {
       selectedBuildingname: name
     })
 
-    this.roomTable.loadDataByRoomID(name,this.state.searchInput)
+    this.roomTable.loadDataByRoomID(name, this.state.searchInput)
   }
 
   handleInputChange (e) {
@@ -89,7 +88,7 @@ class ManageRoom extends Component {
       buildingPopUp: data
     })
   }
-  
+
   setSelectedBuildingname (name) {
     this.setState({
       selectedBuildingname: name
@@ -129,7 +128,7 @@ class ManageRoom extends Component {
                     <label className="label">ตึก : </label>
                     <select className="exam-score-select-box"
                       id="BuildingSelect"
-                      onChange={this.handleSelectBuilding} 
+                      onChange={this.handleSelectBuilding}
                     >
                     </select>
                   </div>
@@ -154,7 +153,7 @@ class ManageRoom extends Component {
             </div>
             <div className="table-div columns is-stay-top">
               <div className="column is-8 user-column-table">
-              <RoomTable
+                <RoomTable
                   ref={instance => { this.roomTable = instance }}
                   showDeleteModal={() => { this.deleteRoomPopupModal.showModal() }}
                   idSelectedBuilding={this.state.idSelectedBuilding}
@@ -172,47 +171,47 @@ class ManageRoom extends Component {
           </div>
         </div>
         <Modal ref={instance => { this.deleteRoomPopupModal = instance }} content={
-            <DeleteRoomPopup
-              ref={instance => { this.deleteRoomPopup = instance }}
-              closeModal={() => {
-                this.deleteRoomPopupModal.closeModal()
-              }}
-              showModal={() => {
-                this.deleteRoomPopupModal.showModal()
-              }}
-              deleteSelectedItem={() => { this.roomTable.deleteSelectedItem() }}
-              reloadTable={() => { this.roomTable.loadDataByRoomID(this.state.selectedBuildingname,this.state.searchInput) }}
-              selectedBuilding={this.state.SelectedBuilding}
-              selectedRoom={this.state.SelectedRoom}
-              setSelectedBuilding={this.setSelectedBuilding}
-              isDataLoading={this.state.isDataLoading}
-              setDataLoadingStatus={this.setDataLoadingStatus}
-            />
-          }
+          <DeleteRoomPopup
+            ref={instance => { this.deleteRoomPopup = instance }}
+            closeModal={() => {
+              this.deleteRoomPopupModal.closeModal()
+            }}
+            showModal={() => {
+              this.deleteRoomPopupModal.showModal()
+            }}
+            deleteSelectedItem={() => { this.roomTable.deleteSelectedItem() }}
+            reloadTable={() => { this.roomTable.loadDataByRoomID(this.state.selectedBuildingname, this.state.searchInput) }}
+            selectedBuilding={this.state.SelectedBuilding}
+            selectedRoom={this.state.SelectedRoom}
+            setSelectedBuilding={this.setSelectedBuilding}
+            isDataLoading={this.state.isDataLoading}
+            setDataLoadingStatus={this.setDataLoadingStatus}
           />
+        }
+        />
         <Modal ref={instance => { this.roomPopupModal = instance }} content={
-            <RoomPopUp
-              ref={instance => { this.roomPopup = instance }}
-              closeModal={() => {
-                this.roomPopupModal.closeModal()
-              }}
-              showModal={() => {
-                this.roomPopupModal.showModal()
-              }}
-              reloadTable={() => { this.roomTable.loadDataByRoomID(this.state.selectedBuildingname,this.state.searchInput) }}
-              dataMainUpDate={() => { this.roomTable.dataMainUpdate() }}
-              selectedBuilding={this.state.SelectedBuilding}
-              selectedRoom={this.state.SelectedRoom}
-              setSelectedBuilding={this.setSelectedBuilding}
-              isDataLoading={this.state.isDataLoading}
-              setDataLoadingStatus={this.setDataLoadingStatus}
-              buildingAll={this.BuildingAll}
-              dataMain={this.state.dataMain}
-              setBuildingPopUp={this.setBuildingPopUp}
-              buildingPopUp={this.state.buildingPopUp}
-            />
-          }
+          <RoomPopUp
+            ref={instance => { this.roomPopup = instance }}
+            closeModal={() => {
+              this.roomPopupModal.closeModal()
+            }}
+            showModal={() => {
+              this.roomPopupModal.showModal()
+            }}
+            reloadTable={() => { this.roomTable.loadDataByRoomID(this.state.selectedBuildingname, this.state.searchInput) }}
+            dataMainUpDate={() => { this.roomTable.dataMainUpdate() }}
+            selectedBuilding={this.state.SelectedBuilding}
+            selectedRoom={this.state.SelectedRoom}
+            setSelectedBuilding={this.setSelectedBuilding}
+            isDataLoading={this.state.isDataLoading}
+            setDataLoadingStatus={this.setDataLoadingStatus}
+            buildingAll={this.BuildingAll}
+            dataMain={this.state.dataMain}
+            setBuildingPopUp={this.setBuildingPopUp}
+            buildingPopUp={this.state.buildingPopUp}
           />
+        }
+        />
       </div>
 
     )
