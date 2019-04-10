@@ -10,7 +10,7 @@ import SubjectTable from './SubjectTable'
 
 const CServiceObj = new ClientService()
 class AddSubject extends Component {
-    2
+    
     constructor(props) {
         super(props)
         this.state = {
