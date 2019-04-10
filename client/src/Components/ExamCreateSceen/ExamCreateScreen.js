@@ -192,6 +192,14 @@ class ExamCreateScreen extends Component {
     }
   }
 
+  handleCreateExamButton () {
+    if (this.state.selectedExam) {
+      this.dataAddModal.showModal('dateModal')
+    } else {
+      alert('กรุณาเลือกการรายวิชาก่อนที่จะเพิ่มการสอบ')
+    }
+  }
+
   render () {
     return (
       <div className="subcontent-main-div exam-create-screen">
@@ -238,7 +246,7 @@ class ExamCreateScreen extends Component {
               <button
                 className={`button is-3 is-oros is-round ${this.handleCreateExamButtonStyle()}`}
                 style={{ width: '130px' }}
-                onClick={() => { this.dataAddModal.showModal('dateModal') }}
+                onClick={() => { this.handleCreateExamButton() }}
               >
                 เพิ่มการสอบ
               </button>
