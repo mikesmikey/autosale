@@ -457,7 +457,8 @@ class RoomScheduleTable extends Component {
         time: i,
         status: `ว่าง`,
         availableSeat: this.props.maxSeat,
-        maxSeat: this.props.maxSeat
+        maxSeat: this.props.maxSeat,
+        maxHour: 1
       }
     }
     return items
@@ -479,7 +480,10 @@ class RoomScheduleTable extends Component {
               for (let i = startTime + 1; i < finishTime; i++) {
                 newSchedules[i].isMergeRow = true
               }
-              newScheduleItem.maxHour = maxHour
+
+              if (newScheduleItem.maxHour < maxHour) {
+                newScheduleItem.maxHour = maxHour
+              }
 
               newScheduleItem.availableSeat -= exam.rooms[i].maxStudent
 
