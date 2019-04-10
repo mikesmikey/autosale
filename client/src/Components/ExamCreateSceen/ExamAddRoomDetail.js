@@ -173,9 +173,10 @@ class AddRoomDetail extends Component {
           maxSelectHour: selectedSchedule.maxHour
         })
       } else {
-        let count = 1
-        for (let i = selectedSchedule.time; i < 20; i++) {
+        let count = 0
+        for (let i = selectedSchedule.time; i <= 20; i++) {
           if (this.state.schedules[i].maxHour) {
+            console.log(this.state.schedules[i].maxHour)
             break
           }
           count++
@@ -457,8 +458,7 @@ class RoomScheduleTable extends Component {
         time: i,
         status: `ว่าง`,
         availableSeat: this.props.maxSeat,
-        maxSeat: this.props.maxSeat,
-        maxHour: 1
+        maxSeat: this.props.maxSeat
       }
     }
     return items
@@ -481,9 +481,15 @@ class RoomScheduleTable extends Component {
                 newSchedules[i].isMergeRow = true
               }
 
-              if (newScheduleItem.maxHour < maxHour) {
-                newScheduleItem.maxHour = maxHour
+              if (!newScheduleItem.maxHour) {
+                newScheduleItem.maxHour = maxHour // default span
+              } else {
+                if (newScheduleItem.maxHour < maxHour) {
+                  newScheduleItem.maxHour = maxHour
+                }
               }
+
+              console.log(newScheduleItem.maxHour)
 
               newScheduleItem.availableSeat -= exam.rooms[i].maxStudent
 
