@@ -111,7 +111,7 @@ class ExamScoreSceen extends Component {
                     <label className="label">ปีการศึกษา </label>
                     <select className="exam-score-select-box"
                       id="YearSelect"
-                      onChange={this.handleSelectYear} 
+                      onChange={this.handleSelectYear}
                     >
                     </select>
                   </div>

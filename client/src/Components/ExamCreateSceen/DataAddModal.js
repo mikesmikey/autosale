@@ -3,10 +3,11 @@ import React, { Component } from 'react'
 
 import Modal from '../Utilities/Modal'
 
-import ExamSelectDate from './ExamSelectDate'
+import ExamAddSimpleData from './ExamAddSimpleData'
 import ExamRoomsManage from './ExamRoomsManage'
 import ExamAddRoomDetail from './ExamAddRoomDetail'
 import ExaminersManage from './ExaminersManage'
+import ExamManage from './ExamManage'
 
 class DataAddModal extends Component {
   constructor (props) {
@@ -34,26 +35,46 @@ class DataAddModal extends Component {
 
   closeModal () {
     this.mainModal.closeModal()
+    this.setState({
+      currentModal: ''
+    })
+  }
+
+  componentWillUpdate () {
+    if (this.examManageModal) {
+      if (this.examManageModal.state.selectedExam) {
+        this.selectedExam = this.examManageModal.state.selectedExam
+      }
+    }
   }
 
   decideModal () {
     const decideTable = {
-      'dateModal': <ExamSelectDate
+      '': <div></div>,
+      'examManageModal': <ExamManage
+        ref={instance => { this.examManageModal = instance }}
         closeModal={this.closeModal}
-        selectedExam={this.props.selectedExam}
-        setSelectedExam={this.props.setSelectedExam}
+        selectedCourse={this.props.selectedCourse}
+        setSelectedCourse={this.props.setSelectedCourse}
+        showModal={this.showModal}
+      />,
+      'sampleDataModal': <ExamAddSimpleData
+        closeModal={this.closeModal}
+        selectedCourse={this.props.selectedCourse}
       />,
       'roomsManageModal': <ExamRoomsManage
         closeModal={this.closeModal}
         showModal={this.showModal}
-        selectedExam={this.props.selectedExam}
+        selectedExam={this.selectedExam}
       />,
       'addRoomDetailModal': <ExamAddRoomDetail
         closeModal={this.closeModal}
         showModal={(modal) => { this.showModal(modal) }}
-        selectedExam={this.props.selectedExam}
+        selectedExam={this.selectedExam}
       />,
-      'examinersManageModal': <ExaminersManage closeModal={this.closeModal}/>
+      'examinersManageModal': <ExaminersManage
+        closeModal={this.closeModal}
+      />
     }
 
     return decideTable[this.state.currentModal]

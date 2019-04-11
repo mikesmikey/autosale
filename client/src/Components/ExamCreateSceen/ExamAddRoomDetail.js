@@ -488,8 +488,6 @@ class RoomScheduleTable extends Component {
                 }
               }
 
-              console.log(newScheduleItem.maxHour)
-
               newScheduleItem.availableSeat -= exam.rooms[i].maxStudent
 
               newSchedules[exam.rooms[i].startTime] = newScheduleItem

@@ -24,7 +24,6 @@ class ExamRoomsModal extends Component {
     this.setState({
       seatOrderTypeRadio: value
     })
-    console.log(this.state.seatOrderTypeRadio)
   }
 
   handleInputChange (e) {
