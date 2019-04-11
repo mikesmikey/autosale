@@ -400,6 +400,13 @@ class WebDAO {
         db.collection('Subject').aggregate(
           [
             {
+              '$match': { '$and':
+              [
+                { 'courses.school_year': Number.parseInt(year) },
+                { 'courses.semester': Number.parseInt(semester) }
+              ] }
+            },
+            {
               '$project': {
                 '_id': 0,
                 'subjectId': 1,
@@ -604,7 +611,7 @@ class WebDAO {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
         if (err) { resolve(null) }
         const db = client.db(dbName)
-        db.collection('Exam').findOne({ 'subjectId': examData.subjectId, 'courseId': examData.courseId, 'category': examData.category }, (err, data) => {
+        db.collection('Exam').findOne({ 'subjectId': examData.subjectId, 'courseId': examData.courseId, 'date': examData.date }, (err, data) => {
           if (err) { throw err }
           if (!data) {
             db.collection('Exam').insertOne(examData, (err, result) => {
