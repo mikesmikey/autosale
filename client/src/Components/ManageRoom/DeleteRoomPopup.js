@@ -36,7 +36,7 @@ class DeleteRoomPopup extends Component {
     newData.floors = this.props.selectedBuilding.floors
 
     for (var i = 0; i < this.props.selectedBuilding.Rooms.length; i++) {
-      if (this.props.selectedBuilding.Rooms[i].room != this.props.selectedRoom.room) {
+      if (this.props.selectedBuilding.Rooms[i].room !== this.props.selectedRoom.room) {
         roomArray.push(this.props.selectedBuilding.Rooms[i])
       }
     }
@@ -50,7 +50,7 @@ class DeleteRoomPopup extends Component {
     // console.log(this.props.selectedRoom)
 
     const BuildingObj = ServiceObj.createBuilding(this.currentFormObject())
-    console.log(BuildingObj)
+    // console.log(BuildingObj)
 
     this.props.setDataLoadingStatus(true)
 

@@ -62,7 +62,6 @@ class UserTable extends Component {
     const parent = e.target.parentElement
     if (parent.classList.contains('user-table-item')) {
       this.props.showManageModal()
-      this.props.setSelectedUser(this.state.data[parent.getAttribute('index')])
     }
   }
 

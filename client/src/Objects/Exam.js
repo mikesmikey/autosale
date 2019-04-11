@@ -3,19 +3,20 @@ class Exam {
     this._id = form._id
     this.subjectId = form.subjectId
     this.subjectName = form.subjectName
-    this.category = form.category
+    this.examName = form.examName
     this.courseId = form.courseId
     this.creatorId = form.creatorId
     this.date = form.date
     this.startTime = form.startTime
     this.rooms = form.rooms
-    this.roomConfirm = form.roomConfirm
+    this.roomConfirm = form.roomConfirm || false
     this.examiners = form.examiners
-    this.examinerConfirm = form.examinerConfirm
+    this.examinerConfirm = form.examinerConfirm || false
     this.examSeatType = form.examSeatType
     this.orderSeat = form.orderSeat
     this.maxScore = form.maxScore
     this.scoreAnoucementDay = form.scoreAnoucementDay
+    this.examConfirm = form.examConfirm || false
 
     this.status = this.decideExamStatus()
   }

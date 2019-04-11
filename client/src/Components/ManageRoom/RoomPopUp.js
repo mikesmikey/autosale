@@ -58,15 +58,15 @@ class RoomPopUp extends Component {
   addButtonHandle () {
     ServiceObj.getAllBuildingByRoom(this.state.stringBuilding, this.room).then((usersData) => {
       this.repetitiveRoom = usersData.length
-      if (this.state.numberRow * this.state.numberStudent != 0
-        && this.numRoom != 0 &&
-        this.state.stringRoom != '' &&
-        this.state.stringRow != '' &&
-        this.state.stringStudent != '' &&
+      if (this.state.numberRow * this.state.numberStudent !== 0 &&
+        this.numRoom !== 0 &&
+        this.state.stringRoom !== '' &&
+        this.state.stringRow !== '' &&
+        this.state.stringStudent !== '' &&
         this.repetitiveRoom == 0
       ) {
         const BuildingObj = ServiceObj.createBuilding(this.currentFormObject())
-        //console.log(BuildingObj)
+        // console.log(BuildingObj)
 
         this.props.setDataLoadingStatus(true)
 
@@ -79,7 +79,7 @@ class RoomPopUp extends Component {
           }
           this.props.setDataLoadingStatus(false)
         })
-      }else {
+      } else {
         alert('เพิ่มไม่สำเร็จ!')
       }
     })
@@ -94,36 +94,36 @@ class RoomPopUp extends Component {
       [name]: value
     })
 
-    if (name == 'stringType') {
-      if (value.toString() == 'Lecture') {
+    if (name === 'stringType') {
+      if (value.toString() === 'Lecture') {
         this.type = 'C'
-      } else{
+      } else {
         this.type = 'L'
       }
     }
-    if (name == 'stringRoom') {
+    if (name === 'stringRoom') {
       this.numRoom = value.toString()
     }
-    if (name == 'stringFloor') {
+    if (name === 'stringFloor') {
       this.numFloor = parseInt(value)
       this.floor = value.toString()
     }
-    if (name == 'stringRow') {
+    if (name === 'stringRow') {
       this.setState({
         numberRow: value
       })
     }
-    if (name == 'stringStudent') {
+    if (name === 'stringStudent') {
       this.setState({
         numberStudent: value
       })
     }
 
-    if (this.numRoom == '') {
+    if (this.numRoom === '') {
       this.room = this.shortname + this.line + this.floor + this.type
     } else if (this.numRoom.length < 2) {
       this.room = this.shortname + this.line + this.floor + this.type + this.zero + this.numRoom
-    }else {
+    } else {
       this.room = this.shortname + this.line + this.floor + this.type + this.numRoom
     }
 
@@ -147,7 +147,7 @@ class RoomPopUp extends Component {
     this.setState({ stringBuilding: name })
 
     for (var i = 0; i < this.props.dataMain.length; i++) {
-      if (this.props.dataMain[i].building_name == name) {
+      if (this.props.dataMain[i].building_name === name) {
         this.shortname = this.props.dataMain[i].short_name
         break
       }
@@ -163,7 +163,6 @@ class RoomPopUp extends Component {
     document.getElementById('TypeOfRoom').selectedIndex = 0
     document.getElementById('roomSpan').innerHTML = this.room
 
-
     this.setFloorSelect()
   }
 
@@ -172,7 +171,7 @@ class RoomPopUp extends Component {
 
     // console.log(this.props.buildingPopUp)
 
-    if (this.state.NumberFloor != 0) {
+    if (this.state.NumberFloor !== 0) {
       document.getElementById('FloorSelectPopUp').options.length = 0
     }
 
@@ -193,16 +192,16 @@ class RoomPopUp extends Component {
       el.textContent = this.props.buildingAll[z]
       let num = 0
 
-      if (z == 0) {
+      if (z === 0) {
         this.setState({ stringBuilding: this.props.buildingAll[z] })
       }
       for (var i = 0; i < this.buildingSelectPopUp.length; i++) {
-        if (this.buildingSelectPopUp[i] != this.props.buildingAll[z]) {
+        if (this.buildingSelectPopUp[i] !== this.props.buildingAll[z]) {
           num++
         }
       }
 
-      if (num == this.buildingSelectPopUp.length) {
+      if (num === this.buildingSelectPopUp.length) {
         select.appendChild(el)
         this.buildingSelectPopUp.push(this.props.buildingAll[z])
         this.floorPopUp.push(this.props.dataMain[z].floors)
@@ -219,7 +218,7 @@ class RoomPopUp extends Component {
 
     newData.building_name = this.state.stringBuilding
     for (var i = 0; i < this.props.dataMain.length; i++) {
-      if (this.props.dataMain[i].building_name == this.state.stringBuilding) {
+      if (this.props.dataMain[i].building_name === this.state.stringBuilding) {
         newData.short_name = this.props.dataMain[i].short_name
         newData.floors = this.props.dataMain[i].floors
         for (var j = 0; j < this.props.dataMain[i].Rooms.length; j++) {
@@ -239,7 +238,6 @@ class RoomPopUp extends Component {
       }
     }
 
-
     newData.Rooms = roomArray
     // console.log(newData)
     return newData
@@ -253,7 +251,7 @@ class RoomPopUp extends Component {
     this.setFloorSelect()
 
     for (var k = 0; k < this.props.dataMain.length; k++) {
-      if (this.props.dataMain[k].building_name == this.buildingSelectPopUp[0]) {
+      if (this.props.dataMain[k].building_name === this.buildingSelectPopUp[0]) {
         this.shortname = this.props.dataMain[k].short_name
         break
       }

@@ -289,6 +289,7 @@ class ClientService {
   editRoom (newBuildingData) {
     return new Promise((resolve, reject) => {
       axios.post(`/building/edit`, { 'BuildingData': newBuildingData }).then((result) => {
+        resolve(result.data)
       })
     })
   }
@@ -342,6 +343,7 @@ class ClientService {
       })
     })
   }
+
   getAllDataCoures () {
     return new Promise((resolve, reject) => {
       this.getAllCouresCurrent().then((ArrayObj) => {
