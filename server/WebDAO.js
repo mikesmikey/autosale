@@ -1,5 +1,6 @@
 /* eslint-disable handle-callback-err */
 const mongoClient = require('mongodb').MongoClient
+const ObjectId = require('mongodb').ObjectID
 const url = 'mongodb+srv://jeff:jeff123@cluster0-mumpe.mongodb.net/test?retryWrites=true'
 // const url = 'mongodb://hanami:hanami02@ds131765.mlab.com:31765/ooad_kob'
 const dbName = 'ooad_kob'
@@ -54,7 +55,6 @@ class WebDAO {
             })
           } else { client.close(); return resolve(false) }
         })
-        client.close()
       })
     })
   }
@@ -109,7 +109,6 @@ class WebDAO {
             })
           } else { client.close(); return resolve(false) }
         })
-        client.close()
       })
     })
   }
@@ -333,7 +332,6 @@ class WebDAO {
             return resolve(false)
           }
         })
-        client.close()
       })
     })
   }
@@ -356,7 +354,6 @@ class WebDAO {
             return resolve(false)
           }
         })
-        client.close()
       })
     })
   }
@@ -468,6 +465,13 @@ class WebDAO {
         const db = client.db(dbName)
         db.collection('Subject').aggregate(
           [
+            {
+              '$match': { '$and':
+              [
+                { 'courses.school_year': Number.parseInt(year) },
+                { 'courses.semester': Number.parseInt(semester) }
+              ] }
+            },
             {
               '$project': {
                 '_id': 0,
@@ -664,10 +668,100 @@ class WebDAO {
         if (err) { resolve(null) }
 
         const db = client.db(dbName)
-        db.collection('Exam').find({ '$and': [{ 'subjectId': Number.parseInt(subjectId) }, { 'courseId': Number.parseInt(courseId) }] }).project({ '_id': 0 }).toArray((err, data) => {
+        db.collection('Exam').find({ '$and': [{ 'subjectId': subjectId }, { 'courseId': Number.parseInt(courseId) }] }).toArray((err, data) => {
           if (err) { throw err }
           client.close()
           return resolve(data)
+        })
+        client.close()
+      })
+    })
+  }
+
+  insertExam (examData) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+        const db = client.db(dbName)
+        db.collection('Exam').findOne({ 'subjectId': examData.subjectId, 'courseId': examData.courseId, 'date': examData.date }, (err, data) => {
+          if (err) { throw err }
+          if (!data) {
+            db.collection('Exam').insertOne(examData, (err, result) => {
+              if (err) { throw err }
+              client.close()
+              return resolve(result.insertedId)
+            })
+          } else { client.close(); return resolve(false) }
+        })
+      })
+    })
+  }
+
+  deleteExam (objectIdStr) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+
+        const db = client.db(dbName)
+        db.collection('Exam').findOneAndDelete({ '_id': new ObjectId(objectIdStr) }, (err, result) => {
+          if (err) { throw err }
+          client.close()
+          return resolve(true)
+        })
+        client.close()
+      })
+    })
+  }
+
+  getAllExamByDateAndRoom (date, roomId) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+
+        const db = client.db(dbName)
+
+        db.collection('Exam').aggregate(
+          [
+            {
+              '$match': { '$and':
+              [
+                { 'date': date },
+                { 'rooms.roomId': roomId }
+              ] }
+            },
+            {
+              '$addFields': {
+                'rooms': {
+                  '$filter': {
+                    'input': '$rooms',
+                    'as': 'room',
+                    'cond': { '$eq': [ '$$room.roomId', roomId ] }
+                  }
+                }
+              }
+            }
+          ]
+        ).toArray((err, data) => {
+          if (err) { throw err }
+          client.close()
+          return resolve(data)
+        })
+        client.close()
+      })
+    })
+  }
+
+  addRoomIntoExam (examId, roomData) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+        const db = client.db(dbName)
+        db.collection('Exam').findOneAndUpdate({ '_id': new ObjectId(examId) }, { '$push': { 'rooms': roomData } }, (err, result) => {
+          if (err) { throw err }
+          if (result) {
+            client.close()
+            return resolve(true)
+          } else { return resolve(false) }
         })
         client.close()
       })

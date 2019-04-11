@@ -34,7 +34,8 @@ class DeleteRoomPopup extends Component {
 
   deleteButtonHandle () {
     if (this.props.selectedCourse.courseId !== '' && this.props.selectedCourse.subjectNumber !== '') {
-      ServiceObj.deleteCourse(this.props.selectedCourse.subjectId, this.props.selectedCourse.courseId).then((data) => {
+      console.log(this.props.selectedCourse.courseId, this.props.selectedCourse.subjectNumber)
+      ServiceObj.deleteCourse(this.props.selectedCourse.subjectNumber, this.props.selectedCourse.courseId).then((data) => {
         if (data) {
           this.props.closeModal()
         } else {

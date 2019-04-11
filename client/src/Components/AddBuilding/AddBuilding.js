@@ -11,7 +11,7 @@ import '../../StyleSheets/addBuilding.css'
 const CServiceObj = new ClientService()
 class AddBuilding extends Component {
   _isMounted = false;
-  constructor(props) {
+  constructor (props) {
     super(props)
     this._isMounted = true
     this.state = {
@@ -26,59 +26,58 @@ class AddBuilding extends Component {
     this.loadBuildingByShortName = this.loadBuildingByShortName.bind(this)
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     this._isMounted = false
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.loadBuilding()
   }
 
-  loadBuilding() {
+  loadBuilding () {
     CServiceObj.getAllBuilding().then((data) => {
       this.setDataBuilding(data)
     })
   }
 
-  loadBuildingByShortName() {
-    console.log("finding")
+  loadBuildingByShortName () {
+    console.log('finding')
     CServiceObj.getAllBuilding().then((data) => {
       this.searchBuildingByShortName(data)
     })
   }
 
-  appendObjTo(thatArray, newObj) {
-    var frozenObj = Object.freeze(newObj);
-    return Object.freeze(thatArray.concat(frozenObj));
+  appendObjTo (thatArray, newObj) {
+    var frozenObj = Object.freeze(newObj)
+    return Object.freeze(thatArray.concat(frozenObj))
   }
 
-  searchBuildingByShortName(data) {
+  searchBuildingByShortName (data) {
     if (this.state.searchShortName === '') {
       this.setDataBuilding(data)
     } else {
       var myArray = []
       var newArray = []
-      var txtLower = this.state.searchShortName.toLowerCase();
+      var txtLower = this.state.searchShortName.toLowerCase()
       var checkFind = false
       for (let i = 0; i < data.length; i++) {
-        var shortNameToLower = data[i].short_name.toLowerCase();
+        var shortNameToLower = data[i].short_name.toLowerCase()
         if (shortNameToLower.includes(txtLower)) {
-          newArray = this.appendObjTo(myArray, data[i]);
+          newArray = this.appendObjTo(myArray, data[i])
           myArray = newArray
           checkFind = true
         }
       }
       console.log(myArray)
-      if(checkFind === false){
+      if (checkFind === false) {
         this.setDataBuilding(myArray)
-      }else{
+      } else {
         this.setDataBuilding(myArray)
       }
-
     }
   }
 
-  handleInputChange(e) {
+  handleInputChange (e) {
     const target = e.target
     const name = target.name
     const value = target.value
@@ -88,7 +87,7 @@ class AddBuilding extends Component {
     })
   }
 
-  setDataBuilding(data) {
+  setDataBuilding (data) {
     if (this._isMounted) {
       this.setState({
         dataBuilding: data
@@ -96,7 +95,7 @@ class AddBuilding extends Component {
     }
   }
 
-  renderTableHead() {
+  renderTableHead () {
     return (
       <tr className="is-header">
         <th>รหัสตึก</th>
@@ -106,7 +105,7 @@ class AddBuilding extends Component {
     )
   }
 
-  loadDataIntoTable() {
+  loadDataIntoTable () {
     var returnData = []
 
     for (var i = 0; i < this.state.dataBuilding.length; i++) {
@@ -120,13 +119,13 @@ class AddBuilding extends Component {
     return returnData
   }
 
-  setSelectedBuilding(building) {
+  setSelectedBuilding (building) {
     this.setState({
       selectedBuilding: building
     })
   }
 
-  selectItem(e) {
+  selectItem (e) {
     const parent = e.target.parentElement
     if (parent.classList.contains('user-table-item')) {
       if (!parent.classList.contains('is-active')) {
@@ -142,13 +141,13 @@ class AddBuilding extends Component {
     }
   }
 
-  render() {
+  render () {
     return (
       <div className="subcontent-main-div home">
         <div className="box with-title is-round">
           <div className="box-title is-violet">
             จัดการตึก
-            </div>
+          </div>
           <div className="box-content">
             <div className="columns">
               <div className="column is-pulled-left ">
@@ -200,12 +199,12 @@ class AddBuilding extends Component {
 }
 
 class BuildingTableItem extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.renderItem = this.renderItem.bind(this)
   }
 
-  renderItem() {
+  renderItem () {
     return (
       <tr className="user-table-item"
         onClick={(e) => { this.props.selectItem(e) }}
@@ -218,13 +217,13 @@ class BuildingTableItem extends Component {
     )
   }
 
-  render() {
+  render () {
     return (this.renderItem())
   }
 }
 
 class BuildingPopUp extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.state = {
@@ -236,7 +235,7 @@ class BuildingPopUp extends Component {
     this.addButtonPopUpHandle = this.addButtonPopUpHandle.bind(this)
   }
 
-  handleInputChange(e) {
+  handleInputChange (e) {
     const target = e.target
     const name = target.name
     const value = target.value
@@ -246,7 +245,7 @@ class BuildingPopUp extends Component {
     })
   }
 
-  setBuldingInput(name, shortname, floor) {
+  setBuldingInput (name, shortname, floor) {
     this.setState({
       inputNameBuilding: name,
       inputShortNameBuilding: shortname,
@@ -254,7 +253,7 @@ class BuildingPopUp extends Component {
     })
   }
 
-  addButtonPopUpHandle() {
+  addButtonPopUpHandle () {
     // eslint-disable-next-line radix
     var floorInt = parseInt(this.state.inputFloorsBuilding)
     if (floorInt <= 0 || isNaN(floorInt) || this.state.inputNameBuilding === '' || this.state.inputShortNameBuilding === '' || this.state.inputFloorsBuilding === '') {
@@ -279,7 +278,7 @@ class BuildingPopUp extends Component {
     }
   }
 
-  render() {
+  render () {
     return (
       <div className="box " style={{ width: '500px' }}>
         <div className="columns">
@@ -323,7 +322,7 @@ class BuildingPopUp extends Component {
 }
 
 class DeleteBuildingPopUp extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.state = {
@@ -331,14 +330,14 @@ class DeleteBuildingPopUp extends Component {
     }
     this.deleteButtonHandle = this.deleteButtonHandle.bind(this)
   }
-  setShortnameDelete() {
+  setShortnameDelete () {
     this.setState({
       shortnameDelete: this.props.selectedBuilding
     })
     this.deleteButtonHandle()
   }
 
-  deleteButtonHandle() {
+  deleteButtonHandle () {
     CServiceObj.deleteBuilding(this.props.selectedBuilding).then((result) => {
       if (result) {
         alert('ลบสำเร็จ')
@@ -350,7 +349,7 @@ class DeleteBuildingPopUp extends Component {
     })
   }
 
-  render() {
+  render () {
     return (
       <div className="box " style={{ width: '400px' }}>
         <div className="columns">

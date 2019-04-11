@@ -159,7 +159,7 @@
     display: none;
 }
 
-.input[type=text], .input[type=password]{
+.input[type=text], .input[type=password], .input[type=date]{
     padding: 5px;
 
     border: 1px solid gray;
@@ -283,6 +283,18 @@
 
 .table td {
     padding: 5px;
+    white-space: pre;
+}
+
+.table td.is-ignore {
+    background-color: #d3d3d3 !important; 
+    color: black !important;
+    cursor: default;
+}
+
+.table th.is-ignore {
+    background-color: #8966a8 !important; 
+    cursor: default;
 }
 
 .table tr:not(.is-header) {

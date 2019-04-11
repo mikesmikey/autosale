@@ -308,7 +308,17 @@ app.post('/building/remove/:short_name', (req, res) => {
   })
 })
 
-app.get('/exams/:subjectId/:courseId', (req, res) => {
+app.get('/building/:short_name', (req, res) => {
+  WebDAOObj.getBuildingByShortName(req.params.short_name).then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.get('/exams/subject=:subjectId/course=:courseId', (req, res) => {
   WebDAOObj.getAllExamBySubjectIdAndCourseId(req.params.subjectId, req.params.courseId).then((data) => {
     if (data != null) {
       res.json(data)
@@ -348,10 +358,40 @@ app.get('/subbjec/current', (req, res) => {
   })
 })
 
+app.post('/exam', (req, res) => {
+  WebDAOObj.insertExam(req.body.examData).then((pass) => {
+    res.send(pass)
+  })
+})
+
+app.delete('/exam/:objectid', (req, res) => {
+  WebDAOObj.deleteExam(req.params.objectid).then((pass) => {
+    res.send(pass)
+  })
+})
+
+app.get('/exams/date=:day/:month/:year/room=:roomId', (req, res) => {
+  const strDate = `${req.params.day}/${req.params.month}/${req.params.year}`
+  WebDAOObj.getAllExamByDateAndRoom(strDate, req.params.roomId).then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
 app.post('/course/delete/:a/:b', (req, res) => {
   WebDAOObj.deleteCourse(req.params.a, req.params.b).then((data) => {
     console.log(data)
     res.send(data)
+  })
+})
+app.post('/exam/room', (req, res) => {
+  WebDAOObj.addRoomIntoExam(req.body.examId, req.body.roomData).then((pass) => {
+    if (pass) {
+      res.send(pass)
+    }
   })
 })
 
