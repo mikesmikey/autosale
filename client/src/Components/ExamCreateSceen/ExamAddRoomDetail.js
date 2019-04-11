@@ -173,8 +173,8 @@ class AddRoomDetail extends Component {
           maxSelectHour: selectedSchedule.maxHour
         })
       } else {
-        let count = 1
-        for (let i = selectedSchedule.time; i < 20; i++) {
+        let count = 0
+        for (let i = selectedSchedule.time; i <= 20; i++) {
           if (this.state.schedules[i].maxHour) {
             break
           }
@@ -479,7 +479,16 @@ class RoomScheduleTable extends Component {
               for (let i = startTime + 1; i < finishTime; i++) {
                 newSchedules[i].isMergeRow = true
               }
-              newScheduleItem.maxHour = maxHour
+
+              if (!newScheduleItem.maxHour) {
+                newScheduleItem.maxHour = maxHour // default span
+              } else {
+                if (newScheduleItem.maxHour < maxHour) {
+                  newScheduleItem.maxHour = maxHour
+                }
+              }
+
+              console.log(newScheduleItem.maxHour)
 
               newScheduleItem.availableSeat -= exam.rooms[i].maxStudent
 
