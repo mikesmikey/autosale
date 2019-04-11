@@ -372,7 +372,7 @@ class ClientService {
       })
     })
   }
-  
+
   deleteExam (objectId) {
     return new Promise((resolve) => {
       axios.delete(`/exam/${objectId}`).then((result) => {

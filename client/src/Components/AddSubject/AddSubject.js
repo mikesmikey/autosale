@@ -14,9 +14,9 @@ class AddSubject extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            selectSubId: '',
-            selectSubName: '',
-            faculties: [],
+            subjectIdSearch: '',
+            subjectNameSearch: '',
+            faculties: []
         }
         this.handleSearchButton = this.handleSearchButton.bind(this)
         this.handleInputChange = this.handleInputChange.bind(this)
@@ -43,23 +43,36 @@ class AddSubject extends Component {
     }
 
     handleSearchButton() {
-        this.subTable.loadDataBySubjectIdOrSubjectName(this.state.selectSubId, this.state.selectSubName)
+        this.subTable.loadDataBySubjectIdOrSubjectName(this.state.subjectIdSearch, this.state.subjectNameSearch)
     }
 
-    handleInputChange = (evt) => {
-        if (evt.target.name === 'subjectIdSearch') {
-            this.setState({
-                selectSubId: evt.target.value
-            })
+    handleInputValidate = (e) => {
+
+        if (e.target.name === 'subjectIdSearch') {
+            if (!(/[0-9:]+/g).test(e.key)) {
+                e.preventDefault();
+            }
         }
-        else {
-            this.setState({
-                selectSubName: evt.target.value
-            })
+        else if (e.target.name === 'subjectNameSearch') {
+            if (!(/^[a-zA-Z\s]+$/g).test(e.key)) {
+                e.preventDefault()
+            }
         }
+    }
+
+    handleInputChange(e) {
+        const target = e.target
+        const name = target.name
+        const value = target.value
+
+        this.setState({
+            [name]: value
+        })
+
     }
 
     render() {
+        console.log(this.state)
         return (
             <div className="subcontent-main-div user-manage">
                 <div className="add-subject-box box with-title is-round">
@@ -76,7 +89,8 @@ class AddSubject extends Component {
                                         type="text"
                                         id="userId"
                                         name="subjectIdSearch"
-                                        onChange={this.handleInputChange} />
+                                        onChange={this.handleInputChange} 
+                                        onKeyPress={this.handleInputValidate.bind(this)} />
                                 </div>
                                 <div className="input-with-text">
                                     <label className="label">หรือ รายวิชา : </label>
@@ -84,7 +98,8 @@ class AddSubject extends Component {
                                         type="text"
                                         id="userName"
                                         name="subjectNameSearch"
-                                        onChange={this.handleInputChange} />
+                                        onChange={this.handleInputChange}
+                                        onKeyPress={this.handleInputValidate.bind(this)} />
                                 </div>
                                 <div className="input-with-text">
                                     <button
@@ -102,8 +117,8 @@ class AddSubject extends Component {
                         </div>
                         <SubjectTable
                             ref={instance => { this.subTable = instance }}
-                            selectSubId={this.state.selectSubId}
-                            selectSubName={this.state.selectSubName}
+                            selectSubId={this.state.subjectIdSearch}
+                            selectSubName={this.state.subjectNameSearch}
                             faculties={this.state.faculties}
                         />
                         <div>

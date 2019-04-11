@@ -199,7 +199,7 @@ class AddCourse extends Component {
             }
 
             var courseData = {
-                courseId: parseInt( maxCourseId + 1 ),
+                courseId: parseInt( maxCourseId + 1 , 10 ),
                 max_groups: parseInt( this.state.groupNum, 10 ),
                 max_students: parseInt( this.state.studentNum, 10 ),
                 school_year: parseInt( maxpacY, 10 ),
