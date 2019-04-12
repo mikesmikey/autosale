@@ -384,6 +384,16 @@ app.post('/examRoom/remove/:objIdRoom', (req, res) => {
   })
 })
 
+app.get('/examDetail/:objId', (req, res) => {
+  WebDAOObj.getExamByObjId(req.params.objId).then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
 app.listen(port, () => {
   console.log(`App listening on ${port}`)
 })

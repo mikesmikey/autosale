@@ -423,6 +423,14 @@ class ClientService {
       })
     })
   }
+
+  getExamByObjId (objId) {
+    return new Promise((resolve, reject) => {
+      axios.get(`/examDetail/${objId}`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
 }
 
 export default ClientService

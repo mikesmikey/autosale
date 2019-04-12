@@ -1,16 +1,22 @@
 /* eslint-disable no-unused-vars */
 import React, { Component } from 'react'
+import ClientService from '../Utilities/ClientService'
+import Modal from '../Utilities/Modal'
 
 import '../../StyleSheets/ExamRoomsModal.css'
 
+const CServiceObj = new ClientService()
 class ExamRoomsModal extends Component {
+  _isMounted = false;
   constructor (props) {
     super(props)
-
+    this._isMounted = true
     this.state = {
       seatOrderTypeRadio: 'shuffle',
       seatLineUpType: 'vertical',
-      selectedExamRoom: ''
+      selectedExamRoom: '',
+      dataExam: [],
+      selectedRow: null
     }
 
     this.seatOrderRadioHandle = this.seatOrderRadioHandle.bind(this)
@@ -19,26 +25,45 @@ class ExamRoomsModal extends Component {
     this.loadDataIntoTable = this.loadDataIntoTable.bind(this)
     this.handleBackButton = this.handleBackButton.bind(this)
     this.setSelectedExamRoom = this.setSelectedExamRoom.bind(this)
+    this.setDataExam = this.setDataExam.bind(this)
   }
 
   componentDidMount () {
-    var test
-    if (this.props.selectedExam.rooms === undefined) {
-      test = 'no'
-    } else {
-      test = 'yes'
+    this.setDataExam(this.props.selectedExam)
+    console.log(this.props.selectedExam.rooms)
+  }
+
+  componentWillUnmount () {
+    this._isMounted = false
+  }
+
+  reloadTable () {
+    CServiceObj.getExamByObjId(this.props.selectedExam._id).then((data) => {
+      this.setDataExam(data)
+    })
+  }
+
+  setDataExam (data) {
+    if (this._isMounted) {
+      this.setState({
+        dataExam: data
+      })
+      if (data.rooms.length !== 0) {
+        this.setState({
+          selectedExamRoom: data.rooms[0]._id
+        })
+      }
     }
-    console.log(test)
   }
 
   loadDataIntoTable () {
-    if (this.props.selectedExam.rooms === undefined) {
+    if (this.state.dataExam.rooms === undefined || this.state.dataExam.rooms.length === 0) {
 
     } else {
       var returnData = []
-      for (var i = 0; i < this.props.selectedExam.rooms.length; i++) {
-        var startTimeToString = this.props.selectedExam.rooms[i].startTime.toString()
-        var finishTime = this.props.selectedExam.rooms[i].startTime + this.props.selectedExam.rooms[i].hours
+      for (var i = 0; i < this.state.dataExam.rooms.length; i++) {
+        var startTimeToString = this.state.dataExam.rooms[i].startTime.toString()
+        var finishTime = this.state.dataExam.rooms[i].startTime + this.state.dataExam.rooms[i].hours
         var finishTimeToString = finishTime.toString()
         if (startTimeToString.length === 1 || startTimeToString.length === 2) {
           startTimeToString = startTimeToString + ':00'
@@ -64,7 +89,7 @@ class ExamRoomsModal extends Component {
           } else {
             finishTimeToString = finishTimeToString.charAt(0) + finishTimeToString.charAt(1) + ':' + finishTimeToString.charAt(3) + '0'
           }
-        } else if (startTimeToString.length === 5) {
+        } else if (finishTimeToString.length === 5) {
           finishTimeToString = finishTimeToString.charAt(0) + finishTimeToString.charAt(1) + ':' + finishTimeToString.charAt(3) + finishTimeToString.charAt(4)
         }
 
@@ -74,7 +99,7 @@ class ExamRoomsModal extends Component {
           key={i}
           selectItem={(e) => { this.selectItem(e) }}
           itemIndex={i}
-          itemData={this.props.selectedExam.rooms[i]}
+          itemData={this.state.dataExam.rooms[i]}
           time={setTime}
         />
       }
@@ -128,7 +153,6 @@ class ExamRoomsModal extends Component {
     this.setState({
       selectedExamRoom: roomId
     })
-    console.log(this.state.selectedExamRoom)
   }
 
   selectItem (e) {
@@ -142,7 +166,7 @@ class ExamRoomsModal extends Component {
         this.setState({
           selectedRow: parent
         })
-        this.setSelectedExamRoom(this.props.selectedExam.rooms[parent.getAttribute('index')]._id)
+        this.setSelectedExamRoom(this.state.dataExam.rooms[parent.getAttribute('index')]._id)
       }
     }
   }
@@ -185,10 +209,16 @@ class ExamRoomsModal extends Component {
           </div>
           <div className="exam-rooms-button-area">
             <button className="button is-3 is-oros is-round" style={{ width: '130px' }} onClick={() => { this.props.showModal('addRoomDetailModal') }}>เพิ่มห้อง</button>
-            <button className="button is-3 is-yentafo is-round" style={{ width: '130px' }} >ลบห้อง</button>
-            <button className="button is-3 is-yentafo is-round" style={{ width: '130px' }} onClick={this.handleBackButton}>ย้อนกลับ</button>
+            <button className="button is-3 is-yentafo is-round" style={{ width: '130px' }} onClick={() => { this.deleteExamRoomPopUp.showModal() }}>ลบห้อง</button>
+            <button className="button is-3 is-banana  is-round" style={{ width: '130px' }} onClick={this.handleBackButton}>ย้อนกลับ</button>
           </div>
         </div>
+        <Modal ref={instance => { this.deleteExamRoomPopUp = instance }} content={
+          <DeleteExamRoomPopUp closedeleteExamRoomPopUp={() => { this.deleteExamRoomPopUp.closeModal() }}
+            selectedExamRoom={this.state.selectedExamRoom}
+            reloadTable={() => { this.reloadTable() }}
+          />}
+        />
       </div>
     )
   }
@@ -218,6 +248,44 @@ class ExamRoomsTableItem extends Component {
 
   render () {
     return (this.renderItem())
+  }
+}
+
+class DeleteExamRoomPopUp extends Component {
+  constructor (props) {
+    super(props)
+
+    this.state = {
+      objIdRoom: null
+    }
+    this.deleteButtonHandle = this.deleteButtonHandle.bind(this)
+  }
+
+  deleteButtonHandle () {
+    CServiceObj.deleteExamRoom(this.props.selectedExamRoom).then((result) => {
+      if (result) {
+        alert('ลบสำเร็จ')
+        this.props.closedeleteExamRoomPopUp()
+        this.props.reloadTable()
+      } else {
+        alert('ลบไม่สำเร็จ!')
+      }
+    })
+  }
+
+  render () {
+    return (
+      <div className="box " style={{ width: '400px' }}>
+        <div className="columns">
+          <label className="label font-size-1" >ต้องการลบหรือไม่</label>
+        </div>
+        <br />
+        <div className="columns">
+          <button className="button is-oros is-round" onClick={this.deleteButtonHandle}>ตกลง</button>
+          <button className="button is-yentafo is-round" onClick={this.props.closeDeleteExamRoomPopUp}>ยกเลิก</button>
+        </div>
+      </div>
+    )
   }
 }
 
