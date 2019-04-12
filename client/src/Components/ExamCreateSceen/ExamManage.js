@@ -122,6 +122,7 @@ class ExamManageModal extends Component {
     this.setState({
       selectedExam: exam
     })
+    console.log(exam)
   }
 
   insertMemExam (exam) {
@@ -161,6 +162,14 @@ class ExamManageModal extends Component {
 
   handleExamManageBoxStyle () {
     return this.state.selectedExam ? '' : 'disabled'
+  }
+
+  handleExaminerManageModal () {
+    if (this.state.selectedExam) {
+      this.props.showModal('examinersManageModal')
+    } else {
+      alert('กรุณาเลือกการสอบก่อนที่จะจัดการ')
+    }
   }
 
   render () {
@@ -217,7 +226,7 @@ class ExamManageModal extends Component {
                 </button>
                 <button
                   className={`button is-3 is-oros is-round is-full-width ${this.handleExamManageButtonStyle()}`}
-                  onClick={() => { this.handleAddDataButton() }}
+                  onClick={() => { this.handleExaminerManageModal() }}
                 >
                 จัดการผู้คุมสอบ
                 </button>
