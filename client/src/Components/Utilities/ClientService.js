@@ -347,6 +347,7 @@ class ClientService {
   }
 
   insertRoomIntoExam (examId, roomData) {
+    console.log(roomData)
     return new Promise((resolve) => {
       axios.post(`/exam/room`, { 'examId': examId, 'roomData': roomData }).then((result) => {
         resolve(result.data)
