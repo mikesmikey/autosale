@@ -30,7 +30,6 @@ class ExamRoomsModal extends Component {
 
   componentDidMount () {
     this.setDataExam(this.props.selectedExam)
-    console.log(this.props.selectedExam.rooms)
   }
 
   componentWillUnmount () {
@@ -48,7 +47,7 @@ class ExamRoomsModal extends Component {
       this.setState({
         dataExam: data
       })
-      if (data.rooms.length !== 0) {
+      if (data.rooms) {
         this.setState({
           selectedExamRoom: data.rooms[0]._id
         })
