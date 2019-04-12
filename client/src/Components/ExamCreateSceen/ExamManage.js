@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { Component } from 'react'
 
-import Modal from '../Utilities/Modal'
 import ExamAddSimpleData from './ExamAddSimpleData'
 
 import ClientService from '../Utilities/ClientService'
@@ -139,6 +138,14 @@ class ExamManageModal extends Component {
     }
   }
 
+  handleManageSimpleDataModal () {
+    if (this.state.selectedExam) {
+      this.createExamModal.showModal('edit')
+    } else {
+      alert('กรุณาเลือกการสอบก่อนที่จะจัดการ')
+    }
+  }
+
   render () {
     return (
       <div className="exam-manage box with-title">
@@ -159,7 +166,7 @@ class ExamManageModal extends Component {
               <button
                 className={`button is-3 is-oros is-round`}
                 style={{ width: '130px' }}
-                onClick={() => { this.createExamModal.showModal() }}
+                onClick={() => { this.createExamModal.showModal('create') }}
               >
                 เพิ่มการสอบ
               </button>
@@ -181,7 +188,7 @@ class ExamManageModal extends Component {
                 <p>ผู้คุมสอบ : </p>
                 <button
                   className={`button is-3 is-oros is-round is-full-width ${this.handleExamManageButtonStyle()}`}
-                  onClick={() => { this.handleAddDataButton() }}
+                  onClick={() => { this.handleManageSimpleDataModal() }}
                 >
                 จัดการข้อมูลพื้นฐาน
                 </button>
@@ -215,13 +222,13 @@ class ExamManageModal extends Component {
             </div>
           </div>
         </div>
-        <Modal ref={instance => { this.createExamModal = instance }} content={
-          <ExamAddSimpleData
-            selectedCourse={this.props.selectedCourse}
-            closeModal={() => { this.createExamModal.closeModal() }}
-            insertMemExam={this.insertMemExam}
-          />
-        }/>
+        <ExamAddSimpleData
+          ref={instance => { this.createExamModal = instance }}
+          selectedCourse={this.props.selectedCourse}
+          selectedExam={this.state.selectedExam}
+          closeModal={() => { this.createExamModal.closeModal() }}
+          insertMemExam={this.insertMemExam}
+        />
       </div>
     )
   }

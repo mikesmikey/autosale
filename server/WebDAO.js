@@ -27,8 +27,8 @@ class WebDAO {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
         if (err) { resolve(null) }
+        if (!client) return resolve(null)
         const db = client.db(dbName)
-        if (!db) return resolve(false)
         db.collection('User').find({ 'typeOfUser': type }).count((err, data) => {
           if (err) { throw err }
           client.close()
@@ -163,7 +163,7 @@ class WebDAO {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
         if (err) { resolve(null) }
-
+        if (!client) return resolve(null)
         const db = client.db(dbName)
         db.collection('User').find({ 'typeOfUser': type }).project({ '_id': 0, 'password': 0 }).skip(Number.parseInt(startPos)).limit(Number.parseInt(limit)).toArray((err, data) => {
           if (err) { throw err }
@@ -478,7 +478,14 @@ class WebDAO {
     })
   }
 
-  getAllCourseByYearSemesterAndSubjectId (year, semester, subjectId) {
+  getAllCourseByYearSemesterAndSubjectId (year, semester, subjectId, startPos, limit) {
+    if (subjectId === 'none') {
+      subjectId = ''
+    }
+    if (limit <= 0) {
+      limit = Number.MAX_SAFE_INTEGER
+    }
+
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
         if (err) { resolve(null) }
@@ -514,7 +521,7 @@ class WebDAO {
               }
             }
           ]
-        ).toArray((err, data) => {
+        ).skip(Number.parseInt(startPos)).limit(Number.parseInt(limit)).toArray((err, data) => {
           if (err) { throw err }
           client.close()
           return resolve(data)
