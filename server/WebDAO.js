@@ -23,6 +23,37 @@ class WebDAO {
     })
   }
 
+  countUserInCollectionByType (type) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+        const db = client.db(dbName)
+        if (!db) return resolve(false)
+        db.collection('User').find({ 'typeOfUser': type }).count((err, data) => {
+          if (err) { throw err }
+          client.close()
+          return resolve(data)
+        })
+      })
+    })
+  }
+
+  countUserInCollectionByTypeAndUsername (type, username) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+
+        const db = client.db(dbName)
+        const regex = new RegExp(`${username}`)
+        db.collection('User').find({ 'username': regex, 'typeOfUser': type }).count((err, data) => {
+          if (err) { throw err }
+          client.close()
+          return resolve(data)
+        })
+      })
+    })
+  }
+
   getUserByUsername (username) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
@@ -34,7 +65,6 @@ class WebDAO {
           client.close()
           return resolve(data)
         })
-        client.close()
       })
     })
   }
@@ -55,6 +85,22 @@ class WebDAO {
             })
           } else { client.close(); return resolve(false) }
         })
+      })
+    })
+  }
+
+  insertManyUser (users) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+
+        const db = client.db(dbName)
+        db.collection('User').insertMany(users, (err, result) => {
+          if (err) { throw err }
+          client.close()
+          return resolve(true)
+        })
+        client.close()
       })
     })
   }
@@ -113,35 +159,33 @@ class WebDAO {
     })
   }
 
-  getAllUserByType (type) {
+  getAllUserByType (type, startPos, limit) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
         if (err) { resolve(null) }
 
         const db = client.db(dbName)
-        db.collection('User').find({ 'typeOfUser': type }).project({ '_id': 0, 'password': 0 }).toArray((err, data) => {
+        db.collection('User').find({ 'typeOfUser': type }).project({ '_id': 0, 'password': 0 }).skip(Number.parseInt(startPos)).limit(Number.parseInt(limit)).toArray((err, data) => {
           if (err) { throw err }
           client.close()
           return resolve(data)
         })
-        client.close()
       })
     })
   }
 
-  getAllUserByTypeAndUsername (type, username) {
+  getAllUserByTypeAndUsername (type, username, startPos, limit) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
         if (err) { resolve(null) }
 
         const db = client.db(dbName)
         const regex = new RegExp(`${username}`)
-        db.collection('User').find({ 'username': regex, 'typeOfUser': type }).project({ '_id': 0, 'password': 0 }).toArray((err, data) => {
+        db.collection('User').find({ 'username': regex, 'typeOfUser': type }).project({ '_id': 0, 'password': 0 }).skip(Number.parseInt(startPos)).limit(Number.parseInt(limit)).toArray((err, data) => {
           if (err) { throw err }
           client.close()
           return resolve(data)
         })
-        client.close()
       })
     })
   }

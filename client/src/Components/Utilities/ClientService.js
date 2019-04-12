@@ -81,17 +81,17 @@ class ClientService {
     if (userData.typeOfUser === 'staff') return new Staff(userData)
   }
 
-  getAllUserBySelectType (type) {
+  getAllUserBySelectType (type, startPos, limit) {
     return new Promise((resolve, reject) => {
-      axios.get(`/users/type/${type}`).then((result) => {
+      axios.get(`/users/type/${type}/${startPos || 0}/${limit || 0}`).then((result) => {
         resolve(result.data)
       })
     })
   }
 
-  searchAllUserByTypeAndUsername (type, userId) {
+  searchAllUserByTypeAndUsername (type, userId, startPos, limit) {
     return new Promise((resolve, reject) => {
-      var url = `/users/${userId.length === 0 ? `type/${type}` : `${type}/${userId}`}`
+      var url = `/users/${userId.length === 0 ? `type/${type}` : `${type}/${userId}`}/${startPos || 0}/${limit || 0}`
       axios.get(url).then((result) => {
         resolve(result.data)
       })
@@ -125,6 +125,15 @@ class ClientService {
   getUserByToken (token) {
     return new Promise((resolve, reject) => {
       axios.post(`/token`, { 'token': token }).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  countUserByTypeAndUsername (type, username) {
+    return new Promise((resolve, reject) => {
+      var url = `/users/count/${username.length === 0 ? `${type}` : `${type}/${username}`}`
+      axios.get(url).then((result) => {
         resolve(result.data)
       })
     })
@@ -399,6 +408,7 @@ class ClientService {
   }
 
   insertRoomIntoExam (examId, roomData) {
+    console.log(roomData)
     return new Promise((resolve) => {
       axios.post(`/exam/room`, { 'examId': examId, 'roomData': roomData }).then((result) => {
         resolve(result.data)
