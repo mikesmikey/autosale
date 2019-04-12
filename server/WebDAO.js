@@ -27,8 +27,8 @@ class WebDAO {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
         if (err) { resolve(null) }
+        if (!client) return resolve(null)
         const db = client.db(dbName)
-        if (!db) return resolve(false)
         db.collection('User').find({ 'typeOfUser': type }).count((err, data) => {
           if (err) { throw err }
           client.close()
