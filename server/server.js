@@ -358,6 +358,12 @@ app.post('/exam/room', (req, res) => {
   })
 })
 
+app.post('/examRoom/remove/:objIdRoom', (req, res) => {
+  WebDAOObj.deleteExamRoom(req.params.objIdRoom).then((pass) => {
+    res.send(pass)
+  })
+})
+
 app.listen(port, () => {
   console.log(`App listening on ${port}`)
 })
