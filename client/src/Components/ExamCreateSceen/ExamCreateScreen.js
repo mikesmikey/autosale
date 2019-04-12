@@ -76,7 +76,6 @@ class ExamCreateScreen extends Component {
     })
     this.calculateMaxPage(this.state.searchInput, 0, 0)
     CServiceObj.searchAllCurrentCourseBySubjectId(subjectId || '', startPos, limit).then((result) => {
-      console.log(result)
       this.setState({
         subjects: result,
         isLoading: false
