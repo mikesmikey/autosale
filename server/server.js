@@ -26,8 +26,8 @@ app.get('/users', (req, res) => {
   })
 })
 
-app.get('/users/type/:userType', (req, res) => {
-  WebDAOObj.getAllUserByType(req.params.userType).then((data) => {
+app.get('/users/count/:type', (req, res) => {
+  WebDAOObj.countUserInCollectionByType(req.params.type).then((data) => {
     if (data != null) {
       res.json(data)
     } else {
@@ -36,8 +36,28 @@ app.get('/users/type/:userType', (req, res) => {
   })
 })
 
-app.get('/users/:type/:username', (req, res) => {
-  WebDAOObj.getAllUserByTypeAndUsername(req.params.type, req.params.username).then((data) => {
+app.get('/users/count/:type/:username', (req, res) => {
+  WebDAOObj.countUserInCollectionByTypeAndUsername(req.params.type, req.params.username).then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.get('/users/type/:userType/:startPos/:limit', (req, res) => {
+  WebDAOObj.getAllUserByType(req.params.userType, req.params.startPos, req.params.limit).then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.get('/users/:type/:username/:startPos/:limit', (req, res) => {
+  WebDAOObj.getAllUserByTypeAndUsername(req.params.type, req.params.username, req.params.startPos, req.params.limit).then((data) => {
     if (data != null) {
       res.json(data)
     } else {

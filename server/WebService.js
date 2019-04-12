@@ -49,7 +49,7 @@ class WebService {
       const typeTable = ['student', 'professor', 'staff']
 
       var users = []
-      for (var i = 0; i < 100; i++) {
+      for (var i = 0; i < 500; i++) {
         var userData = {}
         userData.username = '59100' + i
         userData.password = Number.parseInt(Math.random() * 100000000).toString()
@@ -73,7 +73,7 @@ class WebService {
         }
         users[i] = userData
       }
-      DAO.insertManyUsers(users).then((result) => {
+      DAO.insertManyUser(users).then((result) => {
         if (result) {
           return resolve(true)
         }

@@ -116,19 +116,21 @@ class UserTable extends Component {
     return returnData
   }
 
-  loadDataByTypeAndUsername (typeInput, usernameInput) {
+  loadDataByTypeAndUsername (typeInput, usernameInput, startPos) {
     if (!this.props.isDataLoading) {
       this.props.setDataLoadingStatus(true)
       this.setState({
         data: []
       })
 
-      ServiceObj.searchAllUserByTypeAndUsername(typeInput, usernameInput).then((usersData) => {
+      ServiceObj.searchAllUserByTypeAndUsername(typeInput, usernameInput, startPos, 50).then((usersData) => {
         if (this._isMounted) {
           this.props.setDataLoadingStatus(false)
           this.setState({ data: usersData })
         }
       })
+    } else {
+      console.log('no')
     }
   }
 

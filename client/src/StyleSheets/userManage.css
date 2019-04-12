@@ -48,6 +48,7 @@ div.border-user-1{
 .user-table-div {
     overflow-y: scroll;
     height: 500px;
+    background-color: #f7f7f7;
 }
   
 .user-table {
@@ -123,4 +124,13 @@ div.border-user-1{
 
 .user-manage-box {
     min-height: 80vh;
+}
+
+.user-manage .paging-button-area {
+    text-align: center;
+    user-select: none;
+}
+
+.user-manage .paging-button-area * {
+    display: inline-block;
 }
