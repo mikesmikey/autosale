@@ -198,8 +198,8 @@ class ExamManageModal extends Component {
                 />
               </div>
             </div>
-            <div className="column is-not-grow manage-column">
-              <div className={`secondary-manage-box box is-round ${this.handleExamManageBoxStyle()}`}>
+            <div className={`column is-not-grow manage-column ${this.handleExamManageBoxStyle()}`}>
+              <div className={`secondary-manage-box box is-round`}>
                 <h3>รายละเอียดเบื้องต้น</h3>
                 <p>ห้องสอบ : </p>
                 <p>ผู้คุมสอบ : </p>
