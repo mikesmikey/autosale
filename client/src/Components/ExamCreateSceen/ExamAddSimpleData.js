@@ -18,7 +18,8 @@ class ExamAddSimpleData extends Component {
       date: new Date(Date.now()),
       examNameInput: '',
       examMaxScoreInput: '',
-      mode: ''
+      mode: '',
+      isLoading: false
     }
 
     this.dateHandle = this.dateHandle.bind(this)
@@ -108,6 +109,9 @@ class ExamAddSimpleData extends Component {
     }
 
     let newExam = new Exam(newExamData)
+    this.setState({
+      isLoading: true
+    })
     CServiceObj.createExam(newExam.getExamObjectdata()).then((result) => {
       if (result) {
         newExam._id = newExam
@@ -117,12 +121,34 @@ class ExamAddSimpleData extends Component {
       } else {
         alert('ไม่สามารถสร้างการสอบได้ มีข้อผิดพลาดเกิดขึ้น')
       }
+      this.setState({
+        isLoading: false
+      })
     })
   }
 
   editExam () {
     if (!this.validForm()) {
       alert('กรุณาระบุข้อมูลให้ถูกต้อง')
+    } else {
+      let newData = {
+        examName: this.state.examNameInput,
+        maxScore: this.state.examMaxScoreInput
+      }
+      this.setState({
+        isLoading: true
+      })
+      CServiceObj.updateExamData(this.props.selectedExam._id, newData).then((result) => {
+        if (result) {
+          const updatedExam = Object.assign(this.props.selectedExam, newData)
+          this.props.updateMemExam(updatedExam)
+          alert('อัพเดทสำเร็จ')
+          this.props.closeModal()
+        }
+        this.setState({
+          isLoading: false
+        })
+      })
     }
   }
 
@@ -135,7 +161,7 @@ class ExamAddSimpleData extends Component {
             <div className="box-title is-violet">
               <h3 className="label is-2">ข้อมูลการสอบพื้นฐาน</h3>
             </div>
-            <div className="box-content" style={{ textAlign: 'center' }}>
+            <div className={`box-content ${this.state.isLoading ? 'disabled' : ''}`} style={{ textAlign: 'center' }}>
               <div className="columns">
                 <div className="column is-2">
                   <h3>ชื่อการสอบ</h3>

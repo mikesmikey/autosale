@@ -395,6 +395,14 @@ app.get('/exam/:objId', (req, res) => {
   })
 })
 
+app.post('/exam/room/update', (req, res) => {
+  WebDAOObj.updateExamData(req.body.examId, req.body.examData).then((pass) => {
+    if (pass) {
+      res.send(pass)
+    }
+  })
+})
+
 app.listen(port, () => {
   console.log(`App listening on ${port}`)
 })

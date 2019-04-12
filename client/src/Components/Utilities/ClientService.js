@@ -371,6 +371,14 @@ class ClientService {
     })
   }
 
+  updateExamData (examId, examData) {
+    return new Promise((resolve) => {
+      axios.post(`/exam/room/update`, { 'examId': examId, 'examData': examData }).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
   // ==============[Course Service]====================
   deleteCourse (a, b) {
     return new Promise((resolve, reject) => {

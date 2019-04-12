@@ -58,7 +58,7 @@ class WebDAO {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
         if (err) { resolve(null) }
-
+        if (!client) return resolve(null)
         const db = client.db(dbName)
         db.collection('User').findOne({ 'username': username }, { '_id': 0, 'password': 0 }, (err, data) => {
           if (err) { throw err }
@@ -734,8 +734,27 @@ class WebDAO {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
         if (err) { resolve(null) }
+        if (!client) return resolve(null)
         const db = client.db(dbName)
         db.collection('Exam').findOneAndUpdate({ '_id': new ObjectId(examId) }, { '$push': { 'rooms': roomData } }, (err, result) => {
+          if (err) { throw err }
+          if (result) {
+            client.close()
+            return resolve(true)
+          } else { return resolve(false) }
+        })
+        client.close()
+      })
+    })
+  }
+
+  updateExamData (examId, newData) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+        if (!client) return resolve(null)
+        const db = client.db(dbName)
+        db.collection('Exam').findOneAndUpdate({ '_id': new ObjectId(examId) }, { '$set': newData }, (err, result) => {
           if (err) { throw err }
           if (result) {
             client.close()
