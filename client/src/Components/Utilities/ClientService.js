@@ -355,6 +355,22 @@ class ClientService {
     })
   }
 
+  deleteExamRoom (objIdRoom) {
+    return new Promise((resolve, reject) => {
+      axios.post(`/examRoom/remove/${objIdRoom}`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  getExamByObjId (objId) {
+    return new Promise((resolve, reject) => {
+      axios.get(`/exam/${objId}`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
   // ==============[Course Service]====================
   deleteCourse (a, b) {
     return new Promise((resolve, reject) => {

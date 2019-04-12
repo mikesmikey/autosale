@@ -1,20 +1,124 @@
 /* eslint-disable no-unused-vars */
 import React, { Component } from 'react'
+import ClientService from '../Utilities/ClientService'
+import Modal from '../Utilities/Modal'
 
 import '../../StyleSheets/ExamRoomsModal.css'
 
+const CServiceObj = new ClientService()
 class ExamRoomsModal extends Component {
+  _isMounted = false;
   constructor (props) {
     super(props)
-
+    this._isMounted = true
     this.state = {
       seatOrderTypeRadio: 'shuffle',
-      seatLineUpType: 'vertical'
+      seatLineUpType: 'vertical',
+      selectedExamRoom: '',
+      dataExam: [],
+      selectedRow: null
     }
 
     this.seatOrderRadioHandle = this.seatOrderRadioHandle.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
     this.handleSelectType = this.handleSelectType.bind(this)
+    this.loadDataIntoTable = this.loadDataIntoTable.bind(this)
+    this.handleBackButton = this.handleBackButton.bind(this)
+    this.setSelectedExamRoom = this.setSelectedExamRoom.bind(this)
+    this.setDataExam = this.setDataExam.bind(this)
+  }
+
+  componentDidMount () {
+    this.setDataExam(this.props.selectedExam)
+    console.log(this.props.selectedExam.rooms)
+  }
+
+  componentWillUnmount () {
+    this._isMounted = false
+  }
+
+  reloadTable () {
+    CServiceObj.getExamByObjId(this.props.selectedExam._id).then((data) => {
+      this.setDataExam(data)
+    })
+  }
+
+  setDataExam (data) {
+    if (this._isMounted) {
+      this.setState({
+        dataExam: data
+      })
+      if (data.rooms.length !== 0) {
+        this.setState({
+          selectedExamRoom: data.rooms[0]._id
+        })
+      }
+    }
+  }
+
+  loadDataIntoTable () {
+    if (this.state.dataExam.rooms === undefined || this.state.dataExam.rooms.length === 0) {
+
+    } else {
+      var returnData = []
+      for (var i = 0; i < this.state.dataExam.rooms.length; i++) {
+        var startTimeToString = this.state.dataExam.rooms[i].startTime.toString()
+        var finishTime = this.state.dataExam.rooms[i].startTime + this.state.dataExam.rooms[i].hours
+        var finishTimeToString = finishTime.toString()
+        if (startTimeToString.length === 1 || startTimeToString.length === 2) {
+          startTimeToString = startTimeToString + ':00'
+        } else if (startTimeToString.length === 3) {
+          startTimeToString = startTimeToString.charAt(0) + ':' + startTimeToString.charAt(2)
+        } else if (startTimeToString.length === 4) {
+          if (startTimeToString.charAt(1) === '.') {
+            startTimeToString = startTimeToString.charAt(0) + ':' + startTimeToString.charAt(2) + startTimeToString.charAt(3)
+          } else {
+            startTimeToString = startTimeToString.charAt(0) + startTimeToString.charAt(1) + ':' + startTimeToString.charAt(3) + '0'
+          }
+        } else if (startTimeToString.length === 5) {
+          startTimeToString = startTimeToString.charAt(0) + startTimeToString.charAt(1) + ':' + startTimeToString.charAt(3) + startTimeToString.charAt(4)
+        }
+
+        if (finishTimeToString.length === 1 || finishTimeToString.length === 2) {
+          finishTimeToString = finishTimeToString + ':00'
+        } else if (finishTimeToString.length === 3) {
+          finishTimeToString = finishTimeToString.charAt(0) + ':' + finishTimeToString.charAt(2)
+        } else if (finishTimeToString.length === 4) {
+          if (finishTimeToString.charAt(1) === '.') {
+            finishTimeToString = finishTimeToString.charAt(0) + ':' + finishTimeToString.charAt(2) + finishTimeToString.charAt(3)
+          } else {
+            finishTimeToString = finishTimeToString.charAt(0) + finishTimeToString.charAt(1) + ':' + finishTimeToString.charAt(3) + '0'
+          }
+        } else if (finishTimeToString.length === 5) {
+          finishTimeToString = finishTimeToString.charAt(0) + finishTimeToString.charAt(1) + ':' + finishTimeToString.charAt(3) + finishTimeToString.charAt(4)
+        }
+
+        var setTime = startTimeToString + '-' + finishTimeToString
+
+        returnData[i] = <ExamRoomsTableItem
+          key={i}
+          selectItem={(e) => { this.selectItem(e) }}
+          itemIndex={i}
+          itemData={this.state.dataExam.rooms[i]}
+          time={setTime}
+        />
+      }
+      return returnData
+    }
+  }
+
+  renderTableHead () {
+    return (
+      <tr className="is-header">
+        <th>เวลา</th>
+        <th>รหัสห้อง</th>
+        <th>จำนวนคน</th>
+      </tr>
+    )
+  }
+
+  handleBackButton () {
+    this.props.showModal('examManageModal')
   }
 
   seatOrderRadioHandle (e) {
@@ -45,6 +149,28 @@ class ExamRoomsModal extends Component {
     })
   }
 
+  setSelectedExamRoom (roomId) {
+    this.setState({
+      selectedExamRoom: roomId
+    })
+  }
+
+  selectItem (e) {
+    const parent = e.target.parentElement
+    if (parent.classList.contains('course-table-item')) {
+      if (!parent.classList.contains('is-active')) {
+        if (this.state.selectedRow != null) {
+          this.state.selectedRow.classList.remove('is-active')
+        }
+        parent.classList.add('is-active')
+        this.setState({
+          selectedRow: parent
+        })
+        this.setSelectedExamRoom(this.state.dataExam.rooms[parent.getAttribute('index')]._id)
+      }
+    }
+  }
+
   render () {
     return (
       <div className="exam-rooms-modal box with-title">
@@ -54,16 +180,23 @@ class ExamRoomsModal extends Component {
         </div>
         <div className="box-content">
           <div className="exam-rooms-table-area">
-            <ExamRoomsTable />
+            <table className="table exam-rooms-table">
+              <thead>
+                {this.renderTableHead()}
+              </thead>
+              <tbody>
+                {this.loadDataIntoTable()}
+              </tbody>
+            </table>
           </div>
           <div className="exam-rooms-manage-area">
             <p className="label is-3">การจัดที่นั่ง</p>
             <span className="input-set">
-              <input type="radio" name="shuffle" onChange={this.seatOrderRadioHandle} checked={this.state.seatOrderTypeRadio === 'shuffle'}/>
+              <input type="radio" name="shuffle" onChange={this.seatOrderRadioHandle} checked={this.state.seatOrderTypeRadio === 'shuffle'} />
               <p className="label is-3">แบบสุ่ม</p>
             </span>
             <span className="input-set">
-              <input type="radio" name="normal" onChange={this.seatOrderRadioHandle} checked={this.state.seatOrderTypeRadio === 'normal'}/>
+              <input type="radio" name="normal" onChange={this.seatOrderRadioHandle} checked={this.state.seatOrderTypeRadio === 'normal'} />
               <p className="label is-3">แบบเรียง</p>
             </span>
             <span className="input-set">
@@ -75,50 +208,83 @@ class ExamRoomsModal extends Component {
             </span>
           </div>
           <div className="exam-rooms-button-area">
-            <button className="button is-3 is-orange is-round" style={{ width: '130px' }} onClick={() => { this.props.showModal('addRoomDetailModal') }}>เพิ่มห้อง</button>
-            <button className="button is-3 is-oros is-round" style={{ width: '130px' }}>บันทึก</button>
+            <button className="button is-3 is-oros is-round" style={{ width: '130px' }} onClick={() => { this.props.showModal('addRoomDetailModal') }}>เพิ่มห้อง</button>
+            <button className="button is-3 is-yentafo is-round" style={{ width: '130px' }} onClick={() => { this.deleteExamRoomPopUp.showModal() }}>ลบห้อง</button>
+            <button className="button is-3 is-banana  is-round" style={{ width: '130px' }} onClick={this.handleBackButton}>ย้อนกลับ</button>
           </div>
         </div>
+        <Modal ref={instance => { this.deleteExamRoomPopUp = instance }} content={
+          <DeleteExamRoomPopUp closedeleteExamRoomPopUp={() => { this.deleteExamRoomPopUp.closeModal() }}
+            selectedExamRoom={this.state.selectedExamRoom}
+            reloadTable={() => { this.reloadTable() }}
+          />}
+        />
       </div>
     )
   }
 }
 
-class ExamRoomsTable extends Component {
-  renderTableItem () {
-    var items = []
-    for (var i = 0; i < 50; i++) {
-      items[i] = <ExamRoomsTableItem key={i}/>
+class ExamRoomsTableItem extends Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      setTime: ''
     }
-    return items
+    this.renderItem = this.renderItem.bind(this)
+  }
+
+  renderItem () {
+    return (
+      <tr className="course-table-item"
+        onClick={(e) => { this.props.selectItem(e) }}
+        index={this.props.itemIndex}
+      >
+        <td>{this.props.time}</td>
+        <td>{this.props.itemData.roomId}</td>
+        <td>{this.props.itemData.maxStudent}</td>
+      </tr>
+    )
   }
 
   render () {
-    return (
-      <table className="table exam-rooms-table">
-        <thead>
-          <tr className="is-header">
-            <th>เวลา</th>
-            <th>รหัสห้อง</th>
-            <th>จำนวนคน</th>
-          </tr>
-        </thead>
-        <tbody>
-          {this.renderTableItem()}
-        </tbody>
-      </table>
-    )
+    return (this.renderItem())
   }
 }
 
-class ExamRoomsTableItem extends Component {
+class DeleteExamRoomPopUp extends Component {
+  constructor (props) {
+    super(props)
+
+    this.state = {
+      objIdRoom: null
+    }
+    this.deleteButtonHandle = this.deleteButtonHandle.bind(this)
+  }
+
+  deleteButtonHandle () {
+    CServiceObj.deleteExamRoom(this.props.selectedExamRoom).then((result) => {
+      if (result) {
+        alert('ลบสำเร็จ')
+        this.props.closedeleteExamRoomPopUp()
+        this.props.reloadTable()
+      } else {
+        alert('ลบไม่สำเร็จ!')
+      }
+    })
+  }
+
   render () {
     return (
-      <tr>
-        <td>jeff</td>
-        <td>jeff</td>
-        <td>jeff</td>
-      </tr>
+      <div className="box " style={{ width: '400px' }}>
+        <div className="columns">
+          <label className="label font-size-1" >ต้องการลบหรือไม่</label>
+        </div>
+        <br />
+        <div className="columns">
+          <button className="button is-oros is-round" onClick={this.deleteButtonHandle}>ตกลง</button>
+          <button className="button is-yentafo is-round" onClick={this.props.closeDeleteExamRoomPopUp}>ยกเลิก</button>
+        </div>
+      </div>
     )
   }
 }
