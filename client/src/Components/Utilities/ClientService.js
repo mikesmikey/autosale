@@ -239,11 +239,11 @@ class ClientService {
     })
   }
 
-  searchAllCurrentCourseBySubjectId (subjectId) {
+  searchAllCurrentCourseBySubjectId (subjectId, startPos, limit) {
     return new Promise((resolve, reject) => {
       this.getYearAndTerm().then((timeData) => {
         if (!timeData) return null
-        axios.get(`/courses/${timeData.currentStudyYear}/${timeData.currentStudyTerm}/${subjectId}`).then((result) => {
+        axios.get(`/courses/year=${timeData.currentStudyYear}/semester=${timeData.currentStudyTerm}/subject=${subjectId || 'none'}/start=${startPos || 0}/limit=${limit || 0}`).then((result) => {
           resolve(result.data)
         })
       })
@@ -322,14 +322,6 @@ class ClientService {
     })
   }
 
-  // ==============[Course Service]====================
-  deleteCourse (a, b) {
-    return new Promise((resolve, reject) => {
-      axios.post(`/course/delete/${a}/${b}`).then((result) => {
-        resolve(result.data)
-      })
-    })
-  }
   createExam (examData) {
     return new Promise((resolve) => {
       axios.post(`/exam`, { 'examData': examData }).then((result) => {
@@ -338,16 +330,59 @@ class ClientService {
     })
   }
 
-  getNameteacherFormRegisterCourseBySubjectId (subjecId) {
-    return new Promise((resolve, reject) => {
-      axios.get(`/registerCourse/teachar/${subjecId}`).then((result) => {
+  deleteExam (objectId) {
+    return new Promise((resolve) => {
+      axios.delete(`/exam/${objectId}`).then((result) => {
         resolve(result.data)
       })
     })
   }
-  deleteExam (objectId) {
+
+  getAllExamOnCurrentDateAndRoom (date, roomId) {
+    return new Promise((resolve, reject) => {
+      axios.get(`/exams/date=${date}/room=${roomId}`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  insertRoomIntoExam (examId, roomData) {
+    console.log(roomData)
     return new Promise((resolve) => {
-      axios.delete(`/exam/${objectId}`).then((result) => {
+      axios.post(`/exam/room`, { 'examId': examId, 'roomData': roomData }).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  deleteExamRoom (objIdRoom) {
+    return new Promise((resolve, reject) => {
+      axios.post(`/examRoom/remove/${objIdRoom}`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  getExamByObjId (objId) {
+    return new Promise((resolve, reject) => {
+      axios.get(`/exam/${objId}`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  // ==============[Course Service]====================
+  deleteCourse (a, b) {
+    return new Promise((resolve, reject) => {
+      axios.post(`/course/delete/${a}/${b}`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  getNameteacherFormRegisterCourseBySubjectId (subjecId) {
+    return new Promise((resolve, reject) => {
+      axios.get(`/registerCourse/teachar/${subjecId}`).then((result) => {
         resolve(result.data)
       })
     })
@@ -395,38 +430,6 @@ class ClientService {
   getObjectCountRegisterCourseBySubjectId (subjecId) {
     return new Promise((resolve, reject) => {
       axios.get(`/registerCourse/${subjecId}`).then((result) => {
-        resolve(result.data)
-      })
-    })
-  }
-  getAllExamOnCurrentDateAndRoom (date, roomId) {
-    return new Promise((resolve, reject) => {
-      axios.get(`/exams/date=${date}/room=${roomId}`).then((result) => {
-        resolve(result.data)
-      })
-    })
-  }
-
-  insertRoomIntoExam (examId, roomData) {
-    console.log(roomData)
-    return new Promise((resolve) => {
-      axios.post(`/exam/room`, { 'examId': examId, 'roomData': roomData }).then((result) => {
-        resolve(result.data)
-      })
-    })
-  }
-
-  deleteExamRoom (objIdRoom) {
-    return new Promise((resolve, reject) => {
-      axios.post(`/examRoom/remove/${objIdRoom}`).then((result) => {
-        resolve(result.data)
-      })
-    })
-  }
-
-  getExamByObjId (objId) {
-    return new Promise((resolve, reject) => {
-      axios.get(`/examDetail/${objId}`).then((result) => {
         resolve(result.data)
       })
     })

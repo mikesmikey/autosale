@@ -183,7 +183,7 @@ class UserManage extends Component {
                 setDataLoadingStatus={this.setDataLoadingStatus}
               />
             </div>
-            <div className="paging-button-area">
+            <div className={`paging-button-area ${this.state.isDataLoading ? 'disabled' : ''}`}>
               <button
                 className={`button is-oros is-round ${this.handleDeceasePageStyle()}`}
                 style={{ width: '40px' }}

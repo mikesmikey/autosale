@@ -22,7 +22,9 @@ class ExamCreateScreen extends Component {
       exams: [],
       searchInput: '',
       selectedCourse: null,
-      isLoading: false
+      isLoading: false,
+      page: 1,
+      maxPage: 1
     }
 
     this._isMounted = true
@@ -34,11 +36,13 @@ class ExamCreateScreen extends Component {
   }
 
   componentDidMount () {
-    this.loadAllSubjectWithCurrentCourse()
+    this.loadAllSubjectWithCurrentCourse(this.state.searchInput, this.state.page === 1 ? 0 : (this.state.page - 1) * 50, 50)
   }
 
-  componentDidUpdate () {
-    // console.log('update')
+  componentDidUpdate (prevProps, prevStates) {
+    if (this.state.page !== prevStates.page) {
+      this.loadAllSubjectWithCurrentCourse(this.state.searchInput, this.state.page === 1 ? 0 : (this.state.page - 1) * 50, 50)
+    }
   }
 
   componentWillUnmount () {
@@ -65,12 +69,13 @@ class ExamCreateScreen extends Component {
     return exam1.subjectId - exam2.subjectId
   }
 
-  loadAllSubjectWithCurrentCourse (subjectId) {
+  loadAllSubjectWithCurrentCourse (subjectId, startPos, limit) {
     this.setState({
       isLoading: true,
       subjects: []
     })
-    CServiceObj.searchAllCurrentCourseBySubjectId(subjectId || '').then((result) => {
+    this.calculateMaxPage(this.state.searchInput, 0, 0)
+    CServiceObj.searchAllCurrentCourseBySubjectId(subjectId || '', startPos, limit).then((result) => {
       this.setState({
         subjects: result,
         isLoading: false
@@ -79,13 +84,50 @@ class ExamCreateScreen extends Component {
   }
 
   searchButtonHandle () {
-    this.loadAllSubjectWithCurrentCourse(this.state.searchInput)
+    this.loadAllSubjectWithCurrentCourse(this.state.searchInput, this.state.page === 1 ? 0 : (this.state.page - 1) * 50, 50)
+  }
+
+  calculateMaxPage (subjectId, startPos, limit) {
+    this.setState({
+    })
+    CServiceObj.searchAllCurrentCourseBySubjectId(subjectId || '', startPos, limit).then((result) => {
+      let max = Math.ceil(result.length / 50)
+      this.setState({
+        maxPage: max === 0 ? 1 : max
+      })
+    })
   }
 
   handleToggleExamManage () {
     if (this.state.selectedCourse) {
       this.dataAddModal.showModal('examManageModal')
     }
+  }
+
+  handleInceasePageStyle () {
+    if (this.state.page === this.state.maxPage) {
+      return 'disabled'
+    }
+  }
+
+  handleDeceasePageStyle () {
+    if (this.state.page === 1) {
+      return 'disabled'
+    }
+  }
+
+  inceasePage () {
+    const newPage = this.state.page === this.state.maxPage || this.state.page + 1
+    this.setState({
+      page: newPage
+    })
+  }
+
+  deceasePage () {
+    const newPage = this.state.page === 1 || this.state.page - 1
+    this.setState({
+      page: newPage
+    })
   }
 
   render () {
@@ -121,6 +163,25 @@ class ExamCreateScreen extends Component {
                 setSelectedCourse={this.setSelectedCourse}
                 handleToggleExamManage={this.handleToggleExamManage}
               />
+            </div>
+            <div className={`paging-button-area ${this.state.isDataLoading ? 'disabled' : ''}`}>
+              <button
+                className={`button is-oros is-round ${this.handleDeceasePageStyle()}`}
+                style={{ width: '40px' }}
+                onClick={() => { this.deceasePage() }}
+              >
+                <i className="fas fa-angle-left"></i>
+              </button>
+              <div style={{ width: '100px' }}>
+                <p>{this.state.page}/{this.state.maxPage}</p>
+              </div>
+              <button
+                className={`button is-oros is-round ${this.handleInceasePageStyle()}`}
+                style={{ width: '40px' }}
+                onClick={() => { this.inceasePage() }}
+              >
+                <i className="fas fa-angle-right"></i>
+              </button>
             </div>
           </div>
         </div>

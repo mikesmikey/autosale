@@ -58,10 +58,6 @@ class DataAddModal extends Component {
         setSelectedCourse={this.props.setSelectedCourse}
         showModal={this.showModal}
       />,
-      'sampleDataModal': <ExamAddSimpleData
-        closeModal={this.closeModal}
-        selectedCourse={this.props.selectedCourse}
-      />,
       'roomsManageModal': <ExamRoomsManage
         closeModal={this.closeModal}
         showModal={this.showModal}
