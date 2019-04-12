@@ -38,8 +38,10 @@ class ExamRoomsModal extends Component {
   }
 
   componentDidUpdate () {
-    if (this.state.seatLineUpType !== this.state.dataExam.seatLineUpType || this.state.seatOrderTypeRadio !== this.state.dataExam.seatOrderType) {
-      CServiceObj.updateExamSeatType(this.props.selectedExam._id, this.state.seatLineUpType, this.state.seatOrderTypeRadio)
+    if (this._isMounted) {
+      if (this.state.seatLineUpType !== this.state.dataExam.seatLineUpType || this.state.seatOrderTypeRadio !== this.state.dataExam.seatOrderType) {
+        CServiceObj.updateExamSeatType(this.props.selectedExam._id, this.state.seatLineUpType, this.state.seatOrderTypeRadio)
+      }
     }
   }
 
@@ -295,6 +297,7 @@ class DeleteExamRoomPopUp extends Component {
         this.props.reloadTable()
       } else {
         alert('ลบไม่สำเร็จ!')
+        this.props.closeDeleteExamRoomPopUp()
       }
     })
   }
