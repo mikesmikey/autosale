@@ -259,8 +259,9 @@ app.get('/courses/:year/:semester', (req, res) => {
   })
 })
 
-app.get('/courses/:year/:semester/:subjectId', (req, res) => {
-  WebDAOObj.getAllCourseByYearSemesterAndSubjectId(req.params.year, req.params.semester, req.params.subjectId).then(data => {
+app.get('/courses/year=:year/semester=:semester/subject=:subjectId/start=:startPos/limit=:limit', (req, res) => {
+  let params = req.params
+  WebDAOObj.getAllCourseByYearSemesterAndSubjectId(params.year, params.semester, params.subjectId, params.startPos, params.limit).then(data => {
     if (data != null) {
       res.json(data)
     } else {

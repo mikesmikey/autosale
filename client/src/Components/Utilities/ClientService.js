@@ -239,11 +239,11 @@ class ClientService {
     })
   }
 
-  searchAllCurrentCourseBySubjectId (subjectId) {
+  searchAllCurrentCourseBySubjectId (subjectId, startPos, limit) {
     return new Promise((resolve, reject) => {
       this.getYearAndTerm().then((timeData) => {
         if (!timeData) return null
-        axios.get(`/courses/${timeData.currentStudyYear}/${timeData.currentStudyTerm}/${subjectId}`).then((result) => {
+        axios.get(`/courses/year=${timeData.currentStudyYear}/semester=${timeData.currentStudyTerm}/subject=${subjectId || 'none'}/start=${startPos || 0}/limit=${limit || 0}`).then((result) => {
           resolve(result.data)
         })
       })
