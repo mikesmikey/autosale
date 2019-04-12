@@ -355,9 +355,9 @@ class ClientService {
     })
   }
 
-  deleteExamRoom (objIdRoom) {
+  deleteExamRoom (objId, roomId, startTime) {
     return new Promise((resolve, reject) => {
-      axios.post(`/examRoom/remove/${objIdRoom}`).then((result) => {
+      axios.post(`/examRoom/remove/${objId}/${roomId}/${startTime}`).then((result) => {
         resolve(result.data)
       })
     })

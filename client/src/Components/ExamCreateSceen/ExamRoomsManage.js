@@ -30,6 +30,7 @@ class ExamRoomsModal extends Component {
 
   componentDidMount () {
     this.setDataExam(this.props.selectedExam)
+    console.log(this.props.selectedExam._id)
   }
 
   componentWillUnmount () {
@@ -49,7 +50,7 @@ class ExamRoomsModal extends Component {
       })
       if (data.rooms) {
         this.setState({
-          selectedExamRoom: data.rooms[0]._id
+          selectedExamRoom: data.rooms[0]
         })
       }
     }
@@ -65,7 +66,11 @@ class ExamRoomsModal extends Component {
         var finishTime = this.state.dataExam.rooms[i].startTime + this.state.dataExam.rooms[i].hours
         var finishTimeToString = finishTime.toString()
         if (startTimeToString.length === 1 || startTimeToString.length === 2) {
-          startTimeToString = startTimeToString + ':00'
+          if (startTimeToString.length === 1) {
+            startTimeToString = '0' + startTimeToString + ':00'
+          } else {
+            startTimeToString = startTimeToString + ':00'
+          }
         } else if (startTimeToString.length === 3) {
           startTimeToString = startTimeToString.charAt(0) + ':' + startTimeToString.charAt(2)
         } else if (startTimeToString.length === 4) {
@@ -79,7 +84,11 @@ class ExamRoomsModal extends Component {
         }
 
         if (finishTimeToString.length === 1 || finishTimeToString.length === 2) {
-          finishTimeToString = finishTimeToString + ':00'
+          if (finishTimeToString.length === 1) {
+            finishTimeToString = '0' + finishTimeToString + ':00'
+          } else {
+            finishTimeToString = finishTimeToString + ':00'
+          }
         } else if (finishTimeToString.length === 3) {
           finishTimeToString = finishTimeToString.charAt(0) + ':' + finishTimeToString.charAt(2)
         } else if (finishTimeToString.length === 4) {
@@ -148,9 +157,9 @@ class ExamRoomsModal extends Component {
     })
   }
 
-  setSelectedExamRoom (roomId) {
+  setSelectedExamRoom (rooms) {
     this.setState({
-      selectedExamRoom: roomId
+      selectedExamRoom: rooms
     })
   }
 
@@ -165,7 +174,7 @@ class ExamRoomsModal extends Component {
         this.setState({
           selectedRow: parent
         })
-        this.setSelectedExamRoom(this.state.dataExam.rooms[parent.getAttribute('index')]._id)
+        this.setSelectedExamRoom(this.state.dataExam.rooms[parent.getAttribute('index')])
       }
     }
   }
@@ -215,6 +224,7 @@ class ExamRoomsModal extends Component {
         <Modal ref={instance => { this.deleteExamRoomPopUp = instance }} content={
           <DeleteExamRoomPopUp closedeleteExamRoomPopUp={() => { this.deleteExamRoomPopUp.closeModal() }}
             selectedExamRoom={this.state.selectedExamRoom}
+            exam={this.props.selectedExam}
             reloadTable={() => { this.reloadTable() }}
           />}
         />
@@ -255,13 +265,13 @@ class DeleteExamRoomPopUp extends Component {
     super(props)
 
     this.state = {
-      objIdRoom: null
     }
     this.deleteButtonHandle = this.deleteButtonHandle.bind(this)
   }
 
   deleteButtonHandle () {
-    CServiceObj.deleteExamRoom(this.props.selectedExamRoom).then((result) => {
+    console.log(this.props.exam._id, this.props.selectedExamRoom.roomId, this.props.selectedExamRoom.startTime)
+    CServiceObj.deleteExamRoom(this.props.exam._id, this.props.selectedExamRoom.roomId, this.props.selectedExamRoom.startTime).then((result) => {
       if (result) {
         alert('ลบสำเร็จ')
         this.props.closedeleteExamRoomPopUp()
