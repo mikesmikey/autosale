@@ -123,6 +123,19 @@ class ExamAddSimpleData extends Component {
   editExam () {
     if (!this.validForm()) {
       alert('กรุณาระบุข้อมูลให้ถูกต้อง')
+    } else {
+      let newData = {
+        examName: this.state.examNameInput,
+        maxScore: this.state.examMaxScoreInput
+      }
+      CServiceObj.updateExamData(this.props.selectedExam._id, newData).then((result) => {
+        if (result) {
+          const updatedExam = Object.assign(this.props.selectedExam, newData)
+          this.props.updateMemExam(updatedExam)
+          alert('อัพเดทสำเร็จ')
+          this.props.closeModal()
+        }
+      })
     }
   }
 

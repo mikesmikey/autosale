@@ -24,6 +24,7 @@ class ExamManageModal extends Component {
 
     this.setSelectedExam = this.setSelectedExam.bind(this)
     this.insertMemExam = this.insertMemExam.bind(this)
+    this.updateMemExam = this.updateMemExam.bind(this)
   }
 
   componentDidMount () {
@@ -130,6 +131,17 @@ class ExamManageModal extends Component {
     })
   }
 
+  updateMemExam (newExam) {
+    const originExam = this.state.exams.findIndex((exam) => {
+      return exam._id === newExam._id
+    })
+    let newExamArr = this.state.exams
+    newExamArr[originExam] = newExam
+    this.setState({
+      exams: newExamArr
+    })
+  }
+
   handleManageRoomModal () {
     if (this.state.selectedExam) {
       this.props.showModal('roomsManageModal')
@@ -228,6 +240,7 @@ class ExamManageModal extends Component {
           selectedExam={this.state.selectedExam}
           closeModal={() => { this.createExamModal.closeModal() }}
           insertMemExam={this.insertMemExam}
+          updateMemExam={this.updateMemExam}
         />
       </div>
     )

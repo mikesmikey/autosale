@@ -347,7 +347,6 @@ class ClientService {
   }
 
   insertRoomIntoExam (examId, roomData) {
-    console.log(roomData)
     return new Promise((resolve) => {
       axios.post(`/exam/room`, { 'examId': examId, 'roomData': roomData }).then((result) => {
         resolve(result.data)
@@ -366,6 +365,14 @@ class ClientService {
   getExamByObjId (objId) {
     return new Promise((resolve, reject) => {
       axios.get(`/exam/${objId}`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  updateExamData (examId, examData) {
+    return new Promise((resolve) => {
+      axios.post(`/exam/room/update`, { 'examId': examId, 'examData': examData }).then((result) => {
         resolve(result.data)
       })
     })
