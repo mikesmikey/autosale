@@ -23,13 +23,13 @@ class ClientService {
     return true
   }
 
-  loginByToken (logoutCallBack) {
+  loginByToken (loginCallBack) {
     return new Promise((resolve, reject) => {
       const token = this.getCurrentToken()
       if (token) {
         this.getUserByToken(token).then((result) => {
           if (result) {
-            this.login(logoutCallBack(true, result), false)
+            this.login(loginCallBack(true, result), false)
           }
           resolve(true)
         })
