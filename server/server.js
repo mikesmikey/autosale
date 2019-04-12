@@ -378,8 +378,8 @@ app.post('/exam/room', (req, res) => {
   })
 })
 
-app.post('/examRoom/remove/:objIdRoom', (req, res) => {
-  WebDAOObj.deleteExamRoom(req.params.objIdRoom).then((pass) => {
+app.post('/examRoom/remove/:objId/:roomId/:startTime', (req, res) => {
+  WebDAOObj.deleteExamRoom(req.params.objId, req.params.roomId, req.params.startTime).then((pass) => {
     res.send(pass)
   })
 })
