@@ -26,27 +26,44 @@ class ExamRoomsModal extends Component {
     this.handleBackButton = this.handleBackButton.bind(this)
     this.setSelectedExamRoom = this.setSelectedExamRoom.bind(this)
     this.setDataExam = this.setDataExam.bind(this)
+    this.checkSeat = this.checkSeat.bind(this)
   }
 
   componentDidMount () {
-    this.setDataExam(this.props.selectedExam)
-    console.log(this.props.selectedExam._id)
+    this.reloadTable()
   }
 
   componentWillUnmount () {
     this._isMounted = false
   }
 
+  componentDidUpdate () {
+    if (this.state.seatLineUpType !== this.state.dataExam.seatLineUpType || this.state.seatOrderTypeRadio !== this.state.dataExam.seatOrderType) {
+      CServiceObj.updateExamSeatType(this.props.selectedExam._id, this.state.seatLineUpType, this.state.seatOrderTypeRadio)
+    }
+  }
+
+  checkSeat (data) {
+    if (data.seatLineUpType === undefined || data.seatOrderType === undefined) {
+      CServiceObj.updateExamSeatType(this.props.selectedExam._id, this.state.seatLineUpType, this.state.seatOrderTypeRadio)
+      this.reloadTable()
+    } else {
+      this.setDataExam(data)
+    }
+  }
+
   reloadTable () {
     CServiceObj.getExamByObjId(this.props.selectedExam._id).then((data) => {
-      this.setDataExam(data)
+      this.checkSeat(data)
     })
   }
 
   setDataExam (data) {
     if (this._isMounted) {
       this.setState({
-        dataExam: data
+        dataExam: data,
+        seatLineUpType: data.seatLineUpType,
+        seatOrderTypeRadio: data.seatOrderType
       })
       if (data.rooms) {
         this.setState({
@@ -222,7 +239,7 @@ class ExamRoomsModal extends Component {
           </div>
         </div>
         <Modal ref={instance => { this.deleteExamRoomPopUp = instance }} content={
-          <DeleteExamRoomPopUp closedeleteExamRoomPopUp={() => { this.deleteExamRoomPopUp.closeModal() }}
+          <DeleteExamRoomPopUp closeDeleteExamRoomPopUp={() => { this.deleteExamRoomPopUp.closeModal() }}
             selectedExamRoom={this.state.selectedExamRoom}
             exam={this.props.selectedExam}
             reloadTable={() => { this.reloadTable() }}
@@ -274,7 +291,7 @@ class DeleteExamRoomPopUp extends Component {
     CServiceObj.deleteExamRoom(this.props.exam._id, this.props.selectedExamRoom.roomId, this.props.selectedExamRoom.startTime).then((result) => {
       if (result) {
         alert('ลบสำเร็จ')
-        this.props.closedeleteExamRoomPopUp()
+        this.props.closeDeleteExamRoomPopUp()
         this.props.reloadTable()
       } else {
         alert('ลบไม่สำเร็จ!')

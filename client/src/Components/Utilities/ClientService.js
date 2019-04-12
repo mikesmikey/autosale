@@ -442,6 +442,14 @@ class ClientService {
       })
     })
   }
+
+  updateExamSeatType (objId, seatLineUpType, seatOrderType) {
+    return new Promise((resolve) => {
+      axios.post(`/exam/seatType/update/${objId}/${seatLineUpType}/${seatOrderType}`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
 }
 
 export default ClientService

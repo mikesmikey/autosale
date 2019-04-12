@@ -403,6 +403,14 @@ app.post('/exam/room/update', (req, res) => {
   })
 })
 
+app.post('/exam/seatType/update/:objId/:seatLineUpType/:seatOrderType', (req, res) => {
+  WebDAOObj.updateExamSeatType(req.params.objId, req.params.seatLineUpType, req.params.seatOrderType).then((pass) => {
+    if (pass) {
+      res.send(pass)
+    }
+  })
+})
+
 app.listen(port, () => {
   console.log(`App listening on ${port}`)
 })
