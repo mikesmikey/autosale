@@ -378,6 +378,22 @@ app.post('/exam/room', (req, res) => {
   })
 })
 
+app.post('/examRoom/remove/:objIdRoom', (req, res) => {
+  WebDAOObj.deleteExamRoom(req.params.objIdRoom).then((pass) => {
+    res.send(pass)
+  })
+})
+
+app.get('/examDetail/:objId', (req, res) => {
+  WebDAOObj.getExamByObjId(req.params.objId).then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
 app.listen(port, () => {
   console.log(`App listening on ${port}`)
 })

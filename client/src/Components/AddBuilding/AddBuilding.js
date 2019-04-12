@@ -330,12 +330,6 @@ class DeleteBuildingPopUp extends Component {
     }
     this.deleteButtonHandle = this.deleteButtonHandle.bind(this)
   }
-  setShortnameDelete () {
-    this.setState({
-      shortnameDelete: this.props.selectedBuilding
-    })
-    this.deleteButtonHandle()
-  }
 
   deleteButtonHandle () {
     CServiceObj.deleteBuilding(this.props.selectedBuilding).then((result) => {

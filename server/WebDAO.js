@@ -739,6 +739,43 @@ class WebDAO {
       })
     })
   }
+
+  deleteExamRoom (objIdRoom) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+        const db = client.db(dbName)
+        db.collection('Exam').findOne({ 'rooms': { $elemMatch: { '_id': new ObjectId(objIdRoom) } } }, (err, data) => {
+          if (err) { throw err }
+          if (data) {
+            db.collection('Exam').update({ 'rooms': { $elemMatch: { '_id': new ObjectId(objIdRoom) } } }, { $pull: { 'rooms': { '_id': new ObjectId(objIdRoom) } } }, { multi: true }, (err, result) => {
+              if (err) { throw err }
+              client.close()
+              return resolve(true)
+            })
+          } else {
+            client.close()
+            return resolve(false)
+          }
+        })
+      })
+    })
+  }
+
+  getExamByObjId (objId) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+
+        const db = client.db(dbName)
+        db.collection('Exam').findOne({ '_id': new ObjectId(objId) }, (err, data) => {
+          if (err) { throw err }
+          client.close()
+          return resolve(data)
+        })
+      })
+    })
+  }
 }
 
 module.exports = WebDAO
