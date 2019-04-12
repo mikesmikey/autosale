@@ -17,7 +17,8 @@ class ExamManageModal extends Component {
     super(props)
     this.state = {
       selectedExam: null,
-      exams: []
+      exams: [],
+      isLoading: false
     }
 
     this._isMounted = true
@@ -158,9 +159,13 @@ class ExamManageModal extends Component {
     }
   }
 
+  handleExamManageBoxStyle () {
+    return this.state.selectedExam ? '' : 'disabled'
+  }
+
   render () {
     return (
-      <div className="exam-manage box with-title">
+      <div className={`exam-manage box with-title`}>
         <div className="box-title is-violet">
           <h3
             className="label is-2"
@@ -169,7 +174,7 @@ class ExamManageModal extends Component {
           </h3>
           <button className="exit-button fas fa-times fa-1x" onClick={this.props.closeModal}></button>
         </div>
-        <div className="box-content">
+        <div className={`box-content ${this.state.isLoading ? 'disabled' : ''}`}>
           <div className="columns" style={{ width: '100%' }}>
             <div className="column">
               <h3>การสอบทั้งหมด</h3>
@@ -194,7 +199,7 @@ class ExamManageModal extends Component {
               </div>
             </div>
             <div className="column is-not-grow manage-column">
-              <div className="secondary-manage-box box is-round">
+              <div className={`secondary-manage-box box is-round ${this.handleExamManageBoxStyle()}`}>
                 <h3>รายละเอียดเบื้องต้น</h3>
                 <p>ห้องสอบ : </p>
                 <p>ผู้คุมสอบ : </p>
