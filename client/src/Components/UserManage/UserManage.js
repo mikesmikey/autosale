@@ -23,7 +23,9 @@ class UserManage extends Component {
       selectedUser: false,
       searchInput: '',
       facultys: [],
-      isDataLoading: false
+      isDataLoading: false,
+      page: 1,
+      maxPage: 1
     }
 
     this._isMounted = true
@@ -40,7 +42,9 @@ class UserManage extends Component {
     const name = target.options[target.selectedIndex].value
 
     this.setState({
-      selectedType: name
+      selectedType: name,
+      page: 1,
+      maxPage: 1
     })
     this.userTable.loadDataByTypeAndUsername(name, this.state.searchInput)
   }
@@ -52,6 +56,15 @@ class UserManage extends Component {
 
   componentWillUnmount () {
     this._isMounted = false
+  }
+
+  componentDidUpdate (prevProps, prevStates) {
+    if (this.state.page !== prevStates.page) {
+      this.userTable.loadDataByTypeAndUsername(this.state.selectedType, this.state.searchInput, this.state.page === 1 ? 0 : (this.state.page - 1) * 50)
+    }
+    if (this.state.isDataLoading !== prevStates.isDataLoading) {
+      this.calculateMaxPage()
+    }
   }
 
   handleInputChange (e) {
@@ -77,21 +90,57 @@ class UserManage extends Component {
   }
 
   handleSearchButton () {
-    this.userTable.loadDataByTypeAndUsername(this.state.selectedType, this.state.searchInput)
+    this.setState({
+      page: 1,
+      maxPage: 1
+    })
+    this.userTable.loadDataByTypeAndUsername(this.state.selectedType, this.state.searchInput, this.state.page === 1 ? 0 : (this.state.page - 1) * 50)
   }
 
   loadFacultyData () {
     if (!this.state.isDataLoading) {
-      this.setDataLoadingStatus(true)
       ServiceObj.getAllFaculty().then((data) => {
         if (this._isMounted) {
-          this.setDataLoadingStatus(false)
           this.setState({
             facultys: data
           })
         }
       })
     }
+  }
+
+  calculateMaxPage () {
+    ServiceObj.countUserByTypeAndUsername(this.state.selectedType, this.state.searchInput).then((result) => {
+      this.setState({
+        maxPage: Math.ceil(result / 50)
+      })
+    })
+  }
+
+  handleInceasePageStyle () {
+    if (this.state.page === this.state.maxPage) {
+      return 'disabled'
+    }
+  }
+
+  handleDeceasePageStyle () {
+    if (this.state.page === 1) {
+      return 'disabled'
+    }
+  }
+
+  inceasePage () {
+    const newPage = this.state.page === this.state.maxPage || this.state.page + 1
+    this.setState({
+      page: newPage
+    })
+  }
+
+  deceasePage () {
+    const newPage = this.state.page === 1 || this.state.page - 1
+    this.setState({
+      page: newPage
+    })
   }
 
   render () {
@@ -116,9 +165,7 @@ class UserManage extends Component {
                   <label className="label">รหัสประจำตัว : </label>
                   <input className="input is-userId-width" type="text" id="userId" name="searchInput" onChange={this.handleInputChange} />
                 </div>
-                <div className="input-with-text">
-                  <button type="submit"><i className="fa fa-search height50" onClick={this.handleSearchButton}></i></button>
-                </div>
+                <button className="button is-oros is-round is-free-size" type="button" onClick={this.handleSearchButton} style={{ width: '40px', height: '40px' }}><i className="fa fa-search height50"></i></button>
               </div>
               <div className="column">
                 <button className="button is-yentafo is-round is-free-size is-pulled-right" onClick={() => { this.studentExcelPopup.showInsertExcelModal() }}>นำเข้าผู้ใช้โดย Excel</button>
@@ -135,6 +182,25 @@ class UserManage extends Component {
                 isDataLoading={this.state.isDataLoading}
                 setDataLoadingStatus={this.setDataLoadingStatus}
               />
+            </div>
+            <div className="paging-button-area">
+              <button
+                className={`button is-oros is-round ${this.handleDeceasePageStyle()}`}
+                style={{ width: '40px' }}
+                onClick={() => { this.deceasePage() }}
+              >
+                <i className="fas fa-angle-left"></i>
+              </button>
+              <div style={{ width: '100px' }}>
+                <p>{this.state.page}/{this.state.maxPage}</p>
+              </div>
+              <button
+                className={`button is-oros is-round ${this.handleInceasePageStyle()}`}
+                style={{ width: '40px' }}
+                onClick={() => { this.inceasePage() }}
+              >
+                <i className="fas fa-angle-right"></i>
+              </button>
             </div>
           </div>
         </div>
