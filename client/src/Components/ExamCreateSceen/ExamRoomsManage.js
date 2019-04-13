@@ -39,10 +39,8 @@ class ExamRoomsModal extends Component {
   }
 
   componentDidUpdate (prevProps, prevStates) {
-    if (this._isMounted) {
-      if (this.state.seatLineUpType !== prevStates.seatLineUpType || this.state.seatOrderTypeRadio !== prevStates.seatOrderTypeRadio) {
-        this.updateSeat()
-      }
+    if (this.state.seatLineUpType !== prevStates.seatLineUpType || this.state.seatOrderTypeRadio !== prevStates.seatOrderTypeRadio) {
+      this.updateSeat()
     }
   }
 
@@ -51,9 +49,11 @@ class ExamRoomsModal extends Component {
       isLoading: true
     })
     CServiceObj.updateExamSeatType(this.props.selectedExam._id, this.state.seatLineUpType, this.state.seatOrderTypeRadio).then(() => {
-      this.setState({
-        isLoading: false
-      })
+      if (this._isMounted) {
+        this.setState({
+          isLoading: false
+        })
+      }
     })
   }
 
