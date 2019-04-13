@@ -26,6 +26,7 @@ class ExamManageModal extends Component {
     this.setSelectedExam = this.setSelectedExam.bind(this)
     this.insertMemExam = this.insertMemExam.bind(this)
     this.updateMemExam = this.updateMemExam.bind(this)
+    this.deleteMemExam = this.deleteMemExam.bind(this)
   }
 
   componentDidMount () {
@@ -72,22 +73,12 @@ class ExamManageModal extends Component {
       this.setState({
         isLoading: true
       })
-      CServiceObj.deleteExam(this.props.selectedCourse._id).then((result) => {
-        const noExamData = {
-          subjectId: this.props.selectedCourse.subjectId,
-          subjectName: this.props.selectedCourse.subjectName,
-          courseId: this.props.selectedCourse.courseId,
-          category: this.state.examTypeRadioValue
-        }
-        const examobj = new Exam(noExamData)
-        var newExamsArray = this.state.exams
-        newExamsArray[this.state.exams.indexOf(this.props.selectedCourse)] = examobj
+      CServiceObj.deleteExam(this.state.selectedExam._id).then((result) => {
+        this.deleteMemExam(this.state.selectedExam)
+        alert('ลบการสอบสำเร็จ')
         this.setState({
-          exams: newExamsArray,
           isLoading: false
         })
-        this.setSelectedCourse(examobj)
-        alert('ลบการสอบสำเร็จ')
       })
     } else {
       alert('กรุณาเลือกการสอบก่อนที่จะลบ')
@@ -122,7 +113,6 @@ class ExamManageModal extends Component {
     this.setState({
       selectedExam: exam
     })
-    console.log(exam)
   }
 
   insertMemExam (exam) {
@@ -139,6 +129,17 @@ class ExamManageModal extends Component {
     })
     let newExamArr = this.state.exams
     newExamArr[originExam] = newExam
+    this.setState({
+      exams: newExamArr
+    })
+  }
+
+  deleteMemExam (deletedExam) {
+    const originExam = this.state.exams.findIndex((exam) => {
+      return exam._id === deletedExam._id
+    })
+    let newExamArr = this.state.exams
+    newExamArr.splice(originExam, 1)
     this.setState({
       exams: newExamArr
     })
@@ -170,6 +171,23 @@ class ExamManageModal extends Component {
     } else {
       alert('กรุณาเลือกการสอบก่อนที่จะจัดการ')
     }
+  }
+
+  handleExamCreateButton () {
+    if (this.state.selectedExam) {
+      //this.validCourse
+      //this.validSimpleData
+      //this.validRooms
+      //this.validExaminers
+      //this.generateRooms
+      //this.confirmExam
+    } else {
+      alert('กรุณาเลือกการสอบก่อนที่จะยืนยัน')
+    }
+  }
+
+  validCourse() {
+    CServiceObj.getAllCurrentCourse
   }
 
   render () {
@@ -234,7 +252,7 @@ class ExamManageModal extends Component {
               <div className="manage-button-area box is-round">
                 <button
                   className={`button is-3 is-oros is-round is-full-width ${this.handleExamManageButtonStyle()}`}
-                  onClick={() => { this.handleAddDataButton() }}
+                  onClick={() => { this.handleExamCreateButton() }}
                 >
                 ยืนยันการสอบ
                 </button>

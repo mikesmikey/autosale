@@ -114,7 +114,7 @@ class ExamAddSimpleData extends Component {
     })
     CServiceObj.createExam(newExam.getExamObjectdata()).then((result) => {
       if (result) {
-        newExam._id = newExam
+        newExam._id = result
         this.props.insertMemExam(newExam)
         alert('สร้างการสอบสำเร็จ')
         this.props.closeModal()
