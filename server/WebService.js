@@ -66,6 +66,14 @@ class WebService {
         if (userData.typeOfUser === 'student') {
           userData.year = 3
           userData.isScore = false
+
+          userData.courses = [
+            {
+              group: 1,
+              subjectId: '76930959',
+              courseId: 1
+            }
+          ]
         }
 
         if (userData.typeOfUser === 'staff') {
