@@ -111,9 +111,11 @@ class UserManage extends Component {
 
   calculateMaxPage () {
     ServiceObj.countUserByTypeAndUsername(this.state.selectedType, this.state.searchInput).then((result) => {
-      this.setState({
-        maxPage: Math.ceil(result / 50)
-      })
+      if (this._isMounted) {
+        this.setState({
+          maxPage: Math.ceil(result / 50)
+        })
+      }
     })
   }
 
