@@ -355,9 +355,9 @@ class ClientService {
     })
   }
 
-  deleteExamRoom (objIdRoom) {
+  deleteExamRoom (objId, roomId, startTime) {
     return new Promise((resolve, reject) => {
-      axios.post(`/examRoom/remove/${objIdRoom}`).then((result) => {
+      axios.post(`/examRoom/remove/${objId}/${roomId}/${startTime}`).then((result) => {
         resolve(result.data)
       })
     })
@@ -438,6 +438,14 @@ class ClientService {
   getObjectCountRegisterCourseBySubjectId (subjecId) {
     return new Promise((resolve, reject) => {
       axios.get(`/registerCourse/${subjecId}`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  updateExamSeatType (objId, seatLineUpType, seatOrderType) {
+    return new Promise((resolve) => {
+      axios.post(`/exam/seatType/update/${objId}/${seatLineUpType}/${seatOrderType}`).then((result) => {
         resolve(result.data)
       })
     })

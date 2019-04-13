@@ -379,8 +379,8 @@ app.post('/exam/room', (req, res) => {
   })
 })
 
-app.post('/examRoom/remove/:objIdRoom', (req, res) => {
-  WebDAOObj.deleteExamRoom(req.params.objIdRoom).then((pass) => {
+app.post('/examRoom/remove/:objId/:roomId/:startTime', (req, res) => {
+  WebDAOObj.deleteExamRoom(req.params.objId, req.params.roomId, req.params.startTime).then((pass) => {
     res.send(pass)
   })
 })
@@ -397,6 +397,14 @@ app.get('/exam/:objId', (req, res) => {
 
 app.post('/exam/room/update', (req, res) => {
   WebDAOObj.updateExamData(req.body.examId, req.body.examData).then((pass) => {
+    if (pass) {
+      res.send(pass)
+    }
+  })
+})
+
+app.post('/exam/seatType/update/:objId/:seatLineUpType/:seatOrderType', (req, res) => {
+  WebDAOObj.updateExamSeatType(req.params.objId, req.params.seatLineUpType, req.params.seatOrderType).then((pass) => {
     if (pass) {
       res.send(pass)
     }
