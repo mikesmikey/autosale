@@ -92,9 +92,11 @@ class ExamCreateScreen extends Component {
     })
     CServiceObj.searchAllCurrentCourseBySubjectId(subjectId || '', startPos, limit).then((result) => {
       let max = Math.ceil(result.length / 50)
-      this.setState({
-        maxPage: max === 0 ? 1 : max
-      })
+      if (this._isMounted) {
+        this.setState({
+          maxPage: max === 0 ? 1 : max
+        })
+      }
     })
   }
 

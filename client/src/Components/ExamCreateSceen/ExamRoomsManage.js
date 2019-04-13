@@ -16,7 +16,8 @@ class ExamRoomsModal extends Component {
       seatLineUpType: 'vertical',
       selectedExamRoom: '',
       dataExam: [],
-      selectedRow: null
+      selectedRow: null,
+      isLoading: false
     }
 
     this.seatOrderRadioHandle = this.seatOrderRadioHandle.bind(this)
@@ -37,26 +38,50 @@ class ExamRoomsModal extends Component {
     this._isMounted = false
   }
 
-  componentDidUpdate () {
+  componentDidUpdate (prevProps, prevStates) {
     if (this._isMounted) {
-      if (this.state.seatLineUpType !== this.state.dataExam.seatLineUpType || this.state.seatOrderTypeRadio !== this.state.dataExam.seatOrderType) {
-        CServiceObj.updateExamSeatType(this.props.selectedExam._id, this.state.seatLineUpType, this.state.seatOrderTypeRadio)
+      if (this.state.seatLineUpType !== prevStates.seatLineUpType || this.state.seatOrderTypeRadio !== prevStates.seatOrderTypeRadio) {
+        this.updateSeat()
       }
     }
   }
 
+  updateSeat () {
+    this.setState({
+      isLoading: true
+    })
+    CServiceObj.updateExamSeatType(this.props.selectedExam._id, this.state.seatLineUpType, this.state.seatOrderTypeRadio).then(() => {
+      this.setState({
+        isLoading: false
+      })
+    })
+  }
+
   checkSeat (data) {
     if (data.seatLineUpType === undefined || data.seatOrderType === undefined) {
-      CServiceObj.updateExamSeatType(this.props.selectedExam._id, this.state.seatLineUpType, this.state.seatOrderTypeRadio)
-      this.reloadTable()
+      this.setState({
+        isLoading: true
+      })
+      CServiceObj.updateExamSeatType(this.props.selectedExam._id, this.state.seatLineUpType, this.state.seatOrderTypeRadio).then((result) => {
+        this.setState({
+          isLoading: false
+        })
+        this.reloadTable()
+      })
     } else {
       this.setDataExam(data)
     }
   }
 
   reloadTable () {
+    this.setState({
+      isLoading: true
+    })
     CServiceObj.getExamByObjId(this.props.selectedExam._id).then((data) => {
       this.checkSeat(data)
+      this.setState({
+        isLoading: false
+      })
     })
   }
 
@@ -205,7 +230,7 @@ class ExamRoomsModal extends Component {
           <h3 className="label is-2">เพิ่มห้องสอบ</h3>
           <button className="exit-button fas fa-times fa-1x" onClick={this.props.closeModal}></button>
         </div>
-        <div className="box-content">
+        <div className={`box-content ${this.state.isLoading ? 'disabled' : ''}`}>
           <div className="exam-rooms-table-area">
             <table className="table exam-rooms-table">
               <thead>
