@@ -74,6 +74,7 @@ class DataAddModal extends Component {
       />,
       'examinersManageModal': <ExaminersManage
         closeModal={this.closeModal}
+        selectedExam={this.selectedExam}
       />
     }
 

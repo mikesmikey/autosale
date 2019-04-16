@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 
 import Modal from '../Utilities/Modal'
 import ExamAddSimpleData from './ExamAddSimpleData'
+import ExaminersManage from './ExaminersManage'
 
 import ClientService from '../Utilities/ClientService'
 import Exam from '../../Objects/Exam'
@@ -139,6 +140,14 @@ class ExamManageModal extends Component {
     }
   }
 
+  handleExaminersManageRoomModal () {
+    if (this.state.selectedExam) {
+      this.props.showModal('examinersManageModal')
+    } else {
+      alert('กรุณาเลือกการสอบก่อนที่จะจัดการ')
+    }
+  }
+
   render () {
     return (
       <div className="exam-manage box with-title">
@@ -193,7 +202,7 @@ class ExamManageModal extends Component {
                 </button>
                 <button
                   className={`button is-3 is-oros is-round is-full-width ${this.handleExamManageButtonStyle()}`}
-                  onClick={() => { this.handleAddDataButton() }}
+                  onClick={() => { this.handleExaminersManageRoomModal() }}
                 >
                 จัดการผู้คุมสอบ
                 </button>

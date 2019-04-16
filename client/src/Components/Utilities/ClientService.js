@@ -431,6 +431,41 @@ class ClientService {
       })
     })
   }
+
+  /* ===========[Examiner Service]=================== */
+  countUserByTypeAndName (type, name) {
+    return new Promise((resolve, reject) => {
+      var url = `/users/examinercount/${name.length === 0 ? `${type}` : `${type}/${name}`}`
+      axios.get(url).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  searchAllUserByTypeAndName (type, name, startPos, limit) {
+    return new Promise((resolve, reject) => {
+      var url = `/users/examiner/${name.length === 0 ? `type/${type}` : `${type}/${name}`}/${startPos || 0}/${limit || 0}`
+      axios.get(url).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  getAllExamByExaminer (Id, Room, STime, Data) {
+    return new Promise((resolve) => {
+      axios.post(`/exam/room/examiner`, { 'Id': Id, 'Room': Room, 'STime': STime, 'Data': Data }).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  insertExaminerIntoRoom (Id, Room, STime, Data) {
+    return new Promise((resolve) => {
+      axios.post(`/exam/examiner`, { 'Id': Id, 'Room': Room, 'STime': STime, 'Data': Data }).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
 }
 
 export default ClientService

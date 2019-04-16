@@ -260,7 +260,7 @@ class AddRoomDetail extends Component {
       roomData.startTime = this.state.selectedSchedule.time
       roomData.hours = Number.parseInt(this.state.selectedHour) + (Number.parseInt(this.state.selectedMinute) / 100)
       roomData.maxStudent = this.state.studentNumberInput
-
+      roomData.examiners = []
       CServiceObj.insertRoomIntoExam(this.props.selectedExam._id, roomData).then((result) => {
         if (result) {
           alert('เพิ่มห้องสอบสำเร็จ')
