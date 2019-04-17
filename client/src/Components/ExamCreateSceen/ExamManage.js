@@ -175,19 +175,18 @@ class ExamManageModal extends Component {
 
   handleExamCreateButton () {
     if (this.state.selectedExam) {
-      //this.validCourse
-      //this.validSimpleData
-      //this.validRooms
+      CServiceObj.validCourseExistInDB(this.props.selectedCourse).then((result) => {
+        console.log(`course valid : ${result}`)
+      })
+      let exam = new Exam(this.state.selectedExam)
+      console.log(`exam simple data valid : ${exam.validExamSimpleData()}`)
+      console.log(exam.validRooms())
       //this.validExaminers
       //this.generateRooms
       //this.confirmExam
     } else {
       alert('กรุณาเลือกการสอบก่อนที่จะยืนยัน')
     }
-  }
-
-  validCourse() {
-    CServiceObj.getAllCurrentCourse
   }
 
   render () {

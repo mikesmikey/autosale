@@ -1,3 +1,6 @@
+import ClientService from '../Components/Utilities/ClientService'
+const CServiceObj = new ClientService()
+
 class Exam {
   constructor (form) {
     this._id = form._id
@@ -27,6 +30,47 @@ class Exam {
       objData[key] = this[key]
     })
     return objData
+  }
+
+  validExamSimpleData () {
+    if (new Date(this.date).toDateString() === 'Invalid Date') {
+      return false
+    }
+    if (this.examName === '' || this.examName.length === 0) {
+      return false
+    }
+    if (this.maxScore <= 0 || this.maxScore % 1 !== 0) {
+      return false
+    }
+    return true
+  }
+
+  validRooms () {
+    if (typeof (this.rooms) === 'undefined') {
+      return false
+    }
+    if (this.rooms.length === 0) {
+      return false
+    }
+
+    this.rooms.forEach(room => {
+      CServiceObj.getRoomByRoomId(room.roomId).then((result) => {
+        if (result[0]) {
+          var found = false
+          result[0].rooms.forEach(dbRoom => {
+            if (dbRoom.room === room.roomId) {
+              found = true
+            }
+          })
+          if (!found) {
+            return false
+          }
+        } else {
+          return false
+        }
+        return true
+      })
+    })
   }
 }
 

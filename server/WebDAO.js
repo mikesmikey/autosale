@@ -306,6 +306,39 @@ class WebDAO {
     })
   }
 
+  getRoomByRoomId (roomId) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+
+        const db = client.db(dbName)
+        db.collection('Building').aggregate(
+          [
+            {
+              '$match': { 'Rooms.room': roomId }
+            },
+            {
+              '$project': {
+                'rooms': {
+                  '$filter': {
+                    'input': '$Rooms',
+                    'as': 'room',
+                    'cond': { '$eq': [ '$$room.room', roomId ] }
+                  }
+                }
+              }
+            }
+          ]
+        ).toArray((err, data) => {
+          if (err) { throw err }
+          client.close()
+          return resolve(data)
+        })
+        client.close()
+      })
+    })
+  }
+
   /* ===========[Building DAO]=================== */
   getBuilding () {
     return new Promise((resolve, reject) => {
@@ -639,6 +672,46 @@ class WebDAO {
       })
     })
   }
+
+  getCourseBySubjectAndCourseId (subjectId, courseId) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+        const db = client.db(dbName)
+        db.collection('Subject').aggregate(
+          [
+            {
+              '$match': { '$and':
+              [
+                { 'subjectId': subjectId },
+                { 'courses.courseId': Number.parseInt(courseId) }
+              ] }
+            },
+            {
+              '$project': {
+                '_id': 0,
+                'subjectId': 1,
+                'subjectName': 1,
+                'courses': {
+                  '$filter': {
+                    'input': '$courses',
+                    'as': 'course',
+                    'cond': { '$eq': [ '$$course.courseId', Number.parseInt(courseId) ] }
+                  }
+                }
+              }
+            }
+          ]
+        ).toArray((err, data) => {
+          if (err) { throw err }
+          client.close()
+          return resolve(data)
+        })
+        client.close()
+      })
+    })
+  }
+
   /* ===========[Exam DAO]=================== */
 
   getAllExamBySubjectIdAndCourseId (subjectId, courseId) {

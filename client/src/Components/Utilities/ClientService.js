@@ -250,6 +250,29 @@ class ClientService {
     })
   }
 
+  getCourseByIdAndSubjectId (courseId, subjectId) {
+    return new Promise((resolve, reject) => {
+      axios.get(`/course/subject=${subjectId}/course=${courseId}`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  validCourseExistInDB (course) {
+    return new Promise((resolve, reject) => {
+      this.getCourseByIdAndSubjectId(course.courseId, course.subjectId).then((result) => {
+        if (result.length === 1) {
+          result[0].courses.forEach(dbCourse => {
+            if (dbCourse.courseId === course.courseId && dbCourse.school_year === course.school_year && dbCourse.semester === course.semester) {
+              return resolve(true)
+            }
+          })
+        }
+        return resolve(false)
+      })
+    })
+  }
+
   // ==========[Building Service]=================
 
   getAllBuildingByRoom (buildingname, room) {
@@ -298,6 +321,15 @@ class ClientService {
   editRoom (newBuildingData) {
     return new Promise((resolve, reject) => {
       axios.post(`/building/edit`, { 'BuildingData': newBuildingData }).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  getRoomByRoomId (roomId) {
+    return new Promise((resolve) => {
+      var url = `/room/id=${roomId}`
+      axios.get(url).then((result) => {
         resolve(result.data)
       })
     })

@@ -371,6 +371,7 @@ app.post('/course/delete/:a/:b', (req, res) => {
     res.send(data)
   })
 })
+
 app.post('/exam/room', (req, res) => {
   WebDAOObj.addRoomIntoExam(req.body.examId, req.body.roomData).then((pass) => {
     if (pass) {
@@ -407,6 +408,26 @@ app.post('/exam/seatType/update/:objId/:seatLineUpType/:seatOrderType', (req, re
   WebDAOObj.updateExamSeatType(req.params.objId, req.params.seatLineUpType, req.params.seatOrderType).then((pass) => {
     if (pass) {
       res.send(pass)
+    }
+  })
+})
+
+app.get('/course/subject=:subjectId/course=:courseId', (req, res) => {
+  WebDAOObj.getCourseBySubjectAndCourseId(req.params.subjectId, req.params.courseId).then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.get('/room/id=:roomId', (req, res) => {
+  WebDAOObj.getRoomByRoomId(req.params.roomId).then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
     }
   })
 })
