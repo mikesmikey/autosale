@@ -322,6 +322,15 @@ class ClientService {
     })
   }
 
+  confirmExam (examId) {
+    return new Promise((resolve) => {
+      var url = `/exam/finish`
+      axios.post(url, { examId: examId }).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
   // ==============[Course Service]====================
   deleteCourse (a, b) {
     return new Promise((resolve, reject) => {

@@ -419,6 +419,7 @@ app.post('/course/delete/:a/:b', (req, res) => {
     res.send(data)
   })
 })
+
 app.post('/exam/room', (req, res) => {
   WebDAOObj.addRoomIntoExam(req.body.examId, req.body.roomData).then((pass) => {
     if (pass) {
@@ -439,6 +440,14 @@ app.get('/examDetail/:objId', (req, res) => {
       res.json(data)
     } else {
       res.sendStatus(404)
+    }
+  })
+})
+
+app.post('/exam/finish', (req, res) => {
+  WebServiceObj.confirmExam(req.body.examId).then((pass) => {
+    if (pass) {
+      res.send(pass)
     }
   })
 })
