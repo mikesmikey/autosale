@@ -362,6 +362,15 @@ class ClientService {
     })
   }
 
+  confirmExam (examId) {
+    return new Promise((resolve) => {
+      var url = `/exam/finish`
+      axios.post(url, { examId: examId }).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
   deleteExam (objectId) {
     return new Promise((resolve) => {
       axios.delete(`/exam/${objectId}`).then((result) => {
@@ -478,6 +487,33 @@ class ClientService {
   updateExamSeatType (objId, seatLineUpType, seatOrderType) {
     return new Promise((resolve) => {
       axios.post(`/exam/seatType/update/${objId}/${seatLineUpType}/${seatOrderType}`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  /* ===========[Examiner Service]=================== */
+  countUserByTypeAndName (type, name) {
+    return new Promise((resolve, reject) => {
+      var url = `/users/examinercount/${name.length === 0 ? `${type}` : `${type}/${name}`}`
+      axios.get(url).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  searchAllUserByTypeAndName (type, name, startPos, limit) {
+    return new Promise((resolve, reject) => {
+      var url = `/users/examiner/${name.length === 0 ? `type/${type}` : `${type}/${name}`}/${startPos || 0}/${limit || 0}`
+      axios.get(url).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  insertExaminerIntoRoom (Id, Data) {
+    return new Promise((resolve) => {
+      axios.post(`/exam/examiner`, { 'Id': Id, 'Data': Data }).then((result) => {
         resolve(result.data)
       })
     })

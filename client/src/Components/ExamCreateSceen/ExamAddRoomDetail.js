@@ -271,6 +271,7 @@ class AddRoomDetail extends Component {
       this.setState({
         isLoading: true
       })
+      roomData.examiners = []
       CServiceObj.insertRoomIntoExam(this.props.selectedExam._id, roomData).then((result) => {
         if (result) {
           this.setState({

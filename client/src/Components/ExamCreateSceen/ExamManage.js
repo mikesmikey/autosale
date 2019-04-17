@@ -2,6 +2,7 @@
 import React, { Component } from 'react'
 
 import ExamAddSimpleData from './ExamAddSimpleData'
+import ExaminersManage from './ExaminersManage'
 
 import ClientService from '../Utilities/ClientService'
 import Exam from '../../Objects/Exam'
@@ -165,7 +166,7 @@ class ExamManageModal extends Component {
     return this.state.selectedExam ? '' : 'disabled'
   }
 
-  handleExaminerManageModal () {
+  handleExaminersManageRoomModal () {
     if (this.state.selectedExam) {
       this.props.showModal('examinersManageModal')
     } else {
@@ -243,7 +244,7 @@ class ExamManageModal extends Component {
                 </button>
                 <button
                   className={`button is-3 is-oros is-round is-full-width ${this.handleExamManageButtonStyle()}`}
-                  onClick={() => { this.handleExaminerManageModal() }}
+                  onClick={() => { this.handleExaminersManageRoomModal() }}
                 >
                 จัดการผู้คุมสอบ
                 </button>

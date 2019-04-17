@@ -41,8 +41,24 @@
 
 .selected-examiner-table-area {
     width: 100%;
-    height: 480px;
+    height: 558px;
     overflow-y: scroll;
+}
+
+.select-examiner {
+    width: 80%;
+    height: 40px;
+    overflow-y: scroll;
+}
+
+.column.is-0 {
+    flex: none;
+    width: 10%;
+}
+
+.column.is-00 {
+    flex: none;
+    width: 5%;
 }
 
 .examiners-manage .main-column {

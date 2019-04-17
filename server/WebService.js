@@ -89,5 +89,13 @@ class WebService {
       })
     })
   }
+
+  confirmExam (examId) {
+    console.log(examId)
+  }
+
+  validExamData (exam) {
+
+  }
 }
 module.exports = WebService
