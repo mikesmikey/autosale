@@ -23,13 +23,13 @@ class ClientService {
     return true
   }
 
-  loginByToken (logoutCallBack) {
+  loginByToken (loginCallBack) {
     return new Promise((resolve, reject) => {
       const token = this.getCurrentToken()
       if (token) {
         this.getUserByToken(token).then((result) => {
           if (result) {
-            this.login(logoutCallBack(true, result), false)
+            this.login(loginCallBack(true, result), false)
           }
           resolve(true)
         })
@@ -139,6 +139,15 @@ class ClientService {
     })
   }
 
+  getUserByUsername (username) {
+    return new Promise((resolve, reject) => {
+      var url = `/user/${username}`
+      axios.get(url).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
   // ==========[Faculty Service]=================
 
   getAllFaculty () {
@@ -239,13 +248,21 @@ class ClientService {
     })
   }
 
-  searchAllCurrentCourseBySubjectId (subjectId) {
+  searchAllCurrentCourseBySubjectId (subjectId, startPos, limit) {
     return new Promise((resolve, reject) => {
       this.getYearAndTerm().then((timeData) => {
         if (!timeData) return null
-        axios.get(`/courses/${timeData.currentStudyYear}/${timeData.currentStudyTerm}/${subjectId}`).then((result) => {
+        axios.get(`/courses/year=${timeData.currentStudyYear}/semester=${timeData.currentStudyTerm}/subject=${subjectId || 'none'}/start=${startPos || 0}/limit=${limit || 0}`).then((result) => {
           resolve(result.data)
         })
+      })
+    })
+  }
+
+  getCourseByIdAndSubjectId (courseId, subjectId) {
+    return new Promise((resolve, reject) => {
+      axios.get(`/course/subject=${subjectId}/course=${courseId}`).then((result) => {
+        resolve(result.data)
       })
     })
   }
@@ -303,6 +320,15 @@ class ClientService {
     })
   }
 
+  getRoomByRoomId (roomId) {
+    return new Promise((resolve) => {
+      var url = `/room/id=${roomId}`
+      axios.get(url).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
   // ==========[Exam Service]=================
 
   getAllExamBySubjectAndCourse (subjectId, courseId) {
@@ -322,10 +348,66 @@ class ClientService {
     })
   }
 
-  confirmExam (examId) {
+  createExam (examData) {
     return new Promise((resolve) => {
-      var url = `/exam/finish`
-      axios.post(url, { examId: examId }).then((result) => {
+      axios.post(`/exam`, { 'examData': examData }).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  deleteExam (objectId) {
+    return new Promise((resolve) => {
+      axios.delete(`/exam/${objectId}`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  getAllExamOnCurrentDateAndRoom (date, roomId) {
+    return new Promise((resolve, reject) => {
+      axios.get(`/exams/date=${date}/room=${roomId}`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  insertRoomIntoExam (examId, roomData) {
+    console.log(roomData)
+    return new Promise((resolve) => {
+      axios.post(`/exam/room`, { 'examId': examId, 'roomData': roomData }).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  deleteExamRoom (objId, roomId, startTime) {
+    return new Promise((resolve, reject) => {
+      axios.post(`/examRoom/remove/${objId}/${roomId}/${startTime}`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  getExamByObjId (objId) {
+    return new Promise((resolve, reject) => {
+      axios.get(`/exam/${objId}`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  updateExamData (examId, examData) {
+    return new Promise((resolve) => {
+      axios.post(`/exam/room/update`, { 'examId': examId, 'examData': examData }).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  confirmExam (examId) {
+    return new Promise((resolve, reject) => {
+      axios.post(`/exam/confirm`, { 'examId': examId }).then((result) => {
         resolve(result.data)
       })
     })
@@ -339,24 +421,10 @@ class ClientService {
       })
     })
   }
-  createExam (examData) {
-    return new Promise((resolve) => {
-      axios.post(`/exam`, { 'examData': examData }).then((result) => {
-        resolve(result.data)
-      })
-    })
-  }
 
   getNameteacherFormRegisterCourseBySubjectId (subjecId) {
     return new Promise((resolve, reject) => {
       axios.get(`/registerCourse/teachar/${subjecId}`).then((result) => {
-        resolve(result.data)
-      })
-    })
-  }
-  deleteExam (objectId) {
-    return new Promise((resolve) => {
-      axios.delete(`/exam/${objectId}`).then((result) => {
         resolve(result.data)
       })
     })
@@ -408,34 +476,10 @@ class ClientService {
       })
     })
   }
-  getAllExamOnCurrentDateAndRoom (date, roomId) {
-    return new Promise((resolve, reject) => {
-      axios.get(`/exams/date=${date}/room=${roomId}`).then((result) => {
-        resolve(result.data)
-      })
-    })
-  }
 
-  insertRoomIntoExam (examId, roomData) {
-    console.log(roomData)
+  updateExamSeatType (objId, seatLineUpType, seatOrderType) {
     return new Promise((resolve) => {
-      axios.post(`/exam/room`, { 'examId': examId, 'roomData': roomData }).then((result) => {
-        resolve(result.data)
-      })
-    })
-  }
-
-  deleteExamRoom (objIdRoom) {
-    return new Promise((resolve, reject) => {
-      axios.post(`/examRoom/remove/${objIdRoom}`).then((result) => {
-        resolve(result.data)
-      })
-    })
-  }
-
-  getExamByObjId (objId) {
-    return new Promise((resolve, reject) => {
-      axios.get(`/examDetail/${objId}`).then((result) => {
+      axios.post(`/exam/seatType/update/${objId}/${seatLineUpType}/${seatOrderType}`).then((result) => {
         resolve(result.data)
       })
     })

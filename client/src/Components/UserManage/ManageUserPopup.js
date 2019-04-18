@@ -17,11 +17,13 @@ class ManageUserPopUp extends Component {
       yearIndex: 0,
       facultyIndex: 1,
       branchIndex: 1,
-      standingInput: ''
+      standingInput: '',
+      examinerRadio: false
     }
 
     this.changeStatus = this.changeStatus.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
+    this.handleRadioChange = this.handleRadioChange.bind(this)
     this.loadUserInput = this.loadUserInput.bind(this)
   }
 
@@ -35,6 +37,16 @@ class ManageUserPopUp extends Component {
     })
   }
 
+  handleRadioChange (e) {
+    const target = e.target
+    const name = target.name
+    const value = target.value
+
+    this.setState({
+      [name]: value === 'true'
+    })
+  }
+
   loadUserInput () {
     this.setState({
       fnameInput: this.props.selectedUser.firstName,
@@ -42,7 +54,8 @@ class ManageUserPopUp extends Component {
       usernameInput: this.props.selectedUser.username,
       yearIndex: this.props.selectedUser.year,
       facultyIndex: this.props.selectedUser.facultyId,
-      branchIndex: this.props.selectedUser.branchId
+      branchIndex: this.props.selectedUser.branchId,
+      examinerRadio: this.props.selectedUser.isExaminer
     })
 
     if (this.props.selectedUser.standing) {
@@ -148,6 +161,7 @@ class ManageUserPopUp extends Component {
     newData.lastName = this.state.snameInput
     newData.username = this.state.usernameInput
     newData.typeOfUser = this.props.selectedType
+    newData.isExaminer = this.state.examinerRadio
 
     if (newData.typeOfUser === 'student') {
       newData.facultyId = this.state.facultyIndex
@@ -326,7 +340,31 @@ class ManageUserPopUp extends Component {
               />
             </div>
           </div>
-
+          <div className={`columns input-div`}>
+            <div className="column is-2">
+              <label className="label">เป็นผู้คุมสอบ</label>
+            </div>
+            <div className="column">
+              <input
+                className="input"
+                type="radio"
+                name="examinerRadio"
+                value={true}
+                checked={this.state.examinerRadio === true}
+                onChange={this.handleRadioChange}
+              />
+              <label className="label">ใช่</label>
+              <input
+                className="input"
+                type="radio"
+                name="examinerRadio"
+                value={false}
+                checked={this.state.examinerRadio === false}
+                onChange={this.handleRadioChange}
+              />
+              <label className="label">ไม่ใช่</label>
+            </div>
+          </div>
           <div className={`columns ${this.props.isDataLoading ? 'disabled' : ''}`} style={{ marginTop: '20px' }}>
             {this.state.popupStatus === 'view'
               ? <div className="column is-7" style={{ textAlign: 'center' }}>

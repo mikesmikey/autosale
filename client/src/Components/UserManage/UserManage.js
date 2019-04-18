@@ -111,9 +111,11 @@ class UserManage extends Component {
 
   calculateMaxPage () {
     ServiceObj.countUserByTypeAndUsername(this.state.selectedType, this.state.searchInput).then((result) => {
-      this.setState({
-        maxPage: Math.ceil(result / 50)
-      })
+      if (this._isMounted) {
+        this.setState({
+          maxPage: Math.ceil(result / 50)
+        })
+      }
     })
   }
 
@@ -183,7 +185,7 @@ class UserManage extends Component {
                 setDataLoadingStatus={this.setDataLoadingStatus}
               />
             </div>
-            <div className="paging-button-area">
+            <div className={`paging-button-area ${this.state.isDataLoading ? 'disabled' : ''}`}>
               <button
                 className={`button is-oros is-round ${this.handleDeceasePageStyle()}`}
                 style={{ width: '40px' }}

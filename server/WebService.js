@@ -66,6 +66,14 @@ class WebService {
         if (userData.typeOfUser === 'student') {
           userData.year = 3
           userData.isScore = false
+
+          userData.courses = [
+            {
+              group: 1,
+              subjectId: '76930959',
+              courseId: 1
+            }
+          ]
         }
 
         if (userData.typeOfUser === 'staff') {
@@ -83,10 +91,145 @@ class WebService {
   }
 
   confirmExam (examId) {
-    console.log(examId)
+    return new Promise((resolve, reject) => {
+      const DAO = new WebDAO()
+      DAO.getExamByObjId(examId).then((exam) => {
+        this.validExamData(exam).then(result => {
+          const validResult = this.checkExamConfirmError(result)
+          if (typeof (validResult) === 'object') {
+            resolve(validResult)
+          } else {
+            this.generateSeat(exam.rooms)
+          }
+        })
+      })
+    })
+  }
+
+  checkExamConfirmError (errorArr) {
+    for (let i = 0; i < errorArr.length; i++) {
+      for (let key in errorArr[i]) {
+        if (!errorArr[i][key]) {
+          return { [key]: errorArr[i][key] }
+        }
+      }
+    }
+    return true
   }
 
   validExamData (exam) {
+    return new Promise((resolve, reject) => {
+      Promise.all([
+        this.validCourse(exam),
+        this.validExamSimpleData(exam),
+        this.validRoomData(exam)
+      ]).then(result => {
+        resolve(result)
+      })
+    })
+  }
+
+  validCourse (exam) {
+    return new Promise((resolve, reject) => {
+      const DAO = new WebDAO()
+      DAO.getCourseBySubjectAndCourseId(exam.subjectId, exam.courseId).then((course) => {
+        if (course) { resolve({ 'courseExist': true }) } else resolve({ 'courseExist': false })
+      })
+    })
+  }
+
+  validExamSimpleData (exam) {
+    return new Promise((resolve, reject) => {
+      if (new Date(exam.date).toDateString() === 'Invalid Date') {
+        resolve({ 'validDate': false })
+      }
+      if (exam.examName === '' || exam.examName.length === 0) {
+        resolve({ 'validExamName': false })
+      }
+      if (exam.maxScore <= 0 || exam.maxScore % 1 !== 0) {
+        resolve({ 'validMaxScore': false })
+      }
+      resolve({ 'validSimpleData': true })
+    })
+  }
+
+  validRoomData (exam) {
+    return new Promise((resolve, reject) => {
+      this.validRoom(exam).then(roomResult => {
+        if (roomResult.roomExist) {
+          Promise.all([
+            this.validAvailableSeat(exam),
+            this.validExaminerInRoom(exam)
+          ]).then(insideRoomResult => {
+            insideRoomResult.forEach(item => {
+              for (let key in item) {
+                roomResult[key] = item[key]
+              }
+            })
+            resolve(roomResult)
+          })
+        } else {
+          resolve(roomResult)
+        }
+      })
+    })
+  }
+
+  validRoom (exam) {
+    return new Promise((resolve, reject) => {
+      if (exam.rooms && exam.rooms.length > 0) {
+        resolve({ 'roomExist': true })
+      } else {
+        resolve({ 'roomExist': false })
+      }
+    })
+  }
+
+  validAvailableSeat (exam) {
+    return new Promise((resolve, reject) => {
+      var totalSeat = 0
+      exam.rooms.forEach(room => {
+        totalSeat += Number.parseInt(room.maxStudent)
+      })
+      const DAO = new WebDAO()
+      DAO.getCourseBySubjectAndCourseId(exam.subjectId, exam.courseId).then((result) => {
+        if (result.length === 1) {
+          if (totalSeat > result[0].courses[0].max_students) {
+            resolve({ 'enoughSeat': true })
+          } else {
+            resolve({ 'enoughSeat': false })
+          }
+        }
+        resolve({ 'courseExist': false })
+      })
+    })
+  }
+
+  validExaminerInRoom (exam) {
+    return new Promise((resolve, reject) => {
+      exam.rooms.forEach(room => {
+        if (room.examiners && room.examiners.length > 0) {
+          resolve({ 'enoughExaminer': true })
+        } else {
+          resolve({ 'enoughExaminer': false })
+        }
+      })
+    })
+  }
+
+  generateSeat (rooms) {
+    return new Promise((resolve, reject) => {
+      console.log(rooms)
+      for (let i = 0; i < rooms.length; i++) {
+        let room = rooms[i]
+        console.log(room)
+        for (let j = 0; j < room.maxStudent; j++) {
+        }
+      }
+    })
+  }
+
+  assignStudent () {
 
   }
 }

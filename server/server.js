@@ -308,8 +308,9 @@ app.get('/courses/:year/:semester', (req, res) => {
   })
 })
 
-app.get('/courses/:year/:semester/:subjectId', (req, res) => {
-  WebDAOObj.getAllCourseByYearSemesterAndSubjectId(req.params.year, req.params.semester, req.params.subjectId).then(data => {
+app.get('/courses/year=:year/semester=:semester/subject=:subjectId/start=:startPos/limit=:limit', (req, res) => {
+  let params = req.params
+  WebDAOObj.getAllCourseByYearSemesterAndSubjectId(params.year, params.semester, params.subjectId, params.startPos, params.limit).then(data => {
     if (data != null) {
       res.json(data)
     } else {
@@ -428,13 +429,13 @@ app.post('/exam/room', (req, res) => {
   })
 })
 
-app.post('/examRoom/remove/:objIdRoom', (req, res) => {
-  WebDAOObj.deleteExamRoom(req.params.objIdRoom).then((pass) => {
+app.post('/examRoom/remove/:objId/:roomId/:startTime', (req, res) => {
+  WebDAOObj.deleteExamRoom(req.params.objId, req.params.roomId, req.params.startTime).then((pass) => {
     res.send(pass)
   })
 })
 
-app.get('/examDetail/:objId', (req, res) => {
+app.get('/exam/:objId', (req, res) => {
   WebDAOObj.getExamByObjId(req.params.objId).then((data) => {
     if (data != null) {
       res.json(data)
@@ -444,10 +445,46 @@ app.get('/examDetail/:objId', (req, res) => {
   })
 })
 
-app.post('/exam/finish', (req, res) => {
-  WebServiceObj.confirmExam(req.body.examId).then((pass) => {
+app.post('/exam/room/update', (req, res) => {
+  WebDAOObj.updateExamData(req.body.examId, req.body.examData).then((pass) => {
     if (pass) {
       res.send(pass)
+    }
+  })
+})
+
+app.post('/exam/confirm', (req, res) => {
+  WebServiceObj.confirmExam(req.body.examId).then((result) => {
+    if (result) {
+      res.send(result)
+    }
+  })
+})
+
+app.post('/exam/seatType/update/:objId/:seatLineUpType/:seatOrderType', (req, res) => {
+  WebDAOObj.updateExamSeatType(req.params.objId, req.params.seatLineUpType, req.params.seatOrderType).then((pass) => {
+    if (pass) {
+      res.send(pass)
+    }
+  })
+})
+
+app.get('/course/subject=:subjectId/course=:courseId', (req, res) => {
+  WebDAOObj.getCourseBySubjectAndCourseId(req.params.subjectId, req.params.courseId).then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.get('/room/id=:roomId', (req, res) => {
+  WebDAOObj.getRoomByRoomId(req.params.roomId).then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
     }
   })
 })

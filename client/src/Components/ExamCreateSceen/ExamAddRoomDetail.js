@@ -26,7 +26,8 @@ class AddRoomDetail extends Component {
       maxSelectHour: '0',
       selectedSchedule: null,
       studentNumberInput: '',
-      schedules: null
+      schedules: null,
+      isLoading: false
     }
 
     this.handleInputChange = this.handleInputChange.bind(this)
@@ -77,10 +78,16 @@ class AddRoomDetail extends Component {
   }
 
   loadBuilding () {
+    this.setState({
+      isLoading: true
+    })
     CServiceObj.getAllBuilding().then((buildings) => {
-      this.setState({
-        buildings: buildings
-      })
+      if (this._isMounted) {
+        this.setState({
+          buildings: buildings,
+          isLoading: false
+        })
+      }
     })
   }
 
@@ -260,9 +267,16 @@ class AddRoomDetail extends Component {
       roomData.startTime = this.state.selectedSchedule.time
       roomData.hours = Number.parseInt(this.state.selectedHour) + (Number.parseInt(this.state.selectedMinute) / 100)
       roomData.maxStudent = this.state.studentNumberInput
+
+      this.setState({
+        isLoading: true
+      })
       roomData.examiners = []
       CServiceObj.insertRoomIntoExam(this.props.selectedExam._id, roomData).then((result) => {
         if (result) {
+          this.setState({
+            isLoading: false
+          })
           alert('เพิ่มห้องสอบสำเร็จ')
           this.props.showModal('roomsManageModal')
         }
@@ -282,7 +296,7 @@ class AddRoomDetail extends Component {
           <button className="exit-button fas fa-times fa-1x" onClick={this.props.closeModal}></button>
         </div>
         <div className="box-content">
-          <div className="room-select-area" style={{ paddingBottom: '20px' }}>
+          <div className={`room-select-area ${this.state.isLoading ? 'disabled' : ''}`} style={{ paddingBottom: '20px' }}>
             <span className="input-set">
               <p className="label is-3">ตึก</p>
               <select
@@ -342,7 +356,7 @@ class AddRoomDetail extends Component {
               setSchedules={this.setSchedules}
             />
           </div>
-          <div className="room-data-input-area">
+          <div className={`room-data-input-area ${this.state.isLoading ? 'disabled' : ''}`}>
             <div className="columns">
               <div className="column is-5">
                 <p className="label is-3">จำนวนชั่วโมงมากที่สุด {this.state.maxSelectHour} ชั่วโมง</p>
@@ -393,7 +407,7 @@ class AddRoomDetail extends Component {
                 </span>
               </div>
             </div>
-            <div className="room-data-button-area" style={{ textAlign: 'center' }}>
+            <div className={`room-data-button-area`} style={{ textAlign: 'center' }}>
               <button className={`button is-3 is-oros is-round ${this.handleSubmitButtonStyle()}`} style={{ width: '130px' }} onClick={this.handleSubmitButton}>เพิ่มห้อง</button>
               <button className="button is-3 is-yentafo is-round" style={{ width: '130px' }} onClick={this.handleBackButton}>ย้อนกลับ</button>
             </div>
@@ -409,7 +423,8 @@ class RoomScheduleTable extends Component {
     super(props)
 
     this.state = {
-      schedules: []
+      schedules: [],
+      isLoading: false
     }
   }
 
@@ -465,7 +480,15 @@ class RoomScheduleTable extends Component {
 
   loadScheduleItem () {
     if (this.props.selectedRoom) {
+      this.setState({
+        isLoading: true
+      })
       CServiceObj.getAllExamOnCurrentDateAndRoom(this.props.selectedExam.date, this.props.selectedRoom).then((exams) => {
+        if (!exams || exams.length === 0) {
+          this.setState({
+            isLoading: false
+          })
+        }
         exams.forEach(exam => {
           var newSchedules = this.state.schedules
 
@@ -500,7 +523,8 @@ class RoomScheduleTable extends Component {
             }
           }
           this.setState({
-            schedules: newSchedules
+            schedules: newSchedules,
+            isLoading: false
           })
         })
       })
@@ -523,7 +547,7 @@ class RoomScheduleTable extends Component {
 
   render () {
     return (
-      <table className="table room-schedule-table">
+      <table className={`table room-schedule-table ${this.state.isLoading ? 'disabled' : ''}`}>
         <thead>
           <tr className="is-header">
             <th className="is-ignore">เวลา</th>
