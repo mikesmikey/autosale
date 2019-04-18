@@ -43,6 +43,8 @@ class ExaminersManage extends Component {
     this.Examiner = []
     this.checkExaminer = 0
     this.checkClick = ''
+    this.Exam = []
+    this.checkAdd = 0
 
     this.handleSelectType = this.handleSelectType.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
@@ -141,6 +143,7 @@ class ExaminersManage extends Component {
     this.examinerTable.loadDataByTypeAndUsername(this.state.selectedType, this.state.searchInput)
     this.loadDataToRoomExamSelect()
     this.loadTimeStart()
+    this.Exam = this.props.selectedExam
     // console.log(this.props.selectedExam)
   }
 
@@ -171,6 +174,7 @@ class ExaminersManage extends Component {
     document.getElementById('TimeExamgSelect').options.length = 0
     const target = e.target
     const value = target.value
+    var check = 0
     // console.log(this.props.selectedExam)
 
     this.setState({
@@ -216,6 +220,13 @@ class ExaminersManage extends Component {
         el.value = setTime
         el.textContent = setTime
         select.appendChild(el)
+
+        if (check === 0) {
+          this.setState({
+            Time: setTime
+          })
+          check++
+        }
       }
     }
   }
@@ -333,29 +344,54 @@ class ExaminersManage extends Component {
   }
 
   handleSubmitButton () {
-    for (var i = 0; i < this.Examiner.length; i++) {
-      var examinersData = {}
-      var dataEx = {}
-      // examinersData.username = this.Examiner[i].firstName
-      examinersData.username = this.Examiner[i].firstName + ' ' + this.Examiner[i].lastName
-      dataEx.type = this.Examiner[i].typeOfUser
-      dataEx.room = this.Examiner[i].room
-      dataEx.time = this.Examiner[i].time
-      var startTime = parseInt(dataEx.time.charAt(0))
-      ServiceObj.getAllExamByExaminer(this.props.selectedExam._id, dataEx.room, startTime, examinersData).then((data) => {
-        console.log(data.length)
-        console.log(data)
-        console.log(this.props.selectedExam._id)
-        console.log(dataEx.room)
-        console.log(parseInt(dataEx.time.charAt(0)))
-        console.log(examinersData)
-        var startTime = parseInt(dataEx.time.charAt(0))
-        if (data.length === 0) {
-          ServiceObj.insertExaminerIntoRoom(this.props.selectedExam._id, dataEx.room, startTime, examinersData).then((result) => {
-            if (result) {
-              alert('เพิ่มผู้คุมสอบสำเร็จ')
+    // console.log(this.Exam)
+    if (this.Examiner.length === 0) {
+      alert('ยังไม่ได้ห้องเลือกผู้คุมสอบ')
+    } else {
+      var rooms = []
+      for (var z = 0; z < this.Exam.rooms.length; z++) {
+        rooms.push(this.Exam.rooms[z])
+      }
+      for (var i = 0; i < this.Examiner.length; i++) {
+        this.checkAdd = 0
+        var userName = this.Examiner[i].firstName + ' ' + this.Examiner[i].lastName
+        for (var j = 0; j < rooms.length; j++) {
+          var examinersData = []
+          var time = ''
+          var timenumber = 0
+          for (var kk = 0; kk < this.Examiner[i].time.length; kk++) {
+            if (this.Examiner[i].time.charAt(kk) === ':') {
+              timenumber = parseInt(time)
+              break
             }
-          })
+            time += this.Examiner[i].time.charAt(kk)
+          }
+  
+          if (rooms[j].roomId === this.Examiner[i].room &&
+                rooms[j].startTime === timenumber) {
+            for (var k = 0; k < rooms[j].examiners.length; k++) {
+              if (rooms[j].examiners[k].username === userName) {
+                this.checkAdd++
+              }
+              examinersData.push(rooms[j].examiners[k])
+            }
+  
+            if (this.checkAdd === 0) {
+              examinersData.push({ username: userName })
+            }
+            rooms[j].roomId = this.Exam.rooms[j].roomId
+            rooms[j].startTime = this.Exam.rooms[j].startTime
+            rooms[j].hours = this.Exam.rooms[j].hours
+            rooms[j].maxStudent = this.Exam.rooms[j].maxStudent
+            rooms[j].examiners = examinersData
+          }
+        }
+      }
+      console.log(rooms)
+      ServiceObj.insertExaminerIntoRoom(this.props.selectedExam._id, rooms).then((result) => {
+        if (result) {
+          this.props.closeModal()
+          this.props.showModal('examManageModal')
         }
       })
     }

@@ -812,33 +812,17 @@ class WebDAO {
   }
 
   /* ===========[Examiner DAO]=================== */
-  addExaminerIntoRoom (Id, Room, STime, Data) {
+  addExaminerIntoRoom (Id, Data) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
         if (err) { resolve(null) }
         const db = client.db(dbName)
-        db.collection('Exam').findOneAndUpdate({ '_id': new ObjectId(Id), 'rooms.roomId': Room, 'rooms.startTime': STime }, { '$push': { 'rooms.examiners': Data } }, (err, result) => {
-          // console.log(Data)
+        db.collection('Exam').findOneAndUpdate({ '_id': new ObjectId(Id) }, { '$set': { 'rooms': Data } }, (err, result) => {
           if (err) { throw err }
           if (result) {
             client.close()
             return resolve(true)
           } else { return resolve(false) }
-        })
-        client.close()
-      })
-    })
-  }
-
-  getAllExamByExaminer (Id, Room, STime, Data) {
-    return new Promise((resolve, reject) => {
-      mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
-        if (_err) { resolve(null) }
-        const db = client.db(dbName)
-        db.collection('Exam').find({ '_id': new ObjectId(Id), 'rooms.roomId': Room, 'rooms.startTime': STime, 'rooms.examiners': Data }).project({ '_id': 0, 'password': 0 }).toArray((err, data) => {
-          if (err) { throw err }
-          client.close()
-          return resolve(data)
         })
         client.close()
       })

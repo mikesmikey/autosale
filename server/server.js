@@ -107,16 +107,8 @@ app.get('/users/examiner/:type/:name/:startPos/:limit', (req, res) => {
   })
 })
 
-app.post('/exam/room/examiner', (req, res) => {
-  WebDAOObj.getAllExamByExaminer(req.body.Id, req.body.Room, req.body.STime, req.body.Data).then((pass) => {
-    if (pass) {
-      res.send(pass)
-    }
-  })
-})
-
 app.post('/exam/examiner', (req, res) => {
-  WebDAOObj.addExaminerIntoRoom(req.body.Id, req.body.Room, req.body.STime, req.body.Data).then((pass) => {
+  WebDAOObj.addExaminerIntoRoom(req.body.Id, req.body.Data).then((pass) => {
     if (pass) {
       res.send(pass)
     }

@@ -451,17 +451,9 @@ class ClientService {
     })
   }
 
-  getAllExamByExaminer (Id, Room, STime, Data) {
+  insertExaminerIntoRoom (Id, Data) {
     return new Promise((resolve) => {
-      axios.post(`/exam/room/examiner`, { 'Id': Id, 'Room': Room, 'STime': STime, 'Data': Data }).then((result) => {
-        resolve(result.data)
-      })
-    })
-  }
-
-  insertExaminerIntoRoom (Id, Room, STime, Data) {
-    return new Promise((resolve) => {
-      axios.post(`/exam/examiner`, { 'Id': Id, 'Room': Room, 'STime': STime, 'Data': Data }).then((result) => {
+      axios.post(`/exam/examiner`, { 'Id': Id, 'Data': Data }).then((result) => {
         resolve(result.data)
       })
     })
