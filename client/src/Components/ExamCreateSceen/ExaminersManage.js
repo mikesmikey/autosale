@@ -438,7 +438,6 @@ class ExaminersManage extends Component {
             }
           }
         }
-        console.log(rooms)
         ServiceObj.insertExaminerIntoRoom(this.props.selectedExam._id, rooms).then((result) => {
           if (result) {
             this.props.closeModal()
@@ -526,7 +525,7 @@ class ExaminersManage extends Component {
 
   handleExaminerAddButton () {
     this.addExaminer().then(() => {
-
+      this.addToSelectedExaminerTable()
     })
   }
 
