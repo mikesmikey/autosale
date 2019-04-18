@@ -246,6 +246,7 @@ class WebDAO {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
         if (err) { resolve(null) }
         const db = client.db(dbName)
+        if (!client) return resolve(null)
         db.collection('GlobalData').findOne({}, (err, data) => {
           if (err) { throw err }
           client.close()
@@ -929,7 +930,7 @@ class WebDAO {
       })
     })
   }
-  
+
   /* ===========[Examiner DAO]=================== */
   addExaminerIntoRoom (Id, Data) {
     return new Promise((resolve, reject) => {

@@ -453,10 +453,10 @@ app.post('/exam/room/update', (req, res) => {
   })
 })
 
-app.post('/exam/finish', (req, res) => {
-  WebServiceObj.confirmExam(req.body.examId).then((pass) => {
-    if (pass) {
-      res.send(pass)
+app.post('/exam/confirm', (req, res) => {
+  WebServiceObj.confirmExam(req.body.examId).then((result) => {
+    if (result) {
+      res.send(result)
     }
   })
 })

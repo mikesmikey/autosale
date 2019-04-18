@@ -258,21 +258,6 @@ class ClientService {
     })
   }
 
-  validCourseExistInDB (course) {
-    return new Promise((resolve, reject) => {
-      this.getCourseByIdAndSubjectId(course.courseId, course.subjectId).then((result) => {
-        if (result.length === 1) {
-          result[0].courses.forEach(dbCourse => {
-            if (dbCourse.courseId === course.courseId && dbCourse.school_year === course.school_year && dbCourse.semester === course.semester) {
-              return resolve(true)
-            }
-          })
-        }
-        return resolve(false)
-      })
-    })
-  }
-
   // ==========[Building Service]=================
 
   getAllBuildingByRoom (buildingname, room) {
@@ -362,15 +347,6 @@ class ClientService {
     })
   }
 
-  confirmExam (examId) {
-    return new Promise((resolve) => {
-      var url = `/exam/finish`
-      axios.post(url, { examId: examId }).then((result) => {
-        resolve(result.data)
-      })
-    })
-  }
-
   deleteExam (objectId) {
     return new Promise((resolve) => {
       axios.delete(`/exam/${objectId}`).then((result) => {
@@ -415,6 +391,14 @@ class ClientService {
   updateExamData (examId, examData) {
     return new Promise((resolve) => {
       axios.post(`/exam/room/update`, { 'examId': examId, 'examData': examData }).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
+  confirmExam (examId) {
+    return new Promise((resolve, reject) => {
+      axios.post(`/exam/confirm`, { 'examId': examId }).then((result) => {
         resolve(result.data)
       })
     })

@@ -174,17 +174,11 @@ class ExamManageModal extends Component {
     }
   }
 
-  handleExamCreateButton () {
+  handleExamConfirmButton () {
     if (this.state.selectedExam) {
-      CServiceObj.validCourseExistInDB(this.props.selectedCourse).then((result) => {
-        console.log(`course valid : ${result}`)
+      CServiceObj.confirmExam(this.state.selectedExam._id).then((result) => {
+        console.log(result)
       })
-      let exam = new Exam(this.state.selectedExam)
-      console.log(`exam simple data valid : ${exam.validExamSimpleData()}`)
-      console.log(exam.validRooms())
-      //this.validExaminers
-      //this.generateRooms
-      //this.confirmExam
     } else {
       alert('กรุณาเลือกการสอบก่อนที่จะยืนยัน')
     }
@@ -252,7 +246,7 @@ class ExamManageModal extends Component {
               <div className="manage-button-area box is-round">
                 <button
                   className={`button is-3 is-oros is-round is-full-width ${this.handleExamManageButtonStyle()}`}
-                  onClick={() => { this.handleExamCreateButton() }}
+                  onClick={() => { this.handleExamConfirmButton() }}
                 >
                 ยืนยันการสอบ
                 </button>

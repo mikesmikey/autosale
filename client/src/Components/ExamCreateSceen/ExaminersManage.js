@@ -366,7 +366,6 @@ class ExaminersManage extends Component {
             }
             time += this.Examiner[i].time.charAt(kk)
           }
-  
           if (rooms[j].roomId === this.Examiner[i].room &&
                 rooms[j].startTime === timenumber) {
             for (var k = 0; k < rooms[j].examiners.length; k++) {
@@ -375,7 +374,6 @@ class ExaminersManage extends Component {
               }
               examinersData.push(rooms[j].examiners[k])
             }
-  
             if (this.checkAdd === 0) {
               examinersData.push({ username: userName })
             }
