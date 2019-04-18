@@ -20,6 +20,7 @@ class ExaminersManage extends Component {
     this.state = {
       selectedType: 'student',
       selectedUser: false,
+      UserName: false,
       FName: false,
       LName: false,
       Type: false,
@@ -62,6 +63,7 @@ class ExaminersManage extends Component {
     this.setCheckClick = this.setCheckClick.bind(this)
     this.setDelete = this.setDelete.bind(this)
     this.handleSubmitButton = this.handleSubmitButton.bind(this)
+    this.setUsername = this.setUsername.bind(this)
   }
 
   loadDataToRoomExamSelect () {
@@ -343,6 +345,12 @@ class ExaminersManage extends Component {
     })
   }
 
+  setUsername (data) {
+    this.setState({
+      UserName: data
+    })
+  }
+
   handleSubmitButton () {
     // console.log(this.Exam)
     if (this.Examiner.length === 0) {
@@ -354,7 +362,7 @@ class ExaminersManage extends Component {
       }
       for (var i = 0; i < this.Examiner.length; i++) {
         this.checkAdd = 0
-        var userName = this.Examiner[i].firstName + ' ' + this.Examiner[i].lastName
+        var userName = this.Examiner[i].username
         for (var j = 0; j < rooms.length; j++) {
           var examinersData = []
           var time = ''
@@ -409,6 +417,7 @@ class ExaminersManage extends Component {
     }
     if (this.checkExaminer === this.Examiner.length && this.state.FName !== false) {
       this.Examiner.push({
+        username: this.state.UserName,
         firstName: this.state.FName,
         lastName: this.state.LName,
         typeOfUser: this.state.Type,
@@ -417,6 +426,7 @@ class ExaminersManage extends Component {
       })
       this.checkClick = ''
       this.setState({
+        UserName: false,
         FName: false,
         LName: false,
         Type: false
@@ -496,6 +506,8 @@ class ExaminersManage extends Component {
                   setFName={this.setFName}
                   setLName={this.setLName}
                   setType={this.setType}
+                  setUsername={this.setUsername}
+                  UserName={this.state.UserName}
                   FName={this.state.FName}
                   LName={this.state.LName}
                   Type={this.state.Type}
@@ -605,6 +617,7 @@ class ExaminerTable extends Component {
         this.setState({
           selectedRow: parent
         })
+        this.props.setUsername(this.state.data[parent.getAttribute('index')].username)
         this.props.setFName(this.state.data[parent.getAttribute('index')].firstName)
         this.props.setLName(this.state.data[parent.getAttribute('index')].lastName)
         this.props.setType(this.state.data[parent.getAttribute('index')].typeOfUser)
