@@ -139,6 +139,15 @@ class ClientService {
     })
   }
 
+  getUserByUsername (username) {
+    return new Promise((resolve, reject) => {
+      var url = `/user/${username}`
+      axios.get(url).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
   // ==========[Faculty Service]=================
 
   getAllFaculty () {

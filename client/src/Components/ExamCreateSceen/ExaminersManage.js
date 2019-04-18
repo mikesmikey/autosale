@@ -52,6 +52,7 @@ class ExaminersManage extends Component {
     this.handleSearchButton = this.handleSearchButton.bind(this)
     this.handleSelectRoom = this.handleSelectRoom.bind(this)
     this.handleSelectTime = this.handleSelectTime.bind(this)
+    this.handleBackButton = this.handleBackButton.bind(this)
     this.setDataLoadingStatus = this.setDataLoadingStatus.bind(this)
     this.loadDataToRoomExamSelect = this.loadDataToRoomExamSelect.bind(this)
     this.loadTimeStart = this.loadTimeStart.bind(this)
@@ -62,7 +63,6 @@ class ExaminersManage extends Component {
     this.setType = this.setType.bind(this)
     this.setCheckClick = this.setCheckClick.bind(this)
     this.setDelete = this.setDelete.bind(this)
-    this.handleSubmitButton = this.handleSubmitButton.bind(this)
     this.setUsername = this.setUsername.bind(this)
   }
 
@@ -141,11 +141,55 @@ class ExaminersManage extends Component {
     }
   }
 
+  calculateExamRoomTime (room) {
+    var startTimeToString = room.startTime.toString()
+    var finishTime = room.startTime + room.hours
+    var finishTimeToString = finishTime.toString()
+    if (startTimeToString.length === 1 || startTimeToString.length === 2) {
+      if (startTimeToString.length === 1) {
+        startTimeToString = '0' + startTimeToString + ':00'
+      } else {
+        startTimeToString = startTimeToString + ':00'
+      }
+    } else if (startTimeToString.length === 3) {
+      startTimeToString = startTimeToString.charAt(0) + ':' + startTimeToString.charAt(2)
+    } else if (startTimeToString.length === 4) {
+      if (startTimeToString.charAt(1) === '.') {
+        startTimeToString = startTimeToString.charAt(0) + ':' + startTimeToString.charAt(2) + startTimeToString.charAt(3)
+      } else {
+        startTimeToString = startTimeToString.charAt(0) + startTimeToString.charAt(1) + ':' + startTimeToString.charAt(3) + '0'
+      }
+    } else if (startTimeToString.length === 5) {
+      startTimeToString = startTimeToString.charAt(0) + startTimeToString.charAt(1) + ':' + startTimeToString.charAt(3) + startTimeToString.charAt(4)
+    }
+
+    if (finishTimeToString.length === 1 || finishTimeToString.length === 2) {
+      if (finishTimeToString.length === 1) {
+        finishTimeToString = '0' + finishTimeToString + ':00'
+      } else {
+        finishTimeToString = finishTimeToString + ':00'
+      }
+    } else if (finishTimeToString.length === 3) {
+      finishTimeToString = finishTimeToString.charAt(0) + ':' + finishTimeToString.charAt(2)
+    } else if (finishTimeToString.length === 4) {
+      if (finishTimeToString.charAt(1) === '.') {
+        finishTimeToString = finishTimeToString.charAt(0) + ':' + finishTimeToString.charAt(2) + finishTimeToString.charAt(3)
+      } else {
+        finishTimeToString = finishTimeToString.charAt(0) + finishTimeToString.charAt(1) + ':' + finishTimeToString.charAt(3) + '0'
+      }
+    } else if (finishTimeToString.length === 5) {
+      finishTimeToString = finishTimeToString.charAt(0) + finishTimeToString.charAt(1) + ':' + finishTimeToString.charAt(3) + finishTimeToString.charAt(4)
+    }
+
+    return startTimeToString + '-' + finishTimeToString
+  }
+
   componentDidMount () {
     this.examinerTable.loadDataByTypeAndUsername(this.state.selectedType, this.state.searchInput)
     this.loadDataToRoomExamSelect()
     this.loadTimeStart()
     this.Exam = this.props.selectedExam
+    this.loadExaminer()
     // console.log(this.props.selectedExam)
   }
 
@@ -351,55 +395,75 @@ class ExaminersManage extends Component {
     })
   }
 
-  handleSubmitButton () {
-    // console.log(this.Exam)
-    if (this.Examiner.length === 0) {
-      alert('ยังไม่ได้ห้องเลือกผู้คุมสอบ')
-    } else {
-      var rooms = []
-      for (var z = 0; z < this.Exam.rooms.length; z++) {
-        rooms.push(this.Exam.rooms[z])
-      }
-      for (var i = 0; i < this.Examiner.length; i++) {
-        this.checkAdd = 0
-        var userName = this.Examiner[i].username
-        for (var j = 0; j < rooms.length; j++) {
-          var examinersData = []
-          var time = ''
-          var timenumber = 0
-          for (var kk = 0; kk < this.Examiner[i].time.length; kk++) {
-            if (this.Examiner[i].time.charAt(kk) === ':') {
-              timenumber = parseInt(time)
-              break
-            }
-            time += this.Examiner[i].time.charAt(kk)
-          }
-          if (rooms[j].roomId === this.Examiner[i].room &&
-                rooms[j].startTime === timenumber) {
-            for (var k = 0; k < rooms[j].examiners.length; k++) {
-              if (rooms[j].examiners[k].username === userName) {
-                this.checkAdd++
+  addExaminer () {
+    return new Promise((resolve, reject) => {
+      // console.log(this.Exam)
+      if (this.Examiner.length === 0) {
+        alert('ยังไม่ได้ห้องเลือกผู้คุมสอบ')
+      } else {
+        var rooms = []
+        for (var z = 0; z < this.Exam.rooms.length; z++) {
+          rooms.push(this.Exam.rooms[z])
+        }
+        for (var i = 0; i < this.Examiner.length; i++) {
+          this.checkAdd = 0
+          var userName = this.Examiner[i].username
+          for (var j = 0; j < rooms.length; j++) {
+            var examinersData = []
+            var time = ''
+            var timenumber = 0
+            for (var kk = 0; kk < this.Examiner[i].time.length; kk++) {
+              if (this.Examiner[i].time.charAt(kk) === ':') {
+                timenumber = parseInt(time)
+                break
               }
-              examinersData.push(rooms[j].examiners[k])
+              time += this.Examiner[i].time.charAt(kk)
             }
-            if (this.checkAdd === 0) {
-              examinersData.push({ username: userName })
+            if (rooms[j].roomId === this.Examiner[i].room &&
+                rooms[j].startTime === timenumber) {
+              for (var k = 0; k < rooms[j].examiners.length; k++) {
+                if (rooms[j].examiners[k].username === userName) {
+                  this.checkAdd++
+                }
+                examinersData.push(rooms[j].examiners[k])
+              }
+              if (this.checkAdd === 0) {
+                examinersData.push({ username: userName })
+              }
+              rooms[j].roomId = this.Exam.rooms[j].roomId
+              rooms[j].startTime = this.Exam.rooms[j].startTime
+              rooms[j].hours = this.Exam.rooms[j].hours
+              rooms[j].maxStudent = this.Exam.rooms[j].maxStudent
+              rooms[j].examiners = examinersData
             }
-            rooms[j].roomId = this.Exam.rooms[j].roomId
-            rooms[j].startTime = this.Exam.rooms[j].startTime
-            rooms[j].hours = this.Exam.rooms[j].hours
-            rooms[j].maxStudent = this.Exam.rooms[j].maxStudent
-            rooms[j].examiners = examinersData
           }
         }
+        console.log(rooms)
+        ServiceObj.insertExaminerIntoRoom(this.props.selectedExam._id, rooms).then((result) => {
+          if (result) {
+            this.props.closeModal()
+            this.props.showModal('examManageModal')
+          }
+        })
       }
-      console.log(rooms)
-      ServiceObj.insertExaminerIntoRoom(this.props.selectedExam._id, rooms).then((result) => {
-        if (result) {
-          this.props.closeModal()
-          this.props.showModal('examManageModal')
-        }
-      })
+    })
+  }
+
+  loadExaminer () {
+    for (let i = 0; i < this.Exam.rooms.length; i++) {
+      let room = this.Exam.rooms[i]
+      for (let j = 0; j < room.examiners.length; j++) {
+        ServiceObj.getUserByUsername(room.examiners[j].username).then(result => {
+          this.Examiner.push({
+            username: result.username,
+            firstName: result.firstName,
+            lastName: result.lastName,
+            typeOfUser: result.typeOfUser,
+            room: room.roomId,
+            time: this.calculateExamRoomTime(room)
+          })
+        })
+      }
     }
   }
 
@@ -458,6 +522,16 @@ class ExaminersManage extends Component {
     }
     this.examinerTable.loadDataByTypeAndUsername(this.state.selectedType, this.state.searchInput, this.state.page === 1 ? 0 : (this.state.page - 1) * 50)
     this.calculateMaxPage()
+  }
+
+  handleExaminerAddButton () {
+    this.addExaminer().then(() => {
+
+    })
+  }
+
+  handleBackButton () {
+    this.props.showModal('examManageModal')
   }
 
   render () {
@@ -580,9 +654,9 @@ class ExaminersManage extends Component {
                 <button className="button is-yentafo is-round"
                   onClick={() => { this.deleteToSelectedExaminerTable() }}
                 >ลบ</button>
-                <button className="button is-oros is-round"
-                  onClick={() => { this.handleSubmitButton() }}
-                >บันทึก</button>
+                <button className="button is-orange is-round"
+                  onClick={this.handleBackButton}
+                >ย้อนกลับ</button>
               </div>
             </div>
           </div>
