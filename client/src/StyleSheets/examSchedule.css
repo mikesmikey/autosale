@@ -19,18 +19,25 @@
     background-color: #ededed;
 }
 
-.exam-schedule-item .column {
-    height: 250px;
-}
-
 .date-labels {
+    padding: 10px;
     text-align: center;
     overflow: hidden;
+
+    height: 280px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.exam-schedule-item .columns {
+    min-height: 300px;
 }
 
 .date-labels h1 {
     font-size: 72px;
-    margin: 1rem 0;
+    margin: 0;
+    margin-bottom: .5rem;
 }
 
 .date-labels h2 {
@@ -80,9 +87,8 @@
 }
 
 .exam-detail {
-    height: 50%;
-    padding: 15px 50px;
-
+    height: 180px;
+    margin: 0;
     box-sizing: border-box;
 }
 
@@ -96,7 +102,7 @@
     margin: 0;
 
     font-size: 18px;
-    color: #542f77;
+    color: #6d389e;
 }
 
 .exam-date-box {
@@ -126,9 +132,100 @@
     color: #dbdbdb;
 }
 
+.exam-detail-column {
+    padding: 15px;
+}
+
+.small-detail-box {
+    background-color: #cecece;
+    padding: 5px;
+    border-radius: 5px;
+    margin: 10px 0;
+}
+
 @media screen and (max-width: 800px) {
 
     .exam-schedule {
         width: 100%;
+    }
+
+    .schedule-area {
+        padding: 0;
+    }
+
+    .exam-schedule-item {
+        margin: 0;
+        padding: 5px;
+    }
+
+    .exam-schedule-item .columns {
+        min-height: 100px;
+    }
+
+    .exam-schedule-item .column {
+        height: 100px !important;
+        padding: 3px;
+    }
+
+    .date-labels {
+        padding: 0;
+        display: block;
+        height: inherit;
+    }
+
+    .date-labels h1 {
+        font-size: 24px;
+        margin: 5px;
+    }
+
+    .date-labels h2 {
+        font-size: 12px;
+    }
+
+    .date-labels h3 {
+        font-size: 14px;
+    }
+
+    #subject-name {
+        font-size: 16px;
+        margin: 3px;
+    }
+
+    .exam-detail {
+        height: 70px;
+        padding: 3px;
+    }
+
+    .exam-detail p {
+        margin: 0;
+    
+        font-size: 8px;
+        color: #6d389e;
+    }
+
+    .small-detail-box {
+        margin: 3px 0;
+        padding: 3px;
+    }
+
+    .exam-extend-detail {
+        width: 100vw;
+        height: 100vh;
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+
+    .exam-extend-detail .box .box-content {
+        height: 70vh;
+        overflow: scroll;
+    }
+
+    .exam-extend-detail .box-title p {
+        font-size: 18px;
+    }
+
+    .exam-extend-detail h2 {
+        font-size: 16px;
     }
 }

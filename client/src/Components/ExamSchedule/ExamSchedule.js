@@ -10,8 +10,7 @@ class ExamSchedule extends Component {
   createSampleData () {
     var returnArr = []
     for (var i = 0; i < 50; i++) {
-      // returnArr[i] = <ExamScheduleItem key={i} showModal={() => { this.extendDetailModal.showModal() }} />
-      // returnArr[i] = <div>asdasd</div>
+      returnArr[i] = <ExamScheduleItem key={i} showModal={() => { this.extendDetailModal.showModal() }} />
     }
 
     return returnArr
@@ -21,7 +20,7 @@ class ExamSchedule extends Component {
     return (
       <div className="subcontent-main-div exam-schedule">
         <Modal ref={instance => { this.extendDetailModal = instance }} content={<ExamExtendDetail closeModal={() => { this.extendDetailModal.closeModal() }} />} />
-        <div className="box is-round">
+        <div className="schedule-area box is-round">
           {this.createSampleData()}
         </div>
       </div>
@@ -30,32 +29,61 @@ class ExamSchedule extends Component {
 }
 
 class ExamScheduleItem extends Component {
+  // render () {
+  //   return (
+  //     <div className="exam-schedule-item box is-round" onClick={this.props.showModal}>
+  //       <div className="columns">
+  //         <div className="exam-date-box column is-2 is-white-violet">
+  //           <span className="date-labels">
+  //             <h1>99</h1>
+  //             <h3>ธันวาคม</h3>
+  //             <h3>99999</h3>
+  //             <h2>เวลา 99:99</h2>
+  //           </span>
+  //         </div>
+  //         <div className="exam-detail-column column">
+  //           <div className="exam-title">
+  //             <div className="columns">
+  //               <div className="column auto">
+  //                 <h2 id="subject-id">88624459 : </h2>
+  //               </div>
+  //               <div className="column">
+  //                 <h2 id="subject-name">Object-Oriented Analysis and Design</h2>
+  //               </div>
+  //             </div>
+  //           </div>
+  //           <div className="exam-detail">
+  //             <div className="box is-round is-light-gray">
+  //               <p>กลุ่มที่ : 1 ห้องสอบ : IF-404 เลขที่นั่งสอบ : 12 ประเภท : กลางภาค</p>
+  //             </div>
+  //           </div>
+  //         </div>
+  //       </div>
+  //     </div>
+  //   )
+  // }
   render () {
     return (
       <div className="exam-schedule-item box is-round" onClick={this.props.showModal}>
         <div className="columns">
           <div className="exam-date-box column is-2 is-white-violet">
-            <span className="date-labels">
+            <div className="date-labels">
               <h1>99</h1>
               <h3>ธันวาคม</h3>
               <h3>99999</h3>
               <h2>เวลา 99:99</h2>
-            </span>
+            </div>
           </div>
           <div className="exam-detail-column column">
-            <div className="exam-title">
-              <div className="columns">
-                <div className="column auto">
-                  <h2 id="subject-id">88624459 : </h2>
-                </div>
-                <div className="column">
-                  <h2 id="subject-name">Object-Oriented Analysis and Design</h2>
-                </div>
+            <h2 id="subject-name">ชื่อการสอบ</h2>
+            <div className="exam-detail box is-round is-light-gray">
+              <div className="small-detail-box">
+                <p>รหัสวิชา : ชื่อวิชา</p>
+                <p>ปีการศึกษา เทอม </p>
               </div>
-            </div>
-            <div className="exam-detail">
-              <div className="box is-round is-light-gray">
-                <p>กลุ่มที่ : 1 ห้องสอบ : IF-404 เลขที่นั่งสอบ : 12 ประเภท : กลางภาค</p>
+              <div className="small-detail-box">
+                <p>ตึก ห้องสอบ</p>
+                <p>เลขที่นั่งสอบ : 12A</p>
               </div>
             </div>
           </div>
