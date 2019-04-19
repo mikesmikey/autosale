@@ -533,12 +533,6 @@ class ExaminersManage extends Component {
     }
   }
 
-  handleExaminerAddButton () {
-    this.addExaminer().then(() => {
-      this.addToSelectedExaminerTable()
-    })
-  }
-
   handleBackButton () {
     this.props.showModal('examManageModal')
   }
