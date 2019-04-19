@@ -191,6 +191,26 @@ class WebDAO {
     })
   }
 
+  /* ===========[Student DAO] ================== */
+  getAllStudentByRegisteredCourse (subjectId, courseId) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+
+        const db = client.db(dbName)
+        const query = { 'typeOfUser': 'student',
+          'courses.subjectId': subjectId,
+          'courses.courseId': courseId
+        }
+        db.collection('User').find(query).project({ '_id': 0, 'password': 0 }).toArray((err, data) => {
+          if (err) { throw err }
+          client.close()
+          return resolve(data)
+        })
+      })
+    })
+  }
+
   /* ===========[Faculty DAO]=================== */
   getAllFaculty () {
     return new Promise((resolve, reject) => {
@@ -313,8 +333,8 @@ class WebDAO {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
         if (err) { resolve(null) }
-
         const db = client.db(dbName)
+        if (!client) return resolve(null)
         db.collection('Building').aggregate(
           [
             {

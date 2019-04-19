@@ -19,7 +19,10 @@ class ExamManageModal extends Component {
     this.state = {
       selectedExam: null,
       exams: [],
-      isLoading: false
+      isLoading: false,
+      roomInfoRoomAmount: 0,
+      roomInfoSeatAmount: 0,
+      examinerAmount: 0
     }
 
     this._isMounted = true
@@ -44,6 +47,9 @@ class ExamManageModal extends Component {
     if (this.props.selectedCourse !== prevProps.selectedCourse) {
       this.loadAllExam(this.props.selectedCourse.subjectId, this.props.selectedCourse.courseId)
     }
+    if (this.state.selectedExam !== prevStates.selectedExam) {
+      this.handleExamInfo()
+    }
   }
 
   handleCreateExamButtonStyle () {
@@ -52,8 +58,14 @@ class ExamManageModal extends Component {
     } else { return '' }
   }
 
-  handleExamManageButtonStyle () {
-    if (this.props.selectedCourse && this.props.selectedCourse.status === 'noExamData') {
+  handleConfirmedButtonStyle () {
+    if (this.state.selectedExam && this.state.selectedExam.examConfirm) {
+      return 'disabled'
+    } else { return '' }
+  }
+
+  handleUniversalButtonStyle () {
+    if (!this.state.selectedExam) {
       return 'disabled'
     } else { return '' }
   }
@@ -174,13 +186,51 @@ class ExamManageModal extends Component {
     }
   }
 
-  handleExamConfirmButton () {
+  handleExamConfirmButton (e) {
     if (this.state.selectedExam) {
+      this.setState({
+        isLoading: true
+      })
       CServiceObj.confirmExam(this.state.selectedExam._id).then((result) => {
-        console.log(result)
+        if (result.examConfirm) {
+          alert('ยืนยันการสอบสำเร็จ')
+          let newExam = this.state.selectedExam
+          newExam.examConfirm = result.examConfirm
+          this.updateMemExam(newExam)
+        } else {
+          this.handleExamConfirmError(result.validResult)
+        }
+        this.setState({
+          isLoading: false
+        })
       })
     } else {
       alert('กรุณาเลือกการสอบก่อนที่จะยืนยัน')
+    }
+  }
+
+  handleExamConfirmError (error) {
+    console.log(error)
+  }
+
+  handleExamInfo () {
+    if (this.state.selectedExam) {
+      let calculateSeatAndExaminerAmount = (rooms) => {
+        let seatCount = 0; let examinerCount = 0
+        if (rooms) {
+          rooms.forEach(room => {
+            seatCount += Number.parseInt(room.maxStudent)
+            examinerCount += room.examiners.length
+          })
+        }
+        return [seatCount, examinerCount]
+      }
+      let calResult = calculateSeatAndExaminerAmount(this.state.selectedExam.rooms)
+      this.setState({
+        roomInfoRoomAmount: this.state.selectedExam.rooms ? this.state.selectedExam.rooms.length : 0,
+        roomInfoSeatAmount: calResult[0],
+        examinerAmount: calResult[1]
+      })
     }
   }
 
@@ -222,22 +272,22 @@ class ExamManageModal extends Component {
             <div className={`column is-not-grow manage-column ${this.handleExamManageBoxStyle()}`}>
               <div className={`secondary-manage-box box is-round`}>
                 <h3>รายละเอียดเบื้องต้น</h3>
-                <p>ห้องสอบ : </p>
-                <p>ผู้คุมสอบ : </p>
+                <p>ห้องสอบ : {`${this.state.roomInfoRoomAmount} ห้อง (${this.state.roomInfoSeatAmount} ที่นั่ง)`}</p>
+                <p>ผู้คุมสอบ : {`${this.state.examinerAmount} ท่าน`}</p>
                 <button
-                  className={`button is-3 is-oros is-round is-full-width ${this.handleExamManageButtonStyle()}`}
+                  className={`button is-3 is-oros is-round is-full-width ${this.handleUniversalButtonStyle()}`}
                   onClick={() => { this.handleManageSimpleDataModal() }}
                 >
                 จัดการข้อมูลพื้นฐาน
                 </button>
                 <button
-                  className={`button is-3 is-oros is-round is-full-width ${this.handleExamManageButtonStyle()}`}
+                  className={`button is-3 is-oros is-round is-full-width ${this.handleConfirmedButtonStyle()}`}
                   onClick={() => { this.handleManageRoomModal() }}
                 >
                 จัดการห้องสอบ
                 </button>
                 <button
-                  className={`button is-3 is-oros is-round is-full-width ${this.handleExamManageButtonStyle()}`}
+                  className={`button is-3 is-oros is-round is-full-width ${this.handleConfirmedButtonStyle()}`}
                   onClick={() => { this.handleExaminersManageRoomModal() }}
                 >
                 จัดการผู้คุมสอบ
@@ -245,13 +295,13 @@ class ExamManageModal extends Component {
               </div>
               <div className="manage-button-area box is-round">
                 <button
-                  className={`button is-3 is-oros is-round is-full-width ${this.handleExamManageButtonStyle()}`}
-                  onClick={() => { this.handleExamConfirmButton() }}
+                  className={`button is-3 is-oros is-round is-full-width ${this.handleConfirmedButtonStyle()}`}
+                  onClick={(e) => { this.handleExamConfirmButton(e) }}
                 >
                 ยืนยันการสอบ
                 </button>
                 <button
-                  className={`button is-3 is-yentafo is-round is-full-width ${this.handleExamManageButtonStyle()}`}
+                  className={`button is-3 is-yentafo is-round is-full-width ${this.handleUniversalButtonStyle()}`}
                   onClick={() => { this.handleDeleteExamButton() }}
                 >
                 ยกเลิกการสอบ

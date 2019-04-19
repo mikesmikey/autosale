@@ -49,7 +49,7 @@ class WebService {
       const typeTable = ['student', 'professor', 'staff']
 
       var users = []
-      for (var i = 0; i < 500; i++) {
+      for (var i = 0; i < 1000; i++) {
         var userData = {}
         userData.username = '59100' + i
         userData.password = Number.parseInt(Math.random() * 100000000).toString()
@@ -70,7 +70,7 @@ class WebService {
           userData.courses = [
             {
               group: 1,
-              subjectId: '76930959',
+              subjectId: Number.parseInt(Math.random() * 2) === 0 ? '76930959' : '40550559',
               courseId: 1
             }
           ]
@@ -97,9 +97,22 @@ class WebService {
         this.validExamData(exam).then(result => {
           const validResult = this.checkExamConfirmError(result)
           if (typeof (validResult) === 'object') {
-            resolve(validResult)
+            console.log(`SYSTEM: Exam Valid Successful but found 'ERROR'. returning error to client . . .`)
+            resolve({ examConfirm: false, validResult })
           } else {
-            this.generateSeat(exam.rooms)
+            console.log('SYSTEM: Exam Valid Successful. about to start generate seats . . .')
+            this.generateSeat(exam).then((generateResult) => {
+              if (generateResult) {
+                console.log('SYSTEM: generate seats succussfully.')
+                console.log('SYSTEM: CONFIRMING EXAM . . . .')
+                DAO.updateExamData(examId, { examConfirm: true }).then((confirmResult) => {
+                  if (confirmResult) {
+                    console.log('SYSTEM: Exam Confirm returning to client.')
+                    resolve({ examConfirm: true })
+                  }
+                })
+              }
+            })
           }
         })
       })
@@ -217,20 +230,215 @@ class WebService {
     })
   }
 
-  generateSeat (rooms) {
+  shuffle (a) {
+    var j, x, i
+    for (i = a.length - 1; i > 0; i--) {
+      j = Math.floor(Math.random() * (i + 1))
+      x = a[i]
+      a[i] = a[j]
+      a[j] = x
+    }
+    return a
+  }
+
+  generateSeat (exam) {
+    const DAO = new WebDAO()
     return new Promise((resolve, reject) => {
-      console.log(rooms)
-      for (let i = 0; i < rooms.length; i++) {
-        let room = rooms[i]
-        console.log(room)
-        for (let j = 0; j < room.maxStudent; j++) {
+      DAO.getAllStudentByRegisteredCourse(exam.subjectId, exam.courseId).then((students) => {
+        let startColumn = 0
+        let startRow = 0
+        let lastColumn = 0
+        let lastRow = 0
+        let startStudent = 0
+        let lastStudent = 0
+
+        if (exam.seatOrderType === 'shuffle') {
+          students = this.shuffle(students)
         }
-      }
+        for (let i = 0, p = Promise.resolve(); i < exam.rooms.length; i++) {
+          p = p.then((_) => new Promise(resolve => {
+            let room = exam.rooms[i]
+            let calculateStart = () => {
+              if (lastColumn !== 0 && lastRow !== 0) {
+                if (lastColumn + 1 > room.column - 1) {
+                  if (lastRow + 1 <= room.row - 1) {
+                    startRow = lastRow + 1
+                  }
+                } else {
+                  startColumn = lastColumn + 1
+                }
+              }
+              if (lastStudent !== 0 && startStudent <= students.length - 1) {
+                startStudent = lastStudent + 1
+              }
+            }
+            calculateStart()
+            // console.log(`student amount: ${students.length} start column : ${startColumn} start row : ${startRow} start student : ${startStudent} max student : ${room.maxStudent}`)
+            this.mappingDefaultSeat(room).then((seatArr) => {
+              if (typeof (seatArr) === 'object') {
+                this.mappingAlreadyAssignSeat(exam, room, seatArr).then((mappedSeatArr) => {
+                  this.assignStudent(exam.seatLineUpType, students, mappedSeatArr, startColumn, startRow, startStudent, room.maxStudent).then((assignedResult) => {
+                    exam.rooms[i].examSeats = assignedResult.seatArr
+                    lastColumn = assignedResult.lastColumn
+                    lastRow = assignedResult.lastRow
+                    lastStudent = assignedResult.lastStudent
+                    // console.log(`last column : ${lastColumn} last row : ${lastRow} last student : ${lastStudent} max student : ${room.maxStudent}`)
+                    DAO.updateExamData(exam._id, { 'rooms': exam.rooms }).then(() => {
+                      resolve()
+                    })
+                  })
+                })
+              } else {
+                resolve()
+              }
+            })
+          })
+          )
+        }
+        resolve(true)
+      })
     })
   }
 
-  assignStudent () {
+  mappingDefaultSeat (room) {
+    return new Promise((resolve, reject) => {
+      var DAO = new WebDAO()
+      DAO.getRoomByRoomId(room.roomId).then((result) => {
+        if (result.length === 1) {
+          let seatArr = []
+          let roomInfo = result[0].rooms[0]
+          let char = 65 // A
+          for (let i = 0; i < roomInfo.column; i++) {
+            seatArr[i] = []
+            for (let j = 0; j < roomInfo.row; j++) {
+              seatArr[i][j] = { seatNumber: `${j + 1}${String.fromCharCode(char)}` }
+            }
+            char++
+          }
+          resolve(seatArr)
+        } else {
+          resolve()
+        }
+      })
+    })
+  }
 
+  mappingAlreadyAssignSeat (exam, room, seatArr) {
+    return new Promise((resolve, reject) => {
+      var DAO = new WebDAO()
+      DAO.getAllExamByDateAndRoom(exam.date, room.roomId).then((exams) => {
+        if (exams.length > 0) {
+          exams.forEach(otherExam => {
+            if (otherExam.rooms || otherExam.rooms.length > 0) {
+              if (exam._id.toString() !== otherExam._id.toString()) {
+                otherExam.rooms.forEach(otherExamRoom => {
+                  if (otherExamRoom.startTime === room.startTime && otherExam.examConfirm) {
+                    for (let i = 0; i < otherExamRoom.examSeats.length; i++) {
+                      for (let j = 0; j < otherExamRoom.examSeats[i].length; j++) {
+                        if (otherExamRoom.examSeats[i][j]) {
+                          if (otherExamRoom.examSeats[i][j].studentCode) {
+                            seatArr[i][j] = otherExamRoom.examSeats[i][j]
+                          }
+                        }
+                      }
+                    }
+                  }
+                })
+              }
+            }
+          })
+        }
+        resolve(seatArr)
+      })
+    })
+  }
+
+  assignStudent (lineUpType, students, seatArr, startColumn, startRow, startStudent, maxStudent) {
+    return new Promise((resolve, reject) => {
+      let studentCount = startStudent
+      if (students.length > seatArr.length * seatArr[0].length) {
+        console.log('WARNING: SEAT NOT ENOUGH.')
+      }
+      let lastColumn = startColumn; let lastRow = startRow
+      let ownedSeatArr = []
+
+      if (lineUpType === 'horizontal') {
+        for (let i = 0; i < seatArr.length; i++) {
+          if (studentCount === (startStudent + maxStudent) - 1) {
+            resolve({ seatArr: ownedSeatArr, lastColumn: lastColumn, lastRow: lastRow, lastStudent: studentCount })
+            break
+          }
+          ownedSeatArr[i] = []
+          for (let j = 0; j < seatArr[i].length; j++) {
+            if (!seatArr[i][j].studentCode) {
+              if (studentCount <= students.length - 1) {
+                if (studentCount === (startStudent + maxStudent) - 1) {
+                  ownedSeatArr[i][j] = {}
+                  ownedSeatArr[i][j].seatNumber = seatArr[i][j].seatNumber
+                  ownedSeatArr[i][j].studentCode = students[studentCount].username
+                  ownedSeatArr[i][j].status = 'unregistered'
+                  lastColumn = i + startColumn
+                  lastRow = j + startRow
+                  resolve({ seatArr: ownedSeatArr, lastColumn: lastColumn, lastRow: lastRow, lastStudent: studentCount })
+                  break
+                }
+                if (studentCount === students.length - 1) {
+                  ownedSeatArr[i][j] = {}
+                  ownedSeatArr[i][j].seatNumber = seatArr[i][j].seatNumber
+                } else {
+                  ownedSeatArr[i][j] = {}
+                  ownedSeatArr[i][j].seatNumber = seatArr[i][j].seatNumber
+                  ownedSeatArr[i][j].studentCode = students[studentCount].username
+                  ownedSeatArr[i][j].status = 'unregistered'
+                  lastColumn = i + startColumn
+                  lastRow = j + startRow
+                  studentCount++
+                }
+              }
+            }
+          }
+        }
+      } else if (lineUpType === 'vertical') {
+        for (let i = 0; i < seatArr[0].length; i++) {
+          if (studentCount === (startStudent + maxStudent) - 1) {
+            resolve({ seatArr: ownedSeatArr, lastColumn: lastColumn, lastRow: lastRow, lastStudent: studentCount })
+            break
+          }
+          for (let j = 0; j < seatArr.length; j++) {
+            if (!ownedSeatArr[j]) {
+              ownedSeatArr[j] = []
+            }
+            if (!seatArr[j][i].studentCode) {
+              if (studentCount <= students.length - 1) {
+                if (studentCount === (startStudent + maxStudent) - 1) {
+                  ownedSeatArr[j][i] = {}
+                  ownedSeatArr[j][i].seatNumber = seatArr[j][i].seatNumber
+                  ownedSeatArr[j][i].studentCode = students[studentCount].username
+                  ownedSeatArr[j][i].status = 'unregistered'
+                  lastColumn = i + startColumn
+                  lastRow = j + startRow
+                  resolve({ seatArr: ownedSeatArr, lastColumn: lastColumn, lastRow: lastRow, lastStudent: studentCount })
+                  break
+                }
+                if (studentCount === students.length - 1) {
+                  ownedSeatArr[j][i] = {}
+                  ownedSeatArr[j][i].seatNumber = seatArr[j][i].seatNumber
+                } else {
+                  ownedSeatArr[j][i] = {}
+                  ownedSeatArr[j][i].seatNumber = seatArr[j][i].seatNumber
+                  ownedSeatArr[j][i].studentCode = students[studentCount].username
+                  ownedSeatArr[j][i].status = 'unregistered'
+                  lastColumn = j + startColumn
+                  lastRow = i + startRow
+                  studentCount++
+                }
+              }
+            }
+          }
+        }
+      }
+      resolve({ seatArr: ownedSeatArr, lastColumn: lastColumn, lastRow: lastRow, lastStudent: studentCount })
+    })
   }
 }
 module.exports = WebService
