@@ -30,6 +30,7 @@ class ExaminersManage extends Component {
       maxPage: 1,
       Room: false,
       Time: false,
+      UserNameDelete: false,
       FNameDelete: false,
       LNameDelete: false,
       TypeDelete: false,
@@ -98,7 +99,9 @@ class ExaminersManage extends Component {
         var startTimeToString = this.props.selectedExam.rooms[i].startTime.toString()
         var finishTime = this.props.selectedExam.rooms[i].startTime + this.props.selectedExam.rooms[i].hours
         var finishTimeToString = finishTime.toString()
-        if (startTimeToString.length === 1 || startTimeToString.length === 2) {
+        if (startTimeToString.length === 1) {
+          startTimeToString = '0' + startTimeToString + ':00'
+        } else if (startTimeToString.length === 2) {
           startTimeToString = startTimeToString + ':00'
         } else if (startTimeToString.length === 3) {
           startTimeToString = startTimeToString.charAt(0) + ':' + startTimeToString.charAt(2)
@@ -112,7 +115,9 @@ class ExaminersManage extends Component {
           startTimeToString = startTimeToString.charAt(0) + startTimeToString.charAt(1) + ':' + startTimeToString.charAt(3) + startTimeToString.charAt(4)
         }
 
-        if (finishTimeToString.length === 1 || finishTimeToString.length === 2) {
+        if (finishTimeToString.length === 1) {
+          finishTimeToString = '0' + finishTimeToString + ':00'
+        } else if (finishTimeToString.length === 2) {
           finishTimeToString = finishTimeToString + ':00'
         } else if (finishTimeToString.length === 3) {
           finishTimeToString = finishTimeToString.charAt(0) + ':' + finishTimeToString.charAt(2)
@@ -232,7 +237,9 @@ class ExaminersManage extends Component {
         var startTimeToString = this.props.selectedExam.rooms[i].startTime.toString()
         var finishTime = this.props.selectedExam.rooms[i].startTime + this.props.selectedExam.rooms[i].hours
         var finishTimeToString = finishTime.toString()
-        if (startTimeToString.length === 1 || startTimeToString.length === 2) {
+        if (startTimeToString.length === 1) {
+          startTimeToString = '0' + startTimeToString + ':00'
+        } else if (startTimeToString.length === 2) {
           startTimeToString = startTimeToString + ':00'
         } else if (startTimeToString.length === 3) {
           startTimeToString = startTimeToString.charAt(0) + ':' + startTimeToString.charAt(2)
@@ -246,7 +253,9 @@ class ExaminersManage extends Component {
           startTimeToString = startTimeToString.charAt(0) + startTimeToString.charAt(1) + ':' + startTimeToString.charAt(3) + startTimeToString.charAt(4)
         }
 
-        if (finishTimeToString.length === 1 || finishTimeToString.length === 2) {
+        if (finishTimeToString.length === 1) {
+          finishTimeToString = '0' + finishTimeToString + ':00'
+        } else if (finishTimeToString.length === 2) {
           finishTimeToString = finishTimeToString + ':00'
         } else if (finishTimeToString.length === 3) {
           finishTimeToString = finishTimeToString.charAt(0) + ':' + finishTimeToString.charAt(2)
@@ -266,7 +275,7 @@ class ExaminersManage extends Component {
         el.value = setTime
         el.textContent = setTime
         select.appendChild(el)
-
+        console.log(setTime)
         if (check === 0) {
           this.setState({
             Time: setTime
@@ -381,6 +390,7 @@ class ExaminersManage extends Component {
   setDelete (data) {
     // console.log(data)
     this.setState({
+      UserNameDelete: data.username,
       FNameDelete: data.firstName,
       LNameDelete: data.lastName,
       TypeDelete: data.typeOfUser,
@@ -398,54 +408,60 @@ class ExaminersManage extends Component {
   addExaminer () {
     return new Promise((resolve, reject) => {
       // console.log(this.Exam)
-      if (this.Examiner.length === 0) {
-        alert('ยังไม่ได้ห้องเลือกผู้คุมสอบ')
-      } else {
-        var rooms = []
-        for (var z = 0; z < this.Exam.rooms.length; z++) {
-          rooms.push(this.Exam.rooms[z])
-        }
-        for (var i = 0; i < this.Examiner.length; i++) {
-          this.checkAdd = 0
-          var userName = this.Examiner[i].username
-          for (var j = 0; j < rooms.length; j++) {
-            var examinersData = []
-            var time = ''
-            var timenumber = 0
-            for (var kk = 0; kk < this.Examiner[i].time.length; kk++) {
-              if (this.Examiner[i].time.charAt(kk) === ':') {
-                timenumber = parseInt(time)
-                break
-              }
-              time += this.Examiner[i].time.charAt(kk)
+      var rooms = []
+      for (var z = 0; z < this.Exam.rooms.length; z++) {
+        rooms.push(this.Exam.rooms[z])
+      }
+      for (var i = 0; i < this.Examiner.length; i++) {
+        this.checkAdd = 0
+        var userName = this.Examiner[i].username
+        for (var j = 0; j < rooms.length; j++) {
+          var examinersData = []
+          var time = ''
+          var timenumber = 0
+          for (var kk = 0; kk < this.Examiner[i].time.length; kk++) {
+            if (this.Examiner[i].time.charAt(kk) === ':') {
+              timenumber = parseInt(time)
+              break
             }
-            if (rooms[j].roomId === this.Examiner[i].room &&
+            time += this.Examiner[i].time.charAt(kk)
+          }
+          if (rooms[j].roomId === this.Examiner[i].room &&
                 rooms[j].startTime === timenumber) {
-              for (var k = 0; k < rooms[j].examiners.length; k++) {
-                if (rooms[j].examiners[k].username === userName) {
-                  this.checkAdd++
-                }
+            for (var k = 0; k < rooms[j].examiners.length; k++) {
+              if (rooms[j].examiners[k].username === userName) {
+                this.checkAdd++
+              }
+              if (rooms[j].examiners[k].username !== this.state.UserNameDelete) {
                 examinersData.push(rooms[j].examiners[k])
               }
-              if (this.checkAdd === 0) {
-                examinersData.push({ username: userName })
-              }
-              rooms[j].roomId = this.Exam.rooms[j].roomId
-              rooms[j].startTime = this.Exam.rooms[j].startTime
-              rooms[j].hours = this.Exam.rooms[j].hours
-              rooms[j].maxStudent = this.Exam.rooms[j].maxStudent
-              rooms[j].examiners = examinersData
             }
+            if (this.checkAdd === 0) {
+              examinersData.push({ username: userName })
+            }
+            rooms[j].roomId = this.Exam.rooms[j].roomId
+            rooms[j].startTime = this.Exam.rooms[j].startTime
+            rooms[j].hours = this.Exam.rooms[j].hours
+            rooms[j].maxStudent = this.Exam.rooms[j].maxStudent
+            rooms[j].examiners = examinersData
           }
         }
-        console.log(rooms)
-        ServiceObj.insertExaminerIntoRoom(this.props.selectedExam._id, rooms).then((result) => {
-          if (result) {
-            this.props.closeModal()
-            this.props.showModal('examManageModal')
-          }
-        })
       }
+      console.log(rooms)
+      ServiceObj.insertExaminerIntoRoom(this.props.selectedExam._id, rooms).then((result) => {
+        if (result) {
+          this.checkClick = ''
+          this.setState({
+            UserName: false,
+            FName: false,
+            LName: false,
+            Type: false
+          })
+          this.examinerTable.loadDataByTypeAndUsername(this.state.selectedType, this.state.searchInput, this.state.page === 1 ? 0 : (this.state.page - 1) * 50)
+          this.calculateMaxPage()
+          console.log('End')
+        }
+      })
     })
   }
 
@@ -479,6 +495,8 @@ class ExaminersManage extends Component {
         this.checkExaminer++
       }
     }
+    // console.log(this.checkExaminer)
+    // console.log(this.Examiner.length)
     if (this.checkExaminer === this.Examiner.length && this.state.FName !== false) {
       this.Examiner.push({
         username: this.state.UserName,
@@ -488,15 +506,7 @@ class ExaminersManage extends Component {
         room: this.state.Room,
         time: this.state.Time
       })
-      this.checkClick = ''
-      this.setState({
-        UserName: false,
-        FName: false,
-        LName: false,
-        Type: false
-      })
-      this.examinerTable.loadDataByTypeAndUsername(this.state.selectedType, this.state.searchInput, this.state.page === 1 ? 0 : (this.state.page - 1) * 50)
-      this.calculateMaxPage()
+      this.addExaminer()
     } else if (this.checkClick === '') {
       alert('ยังไม่ได้เลือก user ที่จะเพิ่ม')
     } else {
@@ -517,16 +527,15 @@ class ExaminersManage extends Component {
         this.state.TimeDelete === this.Examiner[i].time
       ) {
         this.Examiner.splice(i, 1)
+        this.addExaminer()
         break
       }
     }
-    this.examinerTable.loadDataByTypeAndUsername(this.state.selectedType, this.state.searchInput, this.state.page === 1 ? 0 : (this.state.page - 1) * 50)
-    this.calculateMaxPage()
   }
 
   handleExaminerAddButton () {
     this.addExaminer().then(() => {
-
+      this.addToSelectedExaminerTable()
     })
   }
 
@@ -647,6 +656,8 @@ class ExaminersManage extends Component {
                   isDataLoading={this.state.isDataLoading}
                   setDataLoadingStatus={this.setDataLoadingStatus}
                   setDelete={this.setDelete}
+                  Time={this.state.Time}
+                  Room={this.state.Room}
                 />
               </div>
               <br></br>
@@ -784,6 +795,7 @@ class SelectedExaminerTable extends Component {
           selectedRow: parent
         })
         this.props.setDelete(this.props.Examiner[parent.getAttribute('index')])
+        console.log(this.props.Examiner[parent.getAttribute('index')])
       }
     }
   }
@@ -791,16 +803,18 @@ class SelectedExaminerTable extends Component {
   renderTableItem () {
     var items = []
     for (var i = 0; i < this.props.Examiner.length; i++) {
-      items[i] = <SelectedExaminerTableItem
-        key={i}
-        itemIndex={i}
-        inspectItem={(e) => { this.inspectItem(e) }}
-        itemDataFirstName={this.props.Examiner[i].firstName}
-        itemDataLastName={this.props.Examiner[i].lastName}
-        itemDataType={this.props.Examiner[i].typeOfUser}
-        itemDataRoom={this.props.Examiner[i].room}
-        itemDataTime={this.props.Examiner[i].time}
-      />
+      if (this.props.Examiner[i].time === this.props.Time && this.props.Examiner[i].room === this.props.Room) {
+        items[i] = <SelectedExaminerTableItem
+          key={i}
+          itemIndex={i}
+          inspectItem={(e) => { this.inspectItem(e) }}
+          itemDataFirstName={this.props.Examiner[i].firstName}
+          itemDataLastName={this.props.Examiner[i].lastName}
+          itemDataType={this.props.Examiner[i].typeOfUser}
+          itemDataRoom={this.props.Examiner[i].room}
+          itemDataTime={this.props.Examiner[i].time}
+        />
+      }
     }
     return items
   }
