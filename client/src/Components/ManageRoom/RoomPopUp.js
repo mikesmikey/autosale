@@ -63,7 +63,7 @@ class RoomPopUp extends Component {
         this.state.stringRoom !== '' &&
         this.state.stringRow !== '' &&
         this.state.stringStudent !== '' &&
-        this.repetitiveRoom == 0
+        this.repetitiveRoom === 0
       ) {
         const BuildingObj = ServiceObj.createBuilding(this.currentFormObject())
         // console.log(BuildingObj)
@@ -232,7 +232,11 @@ class RoomPopUp extends Component {
           floor: this.numFloor,
           room: this.room,
           roomType: this.state.stringType,
-          numberOfSeat: this.state.numberRow * this.state.numberStudent
+          row: this.state.numberRow,
+          column: this.state.numberStudent,
+          numberOfSeat: this.state.numberRow * this.state.numberStudent,
+          hour: '',
+          ExamSeat: []
         }
         )
       }

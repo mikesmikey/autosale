@@ -1,3 +1,4 @@
+/* eslint-disable no-new-object */
 /* eslint-disable handle-callback-err */
 const mongoClient = require('mongodb').MongoClient
 const ObjectId = require('mongodb').ObjectID
@@ -189,6 +190,27 @@ class WebDAO {
       })
     })
   }
+
+  /* ===========[Student DAO] ================== */
+  getAllStudentByRegisteredCourse (subjectId, courseId) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+
+        const db = client.db(dbName)
+        const query = { 'typeOfUser': 'student',
+          'courses.subjectId': subjectId,
+          'courses.courseId': courseId
+        }
+        db.collection('User').find(query).project({ '_id': 0, 'password': 0 }).toArray((err, data) => {
+          if (err) { throw err }
+          client.close()
+          return resolve(data)
+        })
+      })
+    })
+  }
+
   /* ===========[Faculty DAO]=================== */
   getAllFaculty () {
     return new Promise((resolve, reject) => {
@@ -244,6 +266,7 @@ class WebDAO {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
         if (err) { resolve(null) }
         const db = client.db(dbName)
+        if (!client) return resolve(null)
         db.collection('GlobalData').findOne({}, (err, data) => {
           if (err) { throw err }
           client.close()
@@ -300,6 +323,39 @@ class WebDAO {
           if (result.value) {
             return resolve(true)
           } else { return resolve(false) }
+        })
+        client.close()
+      })
+    })
+  }
+
+  getRoomByRoomId (roomId) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+        const db = client.db(dbName)
+        if (!client) return resolve(null)
+        db.collection('Building').aggregate(
+          [
+            {
+              '$match': { 'Rooms.room': roomId }
+            },
+            {
+              '$project': {
+                'rooms': {
+                  '$filter': {
+                    'input': '$Rooms',
+                    'as': 'room',
+                    'cond': { '$eq': [ '$$room.room', roomId ] }
+                  }
+                }
+              }
+            }
+          ]
+        ).toArray((err, data) => {
+          if (err) { throw err }
+          client.close()
+          return resolve(data)
         })
         client.close()
       })
@@ -381,7 +437,39 @@ class WebDAO {
       })
     })
   }
+  /* ===========[Examiner DAO]=================== */
 
+  countUserInCollectionByTypeAndName (type, name) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+
+        const db = client.db(dbName)
+        const regex = new RegExp(`${name}`)
+        db.collection('User').find({ 'firstName': regex, 'typeOfUser': type }).count((err, data) => {
+          if (err) { throw err }
+          client.close()
+          return resolve(data)
+        })
+      })
+    })
+  }
+
+  getAllUserByTypeAndName (type, name, startPos, limit) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+
+        const db = client.db(dbName)
+        const regex = new RegExp(`${name}`)
+        db.collection('User').find({ 'firstName': regex, 'typeOfUser': type }).project({ '_id': 0, 'password': 0 }).skip(Number.parseInt(startPos)).limit(Number.parseInt(limit)).toArray((err, data) => {
+          if (err) { throw err }
+          client.close()
+          return resolve(data)
+        })
+      })
+    })
+  }
   /* ===========[Subject DAO]=================== */
 
   getAllSubjectBySubjectIdOrSubjectName (subjid, subjname) {
@@ -639,6 +727,46 @@ class WebDAO {
       })
     })
   }
+
+  getCourseBySubjectAndCourseId (subjectId, courseId) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+        const db = client.db(dbName)
+        db.collection('Subject').aggregate(
+          [
+            {
+              '$match': { '$and':
+              [
+                { 'subjectId': subjectId },
+                { 'courses.courseId': Number.parseInt(courseId) }
+              ] }
+            },
+            {
+              '$project': {
+                '_id': 0,
+                'subjectId': 1,
+                'subjectName': 1,
+                'courses': {
+                  '$filter': {
+                    'input': '$courses',
+                    'as': 'course',
+                    'cond': { '$eq': [ '$$course.courseId', Number.parseInt(courseId) ] }
+                  }
+                }
+              }
+            }
+          ]
+        ).toArray((err, data) => {
+          if (err) { throw err }
+          client.close()
+          return resolve(data)
+        })
+        client.close()
+      })
+    })
+  }
+
   /* ===========[Exam DAO]=================== */
 
   getAllExamBySubjectIdAndCourseId (subjectId, courseId) {
@@ -817,6 +945,24 @@ class WebDAO {
             client.close()
             return resolve(true)
           } else { client.close(); return resolve(false) }
+        })
+        client.close()
+      })
+    })
+  }
+
+  /* ===========[Examiner DAO]=================== */
+  addExaminerIntoRoom (Id, Data) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+        const db = client.db(dbName)
+        db.collection('Exam').findOneAndUpdate({ '_id': new ObjectId(Id) }, { '$set': { 'rooms': Data } }, (err, result) => {
+          if (err) { throw err }
+          if (result) {
+            client.close()
+            return resolve(true)
+          } else { return resolve(false) }
         })
         client.close()
       })

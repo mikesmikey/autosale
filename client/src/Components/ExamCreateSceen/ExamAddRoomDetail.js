@@ -271,6 +271,7 @@ class AddRoomDetail extends Component {
       this.setState({
         isLoading: true
       })
+      roomData.examiners = []
       CServiceObj.insertRoomIntoExam(this.props.selectedExam._id, roomData).then((result) => {
         if (result) {
           this.setState({
@@ -483,6 +484,11 @@ class RoomScheduleTable extends Component {
         isLoading: true
       })
       CServiceObj.getAllExamOnCurrentDateAndRoom(this.props.selectedExam.date, this.props.selectedRoom).then((exams) => {
+        if (!exams || exams.length === 0) {
+          this.setState({
+            isLoading: false
+          })
+        }
         exams.forEach(exam => {
           var newSchedules = this.state.schedules
 

@@ -46,6 +46,7 @@ app.get('/users/count/:type/:username', (req, res) => {
   })
 })
 
+
 app.get('/users/type/:userType/:startPos/:limit', (req, res) => {
   WebDAOObj.getAllUserByType(req.params.userType, req.params.startPos, req.params.limit).then((data) => {
     if (data != null) {
@@ -62,6 +63,54 @@ app.get('/users/:type/:username/:startPos/:limit', (req, res) => {
       res.json(data)
     } else {
       res.sendStatus(404)
+    }
+  })
+})
+
+app.get('/users/examinercount/:type', (req, res) => {
+  WebDAOObj.countUserInCollectionByType(req.params.type).then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.get('/users/examinercount/:type/:name', (req, res) => {
+  WebDAOObj.countUserInCollectionByTypeAndName(req.params.type, req.params.name).then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.get('/users/examiner/type/:userType/:startPos/:limit', (req, res) => {
+  WebDAOObj.getAllUserByType(req.params.userType, req.params.startPos, req.params.limit).then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.get('/users/examiner/:type/:name/:startPos/:limit', (req, res) => {
+  WebDAOObj.getAllUserByTypeAndName(req.params.type, req.params.name, req.params.startPos, req.params.limit).then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.post('/exam/examiner', (req, res) => {
+  WebDAOObj.addExaminerIntoRoom(req.body.Id, req.body.Data).then((pass) => {
+    if (pass) {
+      res.send(pass)
     }
   })
 })
@@ -371,6 +420,7 @@ app.post('/course/delete/:a/:b', (req, res) => {
     res.send(data)
   })
 })
+
 app.post('/exam/room', (req, res) => {
   WebDAOObj.addRoomIntoExam(req.body.examId, req.body.roomData).then((pass) => {
     if (pass) {
@@ -403,10 +453,38 @@ app.post('/exam/room/update', (req, res) => {
   })
 })
 
+app.post('/exam/confirm', (req, res) => {
+  WebServiceObj.confirmExam(req.body.examId).then((result) => {
+    if (result) {
+      res.send(result)
+    }
+  })
+})
+
 app.post('/exam/seatType/update/:objId/:seatLineUpType/:seatOrderType', (req, res) => {
   WebDAOObj.updateExamSeatType(req.params.objId, req.params.seatLineUpType, req.params.seatOrderType).then((pass) => {
     if (pass) {
       res.send(pass)
+    }
+  })
+})
+
+app.get('/course/subject=:subjectId/course=:courseId', (req, res) => {
+  WebDAOObj.getCourseBySubjectAndCourseId(req.params.subjectId, req.params.courseId).then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+app.get('/room/id=:roomId', (req, res) => {
+  WebDAOObj.getRoomByRoomId(req.params.roomId).then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
     }
   })
 })
