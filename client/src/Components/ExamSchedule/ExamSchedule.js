@@ -38,7 +38,6 @@ class ExamSchedule extends Component {
           CServiceObj.getAllExamBySubjectAndCourse(this.props.user.courses[i].subjectId, this.props.user.courses[i].courseId).then((result) => {
             let newExams = this.state.exams
             newExams = newExams.concat(result)
-            console.log(newExams)
             this.setState({
               exams: newExams
             })
@@ -62,6 +61,50 @@ class ExamSchedule extends Component {
         })
       }))
     }
+  }
+
+  calculateTime (startTime, hours) {
+    var startTimeToString = startTime.toString()
+    var finishTime = startTime + hours
+    var finishTimeToString = finishTime.toString()
+    if (startTimeToString.length === 1 || startTimeToString.length === 2) {
+      if (startTimeToString.length === 1) {
+        startTimeToString = '0' + startTimeToString + ':00'
+      } else {
+        startTimeToString = startTimeToString + ':00'
+      }
+    } else if (startTimeToString.length === 3) {
+      startTimeToString = startTimeToString.charAt(0) + ':' + startTimeToString.charAt(2)
+    } else if (startTimeToString.length === 4) {
+      if (startTimeToString.charAt(1) === '.') {
+        startTimeToString = startTimeToString.charAt(0) + ':' + startTimeToString.charAt(2) + startTimeToString.charAt(3)
+      } else {
+        startTimeToString = startTimeToString.charAt(0) + startTimeToString.charAt(1) + ':' + startTimeToString.charAt(3) + '0'
+      }
+    } else if (startTimeToString.length === 5) {
+      startTimeToString = startTimeToString.charAt(0) + startTimeToString.charAt(1) + ':' + startTimeToString.charAt(3) + startTimeToString.charAt(4)
+    }
+
+    if (finishTimeToString.length === 1 || finishTimeToString.length === 2) {
+      if (finishTimeToString.length === 1) {
+        finishTimeToString = '0' + finishTimeToString + ':00'
+      } else {
+        finishTimeToString = finishTimeToString + ':00'
+      }
+    } else if (finishTimeToString.length === 3) {
+      finishTimeToString = finishTimeToString.charAt(0) + ':' + finishTimeToString.charAt(2)
+    } else if (finishTimeToString.length === 4) {
+      if (finishTimeToString.charAt(1) === '.') {
+        finishTimeToString = finishTimeToString.charAt(0) + ':' + finishTimeToString.charAt(2) + finishTimeToString.charAt(3)
+      } else {
+        finishTimeToString = finishTimeToString.charAt(0) + finishTimeToString.charAt(1) + ':' + finishTimeToString.charAt(3) + '0'
+      }
+    } else if (finishTimeToString.length === 5) {
+      finishTimeToString = finishTimeToString.charAt(0) + finishTimeToString.charAt(1) + ':' + finishTimeToString.charAt(3) + finishTimeToString.charAt(4)
+    }
+
+    var setTime = startTimeToString + ' - ' + finishTimeToString
+    return setTime
   }
 
   renderUserExam () {
@@ -92,11 +135,11 @@ class ExamSchedule extends Component {
                 examData.roomId = room.roomId
                 examData.seatNumber = seatFound.seatNumber
                 examData.date = this.state.exams[i].date
-                console.log(examData)
+                examData.timeString = this.calculateTime(this.state.exams[i].startTime, this.state.exams[i].hours)
                 examItems.push(
                   <ExamScheduleItem
                     key={this.state.exams[i]._id}
-                    showModal={() => { this.extendDetailModal.showModal() }}
+                    showModal={() => { this.examExtendDetail.showModal(examData) }}
                     examData={examData}
                   />
                 )
@@ -109,19 +152,15 @@ class ExamSchedule extends Component {
     return examItems
   }
 
-  createSampleData () {
-    var returnArr = []
-    for (var i = 0; i < 50; i++) {
-      returnArr[i] = <ExamScheduleItem key={i} showModal={() => { this.extendDetailModal.showModal() }} />
-    }
-
-    return returnArr
-  }
-
   render () {
     return (
       <div className="subcontent-main-div exam-schedule">
-        <Modal ref={instance => { this.extendDetailModal = instance }} content={<ExamExtendDetail closeModal={() => { this.extendDetailModal.closeModal() }} />} />
+        <Modal ref={instance => { this.extendDetailModal = instance }} content={
+          <ExamExtendDetail
+            ref={instance => { this.examExtendDetail = instance }}
+            showModal={() => { this.extendDetailModal.showModal() }}
+            closeModal={() => { this.extendDetailModal.closeModal() }}
+          />} />
         <div className="schedule-area box is-round">
           {this.renderUserExam()}
         </div>
@@ -136,7 +175,6 @@ class ExamScheduleItem extends Component {
       'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
     ]
     const examDate = new Date(this.props.examData.date)
-    console.log(new Date(this.props.examData.date).getMonth())
     return (
       <div className="exam-schedule-item box is-round" onClick={this.props.showModal}>
         <div className="columns">
@@ -145,7 +183,7 @@ class ExamScheduleItem extends Component {
               <h1>{examDate.getDate()}</h1>
               <h3>{monthNames[examDate.getMonth()]}</h3>
               <h3>{examDate.getFullYear()}</h3>
-              <h2>เวลา 99:99 - 99:99</h2>
+              <h2>เวลา {this.props.examData.timeString}</h2>
             </div>
           </div>
           <div className="exam-detail-column column">
@@ -168,35 +206,59 @@ class ExamScheduleItem extends Component {
 }
 
 class ExamExtendDetail extends Component {
+  constructor (props) {
+    super(props)
+
+    this.state = {
+      examData: null
+    }
+  }
+
+  showModal (examData) {
+    this.setState({
+      examData: examData
+    })
+    this.props.showModal()
+  }
+
   render () {
+    const monthNames = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน',
+      'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
+    ]
+    var examDate
+    if (this.state.examData) {
+      examDate = new Date(this.state.examData.date)
+    }
     return (
       <div className="exam-extend-detail">
-        <div className="box with-title is-round">
-          <div className="box-title is-violet">
-            <p style={{ margin: 0 }}>รายละเอียดการสอบ</p>
-            <a className="fas fa-times close-button" onClick={this.props.closeModal}></a>
+        {this.state.examData
+          ? <div className="box with-title is-round">
+            <div className="box-title is-violet">
+              <p style={{ margin: 0 }}>รายละเอียดการสอบ</p>
+              <a className="fas fa-times close-button" onClick={this.props.closeModal}></a>
+            </div>
+            <div className="box-content">
+              <h2>วิชาที่สอบ</h2>
+              <div className="box is-light-gray">
+                        ชื่อการสอบ :  {this.state.examData.examName} <br />
+                        วิชา :  {this.state.examData.subjectId} - {this.state.examData.subjectName} <br />
+                        ปีการศึกษา : {this.state.examData.school_year}<br />
+                        ภาคเรียนที่ : {this.state.examData.semester}<br />
+              </div>
+              <h2>เวลาที่สอบ</h2>
+              <div className="box detail is-light-gray">
+                        วันที่ : {examDate.getDate()} {monthNames[examDate.getMonth()]} {examDate.getFullYear()} <br />
+                        เวลา : {this.state.examData.timeString}<br />
+              </div>
+              <h2>ห้องที่สอบ</h2>
+              <div className="box detail is-light-gray">
+                        ห้องสอบ : {this.state.examData.roomId} <br />
+                        เลขที่นั่งสอบ : {this.state.examData.seatNumber} <br />
+              </div>
+            </div>
           </div>
-          <div className="box-content">
-            <h2>วิชาที่สอบ</h2>
-            <div className="box is-light-gray">
-                            วิชา :  88624459 :  Object-Oriented Analysis and Design <br />
-                            ปีการศึกษา : 2562<br />
-                            ภาคเรียนที่ : 1<br />
-                            ประเภท : กลางภาค<br />
-                            กลุ่มที่ : 1<br />
-            </div>
-            <h2>เวลาที่สอบ</h2>
-            <div className="box detail is-light-gray">
-                            วันที่ : 1 เมษายน 2562 <br />
-                            เวลา : 10:30 น.<br />
-            </div>
-            <h2>ห้องที่สอบ</h2>
-            <div className="box detail is-light-gray">
-                            ห้องสอบ : IF-404 <br />
-                            เลขที่นั่งสอบ : 12 <br />
-            </div>
-          </div>
-        </div>
+          : null
+        }
       </div>
     )
   }
