@@ -177,7 +177,7 @@ class ExamScheduleItem extends Component {
     const examDate = new Date(this.props.examData.date)
     return (
       <div className="exam-schedule-item box is-round" onClick={this.props.showModal}>
-        <div className="columns">
+        <div className="schedule-item-columns columns">
           <div className="exam-date-box column is-2 is-white-violet">
             <div className="date-labels">
               <h1>{examDate.getDate()}</h1>
@@ -189,13 +189,23 @@ class ExamScheduleItem extends Component {
           <div className="exam-detail-column column">
             <h2 id="subject-name">{this.props.examData.examName}</h2>
             <div className="exam-detail box is-round is-light-gray">
-              <div className="small-detail-box">
-                <p>วิชา: {this.props.examData.subjectId} - {this.props.examData.subjectName}</p>
-                <p>ปีการศึกษา {this.props.examData.school_year} เทอม {this.props.examData.semester}</p>
-              </div>
-              <div className="small-detail-box">
-                <p>ห้องสอบ: {this.props.examData.roomId}</p>
-                <p>เลขที่นั่งสอบ : {this.props.examData.seatNumber}</p>
+              <div className="exam-detail-columns columns is-stay-top">
+                <div className="column">
+                  <div className="small-detail-box">
+                    <p>วิชา: {this.props.examData.subjectId} - {this.props.examData.subjectName}</p>
+                    <p>ปีการศึกษา {this.props.examData.school_year} เทอม {this.props.examData.semester}</p>
+                  </div>
+                  <div className="small-detail-box">
+                    <p>ห้องสอบ: {this.props.examData.roomId}</p>
+                    <p>เลขที่นั่งสอบ : {this.props.examData.seatNumber}</p>
+                  </div>
+                </div>
+                <div className="column is-not-grow">
+                  <div className="user-status-box box is-round is-white-violet">
+                    <h2>สถานะ</h2>
+                    <h1>ขาดสอบ</h1>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
