@@ -143,6 +143,15 @@
     margin: 10px 0;
 }
 
+.schedule-area {
+    min-height: 800px;
+}
+
+#subject-name {
+    font-size: 42px;
+    margin: 10px 0;
+}
+
 @media screen and (max-width: 800px) {
 
     .exam-schedule {
