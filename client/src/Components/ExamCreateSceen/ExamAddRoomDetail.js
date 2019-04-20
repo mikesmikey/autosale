@@ -277,7 +277,6 @@ class AddRoomDetail extends Component {
           this.setState({
             isLoading: false
           })
-          alert('เพิ่มห้องสอบสำเร็จ')
           this.props.showModal('roomsManageModal')
         }
       })
