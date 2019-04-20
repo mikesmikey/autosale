@@ -232,7 +232,11 @@ class RoomPopUp extends Component {
           floor: this.numFloor,
           room: this.room,
           roomType: this.state.stringType,
-          numberOfSeat: this.state.numberRow * this.state.numberStudent
+          row: this.state.numberRow,
+          column: this.state.numberStudent,
+          numberOfSeat: this.state.numberRow * this.state.numberStudent,
+          hour: '',
+          ExamSeat: []
         }
         )
       }

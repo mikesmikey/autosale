@@ -18,8 +18,6 @@ class AddSubject extends Component {
             subjectNameSearch: '',
             faculties: []
         }
-        this.handleSearchButton = this.handleSearchButton.bind(this)
-        this.handleInputChange = this.handleInputChange.bind(this)
     }
     _isMounted = false
 
@@ -72,7 +70,7 @@ class AddSubject extends Component {
     }
 
     render() {
-        console.log(this.state)
+        // console.log(this.state)
         return (
             <div className="subcontent-main-div user-manage">
                 <div className="add-subject-box box with-title is-round">
@@ -89,7 +87,7 @@ class AddSubject extends Component {
                                         type="text"
                                         id="userId"
                                         name="subjectIdSearch"
-                                        onChange={this.handleInputChange} 
+                                        onChange={this.handleInputChange.bind(this)} 
                                         onKeyPress={this.handleInputValidate.bind(this)} />
                                 </div>
                                 <div className="input-with-text">
@@ -98,7 +96,7 @@ class AddSubject extends Component {
                                         type="text"
                                         id="userName"
                                         name="subjectNameSearch"
-                                        onChange={this.handleInputChange}
+                                        onChange={this.handleInputChange.bind(this)}
                                         onKeyPress={this.handleInputValidate.bind(this)} />
                                 </div>
                                 <div className="input-with-text">
@@ -106,7 +104,7 @@ class AddSubject extends Component {
                                         type="submit">
                                         <i
                                             className="fa fa-search height50"
-                                            onClick={this.handleSearchButton}>
+                                            onClick={this.handleSearchButton.bind(this)}>
                                         </i>
                                     </button>
                                 </div>
@@ -114,7 +112,7 @@ class AddSubject extends Component {
                         </div>
                         <div>
                             <span className="adds-tab-is-15"></span>
-                        </div>
+                        </div>                      
                         <SubjectTable
                             ref={instance => { this.subTable = instance }}
                             selectSubId={this.state.subjectIdSearch}

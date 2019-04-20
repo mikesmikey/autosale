@@ -23,9 +23,6 @@ class AddCourse extends Component {
             hasFound: true,
             currentYandT: []
         }
-        this.handleSearchButton = this.handleSearchButton.bind(this)
-        this.handleInputChange = this.handleInputChange.bind(this)
-        this.validateData = this.validateData.bind(this)
 
     }
     _isMounted = false
@@ -102,6 +99,7 @@ class AddCourse extends Component {
     }
 
     renderFacultyComponent() {
+        console.log(this.state.faculties)
         return this.state.faculties.map((item) => {
             return <option key={item.facultyId} value={item.facultyId}>{item.facultyName}</option>
         })
@@ -254,7 +252,7 @@ class AddCourse extends Component {
                                             type="text"
                                             id="popAddUserFaculty"
                                             name="facultyIndex"
-                                            onChange={this.handleInputChange}
+                                            onChange={this.handleInputChange.bind(this)}
                                             value={this.state.facultyIndex}
                                         >
                                             {this.renderFacultyComponent()}
@@ -272,7 +270,7 @@ class AddCourse extends Component {
                                             type="text"
                                             id="popAddUserBranch"
                                             name="branchIndex"
-                                            onChange={this.handleInputChange}
+                                            onChange={this.handleInputChange.bind(this)}
                                             value={this.state.branchIndex}
                                         >
                                             {this.renderFacultyBranchComponent()}
@@ -299,7 +297,7 @@ class AddCourse extends Component {
                                             type="submit">
                                             <i
                                                 className="fa fa-search height50"
-                                                onClick={this.handleSearchButton}>
+                                                onClick={this.handleSearchButton.bind(this)}>
                                             </i>
                                         </button>
                                     </div>
@@ -369,7 +367,7 @@ class AddCourse extends Component {
                                 <div style={{ textAlign: "center" }}>
                                     <button
                                         className="button is-oros is-round"
-                                        onClick={this.validateData}>
+                                        onClick={this.validateData.bind(this)}>
                                         ยืนยัน
                                     </button>
                                     <button

@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
 import React, { Component } from 'react'
 
-import Modal from '../Utilities/Modal'
 import ExamAddSimpleData from './ExamAddSimpleData'
+import ExaminersManage from './ExaminersManage'
 
 import ClientService from '../Utilities/ClientService'
 import Exam from '../../Objects/Exam'
@@ -18,13 +18,19 @@ class ExamManageModal extends Component {
     super(props)
     this.state = {
       selectedExam: null,
-      exams: []
+      exams: [],
+      isLoading: false,
+      roomInfoRoomAmount: 0,
+      roomInfoSeatAmount: 0,
+      examinerAmount: 0
     }
 
     this._isMounted = true
 
     this.setSelectedExam = this.setSelectedExam.bind(this)
     this.insertMemExam = this.insertMemExam.bind(this)
+    this.updateMemExam = this.updateMemExam.bind(this)
+    this.deleteMemExam = this.deleteMemExam.bind(this)
   }
 
   componentDidMount () {
@@ -41,6 +47,9 @@ class ExamManageModal extends Component {
     if (this.props.selectedCourse !== prevProps.selectedCourse) {
       this.loadAllExam(this.props.selectedCourse.subjectId, this.props.selectedCourse.courseId)
     }
+    if (this.state.selectedExam !== prevStates.selectedExam) {
+      this.handleExamInfo()
+    }
   }
 
   handleCreateExamButtonStyle () {
@@ -49,8 +58,14 @@ class ExamManageModal extends Component {
     } else { return '' }
   }
 
-  handleExamManageButtonStyle () {
-    if (this.props.selectedCourse && this.props.selectedCourse.status === 'noExamData') {
+  handleConfirmedButtonStyle () {
+    if (this.state.selectedExam && this.state.selectedExam.examConfirm) {
+      return 'disabled'
+    } else { return '' }
+  }
+
+  handleUniversalButtonStyle () {
+    if (!this.state.selectedExam) {
       return 'disabled'
     } else { return '' }
   }
@@ -71,22 +86,12 @@ class ExamManageModal extends Component {
       this.setState({
         isLoading: true
       })
-      CServiceObj.deleteExam(this.props.selectedCourse._id).then((result) => {
-        const noExamData = {
-          subjectId: this.props.selectedCourse.subjectId,
-          subjectName: this.props.selectedCourse.subjectName,
-          courseId: this.props.selectedCourse.courseId,
-          category: this.state.examTypeRadioValue
-        }
-        const examobj = new Exam(noExamData)
-        var newExamsArray = this.state.exams
-        newExamsArray[this.state.exams.indexOf(this.props.selectedCourse)] = examobj
+      CServiceObj.deleteExam(this.state.selectedExam._id).then((result) => {
+        this.deleteMemExam(this.state.selectedExam)
+        alert('ลบการสอบสำเร็จ')
         this.setState({
-          exams: newExamsArray,
           isLoading: false
         })
-        this.setSelectedCourse(examobj)
-        alert('ลบการสอบสำเร็จ')
       })
     } else {
       alert('กรุณาเลือกการสอบก่อนที่จะลบ')
@@ -131,6 +136,28 @@ class ExamManageModal extends Component {
     })
   }
 
+  updateMemExam (newExam) {
+    const originExam = this.state.exams.findIndex((exam) => {
+      return exam._id === newExam._id
+    })
+    let newExamArr = this.state.exams
+    newExamArr[originExam] = newExam
+    this.setState({
+      exams: newExamArr
+    })
+  }
+
+  deleteMemExam (deletedExam) {
+    const originExam = this.state.exams.findIndex((exam) => {
+      return exam._id === deletedExam._id
+    })
+    let newExamArr = this.state.exams
+    newExamArr.splice(originExam, 1)
+    this.setState({
+      exams: newExamArr
+    })
+  }
+
   handleManageRoomModal () {
     if (this.state.selectedExam) {
       this.props.showModal('roomsManageModal')
@@ -139,9 +166,77 @@ class ExamManageModal extends Component {
     }
   }
 
+  handleManageSimpleDataModal () {
+    if (this.state.selectedExam) {
+      this.createExamModal.showModal('edit')
+    } else {
+      alert('กรุณาเลือกการสอบก่อนที่จะจัดการ')
+    }
+  }
+
+  handleExamManageBoxStyle () {
+    return this.state.selectedExam ? '' : 'disabled'
+  }
+
+  handleExaminersManageRoomModal () {
+    if (this.state.selectedExam) {
+      this.props.showModal('examinersManageModal')
+    } else {
+      alert('กรุณาเลือกการสอบก่อนที่จะจัดการ')
+    }
+  }
+
+  handleExamConfirmButton (e) {
+    if (this.state.selectedExam) {
+      this.setState({
+        isLoading: true
+      })
+      CServiceObj.confirmExam(this.state.selectedExam._id).then((result) => {
+        if (result.examConfirm) {
+          alert('ยืนยันการสอบสำเร็จ')
+          let newExam = this.state.selectedExam
+          newExam.examConfirm = result.examConfirm
+          this.updateMemExam(newExam)
+        } else {
+          this.handleExamConfirmError(result.validResult)
+        }
+        this.setState({
+          isLoading: false
+        })
+      })
+    } else {
+      alert('กรุณาเลือกการสอบก่อนที่จะยืนยัน')
+    }
+  }
+
+  handleExamConfirmError (error) {
+    console.log(error)
+  }
+
+  handleExamInfo () {
+    if (this.state.selectedExam) {
+      let calculateSeatAndExaminerAmount = (rooms) => {
+        let seatCount = 0; let examinerCount = 0
+        if (rooms) {
+          rooms.forEach(room => {
+            seatCount += Number.parseInt(room.maxStudent)
+            examinerCount += room.examiners.length
+          })
+        }
+        return [seatCount, examinerCount]
+      }
+      let calResult = calculateSeatAndExaminerAmount(this.state.selectedExam.rooms)
+      this.setState({
+        roomInfoRoomAmount: this.state.selectedExam.rooms ? this.state.selectedExam.rooms.length : 0,
+        roomInfoSeatAmount: calResult[0],
+        examinerAmount: calResult[1]
+      })
+    }
+  }
+
   render () {
     return (
-      <div className="exam-manage box with-title">
+      <div className={`exam-manage box with-title`}>
         <div className="box-title is-violet">
           <h3
             className="label is-2"
@@ -150,7 +245,7 @@ class ExamManageModal extends Component {
           </h3>
           <button className="exit-button fas fa-times fa-1x" onClick={this.props.closeModal}></button>
         </div>
-        <div className="box-content">
+        <div className={`box-content ${this.state.isLoading ? 'disabled' : ''}`}>
           <div className="columns" style={{ width: '100%' }}>
             <div className="column">
               <h3>การสอบทั้งหมด</h3>
@@ -159,7 +254,7 @@ class ExamManageModal extends Component {
               <button
                 className={`button is-3 is-oros is-round`}
                 style={{ width: '130px' }}
-                onClick={() => { this.createExamModal.showModal() }}
+                onClick={() => { this.createExamModal.showModal('create') }}
               >
                 เพิ่มการสอบ
               </button>
@@ -174,39 +269,39 @@ class ExamManageModal extends Component {
                 />
               </div>
             </div>
-            <div className="column is-not-grow manage-column">
-              <div className="secondary-manage-box box is-round">
+            <div className={`column is-not-grow manage-column ${this.handleExamManageBoxStyle()}`}>
+              <div className={`secondary-manage-box box is-round`}>
                 <h3>รายละเอียดเบื้องต้น</h3>
-                <p>ห้องสอบ : </p>
-                <p>ผู้คุมสอบ : </p>
+                <p>ห้องสอบ : {`${this.state.roomInfoRoomAmount} ห้อง (${this.state.roomInfoSeatAmount} ที่นั่ง)`}</p>
+                <p>ผู้คุมสอบ : {`${this.state.examinerAmount} ท่าน`}</p>
                 <button
-                  className={`button is-3 is-oros is-round is-full-width ${this.handleExamManageButtonStyle()}`}
-                  onClick={() => { this.handleAddDataButton() }}
+                  className={`button is-3 is-oros is-round is-full-width ${this.handleUniversalButtonStyle()}`}
+                  onClick={() => { this.handleManageSimpleDataModal() }}
                 >
                 จัดการข้อมูลพื้นฐาน
                 </button>
                 <button
-                  className={`button is-3 is-oros is-round is-full-width ${this.handleExamManageButtonStyle()}`}
+                  className={`button is-3 is-oros is-round is-full-width ${this.handleConfirmedButtonStyle()}`}
                   onClick={() => { this.handleManageRoomModal() }}
                 >
                 จัดการห้องสอบ
                 </button>
                 <button
-                  className={`button is-3 is-oros is-round is-full-width ${this.handleExamManageButtonStyle()}`}
-                  onClick={() => { this.handleAddDataButton() }}
+                  className={`button is-3 is-oros is-round is-full-width ${this.handleConfirmedButtonStyle()}`}
+                  onClick={() => { this.handleExaminersManageRoomModal() }}
                 >
                 จัดการผู้คุมสอบ
                 </button>
               </div>
               <div className="manage-button-area box is-round">
                 <button
-                  className={`button is-3 is-oros is-round is-full-width ${this.handleExamManageButtonStyle()}`}
-                  onClick={() => { this.handleAddDataButton() }}
+                  className={`button is-3 is-oros is-round is-full-width ${this.handleConfirmedButtonStyle()}`}
+                  onClick={(e) => { this.handleExamConfirmButton(e) }}
                 >
                 ยืนยันการสอบ
                 </button>
                 <button
-                  className={`button is-3 is-yentafo is-round is-full-width ${this.handleExamManageButtonStyle()}`}
+                  className={`button is-3 is-yentafo is-round is-full-width ${this.handleUniversalButtonStyle()}`}
                   onClick={() => { this.handleDeleteExamButton() }}
                 >
                 ยกเลิกการสอบ
@@ -215,13 +310,14 @@ class ExamManageModal extends Component {
             </div>
           </div>
         </div>
-        <Modal ref={instance => { this.createExamModal = instance }} content={
-          <ExamAddSimpleData
-            selectedCourse={this.props.selectedCourse}
-            closeModal={() => { this.createExamModal.closeModal() }}
-            insertMemExam={this.insertMemExam}
-          />
-        }/>
+        <ExamAddSimpleData
+          ref={instance => { this.createExamModal = instance }}
+          selectedCourse={this.props.selectedCourse}
+          selectedExam={this.state.selectedExam}
+          closeModal={() => { this.createExamModal.closeModal() }}
+          insertMemExam={this.insertMemExam}
+          updateMemExam={this.updateMemExam}
+        />
       </div>
     )
   }
