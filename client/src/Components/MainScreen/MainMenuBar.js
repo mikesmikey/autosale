@@ -119,8 +119,14 @@ class MainScrenMenuBar extends Component {
             <NavLink to="/add_subject" activeClassName="is-active is-black-violet" onClick={this.handleButtonPointer}>
               <i className="menu-icon-awesome fas fa-calendar-plus"></i>
               เพิ่มรายวิชา
-              </NavLink>
-            </li>
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/add_course_data" activeClassName="is-active is-black-violet" onClick={this.handleButtonPointer}>
+              <i className="menu-icon-awesome fas fa-calendar-plus"></i>
+              เพิ่มข้อมูลการเรียน
+            </NavLink>
+          </li>
           <li>
             <a id="course_manage_button"
               onClick={this.handleMenuDropDown}
