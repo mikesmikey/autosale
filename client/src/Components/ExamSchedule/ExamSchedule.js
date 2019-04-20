@@ -135,7 +135,13 @@ class ExamSchedule extends Component {
                 examData.roomId = room.roomId
                 examData.seatNumber = seatFound.seatNumber
                 examData.date = this.state.exams[i].date
-                examData.timeString = this.calculateTime(this.state.exams[i].startTime, this.state.exams[i].hours)
+                examData.timeString = this.calculateTime(room.startTime, room.hours)
+                const userStatusTable = {
+                  'unregistered': 'ยังไม่สอบ',
+                  'registered': 'สอบแล้ว',
+                  'miss': 'ขาดสอบ'
+                }
+                examData.status = userStatusTable[seatFound.status]
                 examItems.push(
                   <ExamScheduleItem
                     key={this.state.exams[i]._id}
@@ -203,7 +209,7 @@ class ExamScheduleItem extends Component {
                 <div className="column is-not-grow">
                   <div className="user-status-box box is-round is-white-violet">
                     <h2>สถานะ</h2>
-                    <h1>ขาดสอบ</h1>
+                    <h1>{this.props.examData.status}</h1>
                   </div>
                 </div>
               </div>

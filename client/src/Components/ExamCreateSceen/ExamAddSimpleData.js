@@ -1,6 +1,8 @@
 /* eslint-disable no-unused-vars */
 import React, { Component } from 'react'
 import ClientService from '../Utilities/ClientService'
+import ErrorModal from '../Utilities/ErrorModal'
+import InfoModal from '../Utilities/InfoModal'
 
 import Modal from '../Utilities/Modal'
 
@@ -95,7 +97,7 @@ class ExamAddSimpleData extends Component {
 
   createExam () {
     if (!this.validForm()) {
-      alert('กรุณาระบุข้อมูลให้ถูกต้อง')
+      this.errorModal.showModal('กรุณาระบุข้อมูลให้ถูกต้อง')
       return
     }
 
@@ -116,10 +118,8 @@ class ExamAddSimpleData extends Component {
       if (result) {
         newExam._id = result
         this.props.insertMemExam(newExam)
-        alert('สร้างการสอบสำเร็จ')
-        this.props.closeModal()
       } else {
-        alert('ไม่สามารถสร้างการสอบได้ มีข้อผิดพลาดเกิดขึ้น')
+        this.errorModal.showModal('ไม่สามารถสร้างการสอบได้ มีข้อผิดพลาดเกิดขึ้น')
       }
       this.setState({
         isLoading: false
@@ -129,7 +129,7 @@ class ExamAddSimpleData extends Component {
 
   editExam () {
     if (!this.validForm()) {
-      alert('กรุณาระบุข้อมูลให้ถูกต้อง')
+      this.errorModal.showModal('กรุณาระบุข้อมูลให้ถูกต้อง')
     } else {
       let newData = {
         examName: this.state.examNameInput,
@@ -142,8 +142,6 @@ class ExamAddSimpleData extends Component {
         if (result) {
           const updatedExam = Object.assign(this.props.selectedExam, newData)
           this.props.updateMemExam(updatedExam)
-          alert('อัพเดทสำเร็จ')
-          this.props.closeModal()
         }
         this.setState({
           isLoading: false
@@ -191,6 +189,12 @@ class ExamAddSimpleData extends Component {
                 <button className="button is-yentafo is-round" onClick={this.props.closeModal}>ยกเลิก</button>
               </div>
             </div>
+            <ErrorModal
+              ref={instance => { this.errorModal = instance }}
+            />
+            <InfoModal
+              ref={instance => { this.infoModal = instance }}
+            />
           </div>
         }/>
     )
