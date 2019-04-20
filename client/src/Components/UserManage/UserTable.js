@@ -155,6 +155,9 @@ class UserTableItem extends Component {
   }
 
   renderItemByType () {
+    const userFaculty = this.props.facultys.find((faculty) => {
+      return faculty.facultyId === this.props.itemData.facultyId
+    })
     return (
       this.props.facultys.length !== 0
         ? <tr className="user-table-item"
@@ -165,7 +168,7 @@ class UserTableItem extends Component {
           <td id="tableUserId">{this.props.itemData.username}</td>
           <td>{`${this.props.itemData.firstName} ${this.props.itemData.lastName}`}</td>
 
-          {this.props.itemData.typeOfUser !== 'staff' ? <td>{this.props.facultys[this.props.itemData.facultyId - 1].facultyName}</td> : null}
+          {this.props.itemData.typeOfUser !== 'staff' ? <td>{userFaculty.facultyName}</td> : null}
           {this.props.itemData.typeOfUser === 'student' ? <td>{this.props.itemData.year}</td> : null}
           {this.props.itemData.typeOfUser === 'staff' ? <td>{this.props.itemData.standing}</td> : null}
         </tr>

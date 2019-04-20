@@ -133,7 +133,9 @@ class ManageUserPopUp extends Component {
   }
 
   renderFacultyBranchComponent () {
-    const faculty = this.props.facultys[this.state.facultyIndex === 0 ? this.state.facultyIndex : this.state.facultyIndex - 1]
+    const faculty = this.props.facultys.find((faculty) => {
+      return faculty.facultyId === this.state.facultyIndex
+    })
     if (!faculty) return null
     var returnArr = []
     for (var i = 0; i < faculty.branches.length; i++) {
