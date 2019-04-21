@@ -486,6 +486,38 @@ class ClientService {
   }
 
   /* ===========[Examiner Service]=================== */
+  getDataUserExamnier (user) {
+    return new Promise((resolve, reject) => {
+      axios.get(`/getDataUserExaminer/${user}`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+  checkSubjecetCurrent (subjectId) {
+    return new Promise((resolve, reject) => {
+      axios.get(`/checkSubjectCurrent/${subjectId}`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+  getDataExam (objecId) {
+    return new Promise((resolve, reject) => {
+      axios.get(`/getDataExam/${objecId}`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+  getNumberRoom (username, array) {
+    var result = []
+    for (var i = 0; i < array.rooms.length; i++) {
+      for (var j = 0; j < array.rooms[i].examiners.length; j++) {
+        if (array.rooms[i].examiners[j].username === username) {
+          result.push(i)
+        }
+      }
+    }
+    return result
+  }
   countUserByTypeAndName (type, name) {
     return new Promise((resolve, reject) => {
       var url = `/users/examinercount/${name.length === 0 ? `${type}` : `${type}/${name}`}`

@@ -1,5 +1,6 @@
 /* eslint-disable no-new-object */
-/* eslint-disable handle-callback-err */
+/* eslint
+disable handle-callback-err */
 const mongoClient = require('mongodb').MongoClient
 const ObjectId = require('mongodb').ObjectID
 const url = 'mongodb+srv://jeff:jeff123@cluster0-mumpe.mongodb.net/test?retryWrites=true'
@@ -470,6 +471,38 @@ class WebDAO {
       })
     })
   }
+
+  getUserExaminerByUserName (nameExaminer) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+
+        const db = client.db(dbName)
+        db.collection('User').find({ username: nameExaminer, isExaminer: true }).toArray((errClass, data) => {
+          if (errClass) { throw errClass }
+          client.close()
+          return resolve(data)
+        })
+        client.close()
+      })
+    })
+  }
+  getExamDataByObjectId (Oid) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+
+        const db = client.db(dbName)
+        db.collection('Exam').find({ '_id': new ObjectId(Oid) }).toArray((errClass, data) => {
+          if (errClass) { throw errClass }
+          client.close()
+          return resolve(data)
+        })
+        client.close()
+      })
+    })
+  }
+
   /* ===========[Subject DAO]=================== */
 
   getAllSubjectBySubjectIdOrSubjectName (subjid, subjname) {
@@ -645,7 +678,22 @@ class WebDAO {
       })
     })
   }
-
+  checkSubjectCurrent (subjectId) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+        const db = client.db(dbName)
+        this.getYearAndTerm().then((NowCurrent) => {
+          db.collection('Subject').findOne({ 'subjectId': subjectId, 'courses': { school_year: NowCurrent.currentStudyYear, semester: NowCurrent.currentStudyTerm } }, (err, data) => {
+            if (err) { throw err }
+            if (!data) {
+              return resolve(true)
+            } else { client.close(); return resolve(false) }
+          })
+        })
+      })
+    })
+  }
   getObjectRegisterCourseBySubjectId (id) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
@@ -713,7 +761,6 @@ class WebDAO {
         if (err) { resolve(null) }
         const db = client.db(dbName)
         // eslint-disable-next-line no-undef
-        console.log(sjid, cid)
         // eslint-disable-next-line no-undef
         db.collection('Subject').updateMany({ subjectId: sjid }, { $pull: { courses: { courseId: Number.parseInt(cid) } } }, (err, data) => {
           if (err) { throw err }
