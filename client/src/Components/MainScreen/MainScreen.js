@@ -39,7 +39,9 @@ class MainScreen extends Component {
             <Home />
           } />
           <Route path="/exam_schedule" render={(props) =>
-            <ExamSchedule />
+            <ExamSchedule
+              user={this.props.user}
+            />
           } />
           <Route path="/exam_create" render={(props) =>
             <ExamCreateScreen />

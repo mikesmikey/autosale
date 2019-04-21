@@ -3,6 +3,8 @@ import React, { Component } from 'react'
 
 import ExamAddSimpleData from './ExamAddSimpleData'
 import ExaminersManage from './ExaminersManage'
+import ErrorModal from '../Utilities/ErrorModal'
+import InfoModal from '../Utilities/InfoModal'
 
 import ClientService from '../Utilities/ClientService'
 import Exam from '../../Objects/Exam'
@@ -88,13 +90,13 @@ class ExamManageModal extends Component {
       })
       CServiceObj.deleteExam(this.state.selectedExam._id).then((result) => {
         this.deleteMemExam(this.state.selectedExam)
-        alert('ลบการสอบสำเร็จ')
+        this.infoModal.showModal('ยกเลิกการสอบสำเร็จ')
         this.setState({
           isLoading: false
         })
       })
     } else {
-      alert('กรุณาเลือกการสอบก่อนที่จะลบ')
+      this.errorModal.showModal('กรุณาเลือกการสอบก่อนที่จะลบ')
     }
   }
 
@@ -102,7 +104,7 @@ class ExamManageModal extends Component {
     if (this.props.selectedCourse) {
       this.dataAddModal.showModal(this.decideAddDataModal())
     } else {
-      alert('กรุณาเลือกการสอบก่อนที่จะเพิ่มข้อมูล')
+      this.errorModal.showModal('กรุณาเลือกการสอบก่อนที่จะเพิ่มข้อมูล')
     }
   }
 
@@ -162,7 +164,7 @@ class ExamManageModal extends Component {
     if (this.state.selectedExam) {
       this.props.showModal('roomsManageModal')
     } else {
-      alert('กรุณาเลือกการสอบก่อนที่จะจัดการ')
+      this.errorModal.showModal('กรุณาเลือกการสอบก่อนที่จะจัดการ')
     }
   }
 
@@ -170,7 +172,7 @@ class ExamManageModal extends Component {
     if (this.state.selectedExam) {
       this.createExamModal.showModal('edit')
     } else {
-      alert('กรุณาเลือกการสอบก่อนที่จะจัดการ')
+      this.errorModal.showModal('กรุณาเลือกการสอบก่อนที่จะจัดการ')
     }
   }
 
@@ -182,7 +184,7 @@ class ExamManageModal extends Component {
     if (this.state.selectedExam) {
       this.props.showModal('examinersManageModal')
     } else {
-      alert('กรุณาเลือกการสอบก่อนที่จะจัดการ')
+      this.errorModal.showModal('กรุณาเลือกการสอบก่อนที่จะจัดการ')
     }
   }
 
@@ -193,7 +195,7 @@ class ExamManageModal extends Component {
       })
       CServiceObj.confirmExam(this.state.selectedExam._id).then((result) => {
         if (result.examConfirm) {
-          alert('ยืนยันการสอบสำเร็จ')
+          this.infoModal.showModal('ยืนยันการสอบสำเร็จ')
           let newExam = this.state.selectedExam
           newExam.examConfirm = result.examConfirm
           this.updateMemExam(newExam)
@@ -205,12 +207,20 @@ class ExamManageModal extends Component {
         })
       })
     } else {
-      alert('กรุณาเลือกการสอบก่อนที่จะยืนยัน')
+      this.errorModal.showModal('กรุณาเลือกการสอบก่อนที่จะยืนยัน')
     }
   }
 
-  handleExamConfirmError (error) {
-    console.log(error)
+  handleExamConfirmError (errorType) {
+    const errorTable = {
+      'roomExist': 'ห้องสอบไม่เพียงพอ',
+      'validDate': 'วันสอบผิดพลาด',
+      'validMaxScore': 'คะแนนเต็มสอบไม่ถูกต้อง',
+      'courseExist': 'ไม่พบคอสเรียนในระบบ',
+      'enoughSeat': 'ที่นั่งไม่เพียงพอ',
+      'enoughExaminer': 'ผู้คุมสอบไม่เพียงพอ'
+    }
+    this.errorModal.showModal(errorTable[Object.keys(errorType)[0]])
   }
 
   handleExamInfo () {
@@ -317,6 +327,12 @@ class ExamManageModal extends Component {
           closeModal={() => { this.createExamModal.closeModal() }}
           insertMemExam={this.insertMemExam}
           updateMemExam={this.updateMemExam}
+        />
+        <ErrorModal
+          ref={instance => { this.errorModal = instance }}
+        />
+        <InfoModal
+          ref={instance => { this.infoModal = instance }}
         />
       </div>
     )
