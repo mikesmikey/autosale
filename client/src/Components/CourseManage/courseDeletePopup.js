@@ -34,9 +34,10 @@ class DeleteRoomPopup extends Component {
 
   deleteButtonHandle () {
     if (this.props.selectedCourse.courseId !== '' && this.props.selectedCourse.subjectNumber !== '') {
-      console.log(this.props.selectedCourse.courseId, this.props.selectedCourse.subjectNumber)
       ServiceObj.deleteCourse(this.props.selectedCourse.subjectNumber, this.props.selectedCourse.courseId).then((data) => {
+      // eslint-disable-next-line no-constant-condition
         if (data) {
+          var a = this.props.deleteItemByName(this.props.selectedCourse.subjectName)
           this.props.closeModal()
         } else {
           this.props.closeModal()
@@ -44,9 +45,8 @@ class DeleteRoomPopup extends Component {
         }
       })
     } else {
-      console.log('STATE NO CHANE')
+      console.log('STATE NOT CHANE')
     }
-    console.log(this.props.selectedCourse)
   }
 
   render () {

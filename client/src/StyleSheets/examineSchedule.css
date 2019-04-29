@@ -1,0 +1,84 @@
+.tab-is-1 { 
+    display: inline-block;
+    margin: 3px 5px;
+}
+.font-size-1{
+    font-size: 20px;
+    color: rgb(113, 95, 129);
+}
+.font-size-2{
+    text-align: center;
+    font-size: 23px;
+    color: white;
+   
+}
+.colorDiv{
+    background-color:#814ab5;
+    padding: 12px
+}
+p {
+    margin: 0;
+    padding: 0;
+}
+.border-1{
+    width: 100%;
+    height: 32px;
+    padding: 5px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    font-size: 16px;
+}
+.border-2{
+    width: 80%;
+    height: 100%;
+    padding: 5px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    font-size: 16px;
+}
+.tab-is-15 { 
+    display:inline-block; 
+    margin-top: 20px; 
+}
+.tab-is-16{ 
+    display:inline-block; 
+    margin-left: 20px; 
+}
+.tab-is-17{ 
+    display:inline-block; 
+    margin-left: 5px; 
+}
+.input.is-year-width {
+    width: 180px;
+}
+.term-select-box-popUp{
+    width: 100%;
+    height: 32px;
+    padding: 5px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    font-size: 16px;
+
+    box-sizing: border-box;
+}
+.set-button-update{
+   margin-left: 40%;
+}
+.column.is-year {
+    flex: none;
+    width: 100%;
+}
+.coures{
+    width: 80%;
+    
+}
+.course-table-item{
+    cursor: pointer;
+}
+.course-table-item.is-active {
+    background-color: #c7afdd !important; 
+    color: white;
+}
+.wigth100 {
+    width: 100%
+}

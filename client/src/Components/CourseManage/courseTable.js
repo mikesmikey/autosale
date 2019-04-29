@@ -20,6 +20,18 @@ class courseTable extends Component {
 
     this.loadDataIntoTable = this.loadDataIntoTable.bind(this)
     this.inspectItem = this.inspectItem.bind(this)
+    this.deleteItemByname = this.deleteItemByname.bind(this)
+  }
+  deleteItemByname (name) {
+    for (var i = 0; i < this.state.data.length; i++) {
+      if (this.state.data[i][0].subjectName === name) {
+        var CopyData = this.state.data
+        CopyData.splice(i, 1)
+        this.setState({ data: CopyData })
+        return true
+      }
+    }
+    return false
   }
   componentWillUnmount () {
     this._isMounted = false
@@ -74,6 +86,7 @@ class courseTable extends Component {
 
   loadDataIntoTable () {
     var DataObj = []
+    console.log(this.state.data)
     for (var i = 0; i < this.state.data.length; i++) {
       DataObj[i] = <CourseTableItem
         selectItem={(e) => { this.selectItem(e) }}
