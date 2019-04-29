@@ -1,54 +1,64 @@
-import React, { Component } from "react";
+/* eslint-disable no-unused-vars */
+import React, { Component } from 'react'
 import {
   NavLink
-} from 'react-router-dom';
+} from 'react-router-dom'
 
-import '../../StyleSheets/mainMenuBar.css';
+import '../../StyleSheets/mainMenuBar.css'
 
 class MainScrenMenuBar extends Component {
-
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
 
     this.state = {
-      buttonPointer: null
+      buttonPointer: null,
+      hamburger: false
     }
 
-    this.handleMenuDropDown = this.handleMenuDropDown.bind(this);
-    this.handleButtonPointer = this.handleButtonPointer.bind(this);
+    this.handleMenuDropDown = this.handleMenuDropDown.bind(this)
+    this.handleButtonPointer = this.handleButtonPointer.bind(this)
+    this.handleHamburger = this.handleHamburger.bind(this)
   }
 
-  dropDownSwitch(id) {
-    var element = document.getElementById(id);
+  dropDownSwitch (id) {
+    var element = document.getElementById(id)
 
-    if (element.classList.contains("dropdown-hide")) {
-      element.classList.remove("dropdown-hide")
-      element.classList.add("dropdown-active");
+    if (element.classList.contains('dropdown-hide')) {
+      element.classList.remove('dropdown-hide')
+      element.classList.add('dropdown-active')
     } else {
-      element.classList.remove("dropdown-active");
-      element.classList.add("dropdown-hide")
+      element.classList.remove('dropdown-active')
+      element.classList.add('dropdown-hide')
     }
   }
 
-  handleMenuDropDown(e) {
-    if (e.target.id === "car_manage_button" && this.state.buttonPointer !== "sub_car_manage") {
-      this.dropDownSwitch("car_manage_list");
-    } else if (e.target.id === "fix_manage_button" && this.state.buttonPointer !== "sub_fix_manage") {
-      this.dropDownSwitch("fix_manage_list");
-    } else if (e.target.id === "part_manage_button" && this.state.buttonPointer !== "sub_part_manage") {
-      this.dropDownSwitch("part_manage_list");
+  handleMenuDropDown (e) {
+    if (e.target.id === 'car_manage_button' && this.state.buttonPointer !== 'sub_car_manage') {
+      this.dropDownSwitch('car_manage_list')
+    } else if (e.target.id === 'fix_manage_button' && this.state.buttonPointer !== 'sub_fix_manage') {
+      this.dropDownSwitch('fix_manage_list')
+    } else if (e.target.id === 'part_manage_button' && this.state.buttonPointer !== 'sub_part_manage') {
+      this.dropDownSwitch('part_manage_list')
+    } else if (e.target.id === 'course_manage_button' && this.state.buttonPointer !== 'sub_course_manage') {
+      this.dropDownSwitch('part_manage_list')
     }
   }
 
-  handleButtonPointer(e) {
+  handleButtonPointer (e) {
     this.setState({
       buttonPointer: e.target.type
     })
   }
 
-  render() {
+  handleHamburger () {
+    this.setState({
+      hamburger: !this.state.hamburger
+    })
+  }
+
+  render () {
     return (
-      <aside className="menu main-menu">
+      <aside className={`menu main-menu ${this.state.hamburger ? 'is-active' : ''}`}>
         <div className="menu-space"></div>
         <ul className="menu-list">
           <li>
@@ -66,7 +76,7 @@ class MainScrenMenuBar extends Component {
           <li>
             <NavLink to="/exam_create" activeClassName="is-active is-black-violet" onClick={this.handleButtonPointer}>
               <i className="menu-icon-awesome fas fa-calendar-plus"></i>
-              เพิ่มการสอบ
+              จัดการสอบ
             </NavLink>
           </li>
           <li>
@@ -74,6 +84,56 @@ class MainScrenMenuBar extends Component {
               <i className="menu-icon-awesome fas fa-users"></i>
               จัดการผู้ใช้
             </NavLink>
+          </li>
+          <li>
+            <NavLink to="/exam_score" activeClassName="is-active is-black-violet" onClick={this.handleButtonPointer}>
+              <i className="menu-icon-awesome fas fa-users"></i>
+              ดูคะแนนสอบ
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/manage_room" activeClassName="is-active is-black-violet" onClick={this.handleButtonPointer}>
+              <i className="menu-icon-awesome fas fa-users"></i>
+              จัดการห้อง
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/add_building" activeClassName="is-active is-black-violet" onClick={this.handleButtonPointer}>
+              <i className="menu-icon-awesome fa fa-building"></i>
+              จัดการตึก
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/add_subject" activeClassName="is-active is-black-violet" onClick={this.handleButtonPointer}>
+              <i className="menu-icon-awesome fas fa-calendar-plus"></i>
+                เพิ่มรายวิชา
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/year_and_term_manage" activeClassName="is-active is-black-violet" onClick={this.handleButtonPointer}>
+              <i className="menu-icon-awesome fa fa-calendar"></i>
+                จัดการปีการศึกษา
+            </NavLink>
+          </li>
+          <li>
+            <a id="course_manage_button"
+              onClick={this.handleMenuDropDown}
+            >
+              <svg className="menu-icon icon-BookCourse icon-size-6" ></svg>
+              จัดการการเรียน
+            </a>
+            <ul id="part_manage_list" className="dropdown-hide">
+              <li>
+                <NavLink to="/course_manage" activeClassName="is-active is-black-oros" type="sub_course_manage" onClick={this.handleButtonPointer}>
+                  จัดการการเรียน
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/Test" activeClassName="is-active is-black-oros" type="sub_course_manage" onClick={this.handleButtonPointer}>
+                  เพิ่มการเรียน
+                </NavLink>
+              </li>
+            </ul>
           </li>
           {/*
           <li>
@@ -151,8 +211,8 @@ class MainScrenMenuBar extends Component {
           */}
         </ul>
       </aside>
-    );
+    )
   }
 }
 
-export default MainScrenMenuBar;
+export default MainScrenMenuBar

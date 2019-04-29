@@ -1,0 +1,82 @@
+.examiners-manage {
+    width: 900px;
+}
+
+.examiners-manage .box-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.examiners-manage .box-content {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.examiners-manage .exit-button {
+    margin-right: 10px;
+    cursor: pointer;
+
+    border: none;
+    border-radius: 5px;
+    background-color: #542f77;
+    color: white;
+}
+
+.examiners-manage .exit-button:hover {
+    color: gray;
+}
+
+.examiners-manage .input-set * {
+    display: inline-block;
+    margin: 5px 5px;
+}
+
+.examiner-table-area {
+    width: 100%;
+    height: 300px;
+    overflow-y: scroll;
+}
+
+.selected-examiner-table-area {
+    width: 100%;
+    height: 558px;
+    overflow-y: scroll;
+}
+
+.select-examiner {
+    width: 80%;
+    height: 40px;
+    overflow-y: scroll;
+}
+
+.column.is-0 {
+    flex: none;
+    width: 10%;
+}
+
+.column.is-00 {
+    flex: none;
+    width: 5%;
+}
+
+.examiners-manage .main-column {
+    margin: 5px 5px;
+}
+
+.examiners-manage .button-area {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.examiners-manage .search-area {
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+
+    display: flex;
+    flex-direction: column;
+
+    background-color: #dbdbdb;
+}

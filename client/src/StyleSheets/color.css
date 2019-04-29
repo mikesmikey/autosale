@@ -73,3 +73,16 @@
     background-color: #dbdbdb !important;
     color: black !important;
 }
+
+.is-banana {
+    background-color: #e0cb0d !important;
+    color: white !important;
+}
+.is-banana.button {
+    border-color: white !important;
+}
+.is-banana.button:hover {
+    background-color: white !important;
+    color: #e0cb0d !important;
+    border-color: #e0cb0d !important;
+}

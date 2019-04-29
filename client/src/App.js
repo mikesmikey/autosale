@@ -1,58 +1,63 @@
-import React, { Component } from 'react';
+/* eslint-disable no-unused-vars */
+import React, { Component } from 'react'
 import {
   Route, Redirect, withRouter, Switch
-} from 'react-router-dom';
+} from 'react-router-dom'
 
-import './StyleSheets/App.css';
-import './StyleSheets/icon.css';
-import './StyleSheets/element.css';
-//import '../node_modules/bulma/css/bulma.css';
+import './StyleSheets/App.css'
+import './StyleSheets/icon.css'
+import './StyleSheets/element.css'
+// import '../node_modules/bulma/css/bulma.css';
 
-import MainScreen from "./Components/MainScreen/MainScreen";
-import LoginScreen from "./Components/LoginScreen/LoginScreen";
-import RegisterScreen from './Components/RegisterScreen/RegisterScreen';
-import About from './Components/About/About';
+import MainScreen from './Components/MainScreen/MainScreen'
+import LoginScreen from './Components/LoginScreen/LoginScreen'
+import RegisterScreen from './Components/RegisterScreen/RegisterScreen'
+import About from './Components/About/About'
+
+import ClientService from './Components/Utilities/ClientService'
+
+const CServiceObj = new ClientService()
 
 class App extends Component {
-
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
     this.state = {
-      isAuth: true,
+      isAuth: false,
       user: {
-        firstname : "N/A"
-      }
+        firstname: 'N/A'
+      },
+      loadStatus: true
     }
 
-    this.mockLogout = this.mockLogout.bind(this);
-    this.mockLogin = this.mockLogin.bind(this);
+    this.setUserAppAuth = this.setUserAppAuth.bind(this)
   }
 
-  setMockAuth(status, user) {
-    this.setState({
-      isAuth: status,
-      user : user
+  componentDidMount () {
+    this.setState({ loadStatus: true })
+    CServiceObj.loginByToken(this.setUserAppAuth).then(() => {
+      this.setState({ loadStatus: false })
     })
   }
 
-  mockLogin(user) {
-    this.setMockAuth(true, user);
+  setUserAppAuth (status, user) {
+    this.setState({
+      isAuth: status,
+      user: user || null
+    })
   }
 
-  mockLogout() {
-    this.setMockAuth(false, null);
-  }
+  render () {
+    const isLoading = this.state.loadStatus ? 'none' : 'block'
 
-  render() {
     return (
-      <div className="App">
+      <div className="App" style={{ display: isLoading }}>
         <Switch>
           <Route exact path="/login" render={(props) =>
-            !this.state.isAuth ? 
-            <LoginScreen
-              {...props}
-              mockLogin={this.mockLogin}
-            /> : <Redirect to="/" />
+            !this.state.isAuth
+              ? <LoginScreen
+                {...props}
+                setUserAppAuth={this.setUserAppAuth}
+              /> : <Redirect to="/" />
           } />
           <Route exact path="/register" render={(props) =>
             !this.state.isAuth ? <RegisterScreen {...props} /> : <Redirect to="/" />
@@ -61,18 +66,18 @@ class App extends Component {
             <About />
           } />
           <Route path="/" render={(props) =>
-            this.state.isAuth ?
-              <MainScreen
+            this.state.isAuth
+              ? <MainScreen
                 {...props}
                 user={this.state.user}
-                mockLogout={this.mockLogout}
-              /> :
-              <Redirect to="/login" />
+                setUserAppAuth={this.setUserAppAuth}
+              />
+              : this.state.loadStatus ? null : <Redirect to="/login" />
           } />
         </Switch>
       </div>
-    );
+    )
   }
 }
 
-export default withRouter(App);
+export default withRouter(App)

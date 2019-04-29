@@ -1,47 +1,50 @@
-import React, { Component } from "react";
+/* eslint-disable no-unused-vars */
+import React, { Component } from 'react'
 import {
   Link
-} from 'react-router-dom';
+} from 'react-router-dom'
 
-//import '../../StyleSheets/mainNavBar.css';
-import '../../StyleSheets/mainNavBar.css';
+// import '../../StyleSheets/mainNavBar.css';
+import '../../StyleSheets/mainNavBar.css'
+import ClientService from '../Utilities/ClientService'
+
+const CServiceObj = new ClientService()
 
 class MainNavBar extends Component {
-
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
 
     this.state = {
       settingclick: false
     }
 
-    this.handleDropDown = this.handleDropDown.bind(this);
-    this.dropdownBlurHandle = this.dropdownBlurHandle.bind(this);
+    this.handleDropDown = this.handleDropDown.bind(this)
+    this.dropdownBlurHandle = this.dropdownBlurHandle.bind(this)
   }
 
-  dropdownBlurHandle(e) {
+  dropdownBlurHandle (e) {
     if (!e.target.className.includes('dropdown-items')) {
-      this.setState({ settingclick: false });
-      document.getElementById('root').removeEventListener('click', this.dropdownBlurHandle);
+      this.setState({ settingclick: false })
+      document.getElementById('root').removeEventListener('click', this.dropdownBlurHandle)
     }
   }
 
-  handleDropDown() {
+  handleDropDown () {
     if (!this.state.settingclick) {
       this.setState({ settingclick: true })
-      document.getElementById('root').addEventListener('click', this.dropdownBlurHandle);
+      document.getElementById('root').addEventListener('click', this.dropdownBlurHandle)
     } else {
       this.setState({ settingclick: false })
-      document.getElementById('root').removeEventListener('click', this.dropdownBlurHandle);
+      document.getElementById('root').removeEventListener('click', this.dropdownBlurHandle)
     }
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     this.setState({ settingclick: false })
-    document.getElementById('root').removeEventListener('click', this.dropdownBlurHandle);
+    document.getElementById('root').removeEventListener('click', this.dropdownBlurHandle)
   }
 
-  render() {
+  render () {
     return (
       <div className="main-nav-bar">
         <nav className="navbar is-violet" aria-label="main navigation">
@@ -56,16 +59,19 @@ class MainNavBar extends Component {
               <span className="navbar-user-text">{this.props.username}</span>
               <svg className="navbar-user-icon icon-down-arrow icon-size-6" ></svg>
             </div>
-            <div className={this.state.settingclick ? "dropdown-items is-active" :"dropdown-items user"}>
+            <div className={this.state.settingclick ? 'dropdown-items is-active' : 'dropdown-items user'}>
               <Link to='/about'>เกี่ยวกับ</Link>
-              <a onClick={this.props.mockLogout}>ออกจากระบบ</a>
+              <a onClick={() => { CServiceObj.logout(() => { this.props.setUserAppAuth(false) }) }}>ออกจากระบบ</a>
               <a className="is-detail">เวอร์ชั่น 0.0.2</a>
             </div>
           </button>
+          <button className="navbar-item hamburger" onClick={this.props.handleHamburger}>
+            <i className="fas fa-bars"></i>
+          </button>
         </nav>
       </div>
-    );
+    )
   }
 }
 
-export default MainNavBar;
+export default MainNavBar

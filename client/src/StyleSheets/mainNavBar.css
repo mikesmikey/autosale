@@ -140,3 +140,18 @@
 
     font-size: 16px;
 }
+
+.navbar-item.hamburger {
+    border: none;
+    background-color: none;
+    width: 50px;
+
+    color: white;
+    background-color: #814ab5;
+
+    display: none; /* only show when using smartphone device*/
+}
+
+.navbar-item.hamburger:hover {
+    background-color: #542f77;
+}

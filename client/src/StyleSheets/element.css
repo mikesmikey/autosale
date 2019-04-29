@@ -130,13 +130,41 @@
     font-size: 14px;
 }
 
+.label.is-fake {
+    font: 400 16px Arial;
+    display: inline-block;
+    color: #fff;
+    border-radius: 5px;
+    padding: .5rem;
+    margin: .3rem;
+    text-align: center;
+    text-overflow: ellipsis;
+    text-decoration: none;
+    background-color: #ef8d22 !important;
+    color: white !important;
+}
+
+.label.is-fake:hover {
+    outline: none;
+    box-shadow: 0px 0px 2px #ef8d22;
+    cursor: pointer;
+    background-color: white !important;
+    color: #ef8d22 !important;
+    border-color: #ef8d22 !important;
+}
+
 /*===============[input]===================*/
 
-.input[type=text], .input[type=password] {
+.input[type=file] {
+    display: none;
+}
+
+.input[type=text], .input[type=password], .input[type=date]{
     padding: 5px;
 
     border: 1px solid gray;
     border-radius: 5px;
+    box-sizing: border-box;
 
     font-size: 16px;
 }
@@ -149,8 +177,13 @@
 .input.is-full-width {
     width: 100%;
 }
+
 .input.is-half {
     width: 50%;
+}
+
+.input.is-free-size {
+    width: auto;
 }
 
 .textarea {
@@ -171,6 +204,8 @@
 
     border: 1px solid gray;
     border-radius: 5px;
+
+    padding: 5px;
 
     font-size: 16px;
 }
@@ -214,4 +249,66 @@
     width: 100%;
     border-radius: 5px;
     font-size: 16px;
+}
+
+/*==============[Table]======================*/
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table,.exam-table  td,.exam-table  th {
+    border: none;
+}
+  
+.table {
+    border-collapse: collapse;
+    border-radius: 3px;
+    width: 100%;
+}
+  
+.table th{
+    height: 50px;
+}
+
+.table tr.is-active {
+    background-color: #c7afdd !important; 
+    color: white;
+}
+
+.table td:not(:first-child) {
+    border-left: 3px solid white;
+}
+
+.table td {
+    padding: 5px;
+    white-space: pre;
+}
+
+.table td.is-ignore {
+    background-color: #d3d3d3 !important; 
+    color: black !important;
+    cursor: default;
+}
+
+.table th.is-ignore {
+    background-color: #8966a8 !important; 
+    cursor: default;
+}
+
+.table tr:not(.is-header) {
+    height: 30px;
+    background-color: #f2f2f2;
+}
+
+.table tr:not(.is-header):hover{ 
+    background: #c7afdd; 
+    color: white;
+    cursor: pointer;
+}
+
+.table thead{ 
+    background: #906cb2 !important; 
+    color: white;
 }
