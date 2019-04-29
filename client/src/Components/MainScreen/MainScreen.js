@@ -20,6 +20,8 @@ import AddBuilding from '../AddBuilding/AddBuilding'
 import AddSubject from '../AddSubject/AddSubject'
 import CourseManage from '../CourseManage/courseManage'
 import Examiner from '../ExaminerSchedule/examinerMain'
+import AddCourse from '../CourseManage/AddCourse'
+import AddCourseData from '../CourseManage/AddCourseData'
 
 import '../../StyleSheets/mainScreen.css'
 import '../../StyleSheets/pageHelper.css'
@@ -72,6 +74,12 @@ class MainScreen extends Component {
               username={this.props.user.firstName}
             />
           }/>
+           <Route path="/add_course" render={(props) =>
+            <AddCourse />
+          } />
+          <Route path="/add_course_data" render={(props) =>
+            <AddCourseData />
+          } />
         </div>
       </div>
     )

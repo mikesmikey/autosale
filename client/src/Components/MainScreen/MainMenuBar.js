@@ -7,7 +7,7 @@ import {
 import '../../StyleSheets/mainMenuBar.css'
 
 class MainScrenMenuBar extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
@@ -20,7 +20,7 @@ class MainScrenMenuBar extends Component {
     this.handleHamburger = this.handleHamburger.bind(this)
   }
 
-  dropDownSwitch (id) {
+  dropDownSwitch(id) {
     var element = document.getElementById(id)
 
     if (element.classList.contains('dropdown-hide')) {
@@ -32,7 +32,7 @@ class MainScrenMenuBar extends Component {
     }
   }
 
-  handleMenuDropDown (e) {
+  handleMenuDropDown(e) {
     if (e.target.id === 'car_manage_button' && this.state.buttonPointer !== 'sub_car_manage') {
       this.dropDownSwitch('car_manage_list')
     } else if (e.target.id === 'fix_manage_button' && this.state.buttonPointer !== 'sub_fix_manage') {
@@ -44,19 +44,19 @@ class MainScrenMenuBar extends Component {
     }
   }
 
-  handleButtonPointer (e) {
+  handleButtonPointer(e) {
     this.setState({
       buttonPointer: e.target.type
     })
   }
 
-  handleHamburger () {
+  handleHamburger() {
     this.setState({
       hamburger: !this.state.hamburger
     })
   }
 
-  render () {
+  render() {
     return (
       <aside className={`menu main-menu ${this.state.hamburger ? 'is-active' : ''}`}>
         <div className="menu-space"></div>
@@ -104,15 +104,27 @@ class MainScrenMenuBar extends Component {
             </NavLink>
           </li>
           <li>
-            <NavLink to="/add_subject" activeClassName="is-active is-black-violet" onClick={this.handleButtonPointer}>
-              <i className="menu-icon-awesome fas fa-calendar-plus"></i>
-                เพิ่มรายวิชา
+            <NavLink to="/year_and_term_manage" activeClassName="is-active is-black-violet" onClick={this.handleButtonPointer}>
+              <i className="menu-icon-awesome fa fa-calendar"></i>
+              จัดการปีการศึกษา
             </NavLink>
           </li>
           <li>
-            <NavLink to="/year_and_term_manage" activeClassName="is-active is-black-violet" onClick={this.handleButtonPointer}>
-              <i className="menu-icon-awesome fa fa-calendar"></i>
-                จัดการปีการศึกษา
+            <NavLink to="/add_course" activeClassName="is-active is-black-violet" type="sub_course_manage" onClick={this.handleButtonPointer}>
+              <i className="menu-icon-awesome fas fa-calendar-plus"></i>
+              เพิ่มการเรียน
+              </NavLink>
+          </li>
+          <li>
+            <NavLink to="/add_subject" activeClassName="is-active is-black-violet" onClick={this.handleButtonPointer}>
+              <i className="menu-icon-awesome fas fa-calendar-plus"></i>
+              เพิ่มรายวิชา
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/add_course_data" activeClassName="is-active is-black-violet" onClick={this.handleButtonPointer}>
+              <i className="menu-icon-awesome fas fa-calendar-plus"></i>
+              เพิ่มข้อมูลการเรียน
             </NavLink>
           </li>
           <li>
@@ -124,13 +136,8 @@ class MainScrenMenuBar extends Component {
             </a>
             <ul id="part_manage_list" className="dropdown-hide">
               <li>
-                <NavLink to="/course_manage" activeClassName="is-active is-black-oros" type="sub_course_manage" onClick={this.handleButtonPointer}>
+                <NavLink to="/course_manage" activeClassName="is-active is-black-violet" type="sub_course_manage" onClick={this.handleButtonPointer}>
                   จัดการการเรียน
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/Test" activeClassName="is-active is-black-oros" type="sub_course_manage" onClick={this.handleButtonPointer}>
-                  เพิ่มการเรียน
                 </NavLink>
               </li>
             </ul>

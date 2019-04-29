@@ -105,7 +105,7 @@ class RoomPopUp extends Component {
       this.numRoom = value.toString()
     }
     if (name === 'stringFloor') {
-      this.numFloor = parseInt(value)
+      this.numFloor = parseInt(value,10)
       this.floor = value.toString()
     }
     if (name === 'stringRow') {
