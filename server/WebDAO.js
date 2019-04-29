@@ -4,7 +4,7 @@ disable handle-callback-err */
 const mongoClient = require('mongodb').MongoClient
 const ObjectId = require('mongodb').ObjectID
 const url = 'mongodb+srv://jeff:jeff123@cluster0-mumpe.mongodb.net/test?retryWrites=true'
-// const url = 'mongodb://<dbuser>:<dbpassword>@ds131765.mlab.com:31765/ooad_kob'
+// const url = 'mongodb://hanami:hanami02@ds131765.mlab.com:31765/ooad_kob'
 const dbName = 'ooad_kob'
 
 class WebDAO {
@@ -222,6 +222,7 @@ class WebDAO {
         db.collection('Faculty').find({}).project({ '_id': 0 }).toArray((err, data) => {
           if (err) { throw err }
           client.close()
+          data.found = true
           return resolve(data)
         })
         client.close()
@@ -261,6 +262,26 @@ class WebDAO {
     })
   }
 
+  insertCourseByThisSubject (subjid, courseData) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
+        if (_err) { resolve(null) }
+        const db = client.db(dbName)
+        db.collection('Subject').findOneAndUpdate({ 'subjectId': subjid }, { '$push': { 'courses': courseData } }, (err, result) => {
+          if (err) { throw err }
+          if (result.value) {
+            client.close()
+            return resolve(true)
+          } else {
+            client.close()
+            return resolve(false)
+          }
+        })
+        client.close()
+      })
+    })
+  }
+
   /* ===========[GlobalData DAO]=================== */
   getYearAndTerm () {
     return new Promise((resolve, reject) => {
@@ -269,6 +290,21 @@ class WebDAO {
         const db = client.db(dbName)
         if (!client) return resolve(null)
         db.collection('GlobalData').findOne({}, (err, data) => {
+          if (err) { throw err }
+          client.close()
+          return resolve(data)
+        })
+        client.close()
+      })
+    })
+  }
+
+  getAllYearAndTerm () {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        if (err) { resolve(null) }
+        const db = client.db(dbName)
+        db.collection('GlobalData').find({}).project({ '_id': 0 }).toArray((err, data) => {
           if (err) { throw err }
           client.close()
           return resolve(data)
@@ -505,11 +541,41 @@ class WebDAO {
 
   /* ===========[Subject DAO]=================== */
 
-  getAllSubjectBySubjectIdOrSubjectName (subjid, subjname) {
+  getAllSubjectBySubjectName (subjname) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
         const db = client.db(dbName)
-        db.collection('Subject').find({ '$or': [{ 'subjectId': subjid }, { 'subjectName': subjname }] }).limit(16).project({ '_id': 0 }).toArray((err, data) => {
+        const regex = new RegExp(`${subjname}`)
+        db.collection('Subject').find({ 'subjectName': regex }).limit(16).project({ '_id': 0 }).toArray((err, data) => {
+          if (err) { throw err }
+          client.close()
+          return resolve(data)
+        })
+        client.close()
+      })
+    })
+  }
+
+  getAllSubjectBySubjectIdMoreOne (subjid) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        const db = client.db(dbName)
+        const regex = new RegExp(`${subjid}`)
+        db.collection('Subject').find({ 'subjectId': regex }).limit(16).project({ '_id': 0 }).toArray((err, data) => {
+          if (err) { throw err }
+          client.close()
+          return resolve(data)
+        })
+        client.close()
+      })
+    })
+  }
+
+  getAllSubjectBySubjectId (subjid) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        const db = client.db(dbName)
+        db.collection('Subject').find({ '$or': [{ 'subjectId': subjid }] }).limit(16).project({ '_id': 0 }).toArray((err, data) => {
           if (err) { throw err }
           client.close()
           return resolve(data)
@@ -545,13 +611,29 @@ class WebDAO {
               client.close()
               return resolve(true)
             })
-          } else { client.close(); return resolve(false) }
+          } else {
+            client.close()
+            return resolve(false)
+          }
         })
         client.close()
       })
     })
   }
 
+  getAllCourseByThisSubject (subjname) {
+    return new Promise((resolve, reject) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+        const db = client.db(dbName)
+        db.collection('Subject').find({}).project({ '_id': 0 }).toArray((err, data) => {
+          if (err) { throw err }
+          client.close()
+          return resolve(data)
+        })
+        client.close()
+      })
+    })
+  }
   /* ===========[Course DAO]=================== */
   // coming with subject name, subject id
 
@@ -580,10 +662,12 @@ class WebDAO {
                   '$filter': {
                     'input': '$courses',
                     'as': 'course',
-                    'cond': { '$and': [
-                      { '$eq': [ '$$course.school_year', Number.parseInt(year) ] },
-                      { '$eq': [ '$$course.semester', Number.parseInt(semester) ] }
-                    ] }
+                    'cond': {
+                      '$and': [
+                        { '$eq': ['$$course.school_year', Number.parseInt(year)] },
+                        { '$eq': ['$$course.semester', Number.parseInt(semester)] }
+                      ]
+                    }
                   }
                 }
               }
@@ -617,12 +701,14 @@ class WebDAO {
         db.collection('Subject').aggregate(
           [
             {
-              '$match': { '$and':
-              [
-                { 'subjectId': { '$regex': regex } },
-                { 'courses.school_year': Number.parseInt(year) },
-                { 'courses.semester': Number.parseInt(semester) }
-              ] }
+              '$match': {
+                '$and':
+                  [
+                    { 'subjectId': { '$regex': regex } },
+                    { 'courses.school_year': Number.parseInt(year) },
+                    { 'courses.semester': Number.parseInt(semester) }
+                  ]
+              }
             },
             {
               '$project': {
@@ -633,10 +719,12 @@ class WebDAO {
                   '$filter': {
                     'input': '$courses',
                     'as': 'course',
-                    'cond': { '$and': [
-                      { '$eq': [ '$$course.school_year', Number.parseInt(year) ] },
-                      { '$eq': [ '$$course.semester', Number.parseInt(semester) ] }
-                    ] }
+                    'cond': {
+                      '$and': [
+                        { '$eq': ['$$course.school_year', Number.parseInt(year)] },
+                        { '$eq': ['$$course.semester', Number.parseInt(semester)] }
+                      ]
+                    }
                   }
                 }
               }
