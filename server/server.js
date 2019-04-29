@@ -46,7 +46,6 @@ app.get('/users/count/:type/:username', (req, res) => {
   })
 })
 
-
 app.get('/users/type/:userType/:startPos/:limit', (req, res) => {
   WebDAOObj.getAllUserByType(req.params.userType, req.params.startPos, req.params.limit).then((data) => {
     if (data != null) {
@@ -307,7 +306,29 @@ app.get('/courses/:year/:semester', (req, res) => {
     }
   })
 })
-
+app.get('/getDataUserExaminer/:username', (req, res) => {
+  WebDAOObj.getUserExaminerByUserName(req.params.username).then(data => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+app.get('/getDataExam/:ObjectId', (req, res) => {
+  WebDAOObj.getExamDataByObjectId(req.params.ObjectId).then(data => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+app.get('/checkSubjectCurrent/:subjectId', (req, res) => {
+  WebDAOObj.checkSubjectCurrent(req.params.subjectId).then(data => {
+    res.json(data)
+  })
+})
 app.get('/courses/year=:year/semester=:semester/subject=:subjectId/start=:startPos/limit=:limit', (req, res) => {
   let params = req.params
   WebDAOObj.getAllCourseByYearSemesterAndSubjectId(params.year, params.semester, params.subjectId, params.startPos, params.limit).then(data => {
@@ -382,7 +403,7 @@ app.get('/registerCourse/:subjecId', (req, res) => {
 })
 
 app.get('/subbjec/current', (req, res) => {
-  WebDAOObj.getAllSubjectCurrent().then((data) => {
+  WebDAOObj.checkSubjectCurrent().then((data) => {
     if (data != null) {
       res.json(data)
     } else {
