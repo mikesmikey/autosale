@@ -118,6 +118,7 @@ class ExamAddSimpleData extends Component {
       if (result) {
         newExam._id = result
         this.props.insertMemExam(newExam)
+        this.myModal.closeModal()
       } else {
         this.errorModal.showModal('ไม่สามารถสร้างการสอบได้ มีข้อผิดพลาดเกิดขึ้น')
       }
