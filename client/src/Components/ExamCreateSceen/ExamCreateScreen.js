@@ -2,14 +2,14 @@
 // eslint-disable-next-line no-unused-vars
 import React, { Component } from 'react'
 
-import ClientService from '../Utilities/ClientService'
+import CCourseService from '../../Services/CourseService'
 
 import CourseTable from './CourseTable'
 import DataAddModal from './DataAddModal'
 
 import '../../StyleSheets/ExamCreateScreen.css'
 
-const CServiceObj = new ClientService()
+const CourseService = new CCourseService()
 
 class ExamCreateScreen extends Component {
   _isMounted = false
@@ -75,7 +75,7 @@ class ExamCreateScreen extends Component {
       subjects: []
     })
     this.calculateMaxPage(this.state.searchInput, 0, 0)
-    CServiceObj.searchAllCurrentCourseBySubjectId(subjectId || '', startPos, limit).then((result) => {
+    CourseService.searchAllCurrentCourseBySubjectId(subjectId || '', startPos, limit).then((result) => {
       this.setState({
         subjects: result,
         isLoading: false
@@ -90,7 +90,7 @@ class ExamCreateScreen extends Component {
   calculateMaxPage (subjectId, startPos, limit) {
     this.setState({
     })
-    CServiceObj.searchAllCurrentCourseBySubjectId(subjectId || '', startPos, limit).then((result) => {
+    CourseService.searchAllCurrentCourseBySubjectId(subjectId || '', startPos, limit).then((result) => {
       let max = Math.ceil(result.length / 50)
       if (this._isMounted) {
         this.setState({

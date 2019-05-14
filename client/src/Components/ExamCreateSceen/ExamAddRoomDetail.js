@@ -3,9 +3,11 @@ import React, { Component } from 'react'
 
 import '../../StyleSheets/AddRoomDetail.css'
 
-import ClientService from '../Utilities/ClientService'
+import CBuildingService from '../../Services/BuildingService'
+import CExamService from '../../Services/ExamService'
 
-const CServiceObj = new ClientService()
+const BuildingService = new CBuildingService()
+const ExamService = new CExamService()
 
 class AddRoomDetail extends Component {
   _isMounted = false
@@ -81,7 +83,7 @@ class AddRoomDetail extends Component {
     this.setState({
       isLoading: true
     })
-    CServiceObj.getAllBuilding().then((buildings) => {
+    BuildingService.getAllBuilding().then((buildings) => {
       if (this._isMounted) {
         this.setState({
           buildings: buildings,
@@ -272,7 +274,7 @@ class AddRoomDetail extends Component {
         isLoading: true
       })
       roomData.examiners = []
-      CServiceObj.insertRoomIntoExam(this.props.selectedExam._id, roomData).then((result) => {
+      BuildingService.insertRoomIntoExam(this.props.selectedExam._id, roomData).then((result) => {
         if (result) {
           this.setState({
             isLoading: false
@@ -482,7 +484,7 @@ class RoomScheduleTable extends Component {
       this.setState({
         isLoading: true
       })
-      CServiceObj.getAllExamOnCurrentDateAndRoom(this.props.selectedExam.date, this.props.selectedRoom).then((exams) => {
+      ExamService.getAllExamOnCurrentDateAndRoom(this.props.selectedExam.date, this.props.selectedRoom).then((exams) => {
         if (!exams || exams.length === 0) {
           this.setState({
             isLoading: false

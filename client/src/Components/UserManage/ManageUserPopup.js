@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import React, { Component } from 'react'
 
-import ClientService from '../Utilities/ClientService'
+import ClientService from '../../Services/UserService'
 
 const CServiceObj = new ClientService()
 

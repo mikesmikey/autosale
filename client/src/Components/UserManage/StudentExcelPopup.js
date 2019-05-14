@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 
-import ClientService from '../Utilities/ClientService'
+import ClientService from '../../Services/UserService'
 import readXlsxFile from 'read-excel-file'
+import FaultyServices from '../../Services/FacultyService'
 
+const ServicesFaulty = new FaultyServices() 
 const CServiceObj = new ClientService()
 
 class StudentExcelPopup extends Component {
@@ -40,7 +42,7 @@ class StudentExcelPopup extends Component {
     }
 
     getAllStudentsAndFaculties () {
-      CServiceObj.getAllFaculty().then((result) => {
+      ServicesFaulty.getAllFaculty().then((result) => {
         if (this._isMounted) {
           this.setState({
             faculties: result

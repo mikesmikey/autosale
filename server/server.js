@@ -188,6 +188,7 @@ app.post('/autogenerate', (req, res) => {
 
 app.get('/facultys', (req, res) => {
   WebDAOObj.getAllFaculty().then((data) => {
+    
     if (data != null) {
       res.json(data)
     } else {

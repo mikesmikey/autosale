@@ -2,11 +2,12 @@
 import React, { Component } from 'react'
 
 import '../../StyleSheets/ExamScoreSceen.css'
-
-import ClientService from '../Utilities/ClientService'
+import CRoomSerive from '../../Services/RoomService'
+import CSBuildingService from '../../Services/BuildingService'
 import '../../StyleSheets/RoomTable.css'
 
-const ServiceObj = new ClientService()
+const BuildingService = new CSBuildingService()
+const RoomService = new CRoomSerive()
 
 // eslint-disable-next-line react/require-render-return
 class DeleteRoomPopup extends Component {
@@ -49,12 +50,12 @@ class DeleteRoomPopup extends Component {
     // console.log(this.props.selectedBuilding)
     // console.log(this.props.selectedRoom)
 
-    const BuildingObj = ServiceObj.createBuilding(this.currentFormObject())
+    const BuildingObj = BuildingService.createBuilding(this.currentFormObject())
     // console.log(BuildingObj)
 
     this.props.setDataLoadingStatus(true)
 
-    ServiceObj.editRoom(BuildingObj.getUserObjectData()).then((result) => {
+    RoomService.editRoom(BuildingObj.getUserObjectData()).then((result) => {
       if (result) {
         this.props.reloadTable()
         this.props.closeModal()

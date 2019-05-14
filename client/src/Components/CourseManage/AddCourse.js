@@ -1,6 +1,8 @@
 /* eslint-disable no-unused-vars */
 import React, { Component } from 'react';
-import ClientService from '../Utilities/ClientService'
+import CGlobalDataService from '../../Services/GlobalDataService'
+import CSubjectService from '../../Services/SubjectService'
+import CFacultyService from '../../Services/FacultyService'
 
 // Components
 import '../../StyleSheets/userManage.css'
@@ -8,7 +10,10 @@ import '../../StyleSheets/addNewSubject.css'
 import '../../StyleSheets/addCourse.css'
 import Subject2Table from './Subject2Table'
 
-const CServiceObj = new ClientService()
+const GlobalDataService = new CGlobalDataService()
+const SubjectService = new CSubjectService()
+const FacultyService = new CFacultyService()
+
 class AddCourse extends Component {
     constructor(props) {
         super(props)
@@ -39,7 +44,7 @@ class AddCourse extends Component {
     }
 
     loadYearAndTerm() {
-        CServiceObj.getAllYearAndTerm().then((result) => {
+        GlobalDataService.getAllYearAndTerm().then((result) => {
             if (this._isMounted) {
                 this.setState({
                     currentYandT: result
@@ -48,7 +53,7 @@ class AddCourse extends Component {
         })
     }
     loadAllSubject() {
-        CServiceObj.getAllSubject().then((result) => {
+        SubjectService.getAllSubject().then((result) => {
             if (this._isMounted) {
                 this.setState({
                     subjects: result
@@ -58,7 +63,7 @@ class AddCourse extends Component {
     }
 
     loadFacultyData() {
-        CServiceObj.getAllFaculty().then((result) => {
+        FacultyService.getAllFaculty().then((result) => {
             if (this._isMounted) {
                 this.setState({
                     faculties: result
@@ -69,7 +74,7 @@ class AddCourse extends Component {
 
     handleSearchButton() {
         this.subTable.loadDataBySubjectId(this.state.selectSubId)
-        CServiceObj.searchAllSubjectBySubjectId(this.state.selectSubId).then((result) => {
+        SubjectService.searchAllSubjectBySubjectId(this.state.selectSubId).then((result) => {
             if (this._isMounted) {
                 if (result.length === 2) {
                     this.setState({ hasFound: result[1].found })
@@ -205,7 +210,7 @@ class AddCourse extends Component {
             }
 
 
-            CServiceObj.addCourseToThisSubject(this.state.selectSubId, courseData).then((result) => {
+            SubjectService.addCourseToThisSubject(this.state.selectSubId, courseData).then((result) => {
                 if (result) {
                     alert('เพิ่มสำเร็จ')
                     this.clearData()

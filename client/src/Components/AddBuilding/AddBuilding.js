@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { Component } from 'react'
-import ClientService from '../Utilities/ClientService'
+import CBuildingService from '../../Services/BuildingService'
 
 // Components
 import Modal from '../Utilities/Modal'
@@ -8,7 +8,7 @@ import Modal from '../Utilities/Modal'
 import '../../StyleSheets/home.css'
 import '../../StyleSheets/addBuilding.css'
 
-const CServiceObj = new ClientService()
+const BuildingService = new CBuildingService()
 class AddBuilding extends Component {
   _isMounted = false;
   constructor (props) {
@@ -35,14 +35,14 @@ class AddBuilding extends Component {
   }
 
   loadBuilding () {
-    CServiceObj.getAllBuilding().then((data) => {
+    BuildingService.getAllBuilding().then((data) => {
       this.setDataBuilding(data)
     })
   }
 
   loadBuildingByShortName () {
     console.log('finding')
-    CServiceObj.getAllBuilding().then((data) => {
+    BuildingService.getAllBuilding().then((data) => {
       this.searchBuildingByShortName(data)
     })
   }
@@ -265,8 +265,8 @@ class BuildingPopUp extends Component {
       newBuilding.floors = floorInt
       newBuilding.Rooms = []
 
-      const buildingObj = CServiceObj.createBuildingDataObject(newBuilding)
-      CServiceObj.addBuilding(buildingObj.getBuildingObjectData()).then((result) => {
+      const buildingObj = BuildingService.createBuildingDataObject(newBuilding)
+      BuildingService.addBuilding(buildingObj.getBuildingObjectData()).then((result) => {
         if (result) {
           alert('เพิ่มสำเร็จ')
           this.setBuldingInput('', '', '')
@@ -332,7 +332,7 @@ class DeleteBuildingPopUp extends Component {
   }
 
   deleteButtonHandle () {
-    CServiceObj.deleteBuilding(this.props.selectedBuilding).then((result) => {
+    BuildingService.deleteBuilding(this.props.selectedBuilding).then((result) => {
       if (result) {
         alert('ลบสำเร็จ')
         this.props.closeDeleteBuildingPopUp()
