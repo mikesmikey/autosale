@@ -296,7 +296,7 @@ class ClientService {
 
   getAllExamBySubjectAndCourse (subjectId, courseId) {
     return new Promise((resolve, reject) => {
-      axios.get(`/exams/subject=${subjectId}/course=${courseId}`).then((result) => {
+      axios.get(`/exam/subject=${subjectId}/course=${courseId}`).then((result) => {
         resolve(result.data)
       })
     })
@@ -329,7 +329,7 @@ class ClientService {
 
   getAllExamOnCurrentDateAndRoom (date, roomId) {
     return new Promise((resolve, reject) => {
-      axios.get(`/exams/date=${date}/room=${roomId}`).then((result) => {
+      axios.get(`/exam/date=${date}/room=${roomId}`).then((result) => {
         resolve(result.data)
       })
     })
@@ -353,6 +353,7 @@ class ClientService {
   }
 
   getExamByObjId (objId) {
+    console.log(objId)
     return new Promise((resolve, reject) => {
       axios.get(`/exam/${objId}`).then((result) => {
         resolve(result.data)
