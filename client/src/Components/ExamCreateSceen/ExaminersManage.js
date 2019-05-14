@@ -475,7 +475,7 @@ class ExaminersManage extends Component {
       for (let i = 0; i < this.Exam.rooms.length; i++) {
         let room = this.Exam.rooms[i]
         for (let j = 0; j < room.examiners.length; j++) {
-          ServiceObj.getUserByUsername(room.examiners[j].username).then(result => {
+          UserService.getUserByUsername(room.examiners[j].username).then(result => {
             this.Examiner.push({
               username: result.username,
               firstName: result.firstName,
