@@ -70,77 +70,81 @@ class ExaminersManage extends Component {
   loadDataToRoomExamSelect () {
     // console.log(this.props.selectedExam.rooms)
     var select = document.getElementById('RoomExamgSelect')
-    for (var i = 0; i < this.props.selectedExam.rooms.length; i++) {
-      this.NumRoom = 0
-      for (var j = 0; j < this.room.length; j++) {
-        if (this.room[j] !== this.props.selectedExam.rooms[i].roomId) {
-          this.NumRoom++
+    if (this.props.selectedExam.rooms) {
+      for (var i = 0; i < this.props.selectedExam.rooms.length; i++) {
+        this.NumRoom = 0
+        for (var j = 0; j < this.room.length; j++) {
+          if (this.room[j] !== this.props.selectedExam.rooms[i].roomId) {
+            this.NumRoom++
+          }
         }
-      }
-      if (i === 0) {
-        this.roomToTime = this.props.selectedExam.rooms[i].roomId
-        this.setState({
-          Room: this.roomToTime
-        })
-      }
-      if (this.NumRoom === this.room.length) {
-        var el = document.createElement('option')
-        el.value = this.props.selectedExam.rooms[i].roomId
-        el.textContent = this.props.selectedExam.rooms[i].roomId
-        this.room.push(this.props.selectedExam.rooms[i].roomId)
-        select.appendChild(el)
+        if (i === 0) {
+          this.roomToTime = this.props.selectedExam.rooms[i].roomId
+          this.setState({
+            Room: this.roomToTime
+          })
+        }
+        if (this.NumRoom === this.room.length) {
+          var el = document.createElement('option')
+          el.value = this.props.selectedExam.rooms[i].roomId
+          el.textContent = this.props.selectedExam.rooms[i].roomId
+          this.room.push(this.props.selectedExam.rooms[i].roomId)
+          select.appendChild(el)
+        }
       }
     }
   }
 
   loadTimeStart () {
-    for (var i = 0; i < this.props.selectedExam.rooms.length; i++) {
-      if (this.roomToTime === this.props.selectedExam.rooms[i].roomId) {
-        var startTimeToString = this.props.selectedExam.rooms[i].startTime.toString()
-        var finishTime = this.props.selectedExam.rooms[i].startTime + this.props.selectedExam.rooms[i].hours
-        var finishTimeToString = finishTime.toString()
-        if (startTimeToString.length === 1) {
-          startTimeToString = '0' + startTimeToString + ':00'
-        } else if (startTimeToString.length === 2) {
-          startTimeToString = startTimeToString + ':00'
-        } else if (startTimeToString.length === 3) {
-          startTimeToString = startTimeToString.charAt(0) + ':' + startTimeToString.charAt(2)
-        } else if (startTimeToString.length === 4) {
-          if (startTimeToString.charAt(1) === '.') {
-            startTimeToString = startTimeToString.charAt(0) + ':' + startTimeToString.charAt(2) + startTimeToString.charAt(3)
-          } else {
-            startTimeToString = startTimeToString.charAt(0) + startTimeToString.charAt(1) + ':' + startTimeToString.charAt(3) + '0'
+    if (this.props.selectedExam.rooms) {
+      for (var i = 0; i < this.props.selectedExam.rooms.length; i++) {
+        if (this.roomToTime === this.props.selectedExam.rooms[i].roomId) {
+          var startTimeToString = this.props.selectedExam.rooms[i].startTime.toString()
+          var finishTime = this.props.selectedExam.rooms[i].startTime + this.props.selectedExam.rooms[i].hours
+          var finishTimeToString = finishTime.toString()
+          if (startTimeToString.length === 1) {
+            startTimeToString = '0' + startTimeToString + ':00'
+          } else if (startTimeToString.length === 2) {
+            startTimeToString = startTimeToString + ':00'
+          } else if (startTimeToString.length === 3) {
+            startTimeToString = startTimeToString.charAt(0) + ':' + startTimeToString.charAt(2)
+          } else if (startTimeToString.length === 4) {
+            if (startTimeToString.charAt(1) === '.') {
+              startTimeToString = startTimeToString.charAt(0) + ':' + startTimeToString.charAt(2) + startTimeToString.charAt(3)
+            } else {
+              startTimeToString = startTimeToString.charAt(0) + startTimeToString.charAt(1) + ':' + startTimeToString.charAt(3) + '0'
+            }
+          } else if (startTimeToString.length === 5) {
+            startTimeToString = startTimeToString.charAt(0) + startTimeToString.charAt(1) + ':' + startTimeToString.charAt(3) + startTimeToString.charAt(4)
           }
-        } else if (startTimeToString.length === 5) {
-          startTimeToString = startTimeToString.charAt(0) + startTimeToString.charAt(1) + ':' + startTimeToString.charAt(3) + startTimeToString.charAt(4)
-        }
-
-        if (finishTimeToString.length === 1) {
-          finishTimeToString = '0' + finishTimeToString + ':00'
-        } else if (finishTimeToString.length === 2) {
-          finishTimeToString = finishTimeToString + ':00'
-        } else if (finishTimeToString.length === 3) {
-          finishTimeToString = finishTimeToString.charAt(0) + ':' + finishTimeToString.charAt(2)
-        } else if (finishTimeToString.length === 4) {
-          if (finishTimeToString.charAt(1) === '.') {
-            finishTimeToString = finishTimeToString.charAt(0) + ':' + finishTimeToString.charAt(2) + finishTimeToString.charAt(3)
-          } else {
-            finishTimeToString = finishTimeToString.charAt(0) + finishTimeToString.charAt(1) + ':' + finishTimeToString.charAt(3) + '0'
+  
+          if (finishTimeToString.length === 1) {
+            finishTimeToString = '0' + finishTimeToString + ':00'
+          } else if (finishTimeToString.length === 2) {
+            finishTimeToString = finishTimeToString + ':00'
+          } else if (finishTimeToString.length === 3) {
+            finishTimeToString = finishTimeToString.charAt(0) + ':' + finishTimeToString.charAt(2)
+          } else if (finishTimeToString.length === 4) {
+            if (finishTimeToString.charAt(1) === '.') {
+              finishTimeToString = finishTimeToString.charAt(0) + ':' + finishTimeToString.charAt(2) + finishTimeToString.charAt(3)
+            } else {
+              finishTimeToString = finishTimeToString.charAt(0) + finishTimeToString.charAt(1) + ':' + finishTimeToString.charAt(3) + '0'
+            }
+          } else if (finishTimeToString.length === 5) {
+            finishTimeToString = finishTimeToString.charAt(0) + finishTimeToString.charAt(1) + ':' + finishTimeToString.charAt(3) + finishTimeToString.charAt(4)
           }
-        } else if (finishTimeToString.length === 5) {
-          finishTimeToString = finishTimeToString.charAt(0) + finishTimeToString.charAt(1) + ':' + finishTimeToString.charAt(3) + finishTimeToString.charAt(4)
-        }
-
-        var setTime = startTimeToString + '-' + finishTimeToString
-        var select = document.getElementById('TimeExamgSelect')
-        var el = document.createElement('option')
-        el.value = setTime
-        el.textContent = setTime
-        select.appendChild(el)
-        if (i === 0) {
-          this.setState({
-            Time: setTime
-          })
+  
+          var setTime = startTimeToString + '-' + finishTimeToString
+          var select = document.getElementById('TimeExamgSelect')
+          var el = document.createElement('option')
+          el.value = setTime
+          el.textContent = setTime
+          select.appendChild(el)
+          if (i === 0) {
+            this.setState({
+              Time: setTime
+            })
+          }
         }
       }
     }
@@ -466,19 +470,21 @@ class ExaminersManage extends Component {
   }
 
   loadExaminer () {
-    for (let i = 0; i < this.Exam.rooms.length; i++) {
-      let room = this.Exam.rooms[i]
-      for (let j = 0; j < room.examiners.length; j++) {
-        ServiceObj.getUserByUsername(room.examiners[j].username).then(result => {
-          this.Examiner.push({
-            username: result.username,
-            firstName: result.firstName,
-            lastName: result.lastName,
-            typeOfUser: result.typeOfUser,
-            room: room.roomId,
-            time: this.calculateExamRoomTime(room)
+    if (this.Exam.rooms) {
+      for (let i = 0; i < this.Exam.rooms.length; i++) {
+        let room = this.Exam.rooms[i]
+        for (let j = 0; j < room.examiners.length; j++) {
+          ServiceObj.getUserByUsername(room.examiners[j].username).then(result => {
+            this.Examiner.push({
+              username: result.username,
+              firstName: result.firstName,
+              lastName: result.lastName,
+              typeOfUser: result.typeOfUser,
+              room: room.roomId,
+              time: this.calculateExamRoomTime(room)
+            })
           })
-        })
+        }
       }
     }
   }

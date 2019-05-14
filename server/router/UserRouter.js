@@ -3,7 +3,7 @@ const UserRouter = express.Router()
 // const app = express()
 const User = require('../dao/UserDAO')
 
-UserRouter.route('/all').get((req, res) => {
+UserRouter.route('/').get((req, res) => {
   User.find(function (err, users) {
     if (err) {
       console.log(err)
@@ -62,6 +62,27 @@ UserRouter.route('/:type/:username/:startPos/:limit').get((req, res) => {
       res.json(data)
     } else {
       res.sendStatus(404)
+    }
+  })
+})
+
+UserRouter.route('/').post((req, res) => {
+  const user = new User(req.body.registerForm)
+  User.findOne({ 'username': user.username }).then((data) => {
+    if (!data) {
+      user.save()
+        .then(user => {
+          if (user) {
+            res.send(true)
+          } else {
+            res.send(false)
+          }
+        })
+        .catch(_err => {
+          res.status(400).send('unable to save to database')
+        })
+    } else {
+      res.send(false)
     }
   })
 })

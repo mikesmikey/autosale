@@ -480,7 +480,7 @@ class ClientService {
   }
   countUserByTypeAndName (type, name) {
     return new Promise((resolve, reject) => {
-      var url = `/user/examinercount/${name.length === 0 ? `${type}` : `${type}/${name}`}`
+      var url = `/user/count/${name.length === 0 ? `${type}` : `${type}/${name}`}`
       axios.get(url).then((result) => {
         resolve(result.data)
       })
@@ -489,7 +489,7 @@ class ClientService {
 
   searchAllUserByTypeAndName (type, name, startPos, limit) {
     return new Promise((resolve, reject) => {
-      var url = `/user/examiner/${name.length === 0 ? `type/${type}` : `${type}/${name}`}/${startPos || 0}/${limit || 0}`
+      var url = `/user/${name.length === 0 ? `type/${type}` : `${type}/${name}`}/${startPos || 0}/${limit || 0}`
       axios.get(url).then((result) => {
         resolve(result.data)
       })
