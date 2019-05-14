@@ -162,29 +162,29 @@ app.post('/login', (req, res) => {
   })
 })
 
-app.post('/user/remove/:username', (req, res) => {
-  WebDAOObj.deleteUserByUsername(req.params.username).then((pass) => {
-    res.send(pass)
-  })
-})
+// app.post('/user/remove/:username', (req, res) => {
+//   WebDAOObj.deleteUserByUsername(req.params.username).then((pass) => {
+//     res.send(pass)
+//   })
+// })
 
-app.post('/user/add', (req, res) => {
-  WebDAOObj.insertUser(req.body.userData).then((pass) => {
-    res.send(pass)
-  })
-})
+// app.post('/user/add', (req, res) => {
+//   WebDAOObj.insertUser(req.body.userData).then((pass) => {
+//     res.send(pass)
+//   })
+// })
 
-app.post('/user/edit', (req, res) => {
-  WebDAOObj.editUser(req.body.userData).then((pass) => {
-    res.send(pass)
-  })
-})
+// app.post('/user/edit', (req, res) => {
+//   WebDAOObj.editUser(req.body.userData).then((pass) => {
+//     res.send(pass)
+//   })
+// })
 
-app.post('/autogenerate', (req, res) => {
-  WebServiceObj.autoGenerateSampleUserData().then((pass) => {
-    res.send(pass)
-  })
-})
+// app.post('/autogenerate', (req, res) => {
+//   WebServiceObj.autoGenerateSampleUserData().then((pass) => {
+//     res.send(pass)
+//   })
+// })
 
 app.get('/facultys', (req, res) => {
   WebDAOObj.getAllFaculty().then((data) => {
@@ -196,11 +196,11 @@ app.get('/facultys', (req, res) => {
   })
 })
 
-app.post('/user/addmany', (req, res) => {
-  WebDAOObj.addManyStudents(req.body.usersData).then((pass) => {
-    res.send(pass)
-  })
-})
+// app.post('/user/addmany', (req, res) => {
+//   WebDAOObj.addManyStudents(req.body.usersData).then((pass) => {
+//     res.send(pass)
+//   })
+// })
 
 app.get('/subjects', (req, res) => {
   WebDAOObj.getAllSubject().then((data) => {

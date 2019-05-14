@@ -72,7 +72,7 @@ UserRouter.route('/:type/:username/:startPos/:limit').get((req, res) => {
   })
 })
 
-UserRouter.route('/').post((req, res) => {
+UserRouter.route('/add').post((req, res) => {
   const user = new User(req.body.registerForm)
   User.findOne({ 'username': user.username }).then((data) => {
     if (!data) {
@@ -87,6 +87,37 @@ UserRouter.route('/').post((req, res) => {
         .catch(_err => {
           res.status(400).send('unable to save to database')
         })
+    } else {
+      res.send(false)
+    }
+  })
+})
+
+UserRouter.route('/edit').post((req, res) => {
+  const newUserData = req.params.userData
+  User.findOneAndUpdate({ 'username': newUserData.username }, { '$set': newUserData }).then((result) => {
+    if (result.value) {
+      res.send(true)
+    } else {
+      res.send(false)
+    }
+  })
+})
+
+UserRouter.route('/remove/:username').post((req, res) => {
+  User.findOneAndDelete({ 'username': req.params.username }).then((result) => {
+    if (result) {
+      res.send(true)
+    } else {
+      res.send(false)
+    }
+  })
+})
+
+UserRouter.route('/addmany').post((req, res) => {
+  User.insertMany(req.body.usersData).then((result) => {
+    if (result) {
+      res.send(true)
     } else {
       res.send(false)
     }
