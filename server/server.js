@@ -3,6 +3,7 @@ const expPretty = require('express-prettify')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const UserRouter = require('./router/UserRouter')
+const SubjectRouter = require('./router/SubjectRouter')
 
 const app = express()
 const port = 5000
@@ -26,6 +27,7 @@ db.once('open', function () {
 
 app.use('/user', UserRouter)
 app.use('/exam', UserRouter)
+app.use('/subject', SubjectRouter)
 
 const WebDAO = require('./WebDAO')
 const WebService = require('./WebService')
@@ -131,15 +133,15 @@ app.post('/exam/examiner', (req, res) => {
   })
 })
 
-app.get('/subjects/id_:subjid/:subjname', (req, res) => {
-  WebDAOObj.getAllSubjectBySubjectIdOrSubjectName(req.params.subjid, req.params.subjname).then((data) => {
-    if (data != null) {
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
+// app.get('/subjects/id_:subjid/:subjname', (req, res) => {
+//   WebDAOObj.getAllSubjectBySubjectIdOrSubjectName(req.params.subjid, req.params.subjname).then((data) => {
+//     if (data != null) {
+//       res.json(data)
+//     } else {
+//       res.sendStatus(404)
+//     }
+//   })
+// })
 
 // app.post('/user', (req, res) => {
 //   WebDAOObj.insertUser(req.body.registerForm).then((pass) => {
@@ -203,65 +205,65 @@ app.get('/facultys', (req, res) => {
 //   })
 // })
 
-app.get('/subjects', (req, res) => {
-  WebDAOObj.getAllSubject().then((data) => {
-    // console.log(data)
-    if (data != null) {
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
+// app.get('/subjects', (req, res) => {
+//   WebDAOObj.getAllSubject().then((data) => {
+//     // console.log(data)
+//     if (data != null) {
+//       res.json(data)
+//     } else {
+//       res.sendStatus(404)
+//     }
+//   })
+// })
 
-app.get('/subjects/nm_:subjname', (req, res) => {
-  WebDAOObj.getAllSubjectBySubjectName(req.params.subjname).then((data) => {
-    if (data != null) {
-      // data.push({ found: true })
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
+// app.get('/subjects/nm_:subjname', (req, res) => {
+//   WebDAOObj.getAllSubjectBySubjectName(req.params.subjname).then((data) => {
+//     if (data != null) {
+//       // data.push({ found: true })
+//       res.json(data)
+//     } else {
+//       res.sendStatus(404)
+//     }
+//   })
+// })
 
-app.get('/subjects/id_:subjid', (req, res) => {
-  WebDAOObj.getAllSubjectBySubjectIdMoreOne(req.params.subjid).then((data) => {
-    if (data != null) {
-      // data.push({ found: true })
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
+// app.get('/subjects/id_:subjid', (req, res) => {
+//   WebDAOObj.getAllSubjectBySubjectIdMoreOne(req.params.subjid).then((data) => {
+//     if (data != null) {
+//       // data.push({ found: true })
+//       res.json(data)
+//     } else {
+//       res.sendStatus(404)
+//     }
+//   })
+// })
 
-app.get('/subject/id_:subjid', (req, res) => {
-  WebDAOObj.getAllSubjectBySubjectId(req.params.subjid).then((data) => {
-    if (data != null) {
-      data.push({ found: true })
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
+// app.get('/subject/id_:subjid', (req, res) => {
+//   WebDAOObj.getAllSubjectBySubjectId(req.params.subjid).then((data) => {
+//     if (data != null) {
+//       data.push({ found: true })
+//       res.json(data)
+//     } else {
+//       res.sendStatus(404)
+//     }
+//   })
+// })
 
-app.get('/subject/:subjname/courses/', (req, res) => {
-  WebDAOObj.getAllCourseByThisSubject(req.params.subjname).then((data) => {
-    if (data != null) {
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
+// app.get('/subject/:subjname/courses/', (req, res) => {
+//   WebDAOObj.getAllCourseByThisSubject(req.params.subjname).then((data) => {
+//     if (data != null) {
+//       res.json(data)
+//     } else {
+//       res.sendStatus(404)
+//     }
+//   })
+// })
 
-app.post('/subject/add', (req, res) => {
-  WebDAOObj.insertSubject(req.body.subjectData).then((pass) => {
-    res.send(pass)
-  })
-})
+// app.post('/subject/add', (req, res) => {
+//   WebDAOObj.insertSubject(req.body.subjectData).then((pass) => {
+//     res.send(pass)
+//   })
+// })
 
 app.post('/subject/id_:subjid/course/add', (req, res) => {
   WebDAOObj.insertCourseByThisSubject(req.params.subjid, req.body.courseData).then((pass) => {
@@ -293,16 +295,6 @@ app.get('/yearAndTerm', (req, res) => {
 
 app.get('/yearAndTerms', (req, res) => {
   WebDAOObj.getAllYearAndTerm().then(data => {
-    if (data != null) {
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
-
-app.get('/subject', (req, res) => {
-  WebDAOObj.getAllSubject().then((data) => {
     if (data != null) {
       res.json(data)
     } else {
