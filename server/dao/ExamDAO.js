@@ -50,7 +50,31 @@ Exam.methods.getExamByObjId = function (objId, callback) {
   return this.model('Exam').findOne({ '_id': new ObjectId(objId) }, callback)
 }
 
-Exam.method.updateExamData = function (examId, newData, callback) {
+Exam.methods.getAllExamByDateAndRoom = function (date, roomId, callback) {
+  return this.model('Exam').aggregate(
+    [
+      {
+        '$match': { '$and':
+              [
+                { 'date': date },
+                { 'rooms.roomId': roomId }
+              ] }
+      },
+      {
+        '$addFields': {
+          'rooms': {
+            '$filter': {
+              'input': '$rooms',
+              'as': 'room',
+              'cond': { '$eq': [ '$$room.roomId', roomId ] }
+            }
+          }
+        }
+      }
+    ], callback)
+}
+
+Exam.methods.updateExamData = function (examId, newData, callback) {
   return this.model('Exam').findOneAndUpdate({ '_id': new ObjectId(examId) }, { '$set': newData }, callback)
 }
 

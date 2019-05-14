@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
 import React, { Component } from 'react'
 
-import ClientService from '../Utilities/ClientService'
+import CBuildingService from '../../Services/BuildingService'
 import '../../StyleSheets/RoomTable.css'
 
-const ServiceObj = new ClientService()
+const BuildingService = new CBuildingService()
 
 class RoomTable extends Component {
   _isMounted = false;
@@ -87,7 +87,7 @@ class RoomTable extends Component {
   }
 
   dataMainUpdate () {
-    ServiceObj.getAllBuilding().then((usersData) => {
+    BuildingService.getAllBuilding().then((usersData) => {
       if (this._isMounted) {
         this.props.setdataMain(usersData)
       }
@@ -95,7 +95,7 @@ class RoomTable extends Component {
   }
 
   loadData () {
-    ServiceObj.getAllBuilding().then((usersData) => {
+    BuildingService.getAllBuilding().then((usersData) => {
       if (this._isMounted) {
         // this.props.setDataLoadingStatus(false)
         this.setState({ data: usersData })
@@ -106,7 +106,7 @@ class RoomTable extends Component {
   }
 
   loadDataByRoomID (buildingname, room) {
-    ServiceObj.getAllBuildingByRoom(buildingname, room).then((usersData) => {
+    BuildingService.getAllBuildingByRoom(buildingname, room).then((usersData) => {
       if (this._isMounted) {
         // this.props.setDataLoadingStatus(false)
         this.setState({ data: usersData })

@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
 
 import React, { Component } from 'react'
-import ClientService from '../Utilities/ClientService'
+import CCourseService from '../../Services/CourseService'
 
-const ServiceObj = new ClientService()
+const CourseService = new CCourseService()
 
 class courseTable extends Component {
   _isMounted = false;
@@ -47,7 +47,7 @@ class courseTable extends Component {
   }
 
   loadAllDataCourse () {
-    ServiceObj.getAllDataCoures().then((courseData) => {
+    CourseService.getAllDataCoures().then((courseData) => {
       if (this._isMounted) {
         this.setState({ data: courseData })
       }

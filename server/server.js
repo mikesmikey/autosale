@@ -124,13 +124,13 @@ const WebServiceObj = new WebService()
 //   })
 // })
 
-app.post('/exam/examiner', (req, res) => {
-  WebDAOObj.addExaminerIntoRoom(req.body.Id, req.body.Data).then((pass) => {
-    if (pass) {
-      res.send(pass)
-    }
-  })
-})
+// app.post('/exam/examiner', (req, res) => {
+//   WebDAOObj.addExaminerIntoRoom(req.body.Id, req.body.Data).then((pass) => {
+//     if (pass) {
+//       res.send(pass)
+//     }
+//   })
+// })
 
 app.get('/subjects/id_:subjid/:subjname', (req, res) => {
   WebDAOObj.getAllSubjectBySubjectIdOrSubjectName(req.params.subjid, req.params.subjname).then((data) => {
@@ -551,21 +551,21 @@ app.post('/examRoom/remove/:objId/:roomId/:startTime', (req, res) => {
 //   })
 // })
 
-app.post('/exam/confirm', (req, res) => {
-  WebServiceObj.confirmExam(req.body.examId).then((result) => {
-    if (result) {
-      res.send(result)
-    }
-  })
-})
+// app.post('/exam/confirm', (req, res) => {
+//   WebServiceObj.confirmExam(req.body.examId).then((result) => {
+//     if (result) {
+//       res.send(result)
+//     }
+//   })
+// })
 
-app.post('/exam/seatType/update/:objId/:seatLineUpType/:seatOrderType', (req, res) => {
-  WebDAOObj.updateExamSeatType(req.params.objId, req.params.seatLineUpType, req.params.seatOrderType).then((pass) => {
-    if (pass) {
-      res.send(pass)
-    }
-  })
-})
+// app.post('/exam/seatType/update/:objId/:seatLineUpType/:seatOrderType', (req, res) => {
+//   WebDAOObj.updateExamSeatType(req.params.objId, req.params.seatLineUpType, req.params.seatOrderType).then((pass) => {
+//     if (pass) {
+//       res.send(pass)
+//     }
+//   })
+// })
 
 app.get('/course/subject=:subjectId/course=:courseId', (req, res) => {
   WebDAOObj.getCourseBySubjectAndCourseId(req.params.subjectId, req.params.courseId).then((data) => {

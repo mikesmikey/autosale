@@ -1,13 +1,13 @@
 /* eslint-disable no-unused-vars */
 import React, { Component } from 'react'
-import ClientService from '../Utilities/ClientService'
-
+import CCourseService from '../../Services/CourseService'
+import CExamService from '../../Services/ExamService'
 // Components
 import Modal from '../Utilities/Modal'
-
 import '../../StyleSheets/examSchedule.css'
 
-const CServiceObj = new ClientService()
+const CourseService = new CCourseService()
+const ExamService = new CExamService()
 
 class ExamSchedule extends Component {
   constructor (props) {
@@ -35,7 +35,7 @@ class ExamSchedule extends Component {
       console.log('LOG: Loading user exam')
       for (let i = 0, p = Promise.resolve(); i < this.props.user.courses.length; i++) {
         p = p.then((_) => new Promise(resolve => {
-          CServiceObj.getAllExamBySubjectAndCourse(this.props.user.courses[i].subjectId, this.props.user.courses[i].courseId).then((result) => {
+          ExamService.getAllExamBySubjectAndCourse(this.props.user.courses[i].subjectId, this.props.user.courses[i].courseId).then((result) => {
             let newExams = this.state.exams
             newExams = newExams.concat(result)
             this.setState({
@@ -51,7 +51,7 @@ class ExamSchedule extends Component {
   loadUserCourse () {
     for (let i = 0, p = Promise.resolve(); i < this.props.user.courses.length; i++) {
       p = p.then((_) => new Promise(resolve => {
-        CServiceObj.getCourseByIdAndSubjectId(this.props.user.courses[i].courseId, this.props.user.courses[i].subjectId).then((result) => {
+        CourseService.getCourseByIdAndSubjectId(this.props.user.courses[i].courseId, this.props.user.courses[i].subjectId).then((result) => {
           let newCourses = this.state.courses
           newCourses = newCourses.concat(result)
           this.setState({

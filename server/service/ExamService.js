@@ -1,13 +1,13 @@
 const Exam = require('../dao/ExamDAO')
 const User = require('../dao/UserDAO')
-
-const WebDAO = require('../WebDAO')
+const Subject = require('../dao/SubjectDAO')
+const Building = require('../dao/BuildingDAO')
 
 class ExamService {
   confirmExam (examId) {
     return new Promise((resolve, reject) => {
-      const exam = new Exam()
-      exam.getExamByObjId(examId).then((exam) => {
+      const examDAO = new Exam()
+      examDAO.getExamByObjId(examId).then((exam) => {
         this.validExamData(exam).then(result => {
           const validResult = this.checkExamConfirmError(result)
           if (typeof (validResult) === 'object') {
@@ -19,8 +19,8 @@ class ExamService {
               if (generateResult) {
                 console.log('SYSTEM: generate seats succussfully.')
                 console.log('SYSTEM: CONFIRMING EXAM . . . .')
-                exam.updateExamData(examId, { examConfirm: true }).then((confirmResult) => {
-                  if (confirmResult) {
+                examDAO.updateExamData(examId, { examConfirm: true }, (_err, result) => {
+                  if (result) {
                     console.log('SYSTEM: Exam Confirm returning to client.')
                     resolve({ examConfirm: true })
                   }
@@ -58,8 +58,8 @@ class ExamService {
 
   validCourse (exam) {
     return new Promise((resolve, reject) => {
-      const DAO = new WebDAO()
-      DAO.getCourseBySubjectAndCourseId(exam.subjectId, exam.courseId).then((course) => {
+      const CourseDAO = new Subject()
+      CourseDAO.getCourseBySubjectAndCourseId(exam.subjectId, exam.courseId, function (_err, course) {
         if (course) { resolve({ 'courseExist': true }) } else resolve({ 'courseExist': false })
       })
     })
@@ -118,8 +118,8 @@ class ExamService {
       exam.rooms.forEach(room => {
         totalSeat += Number.parseInt(room.maxStudent)
       })
-      const user = new User()
-      user.getCourseBySubjectAndCourseId(exam.subjectId, exam.courseId).then((result) => {
+      const CourseDAO = new Subject()
+      CourseDAO.getCourseBySubjectAndCourseId(exam.subjectId, exam.courseId).then((result) => {
         if (result.length === 1) {
           if (totalSeat > result[0].courses[0].max_students) {
             resolve({ 'enoughSeat': true })
@@ -156,9 +156,9 @@ class ExamService {
   }
 
   generateSeat (exam) {
-    const DAO = new WebDAO()
     return new Promise((resolve, reject) => {
-      DAO.getAllStudentByRegisteredCourse(exam.subjectId, exam.courseId).then((students) => {
+      const userDAO = new User()
+      userDAO.getAllStudentByRegisteredCourse(exam.subjectId, exam.courseId, (_err, students) => {
         let startColumn = 0
         let startRow = 0
         let lastColumn = 0
@@ -196,8 +196,10 @@ class ExamService {
                     lastColumn = assignedResult.lastColumn
                     lastRow = assignedResult.lastRow
                     lastStudent = assignedResult.lastStudent
+
+                    const examDAO = new Exam()
                     // console.log(`last column : ${lastColumn} last row : ${lastRow} last student : ${lastStudent} max student : ${room.maxStudent}`)
-                    DAO.updateExamData(exam._id, { 'rooms': exam.rooms }).then(() => {
+                    examDAO.updateExamData(exam._id, { 'rooms': exam.rooms }).then(() => {
                       resolve()
                     })
                   })
@@ -216,8 +218,8 @@ class ExamService {
 
   mappingDefaultSeat (room) {
     return new Promise((resolve, reject) => {
-      var DAO = new WebDAO()
-      DAO.getRoomByRoomId(room.roomId).then((result) => {
+      const roomDAO = new Building()
+      roomDAO.getRoomByRoomId(room.roomId, (_err, result) => {
         if (result.length === 1) {
           let seatArr = []
           let roomInfo = result[0].rooms[0]
@@ -239,8 +241,8 @@ class ExamService {
 
   mappingAlreadyAssignSeat (exam, room, seatArr) {
     return new Promise((resolve, reject) => {
-      var DAO = new WebDAO()
-      DAO.getAllExamByDateAndRoom(exam.date, room.roomId).then((exams) => {
+      var examDAO = new Exam()
+      examDAO.getAllExamByDateAndRoom(exam.date, room.roomId, (_err, exams) => {
         if (exams.length > 0) {
           exams.forEach(otherExam => {
             if (otherExam.rooms || otherExam.rooms.length > 0) {

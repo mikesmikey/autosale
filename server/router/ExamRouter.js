@@ -25,17 +25,6 @@ ExamRouter.route('/username/:username').get((req, res) => {
   })
 })
 
-// ExamRouter.route('/:username/:SubjectId').get((req, res) => {
-//   const regex = new RegExp(`${req.params.SubjectId}`)
-//   Exam.find({ 'subjectId': regex, 'ExamSeat.studentCode': req.params.username }).then(function (exams) {
-//     if (exams) {
-//       res.json(exams)
-//     } else {
-//       res.sendStatus(404)
-//     }
-//   })
-// })
-
 ExamRouter.route('/subject=:subjectId/course=:courseId').get((req, res) => {
   Exam.find({ '$and': [{ 'subjectId': req.params.subjectId }, { 'courseId': Number.parseInt(req.params.courseId) }] }).then(function (exams) {
     if (exams) {
@@ -132,7 +121,7 @@ ExamRouter.route('/room/update').post((req, res) => {
 
 ExamRouter.route('/objectid=:objectid').get((req, res) => {
   var exam = new Exam()
-  exam.getExamByObjId(req.body.examId, (err, exam) => {
+  exam.getExamByObjId(req.params.objectid, (err, exam) => {
     if (err) {
       console.log(err)
       return
@@ -146,17 +135,30 @@ ExamRouter.route('/objectid=:objectid').get((req, res) => {
 })
 
 ExamRouter.route('/confirm').post((req, res) => {
-//   Exam.findOneAndUpdate({ '_id': new ObjectId(req.body.examId) }, { '$set': req.body.examData }).then((result) => {
-//     if (result) {
-//       res.send(true)
-//     } else {
-//       res.send(false)
-//     }
-//   })
   const service = new ExamService()
   service.confirmExam(req.body.examId).then((result) => {
     if (result) {
       res.send(result)
+    }
+  })
+})
+
+ExamRouter.route('/examiner').post((req, res) => {
+  Exam.findOneAndUpdate({ '_id': new ObjectId(req.body.Id) }, { '$set': { 'rooms': req.body.Data } }).then((result) => {
+    if (result) {
+      res.send(true)
+    } else {
+      res.send(false)
+    }
+  })
+})
+
+ExamRouter.route('/seatType/update/:objId/:seatLineUpType/:seatOrderType').post((req, res) => {
+  Exam.findOneAndUpdate({ '_id': new ObjectId(req.params.objId) }, { $set: { 'seatLineUpType': req.params.seatLineUpType, 'seatOrderType': req.params.seatOrderType } }).then((result) => {
+    if (result) {
+      res.send(true)
+    } else {
+      res.send(false)
     }
   })
 })

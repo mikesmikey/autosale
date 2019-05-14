@@ -4,14 +4,15 @@ import React, { Component } from 'react'
 import '../../StyleSheets/ExaminersManage.css'
 import '../../StyleSheets/userManage.css'
 
-import ClientService from '../Utilities/ClientService'
-
+import CUserService from '../../Services/UserService'
+import CExaminerService from '../../Services/ExaminerService'
 // Objects
 import Student from '../../Objects/Student'
 import Professor from '../../Objects/Professor'
 import Staff from '../../Objects/Staff'
 
-const ServiceObj = new ClientService()
+const ExaminerService = new CExaminerService()
+const UserService = new CUserService()
 
 class ExaminersManage extends Component {
   constructor (props) {
@@ -327,7 +328,7 @@ class ExaminersManage extends Component {
   }
 
   calculateMaxPage () {
-    ServiceObj.countUserByTypeAndName(this.state.selectedType, this.state.searchInput).then((result) => {
+    ExaminerService.countUserByTypeAndName(this.state.selectedType, this.state.searchInput).then((result) => {
       if (result === 0) {
         this.setState({
           page: Math.ceil(result / 50),
@@ -452,7 +453,7 @@ class ExaminersManage extends Component {
         }
       }
       console.log(rooms)
-      ServiceObj.insertExaminerIntoRoom(this.props.selectedExam._id, rooms).then((result) => {
+      ExaminerService.insertExaminerIntoRoom(this.props.selectedExam._id, rooms).then((result) => {
         if (result) {
           this.checkClick = ''
           this.setState({
@@ -474,7 +475,7 @@ class ExaminersManage extends Component {
       for (let i = 0; i < this.Exam.rooms.length; i++) {
         let room = this.Exam.rooms[i]
         for (let j = 0; j < room.examiners.length; j++) {
-          ServiceObj.getUserByUsername(room.examiners[j].username).then(result => {
+          UserService.getUserByUsername(room.examiners[j].username).then(result => {
             this.Examiner.push({
               username: result.username,
               firstName: result.firstName,
@@ -718,7 +719,7 @@ class ExaminerTable extends Component {
         data: []
       })
 
-      ServiceObj.searchAllUserByTypeAndName(typeInput, usernameInput, startPos, 50).then((usersData) => {
+      ExaminerService.searchAllUserByTypeAndName(typeInput, usernameInput, startPos, 50).then((usersData) => {
         if (this._isMounted) {
           this.props.setDataLoadingStatus(false)
           this.setState({ data: usersData })

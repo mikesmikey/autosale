@@ -3,10 +3,10 @@ import React, { Component } from 'react'
 
 import '../../StyleSheets/ManageRoom.css'
 
-import ClientService from '../Utilities/ClientService'
-
-const ServiceObj = new ClientService()
-
+import CBuildingService from '../../Services/BuildingService'
+import CRoomService from '../../Services/RoomService'
+const BuildingService = new CBuildingService()
+const RoomService = new CRoomService()
 // eslint-disable-next-line react/require-render-return
 class RoomPopUp extends Component {
   _isMounted = false;
@@ -56,7 +56,7 @@ class RoomPopUp extends Component {
   }
 
   addButtonHandle () {
-    ServiceObj.getAllBuildingByRoom(this.state.stringBuilding, this.room).then((usersData) => {
+    BuildingService.getAllBuildingByRoom(this.state.stringBuilding, this.room).then((usersData) => {
       this.repetitiveRoom = usersData.length
       if (this.state.numberRow * this.state.numberStudent !== 0 &&
         this.numRoom !== 0 &&
@@ -65,12 +65,12 @@ class RoomPopUp extends Component {
         this.state.stringStudent !== '' &&
         this.repetitiveRoom === 0
       ) {
-        const BuildingObj = ServiceObj.createBuilding(this.currentFormObject())
+        const BuildingObj = BuildingService.createBuilding(this.currentFormObject())
         // console.log(BuildingObj)
 
         this.props.setDataLoadingStatus(true)
 
-        ServiceObj.editRoom(BuildingObj.getUserObjectData()).then((result) => {
+        RoomService.editRoom(BuildingObj.getUserObjectData()).then((result) => {
           if (result) {
             this.props.reloadTable()
             this.props.closeModal()
