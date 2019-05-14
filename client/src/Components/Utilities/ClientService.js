@@ -38,7 +38,7 @@ class ClientService {
 
   addUser (userData) {
     return new Promise((resolve, reject) => {
-      axios.post(`/user/add`, { 'userData': userData }).then((result) => {
+      axios.post(`/user`, { 'userData': userData }).then((result) => {
         resolve(result.data)
       })
     })

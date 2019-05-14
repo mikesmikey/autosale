@@ -4,15 +4,21 @@ const UserRouter = express.Router()
 const User = require('../dao/UserDAO')
 
 UserRouter.route('/').get((req, res) => {
-  User.find(function (err, users) {
-    if (err) {
-      console.log(err)
+  User.find().select({ '_id': 0, 'password': 0 }).then(function (users) {
+    if (users) {
+      res.json(users)
     } else {
-      if (users) {
-        res.json(users)
-      } else {
-        res.sendStatus(404)
-      }
+      res.sendStatus(404)
+    }
+  })
+})
+
+UserRouter.route('/:username').get((req, res) => {
+  User.findOne({ 'username': req.params.username }).select({ '_id': 0, 'password': 0 }).then(function (users) {
+    if (users) {
+      res.json(users)
+    } else {
+      res.sendStatus(404)
     }
   })
 })

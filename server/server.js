@@ -146,15 +146,15 @@ app.get('/subjects/id_:subjid/:subjname', (req, res) => {
 //   })
 // })
 
-app.get('/user/:username', (req, res) => {
-  WebDAOObj.getUserByUsername(req.params.username).then((data) => {
-    if (data != null) {
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
+// app.get('/user/:username', (req, res) => {
+//   WebDAOObj.getUserByUsername(req.params.username).then((data) => {
+//     if (data != null) {
+//       res.json(data)
+//     } else {
+//       res.sendStatus(404)
+//     }
+//   })
+// })
 
 app.post('/login', (req, res) => {
   WebServiceObj.loginAuth(req.body.loginInfo).then((pass) => {
