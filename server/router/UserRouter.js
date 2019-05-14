@@ -3,17 +3,22 @@ const UserRouter = express.Router()
 // const app = express()
 const User = require('../dao/UserDAO')
 
-UserRouter.route('/all').get((req, res) => {
-  console.log(req)
-  User.find(function (err, users) {
-    if (err) {
-      console.log(err)
+UserRouter.route('/').get((req, res) => {
+  User.find().select({ '_id': 0, 'password': 0 }).then(function (users) {
+    if (users) {
+      res.json(users)
     } else {
-      if (users) {
-        res.json(users)
-      } else {
-        res.sendStatus(404)
-      }
+      res.sendStatus(404)
+    }
+  })
+})
+
+UserRouter.route('/:username').get((req, res) => {
+  User.findOne({ 'username': req.params.username }).select({ '_id': 0, 'password': 0 }).then(function (users) {
+    if (users) {
+      res.json(users)
+    } else {
+      res.sendStatus(404)
     }
   })
 })
@@ -63,6 +68,58 @@ UserRouter.route('/:type/:username/:startPos/:limit').get((req, res) => {
       res.json(data)
     } else {
       res.sendStatus(404)
+    }
+  })
+})
+
+UserRouter.route('/add').post((req, res) => {
+  const user = new User(req.body.registerForm)
+  User.findOne({ 'username': user.username }).then((data) => {
+    if (!data) {
+      user.save()
+        .then(user => {
+          if (user) {
+            res.send(true)
+          } else {
+            res.send(false)
+          }
+        })
+        .catch(_err => {
+          res.status(400).send('unable to save to database')
+        })
+    } else {
+      res.send(false)
+    }
+  })
+})
+
+UserRouter.route('/edit').post((req, res) => {
+  const newUserData = req.params.userData
+  User.findOneAndUpdate({ 'username': newUserData.username }, { '$set': newUserData }).then((result) => {
+    if (result.value) {
+      res.send(true)
+    } else {
+      res.send(false)
+    }
+  })
+})
+
+UserRouter.route('/remove/:username').post((req, res) => {
+  User.findOneAndDelete({ 'username': req.params.username }).then((result) => {
+    if (result) {
+      res.send(true)
+    } else {
+      res.send(false)
+    }
+  })
+})
+
+UserRouter.route('/addmany').post((req, res) => {
+  User.insertMany(req.body.usersData).then((result) => {
+    if (result) {
+      res.send(true)
+    } else {
+      res.send(false)
     }
   })
 })
