@@ -65,10 +65,10 @@ class StudentExcelPopup extends Component {
       }
     }
 
-    addManyStudent (JSON_object, count_excel) {
-      CServiceObj.addManyStudents(JSON_object).then((result) => {
+    addManyStudent (studentObj, countExcel) {
+      CServiceObj.addManyStudents(studentObj).then((result) => {
         if (result) {
-          alert(`จากรายการข้อมูลนิสิตทั้งหมดใน excel : ${count_excel}\nเพิ่มสำเร็จ : ${JSON_object.length}`)
+          alert(`จากรายการข้อมูลนิสิตทั้งหมดใน excel : ${countExcel}\nเพิ่มสำเร็จ : ${studentObj.length}`)
           this.setState({
             fileName: '',
             source: null
@@ -94,8 +94,8 @@ class StudentExcelPopup extends Component {
                         rows[0][5] === 'ชั้นปี' &&
                         rows[0].length === 6) {
               var users = []
-              var checkFaculty_Branch = new Array(rows.length).fill(false)
-              var checkID_Year = new Array(rows.length).fill(true)
+              var checkBranchArr = new Array(rows.length).fill(false)
+              var checkYearArr = new Array(rows.length).fill(true)
 
               // true and true => push to database
               for (let i = 1; i < rows.length; i++) {
@@ -117,7 +117,7 @@ class StudentExcelPopup extends Component {
                     for (var k = 0; k < this.state.faculties[j].branches.length; k++) {
                       if (rows[i][4] === this.state.faculties[j].branches[k].branchName) {
                         rows[i][4] = this.state.faculties[j].branches[k].branchId
-                        checkFaculty_Branch[i] = true
+                        checkBranchArr[i] = true
                         break
                       }
                     }
@@ -127,14 +127,14 @@ class StudentExcelPopup extends Component {
 
                 for (let j = 0; j < this.state.students.length; j++) {
                   if (rows[i][0].toString() === this.state.students[j].username) {
-                    checkID_Year[i] = false
+                    checkYearArr[i] = false
                     break
                   }
                 }
 
-                checkID_Year[i] = (rows[i][5] > 0 && rows[i][5] < 7) && checkID_Year[i]
+                checkYearArr[i] = (rows[i][5] > 0 && rows[i][5] < 7) && checkYearArr[i]
 
-                if (checkFaculty_Branch[i] && checkID_Year[i]) {
+                if (checkBranchArr[i] && checkYearArr[i]) {
                   users.push({
                     'username': rows[i][0].toString(),
                     'password': 'changenow',
@@ -148,7 +148,7 @@ class StudentExcelPopup extends Component {
                   })
                 }
               }
-              // console.log(checkFaculty_Branch, checkID_Year)
+              // console.log(checkBranchArr, checkID_Year)
               alert('ok')
               if (users.length > 0) {
                 this.addManyStudent(users, rows.length - 1)

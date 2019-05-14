@@ -74,7 +74,7 @@ class MainScreen extends Component {
               username={this.props.user.firstName}
             />
           }/>
-           <Route path="/add_course" render={(props) =>
+          <Route path="/add_course" render={(props) =>
             <AddCourse />
           } />
           <Route path="/add_course_data" render={(props) =>

@@ -14,9 +14,9 @@ import LoginScreen from './Components/LoginScreen/LoginScreen'
 import RegisterScreen from './Components/RegisterScreen/RegisterScreen'
 import About from './Components/About/About'
 
-import ClientService from './Components/Utilities/ClientService'
+import AuthService from './Services/AuthService'
 
-const CServiceObj = new ClientService()
+const AuthServiceObj = new AuthService()
 
 class App extends Component {
   constructor (props) {
@@ -34,7 +34,7 @@ class App extends Component {
 
   componentDidMount () {
     this.setState({ loadStatus: true })
-    CServiceObj.loginByToken(this.setUserAppAuth).then(() => {
+    AuthServiceObj.loginByToken(this.setUserAppAuth).then(() => {
       this.setState({ loadStatus: false })
     })
   }

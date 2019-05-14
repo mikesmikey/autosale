@@ -1,5 +1,4 @@
 import ClientService from '../Components/Utilities/ClientService'
-const CServiceObj = new ClientService()
 
 class Exam {
   constructor (form) {

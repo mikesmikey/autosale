@@ -1,14 +1,30 @@
 const express = require('express')
 const expPretty = require('express-prettify')
 const bodyParser = require('body-parser')
+const mongoose = require('mongoose')
+const UserRouter = require('./router/UserRouter')
+
 const app = express()
 const port = 5000
 // const cors= require('cors')
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(expPretty({ query: 'pretty' }))
 // app.use(cors())
-
 // disable cors due to the server will not using cross origin feature.
+
+const dbname = 'ooad_kob'
+mongoose.Promise = global.Promise
+mongoose.connect(`mongodb+srv://jeff:jeff123@cluster0-mumpe.mongodb.net/${dbname}?retryWrites=true`, { useNewUrlParser: true })
+
+var db = mongoose.connection
+db.on('error', console.error.bind(console, 'connection error:'))
+db.once('open', function () {
+  // we're connected!
+  console.log('connected to mongoose')
+})
+
+app.use('/user', UserRouter)
 
 const WebDAO = require('./WebDAO')
 const WebService = require('./WebService')
@@ -16,55 +32,55 @@ const WebService = require('./WebService')
 const WebDAOObj = new WebDAO()
 const WebServiceObj = new WebService()
 
-app.get('/users', (req, res) => {
-  WebDAOObj.getAllUser().then((data) => {
-    if (data != null) {
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
+// app.get('/users', (req, res) => {
+//   WebDAOObj.getAllUser().then((data) => {
+//     if (data != null) {
+//       res.json(data)
+//     } else {
+//       res.sendStatus(404)
+//     }
+//   })
+// })
 
-app.get('/users/count/:type', (req, res) => {
-  WebDAOObj.countUserInCollectionByType(req.params.type).then((data) => {
-    if (data != null) {
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
+// app.get('/users/count/:type', (req, res) => {
+//   WebDAOObj.countUserInCollectionByType(req.params.type).then((data) => {
+//     if (data != null) {
+//       res.json(data)
+//     } else {
+//       res.sendStatus(404)
+//     }
+//   })
+// })
 
-app.get('/users/count/:type/:username', (req, res) => {
-  WebDAOObj.countUserInCollectionByTypeAndUsername(req.params.type, req.params.username).then((data) => {
-    if (data != null) {
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
+// app.get('/users/count/:type/:username', (req, res) => {
+//   WebDAOObj.countUserInCollectionByTypeAndUsername(req.params.type, req.params.username).then((data) => {
+//     if (data != null) {
+//       res.json(data)
+//     } else {
+//       res.sendStatus(404)
+//     }
+//   })
+// })
 
-app.get('/users/type/:userType/:startPos/:limit', (req, res) => {
-  WebDAOObj.getAllUserByType(req.params.userType, req.params.startPos, req.params.limit).then((data) => {
-    if (data != null) {
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
+// app.get('/users/type/:userType/:startPos/:limit', (req, res) => {
+//   WebDAOObj.getAllUserByType(req.params.userType, req.params.startPos, req.params.limit).then((data) => {
+//     if (data != null) {
+//       res.json(data)
+//     } else {
+//       res.sendStatus(404)
+//     }
+//   })
+// })
 
-app.get('/users/:type/:username/:startPos/:limit', (req, res) => {
-  WebDAOObj.getAllUserByTypeAndUsername(req.params.type, req.params.username, req.params.startPos, req.params.limit).then((data) => {
-    if (data != null) {
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
+// app.get('/users/:type/:username/:startPos/:limit', (req, res) => {
+//   WebDAOObj.getAllUserByTypeAndUsername(req.params.type, req.params.username, req.params.startPos, req.params.limit).then((data) => {
+//     if (data != null) {
+//       res.json(data)
+//     } else {
+//       res.sendStatus(404)
+//     }
+//   })
+// })
 
 app.get('/users/examinercount/:type', (req, res) => {
   WebDAOObj.countUserInCollectionByType(req.params.type).then((data) => {

@@ -5,11 +5,9 @@ import '../../StyleSheets/loginScreen.css'
 
 import keyIcon from '../../Resources/colored_Icons/keys.svg'
 import loginImage from '../../Resources/imgs/login_image.svg'
-import ClientService from '../Utilities/ClientService'
-import ExamScoreSceen from '../ExamScoreSceen/ExamScoreSceen'
+import AuthService from '../../Services/AuthService'
 
-const ServiceObj = new ClientService()
-
+const AuthServiceObj = new AuthService()
 
 class LoginScreen extends Component {
   constructor (props) {
@@ -33,9 +31,9 @@ class LoginScreen extends Component {
       username: this.state.username,
       password: this.state.password
     }
-    ServiceObj.checkAuth(loginData).then((result) => {
+    AuthServiceObj.checkAuth(loginData).then((result) => {
       if (result) {
-        ServiceObj.login(() => { this.props.setUserAppAuth(true, result.userData) }, result)
+        AuthServiceObj.login(() => { this.props.setUserAppAuth(true, result.userData) }, result)
       } else {
         alert('ข้อมูลผู้ใช้ไม่ถูกต้อง โปรดระบุใหม่')
         this.setState({

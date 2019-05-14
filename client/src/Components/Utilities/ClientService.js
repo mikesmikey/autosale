@@ -7,75 +7,13 @@ import Building from '../../Objects/Building'
 import BuildingData from '../../Objects/BuildingData'
 
 class ClientService {
-  // ==========[Auth Service]=================
-
-  loginUsernameCheck(username) {
-    if (username === '') {
-      return false
-    }
-    return true
-  }
-
-  loginPasswordCheck(password) {
-    if (password === '') {
-      return false
-    }
-    return true
-  }
-
-  loginByToken (loginCallBack) {
-    return new Promise((resolve, reject) => {
-      const token = this.getCurrentToken()
-      if (token) {
-        this.getUserByToken(token).then((result) => {
-          if (result) {
-            this.login(loginCallBack(true, result), false)
-          }
-          resolve(true)
-        })
-      } else {
-        resolve(true)
-      }
-    })
-  }
-
-  login(loginCallBack, data) {
-    if (data.token) {
-      this.keepTokenInLocalStore(data.token)
-    }
-
-    if (loginCallBack) {
-      loginCallBack()
-    }
-  }
-
-  logout(logoutCallBack) {
-    this.removeTokenFromLocalStore()
-    if (logoutCallBack) {
-      logoutCallBack()
-    }
-  }
-
-  checkAuth(data) {
-    return new Promise((resolve, reject) => {
-      if (this.loginUsernameCheck(data.username) && this.loginPasswordCheck(data.password)) {
-        const sendData = { 'loginInfo': data }
-        axios.post('/login', sendData).then((result) => {
-          resolve(result.data)
-        })
-      } else {
-        resolve(false)
-      }
-    })
-  }
-
   // ==========[User Service]=================
 
-  userObjFormCheck(userObj) {
+  userObjFormCheck (userObj) {
     return userObj.validMethod()
   }
 
-  createUserObjectByType(userData) {
+  createUserObjectByType (userData) {
     if (userData.typeOfUser === 'student') return new Student(userData)
     if (userData.typeOfUser === 'professor') return new Professor(userData)
     if (userData.typeOfUser === 'staff') return new Staff(userData)
@@ -83,7 +21,7 @@ class ClientService {
 
   getAllUserBySelectType (type, startPos, limit) {
     return new Promise((resolve, reject) => {
-      axios.get(`/users/type/${type}/${startPos || 0}/${limit || 0}`).then((result) => {
+      axios.get(`/user/type/${type}/${startPos || 0}/${limit || 0}`).then((result) => {
         resolve(result.data)
       })
     })
@@ -91,14 +29,14 @@ class ClientService {
 
   searchAllUserByTypeAndUsername (type, userId, startPos, limit) {
     return new Promise((resolve, reject) => {
-      var url = `/users/${userId.length === 0 ? `type/${type}` : `${type}/${userId}`}/${startPos || 0}/${limit || 0}`
+      var url = `/user/${userId.length === 0 ? `type/${type}` : `${type}/${userId}`}/${startPos || 0}/${limit || 0}`
       axios.get(url).then((result) => {
         resolve(result.data)
       })
     })
   }
 
-  addUser(userData) {
+  addUser (userData) {
     return new Promise((resolve, reject) => {
       axios.post(`/user/add`, { 'userData': userData }).then((result) => {
         resolve(result.data)
@@ -106,7 +44,7 @@ class ClientService {
     })
   }
 
-  editUser(newUserData) {
+  editUser (newUserData) {
     return new Promise((resolve, reject) => {
       axios.post(`/user/edit`, { 'userData': newUserData }).then((result) => {
         resolve(result.data)
@@ -114,7 +52,7 @@ class ClientService {
     })
   }
 
-  deleteUser(deleteUserId) {
+  deleteUser (deleteUserId) {
     return new Promise((resolve, reject) => {
       axios.post(`/user/remove/${deleteUserId}`).then((result) => {
         resolve(result.data)
@@ -122,7 +60,7 @@ class ClientService {
     })
   }
 
-  getUserByToken(token) {
+  getUserByToken (token) {
     return new Promise((resolve, reject) => {
       axios.post(`/token`, { 'token': token }).then((result) => {
         resolve(result.data)
@@ -132,7 +70,7 @@ class ClientService {
 
   countUserByTypeAndUsername (type, username) {
     return new Promise((resolve, reject) => {
-      var url = `/users/count/${username.length === 0 ? `${type}` : `${type}/${username}`}`
+      var url = `/user/count/${username.length === 0 ? `${type}` : `${type}/${username}`}`
       axios.get(url).then((result) => {
         resolve(result.data)
       })
@@ -150,7 +88,7 @@ class ClientService {
 
   // ==========[Faculty Service]=================
 
-  getAllFaculty() {
+  getAllFaculty () {
     return new Promise((resolve, reject) => {
       axios.get('/facultys').then((result) => {
         resolve(result.data)
@@ -160,7 +98,7 @@ class ClientService {
 
   // ==========[Subject Service]=================
 
-  getAllSubject() {
+  getAllSubject () {
     return new Promise((resolve, reject) => {
       axios.get('/subjects').then((result) => {
         resolve(result.data)
@@ -168,7 +106,7 @@ class ClientService {
     })
   }
 
-  addSubject(subjectData) {
+  addSubject (subjectData) {
     return new Promise((resolve, reject) => {
       axios.post(`/subject/add`, { 'subjectData': subjectData }).then((result) => {
         resolve(result.data)
@@ -176,15 +114,14 @@ class ClientService {
     })
   }
 
-  searchAllSubjectBySubjectIdOrSubjectName(subjid, subjname) {
+  searchAllSubjectBySubjectIdOrSubjectName (subjid, subjname) {
     console.log('on client => ', subjid, subjname)
     return new Promise((resolve, reject) => {
       var url = '/subjects'
-      if(subjid.length === 0 && subjname.trim().length > 0) {
-        url = `/subjects/nm_${subjname}` //search by specified only name
-      }
-      else if(subjid.length > 0 && subjname.trim().length === 0){
-        url = `/subjects/id_${subjid}` //search by specified only id
+      if (subjid.length === 0 && subjname.trim().length > 0) {
+        url = `/subjects/nm_${subjname}` // search by specified only name
+      } else if (subjid.length > 0 && subjname.trim().length === 0) {
+        url = `/subjects/id_${subjid}` // search by specified only id
       }
       axios.get(url)
         .then((result) => {
@@ -193,7 +130,7 @@ class ClientService {
     })
   }
 
-  searchAllSubjectBySubjectId(subjid) {
+  searchAllSubjectBySubjectId (subjid) {
     return new Promise((resolve, reject) => {
       var url = `/subject/id_${subjid}`
       axios.get(url)
@@ -203,7 +140,7 @@ class ClientService {
     })
   }
 
-  getAllCourseByThisSubject(subjname) {
+  getAllCourseByThisSubject (subjname) {
     return new Promise((resolve, reject) => {
       var url = `/subject/${subjname}/courses/`
       axios.get(url)
@@ -212,8 +149,8 @@ class ClientService {
         })
     })
   }
-  
-  addCourseToThisSubject(subjid, courseData) {
+
+  addCourseToThisSubject (subjid, courseData) {
     return new Promise((resolve, reject) => {
       axios.post(`/subject/id_${subjid}/course/add`, { 'courseData': courseData }).then((result) => {
         resolve(result.data)
@@ -223,7 +160,7 @@ class ClientService {
 
   // ==========[Student Service]=================
 
-  addManyStudents(users) {
+  addManyStudents (users) {
     return new Promise((resolve, reject) => {
       axios.post(`/user/addmany`, { 'usersData': users }).then((result) => {
         resolve(result.data)
@@ -231,25 +168,8 @@ class ClientService {
     })
   }
 
-  // ==========[Token Service]=================
-
-  getCurrentToken() {
-    const token = localStorage.getItem('iAMToken')
-    if (typeof (token) !== 'undefined' && token !== null) {
-      return token
-    } else { return false }
-  }
-
-  keepTokenInLocalStore(token) {
-    localStorage.setItem('iAMToken', token)
-  }
-
-  removeTokenFromLocalStore() {
-    localStorage.removeItem('iAMToken')
-  }
-
   /* ===========[GlobalData Service]=================== */
-  getYearAndTerm() {
+  getYearAndTerm () {
     return new Promise((resolve, reject) => {
       axios.get(`/yearAndTerm`).then((result) => {
         resolve(result.data)
@@ -257,7 +177,7 @@ class ClientService {
     })
   }
 
-  getAllYearAndTerm() {
+  getAllYearAndTerm () {
     return new Promise((resolve, reject) => {
       axios.get(`/yearAndTerms`).then((result) => {
         resolve(result.data)
@@ -265,11 +185,11 @@ class ClientService {
     })
   }
 
-  createGlobalDataObject(globalData) {
+  createGlobalDataObject (globalData) {
     return new GlobalData(globalData)
   }
 
-  editGlobalData(newGlobalData) {
+  editGlobalData (newGlobalData) {
     return new Promise((resolve, reject) => {
       axios.post(`/yearAndTerm/edit`, { 'globalData': newGlobalData }).then((result) => {
         resolve(result.data)
@@ -280,7 +200,7 @@ class ClientService {
   // ==========[Course Service]=================
 
   // coming with subject id, name :)
-  getAllCurrentCourse() {
+  getAllCurrentCourse () {
     return new Promise((resolve, reject) => {
       this.getYearAndTerm().then((timeData) => {
         if (!timeData) return null
@@ -312,7 +232,7 @@ class ClientService {
 
   // ==========[Building Service]=================
 
-  getAllBuildingByRoom(buildingname, room) {
+  getAllBuildingByRoom (buildingname, room) {
     return new Promise((resolve) => {
       var url = `/building/${room.length === 0 ? `/${buildingname}` : `/${buildingname}/${room}`}`
       axios.get(url).then((result) => {
@@ -321,7 +241,7 @@ class ClientService {
     })
   }
 
-  getAllBuilding() {
+  getAllBuilding () {
     return new Promise((resolve) => {
       axios.get(`/buildings`).then((result) => {
         resolve(result.data)
@@ -329,11 +249,11 @@ class ClientService {
     })
   }
 
-  createBuildingDataObject(buildingData) {
+  createBuildingDataObject (buildingData) {
     return new BuildingData(buildingData)
   }
 
-  addBuilding(buildingData) {
+  addBuilding (buildingData) {
     return new Promise((resolve, reject) => {
       axios.post(`/building/add`, { 'buildingData': buildingData }).then((result) => {
         resolve(result.data)
@@ -341,7 +261,7 @@ class ClientService {
     })
   }
 
-  deleteBuilding(shortname) {
+  deleteBuilding (shortname) {
     return new Promise((resolve, reject) => {
       axios.post(`/building/remove/${shortname}`).then((result) => {
         resolve(result.data)
@@ -349,13 +269,13 @@ class ClientService {
     })
   }
 
-  createBuilding(BuildingData) {
+  createBuilding (BuildingData) {
     return new Building(BuildingData)
   }
 
   // ==========[Room Service]=================
 
-  editRoom(newBuildingData) {
+  editRoom (newBuildingData) {
     return new Promise((resolve, reject) => {
       axios.post(`/building/edit`, { 'BuildingData': newBuildingData }).then((result) => {
         resolve(result.data)
@@ -374,7 +294,7 @@ class ClientService {
 
   // ==========[Exam Service]=================
 
-  getAllExamBySubjectAndCourse(subjectId, courseId) {
+  getAllExamBySubjectAndCourse (subjectId, courseId) {
     return new Promise((resolve, reject) => {
       axios.get(`/exams/subject=${subjectId}/course=${courseId}`).then((result) => {
         resolve(result.data)
@@ -382,7 +302,7 @@ class ClientService {
     })
   }
 
-  getAllExamBySubjectId(SubjectId, username) {
+  getAllExamBySubjectId (SubjectId, username) {
     return new Promise((resolve) => {
       var url = `/exam/${SubjectId.length === 0 ? `username/${username}` : `/${username}/${SubjectId}`}`
       axios.get(url).then((result) => {
@@ -486,7 +406,7 @@ class ClientService {
     })
   }
 
-  getAllCouresCurrent() {
+  getAllCouresCurrent () {
     return new Promise((resolve, reject) => {
       axios.get('/subbjec/current').then((result) => {
         var listCourse = []
@@ -509,7 +429,7 @@ class ClientService {
       })
     })
   }
-  getObjectCountRegisterCourseBySubjectId(subjecId) {
+  getObjectCountRegisterCourseBySubjectId (subjecId) {
     return new Promise((resolve, reject) => {
       axios.get(`/registerCourse/${subjecId}`).then((result) => {
         resolve(result.data)
@@ -560,7 +480,7 @@ class ClientService {
   }
   countUserByTypeAndName (type, name) {
     return new Promise((resolve, reject) => {
-      var url = `/users/examinercount/${name.length === 0 ? `${type}` : `${type}/${name}`}`
+      var url = `/user/examinercount/${name.length === 0 ? `${type}` : `${type}/${name}`}`
       axios.get(url).then((result) => {
         resolve(result.data)
       })
@@ -569,7 +489,7 @@ class ClientService {
 
   searchAllUserByTypeAndName (type, name, startPos, limit) {
     return new Promise((resolve, reject) => {
-      var url = `/users/examiner/${name.length === 0 ? `type/${type}` : `${type}/${name}`}/${startPos || 0}/${limit || 0}`
+      var url = `/user/examiner/${name.length === 0 ? `type/${type}` : `${type}/${name}`}/${startPos || 0}/${limit || 0}`
       axios.get(url).then((result) => {
         resolve(result.data)
       })
