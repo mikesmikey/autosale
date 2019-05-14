@@ -25,7 +25,7 @@ db.once('open', function () {
 })
 
 app.use('/user', UserRouter)
-app.use('/exam', UserRouter)
+//app.use('/exam', UserRouter)
 
 const WebDAO = require('./WebDAO')
 const WebService = require('./WebService')

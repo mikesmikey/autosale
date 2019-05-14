@@ -352,10 +352,13 @@ class ClientService {
     })
   }
 
-  // getExamByObjId (objId) {
-  //     })
-  //   })
-  // }
+  getExamByObjId (objId) {
+    return new Promise((resolve, reject) => {
+      axios.get(`/exam/${objId}`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
 
   updateExamData (examId, examData) {
     return new Promise((resolve) => {
