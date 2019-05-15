@@ -14,7 +14,7 @@ const AuthServiceObj = new AuthService()
 const ERROR_TEXT_TABLE = {
   'username-blank': 'กรุณากรอก Username!',
   'password-blank': 'กรุณากรอก Password!',
-  'wrong-username': 'Username ผิด!',
+  'wrong-username': 'ไม่พบ user นี้!',
   'wrong-password': 'Password ผิด!'
 }
 
