@@ -10,12 +10,16 @@ class Professor extends User {
   }
 
   validProfessorData () {
-    if (!this.validUserData()) {
-      return false
+    const userValid = this.validUserData()
+    if (userValid.error) {
+      return userValid
     }
-    if (this.facultyId === 0 || this.branchId === 0) {
-      return false
+    if (this.facultyId === 0) {
+      return { error: 'faculty-wrong' }
+    } else if (this.branchId === 0) {
+      return { error: 'branch-wrong' }
     }
+    return true
   }
 }
 

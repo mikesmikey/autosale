@@ -75,7 +75,7 @@ UserRouter.route('/:type/:username/:startPos/:limit').get((req, res) => {
 })
 
 UserRouter.route('/add').post((req, res) => {
-  const user = new User(req.body.registerForm)
+  const user = new User(req.body.userData)
   User.findOne({ 'username': user.username }).then((data) => {
     if (!data) {
       user.save()
@@ -96,9 +96,9 @@ UserRouter.route('/add').post((req, res) => {
 })
 
 UserRouter.route('/edit').post((req, res) => {
-  const newUserData = req.params.userData
+  const newUserData = req.body.userData
   User.findOneAndUpdate({ 'username': newUserData.username }, { '$set': newUserData }).then((result) => {
-    if (result.value) {
+    if (result) {
       res.send(true)
     } else {
       res.send(false)

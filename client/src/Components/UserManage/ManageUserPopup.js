@@ -1,9 +1,11 @@
 // eslint-disable-next-line no-unused-vars
 import React, { Component } from 'react'
 
-import ClientService from '../../Services/UserService'
+import UserService from '../../Services/UserService'
+import ErrorModal from '../Utilities/ErrorModal'
+import InfoModal from '../Utilities/InfoModal'
 
-const CServiceObj = new ClientService()
+const userServiceObj = new UserService()
 
 class ManageUserPopUp extends Component {
   constructor (props) {
@@ -18,7 +20,18 @@ class ManageUserPopUp extends Component {
       facultyIndex: 1,
       branchIndex: 1,
       standingInput: '',
-      examinerRadio: false
+      examinerRadio: false,
+      tempUser: {}
+    }
+
+    this.ERROR_TEXT_TABLE = {
+      'username-blank': 'กรุณากรอก Username!',
+      'firstname-blank': 'กรุณากรอกชื่อ!',
+      'lastname-blank': 'กรุณากรอกนามสกุล!',
+      'faculty-wrong': 'กรุณาระบุคณะให้ถูกต้อง!',
+      'branch-wrong': 'กรุณาระบุสาขาให้ถูกต้อง!',
+      'year-wrong': 'กรุณาระบุชั้นปีให้ถูกต้อง!',
+      'standing-blank': 'กรุณากรอกตำแหน่ง!'
     }
 
     this.changeStatus = this.changeStatus.bind(this)
@@ -48,7 +61,9 @@ class ManageUserPopUp extends Component {
   }
 
   loadUserInput () {
+    const tempUser = Object.assign({}, this.props.selectedUser)
     this.setState({
+      tempUser: tempUser,
       fnameInput: this.props.selectedUser.firstName,
       snameInput: this.props.selectedUser.lastName,
       usernameInput: this.props.selectedUser.username,
@@ -65,6 +80,24 @@ class ManageUserPopUp extends Component {
     }
   }
 
+  loadTempInput () {
+    this.setState({
+      fnameInput: this.state.tempUser.firstName,
+      snameInput: this.state.tempUser.lastName,
+      usernameInput: this.state.tempUser.username,
+      yearIndex: this.state.tempUser.year,
+      facultyIndex: this.state.tempUser.facultyId,
+      branchIndex: this.state.tempUser.branchId,
+      examinerRadio: this.state.tempUser.isExaminer
+    })
+
+    if (this.state.tempUser.standing) {
+      this.setState({
+        standingInput: this.state.tempUser.standing
+      })
+    }
+  }
+
   clearInput () {
     this.setState({
       fnameInput: '',
@@ -73,7 +106,8 @@ class ManageUserPopUp extends Component {
       yearIndex: 0,
       facultyIndex: 1,
       branchIndex: 1,
-      standingInput: ''
+      standingInput: '',
+      tempUser: {}
     })
   }
 
@@ -106,7 +140,7 @@ class ManageUserPopUp extends Component {
     })
   }
 
-  componentDidUpdate () {
+  componentDidUpdate (prevProps, prevStates) {
     this.defindInputClassByType()
   }
 
@@ -146,7 +180,7 @@ class ManageUserPopUp extends Component {
 
   deleteButtonHandle () {
     this.props.setDataLoadingStatus(true)
-    CServiceObj.deleteUser(this.props.selectedUser.username).then((result) => {
+    userServiceObj.deleteUser(this.props.selectedUser.username).then((result) => {
       if (result) {
         this.props.deleteSelectedItem()
         this.props.closeModal()
@@ -181,36 +215,45 @@ class ManageUserPopUp extends Component {
   }
 
   editButtonHandle () {
-    const userObj = CServiceObj.createUserObjectByType(this.currentFormObject('edit'))
-
-    if (!CServiceObj.userObjFormCheck(userObj)) { alert('แก้ไขไม่สำเร็จ!'); return }
+    const userObj = userServiceObj.createUserObjectByType(this.currentFormObject('edit'))
+    const error = userServiceObj.userObjFormCheck(userObj).error
+    if (error) {
+      this.loadTempInput()
+      this.errorModal.showModal(this.ERROR_TEXT_TABLE[error])
+      return
+    }
 
     this.props.setDataLoadingStatus(true)
 
-    CServiceObj.editUser(userObj.getUserObjectData()).then((result) => {
+    userServiceObj.editUser(userObj.getUserObjectData()).then((result) => {
       if (result) {
         this.props.editSelectedItem(userObj.getUserObjectData())
         this.changeStatus('view')
       } else {
-        alert('แก้ไขไม่สำเร็จ!')
+        this.loadTempInput()
+        this.errorModal.showModal('แก้ไขไม่สำเร็จ โปรดลองใหม่ภายหลัง!')
       }
       this.props.setDataLoadingStatus(false)
     })
   }
 
   addButtonHandle () {
-    const userObj = CServiceObj.createUserObjectByType(this.currentFormObject('add'))
+    const userObj = userServiceObj.createUserObjectByType(this.currentFormObject('add'))
 
-    if (!CServiceObj.userObjFormCheck(userObj)) { alert('เพิ่มไม่สำเร็จ!'); return }
+    const error = userServiceObj.userObjFormCheck(userObj).error
+    if (error) {
+      this.errorModal.showModal(this.ERROR_TEXT_TABLE[error])
+      return
+    }
 
     this.props.setDataLoadingStatus(true)
 
-    CServiceObj.addUser(userObj.getUserObjectData()).then((result) => {
+    userServiceObj.addUser(userObj.getUserObjectData()).then((result) => {
       if (result) {
         this.props.addItem(userObj.getUserObjectData())
         this.props.closeModal()
       } else {
-        alert('เพิ่มไม่สำเร็จ!')
+        this.errorModal.showModal('เพิ่มไม่สำเร็จ โปรดลองใหม่ภายหลัง!')
       }
       this.props.setDataLoadingStatus(false)
     })
@@ -394,6 +437,12 @@ class ManageUserPopUp extends Component {
             }
           </div>
         </div>
+        <ErrorModal
+          ref={instance => { this.errorModal = instance }}
+        />
+        <InfoModal
+          ref={instance => { this.infoModal = instance }}
+        />
       </div>
     )
   }

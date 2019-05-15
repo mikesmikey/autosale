@@ -1,10 +1,11 @@
+// eslint-disable-next-line no-unused-vars
 import React, { Component } from 'react'
 
 import ClientService from '../../Services/UserService'
 import readXlsxFile from 'read-excel-file'
 import FaultyServices from '../../Services/FacultyService'
 
-const ServicesFaulty = new FaultyServices() 
+const ServicesFaulty = new FaultyServices()
 const CServiceObj = new ClientService()
 
 class StudentExcelPopup extends Component {

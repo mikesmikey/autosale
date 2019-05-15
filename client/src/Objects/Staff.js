@@ -9,11 +9,12 @@ class Staff extends User {
   }
 
   validStaffData () {
-    if (!this.validUserData()) {
-      return false
+    const userValid = this.validUserData()
+    if (userValid.error) {
+      return userValid
     }
     if (this.standing === '') {
-      return false
+      return { error: 'standing-blank' }
     }
     return true
   }

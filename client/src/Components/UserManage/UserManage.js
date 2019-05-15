@@ -11,7 +11,7 @@ import StudentExcelPopUp from './StudentExcelPopup'
 import UserTable from './UserTable'
 import FaultyServices from '../../Services/FacultyService'
 
-const ServicesFaulty = new FaultyServices() 
+const ServicesFaulty = new FaultyServices()
 const ServiceObj = new ClientService()
 
 class UserManage extends Component {

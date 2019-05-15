@@ -134,13 +134,17 @@ class ExamService {
 
   validExaminerInRoom (exam) {
     return new Promise((resolve, reject) => {
+      let flag = true
       exam.rooms.forEach(room => {
-        if (room.examiners && room.examiners.length > 0) {
-          resolve({ 'enoughExaminer': true })
-        } else {
-          resolve({ 'enoughExaminer': false })
+        if (!room.examiners || room.examiners.length <= 0) {
+          flag = false
         }
       })
+      if (flag) {
+        resolve({ 'enoughExaminer': true })
+      } else {
+        resolve({ 'enoughExaminer': false })
+      }
     })
   }
 

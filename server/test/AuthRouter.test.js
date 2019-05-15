@@ -4,7 +4,7 @@
 
 var chai = require('chai')
 var chaiHttp = require('chai-http')
-var server = require('../server')
+var server = require('./testHelper')
 var should = chai.should()
 
 const User = require('../dao/UserDAO')

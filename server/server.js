@@ -15,7 +15,7 @@ app.use(expPretty({ query: 'pretty' }))
 // app.use(cors())
 // disable cors due to the server will not using cross origin feature.
 
-const dbname = 'ooad_kob'
+var dbname = 'ooad_kob'
 mongoose.Promise = global.Promise
 mongoose.connect(`mongodb+srv://jeff:jeff123@cluster0-mumpe.mongodb.net/${dbname}?retryWrites=true`, { useNewUrlParser: true })
 
