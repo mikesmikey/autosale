@@ -66,6 +66,7 @@ SubjectRouter.route('/add').post((req, res) => {
 
 // [================= AddCourse =================]
 
+// route done
 SubjectRouter.route('/findone/id/:subjectId').get((req, res) => {
   Subject.findOne({ 'subjectId': req.params.subjectId }).limit(16).select({ '_id': 0 }).then(function (subjects) {
     if (subjects) {
@@ -76,6 +77,7 @@ SubjectRouter.route('/findone/id/:subjectId').get((req, res) => {
   })
 })
 
+// route done
 SubjectRouter.route('/findone/name/:subjectName').get((req, res) => {
   Subject.findOne({ 'subjectName': req.params.subjectName }).limit(16).select({ '_id': 0 }).then(function (subjects) {
     if (subjects) {
@@ -86,9 +88,10 @@ SubjectRouter.route('/findone/name/:subjectName').get((req, res) => {
   })
 })
 
+// route done
 SubjectRouter.route('/add/id/:subjectId/course').post((req, res) => {
   Subject.findOneAndUpdate({ 'subjectId': req.params.subjectId }, { '$push': { 'courses': req.body.courseData } }).then((result) => {
-    if (result.value) {
+    if (result) {
       res.send(true)
     } else {
       res.send(false)
@@ -96,7 +99,8 @@ SubjectRouter.route('/add/id/:subjectId/course').post((req, res) => {
   })
 })
 
-SubjectRouter.route('/find/course/with/year/:year/semester/:semester').get((req, res) => {
+// getAllCurrentCourse()
+SubjectRouter.route('/find/courses/year/:year/semester/:semester').get((req, res) => {
   Subject.aggregate([
     {
       '$match': { '$and':
@@ -133,7 +137,8 @@ SubjectRouter.route('/find/course/with/year/:year/semester/:semester').get((req,
   })
 })
 
-SubjectRouter.route('/find/course/with/year/:year/semester/:semester/id/:subjectId/options/:startPos/:limit').get((req, res) => {
+// searchAllCurrentCourseBySubjectId()
+SubjectRouter.route('/find/courses/year/:year/semester/:semester/id/:subjectId/:startPos/:limit').get((req, res) => {
   var subId = req.params.subjectId
   var lim = req.params.limit
 
@@ -186,7 +191,8 @@ SubjectRouter.route('/find/course/with/year/:year/semester/:semester/id/:subject
     })
 })
 
-SubjectRouter.route('/findcurrent').get((req, res) => {
+// getAllCouresCurrent()
+SubjectRouter.route('/findone').get((req, res) => {
   GlobalData.findOne().then((NowCurrent) => {
     Subject.find({ 'courses': { $elemMatch: { school_year: NowCurrent.currentStudyYear, semester: NowCurrent.currentStudyTerm } } }).then((data) => {
       for (var i = 0; i < data.length; i++) {
@@ -204,19 +210,20 @@ SubjectRouter.route('/findcurrent').get((req, res) => {
   })
 })
 
-SubjectRouter.route('/checkcurrent/id/:subjectId').get((req, res) => {
-  GlobalData.findOne().then((NowCurrent) => {
-    Subject.findOne({ 'subjectId': req.params.subjectId, 'courses': { school_year: NowCurrent.currentStudyYear, semester: NowCurrent.currentStudyTerm } }).then((data) => {
-      if (!data) {
-        res.send(false)
-      } else {
-        res.send(true)
-      }
-    })
-  })
-})
+// SubjectRouter.route('findone/courses/id/:subjectId').get((req, res) => {
+//   GlobalData.findOne().then((NowCurrent) => {
+//     Subject.findOne({ 'subjectId': req.params.subjectId, 'courses': { school_year: NowCurrent.currentStudyYear, semester: NowCurrent.currentStudyTerm } }).then((data) => {
+//       if (!data) {
+//         res.send(false)
+//       } else {
+//         res.send(true)
+//       }
+//     })
+//   })
+// })
 
-SubjectRouter.route('/find/obj/with/id/:subjectId/regcourse').get((req, res) => {
+// getObjectCountRegisterCourseBySubjectId()
+SubjectRouter.route('/regCourse/find/id/:subjectId').get((req, res) => {
   User.find({ typeOfUser: 'student', 'RegisteredCourse': { $elemMatch: { subjectId: req.params.subjectId } } }).count((StudentData) => {
     User.find({ typeOfUser: 'professor', 'RegisteredCourse': { $elemMatch: { subjectId: req.params.subjectId } } }).then((TeacherData) => {
       let ObjectData = []
@@ -231,7 +238,8 @@ SubjectRouter.route('/find/obj/with/id/:subjectId/regcourse').get((req, res) => 
   })
 })
 
-SubjectRouter.route('/find/nameteacher/with/id/:subjectId/regcourse').get((req, res) => {
+// getNameteacherFormRegisterCourseBySubjectId()
+SubjectRouter.route('/regCourse/find/teacher/id/:subjectId').get((req, res) => {
   User.find({ typeOfUser: 'professor', 'RegisteredCourse': { $elemMatch: { subjectId: req.params.subjectId } } }).then((data) => {
     var listData = []
     for (var i = 0; i < data.length; i++) {
@@ -242,6 +250,7 @@ SubjectRouter.route('/find/nameteacher/with/id/:subjectId/regcourse').get((req, 
   })
 })
 
+// deleteCourse()
 SubjectRouter.route('/remove/course/id/:subjectId/courseId/:courseId').post((req, res) => {
   Subject.updateMany({ subjectId: req.params.subjectId }, { $pull: { courses: { courseId: Number.parseInt(req.params.courseId) } } }).then((data) => {
     User.updateMany({ '$or': [{ typeOfUser: 'professor' }, { typeOfUser: 'student' }] }, { $pull: { RegisteredCourse: { subjectId: req.params.subjectId } } }).then((data) => {
@@ -250,6 +259,7 @@ SubjectRouter.route('/remove/course/id/:subjectId/courseId/:courseId').post((req
   })
 })
 
+// getCourseByIdAndSubjectId()
 SubjectRouter.route('/find/course/id/:subjectId/courseId/:courseId').get((req, res) => {
   Subject.aggregate([
     {

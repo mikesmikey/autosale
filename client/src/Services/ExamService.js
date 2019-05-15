@@ -67,6 +67,14 @@ class ExamService {
     })
   }
 
+  updateExamSeatType(objId, seatLineUpType, seatOrderType) {
+    return new Promise((resolve) => {
+      axios.post(`/exam/seatType/update/${objId}/${seatLineUpType}/${seatOrderType}`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+
   updateExamData (examId, examData) {
     return new Promise((resolve) => {
       axios.post(`/exam/room/update`, { 'examId': examId, 'examData': examData }).then((result) => {
