@@ -6,30 +6,11 @@ const User = require('../dao/UserDAO')
 const GlobalData = require('../dao/GlobalDataDAO')
 // const GlobalData = require('../dao/GlobalData')
 
+// [================= AddSubject =================]
+
 // route done
 SubjectRouter.route('/').get((req, res) => {
   Subject.find().select({ '_id': 0 }).then(function (subjects) {
-    if (subjects) {
-      res.json(subjects)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
-
-// route done
-SubjectRouter.route('/findone/id/:subjectId').get((req, res) => {
-  Subject.findOne({ 'subjectId': req.params.subjectId }).limit(16).select({ '_id': 0 }).then(function (subjects) {
-    if (subjects) {
-      res.json(subjects)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
-// route done
-SubjectRouter.route('/findone/name/:subjectName').get((req, res) => {
-  Subject.findOne({ 'subjectName': req.params.subjectName }).limit(16).select({ '_id': 0 }).then(function (subjects) {
     if (subjects) {
       res.json(subjects)
     } else {
@@ -79,6 +60,28 @@ SubjectRouter.route('/add').post((req, res) => {
         })
     } else {
       res.send(false)
+    }
+  })
+})
+
+// [================= AddCourse =================]
+
+SubjectRouter.route('/findone/id/:subjectId').get((req, res) => {
+  Subject.findOne({ 'subjectId': req.params.subjectId }).limit(16).select({ '_id': 0 }).then(function (subjects) {
+    if (subjects) {
+      res.json(subjects)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+SubjectRouter.route('/findone/name/:subjectName').get((req, res) => {
+  Subject.findOne({ 'subjectName': req.params.subjectName }).limit(16).select({ '_id': 0 }).then(function (subjects) {
+    if (subjects) {
+      res.json(subjects)
+    } else {
+      res.sendStatus(404)
     }
   })
 })
