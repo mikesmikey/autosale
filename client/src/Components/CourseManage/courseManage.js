@@ -12,8 +12,8 @@ import CoursePopup from './coursePopup.js'
 // eslint-disable-next-line no-unused-vars
 import CoureseDeletePopup from './courseDeletePopup'
 
-import ClientService from '../Utilities/ClientService'
-const CServiceObj = new ClientService()
+import CGlobalDataService from '../../Services/GlobalDataService'
+const GlobalDataService = new CGlobalDataService()
 
 class App extends Component {
   constructor (props) {
@@ -42,7 +42,7 @@ class App extends Component {
     this._isMounted = false
   }
   loadYearAndTerm () {
-    CServiceObj.getYearAndTerm().then((data) => {
+    GlobalDataService.getYearAndTerm().then((data) => {
       this.setYearAndTerm(data.currentStudyYear, data.currentStudyTerm)
     })
   }

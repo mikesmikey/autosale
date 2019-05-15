@@ -1,11 +1,11 @@
 /* eslint-disable no-useless-constructor */
 import React, { Component } from 'react'
-import ClientService from '../Utilities/ClientService'
+import CSubjectService from '../../Services/SubjectService'
 
 //Object
 import Subject from '../../Objects/Subject'
 
-const CServiceObj = new ClientService()
+const SubjectService = new CSubjectService()
 
 class Subject2Table extends Component {
     constructor(props) {
@@ -38,8 +38,9 @@ class Subject2Table extends Component {
     }
 
     loadDataBySubjectId(subIdInput) {
-        CServiceObj.searchAllSubjectBySubjectId(subIdInput).then((result) => {                  
+        SubjectService.searchAllSubjectBySubjectId(subIdInput).then((result) => {                  
             if (this._isMounted) {
+
                 this.setState({ data: result })
             }
         }) 
@@ -51,8 +52,9 @@ class Subject2Table extends Component {
 
     loadDataIntoTable () {
         var returnData = []
-        for (var i = 0; i < this.state.data.length - 1; i++) {
-          returnData[i] = <SubjectTableItem
+        for (var i = 0; i < this.state.data.length ; i++) {
+            this.state.data
+            returnData[i] = <SubjectTableItem
             key={i}
             // selectItem={(e) => { this.selectItem(e) }}
             // inspectItem={(e) => { this.inspectItem(e) }}

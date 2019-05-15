@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-vars */
 import React, { Component } from 'react'
-import ClientService from '../Utilities/ClientService'
+import CGlobalDataService from '../../Services/GlobalDataService'
 
 // Components
 
 import '../../StyleSheets/home.css'
 import '../../StyleSheets/yearAndTermManage.css'
-const CServiceObj = new ClientService()
+const GlobalDataService = new CGlobalDataService()
 
 class YearAndTermManage extends Component {
   _isMounted = false;
@@ -38,7 +38,7 @@ class YearAndTermManage extends Component {
   }
 
   loadYearAndTerm () {
-    CServiceObj.getYearAndTerm().then((data) => {
+    GlobalDataService.getYearAndTerm().then((data) => {
       this.setYearAndTerm(data.currentStudyYear, data.currentStudyTerm)
     })
   }
@@ -72,8 +72,8 @@ class YearAndTermManage extends Component {
       newGlobalData.currentStudyYear = yearInt
       newGlobalData.currentStudyTerm = termInt
 
-      const globalObj = CServiceObj.createGlobalDataObject(newGlobalData)
-      CServiceObj.editGlobalData(globalObj.getGlobalObjectData()).then((result) => {
+      const globalObj = GlobalDataService.createGlobalDataObject(newGlobalData)
+      GlobalDataService.editGlobalData(globalObj.getGlobalObjectData()).then((result) => {
         if (result) {
           this.setYearAndTerm(this.state.yearInput, this.state.termInput)
           this.setYearAndTermInput('', 0)
