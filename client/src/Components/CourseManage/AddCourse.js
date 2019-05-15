@@ -173,7 +173,6 @@ class AddCourse extends Component {
       } else if (hasAssigned) {
         alert('รหัสวิชานี้ได้ถูกเพิ่มไปแล้ว')
       } else {
-        alert('ok')
 
         // find max course id in this select subject
         var maxCourseId = 0
