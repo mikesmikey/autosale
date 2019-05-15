@@ -1,8 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const GlobalData = require('./GlobalData')
-
 var Subject = new Schema({
   subjectId: {
     type: String
@@ -25,10 +23,6 @@ var Subject = new Schema({
 }, {
   collection: 'Subject'
 })
-
-const gb = new GlobalData()
-
-Subject.methods.getYearAndTerm = gb.getYearAndTerm()
 
 // Subject.methods.getCourseBySubjectAndCourseId = function (subjectId, courseId, callback) {
 //   return this.model('Subject').aggregate(
@@ -56,9 +50,5 @@ Subject.methods.getYearAndTerm = gb.getYearAndTerm()
 //       }
 //     ], callback)
 // }
-
-Subject.methods.getAllCourseByThisSubject = function () {
-  return this.model('Subject').f
-}
 
 module.exports = mongoose.model('Subject', Subject)

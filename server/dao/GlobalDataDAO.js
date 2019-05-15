@@ -12,8 +12,4 @@ const GlobalData = new Schema({
   collection: 'GlobalData'
 })
 
-GlobalData.methods.getYearAndTerm = function (callback) {
-  return this.model('GlobalData').findOne({}, callback)
-}
-
 module.exports = mongoose.model('GlobalData', GlobalData)

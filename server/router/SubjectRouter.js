@@ -3,8 +3,10 @@ const SubjectRouter = express.Router()
 // const app = express()
 const Subject = require('../dao/SubjectDAO')
 const User = require('../dao/UserDAO')
+const GlobalData = require('../dao/GlobalDataDAO')
 // const GlobalData = require('../dao/GlobalData')
 
+// route done
 SubjectRouter.route('/').get((req, res) => {
   Subject.find().select({ '_id': 0 }).then(function (subjects) {
     if (subjects) {
@@ -15,8 +17,19 @@ SubjectRouter.route('/').get((req, res) => {
   })
 })
 
+// route done
 SubjectRouter.route('/findone/id/:subjectId').get((req, res) => {
-  Subject.find({ '$or': [{ 'subjectId': req.params.subjectId }] }).limit(16).select({ '_id': 0 }).then(function (subjects) {
+  Subject.findOne({ 'subjectId': req.params.subjectId }).limit(16).select({ '_id': 0 }).then(function (subjects) {
+    if (subjects) {
+      res.json(subjects)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+// route done
+SubjectRouter.route('/findone/name/:subjectName').get((req, res) => {
+  Subject.findOne({ 'subjectName': req.params.subjectName }).limit(16).select({ '_id': 0 }).then(function (subjects) {
     if (subjects) {
       res.json(subjects)
     } else {
@@ -25,6 +38,7 @@ SubjectRouter.route('/findone/id/:subjectId').get((req, res) => {
   })
 })
 
+// route done
 SubjectRouter.route('/find/name/:subjectName').get((req, res) => {
   const regex = new RegExp(`${req.params.subjectName}`)
   Subject.find({ 'subjectName': regex }).limit(16).select({ '_id': 0 }).then(function (subjects) {
@@ -36,6 +50,7 @@ SubjectRouter.route('/find/name/:subjectName').get((req, res) => {
   })
 })
 
+// route done
 SubjectRouter.route('/find/id/:subjectId').get((req, res) => {
   const regex = new RegExp(`${req.params.subjectId}`)
   Subject.find({ 'subjectId': regex }).limit(16).select({ '_id': 0 }).then(function (subjects) {
@@ -47,8 +62,9 @@ SubjectRouter.route('/find/id/:subjectId').get((req, res) => {
   })
 })
 
-SubjectRouter.route('/add').get((req, res) => {
-  const subject = new Subject(req.body.subjectForm)
+// route done
+SubjectRouter.route('/add').post((req, res) => {
+  const subject = new Subject(req.body.subjectData)
   Subject.findOne({ '$or': [{ 'subjectId': subject.subjectId }, { 'subjectName': subject.subjectName }] }).then((data) => {
     if (!data) {
       subject.save().then(subject => {
@@ -67,7 +83,7 @@ SubjectRouter.route('/add').get((req, res) => {
   })
 })
 
-SubjectRouter.route('/add/id/:subjectId/course').get((req, res) => {
+SubjectRouter.route('/add/id/:subjectId/course').post((req, res) => {
   Subject.findOneAndUpdate({ 'subjectId': req.params.subjectId }, { '$push': { 'courses': req.body.courseData } }).then((result) => {
     if (result.value) {
       res.send(true)
@@ -168,7 +184,7 @@ SubjectRouter.route('/find/course/with/year/:year/semester/:semester/id/:subject
 })
 
 SubjectRouter.route('/findcurrent').get((req, res) => {
-  Subject.methods.getYearAndTerm.then((NowCurrent) => {
+  GlobalData.findOne().then((NowCurrent) => {
     Subject.find({ 'courses': { $elemMatch: { school_year: NowCurrent.currentStudyYear, semester: NowCurrent.currentStudyTerm } } }).then((data) => {
       for (var i = 0; i < data.length; i++) {
         for (var j = 0; j < data[i].courses.length; j++) {
@@ -186,7 +202,7 @@ SubjectRouter.route('/findcurrent').get((req, res) => {
 })
 
 SubjectRouter.route('/checkcurrent/id/:subjectId').get((req, res) => {
-  Subject.methods.getYearAndTerm.then((NowCurrent) => {
+  GlobalData.findOne().then((NowCurrent) => {
     Subject.findOne({ 'subjectId': req.params.subjectId, 'courses': { school_year: NowCurrent.currentStudyYear, semester: NowCurrent.currentStudyTerm } }).then((data) => {
       if (!data) {
         res.send(false)
@@ -223,7 +239,7 @@ SubjectRouter.route('/find/nameteacher/with/id/:subjectId/regcourse').get((req, 
   })
 })
 
-SubjectRouter.route('/remove/course/id/:subjectId/courseId/:courseId').get((req, res) => {
+SubjectRouter.route('/remove/course/id/:subjectId/courseId/:courseId').post((req, res) => {
   Subject.updateMany({ subjectId: req.params.subjectId }, { $pull: { courses: { courseId: Number.parseInt(req.params.courseId) } } }).then((data) => {
     User.updateMany({ '$or': [{ typeOfUser: 'professor' }, { typeOfUser: 'student' }] }, { $pull: { RegisteredCourse: { subjectId: req.params.subjectId } } }).then((data) => {
       res.send(true)
