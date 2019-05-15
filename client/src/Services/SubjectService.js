@@ -1,13 +1,14 @@
 import axios from 'axios'
 class SubjectService {
+  // serve done
   getAllSubject () {
     return new Promise((resolve, reject) => {
-      axios.get('/subjects').then((result) => {
+      axios.get('/subject').then((result) => {
         resolve(result.data)
       })
     })
   }
-
+  // serve done
   addSubject (subjectData) {
     return new Promise((resolve, reject) => {
       axios.post(`/subject/add`, { 'subjectData': subjectData }).then((result) => {
@@ -15,15 +16,15 @@ class SubjectService {
       })
     })
   }
-
+  // serve done
   searchAllSubjectBySubjectIdOrSubjectName (subjid, subjname) {
-    console.log('on client => ', subjid, subjname)
     return new Promise((resolve, reject) => {
-      var url = '/subjects'
-      if (subjid.length === 0 && subjname.trim().length > 0) {
-        url = `/subjects/nm_${subjname}` // search by specified only name
-      } else if (subjid.length > 0 && subjname.trim().length === 0) {
-        url = `/subjects/id_${subjid}` // search by specified only id
+      var url = '/subject'
+      
+      if (subjid.length === 0 && subjname.trim.length > 0) {
+        url = `/subject/find/name/${subjname}` // search 'more one' by specified only name
+      } else if (subjid.length > 0 && subjname.trim.length === 0) {
+        url = `/subject/find/id/${subjid}` // search 'more one' by specified only id
       }
       axios.get(url)
         .then((result) => {
@@ -31,10 +32,10 @@ class SubjectService {
         })
     })
   }
-
+  // serve done
   searchAllSubjectBySubjectId (subjid) {
     return new Promise((resolve, reject) => {
-      var url = `/subject/id_${subjid}`
+      var url = `${subjid.length > 0 ? `/subject/find/id/${subjid}` : `/subject`}` // search 'one' by specified id
       axios.get(url)
         .then((result) => {
           resolve(result.data)
@@ -44,7 +45,7 @@ class SubjectService {
 
   getAllCourseByThisSubject (subjname) {
     return new Promise((resolve, reject) => {
-      var url = `/subject/${subjname}/courses/`
+      var url = `/subject/findone/name/${subjname}`
       axios.get(url)
         .then((result) => {
           resolve(result.data)
@@ -54,7 +55,7 @@ class SubjectService {
 
   addCourseToThisSubject (subjid, courseData) {
     return new Promise((resolve, reject) => {
-      axios.post(`/subject/id_${subjid}/course/add`, { 'courseData': courseData }).then((result) => {
+      axios.post(`/subject/add/id/${subjid}/course`, { 'courseData': courseData }).then((result) => {
         resolve(result.data)
       })
     })

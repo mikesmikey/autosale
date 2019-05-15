@@ -25,7 +25,6 @@ class AddCourse extends Component {
       branchIndex: 1,
       faculties: [],
       subjects: [],
-      hasFound: true,
       currentYandT: []
     }
   }
@@ -73,15 +72,6 @@ class AddCourse extends Component {
 
     handleSearchButton () {
       this.subTable.loadDataBySubjectId(this.state.selectSubId)
-      SubjectService.searchAllSubjectBySubjectId(this.state.selectSubId).then((result) => {
-        if (this._isMounted) {
-          if (result.length === 2) {
-            this.setState({ hasFound: result[1].found })
-          } else {
-            this.setState({ hasFound: false })
-          }
-        }
-      })
     }
 
     handleInputChange (e) {
@@ -101,7 +91,7 @@ class AddCourse extends Component {
     }
 
     renderFacultyComponent () {
-      console.log(this.state.faculties)
+      // console.log(this.state.faculties)
       return this.state.faculties.map((item) => {
         return <option key={item.facultyId} value={item.facultyId}>{item.facultyName}</option>
       })
@@ -171,8 +161,9 @@ class AddCourse extends Component {
       // check null form
       if (!hasAssigned) {
         if (this.state.groupNum.length < 1 ||
-                this.state.studentNum.trim().length < 1 ||
-                !this.state.hasFound) {
+                this.state.studentNum.trim().length < 1
+                // comment: !this.state.hasFound
+        ) {
           hasNull = true
         }
       }
@@ -182,8 +173,6 @@ class AddCourse extends Component {
       } else if (hasAssigned) {
         alert('รหัสวิชานี้ได้ถูกเพิ่มไปแล้ว')
       } else {
-        alert('ok')
-
         // find max course id in this select subject
         var maxCourseId = 0
         for (let j in courses) {
@@ -217,8 +206,7 @@ class AddCourse extends Component {
         groupNum: '',
         selectSubId: '',
         facultyIndex: 1,
-        branchIndex: 1,
-        hasFound: true
+        branchIndex: 1
       })
       this.loadFacultyData()
       this.loadYearAndTerm()
@@ -283,7 +271,7 @@ class AddCourse extends Component {
                         id="userId"
                         name="selectSubId"
                         value={this.state.selectSubId}
-                        onChange={this.handleInputChange}
+                        onChange={this.handleInputChange.bind(this)}
                         onKeyPress={this.handleInputValidate.bind(this)} />
                     </div>
                     <div className="input-with-text">
@@ -297,11 +285,11 @@ class AddCourse extends Component {
                     </div>
                   </div>
 
-                  <div className={`columns input-div ${!this.state.hasFound ? '' : 'is-hiding'}`}>
-                    <div className="column is-2" style={{ color: 'red' }}>
-                      <label className="label">ไม่พบรายการ</label>
-                    </div>
-                  </div>
+                  {/* <div className={`columns input-div ${!this.state.hasFound ? '' : 'is-hiding'}`}>
+                                    <div className="column is-2" style={{ color: 'red' }}>
+                                        <label className="label">ไม่พบรายการ</label>
+                                    </div>
+                                </div> */}
 
                   <div className="columns input-div">
                     <Subject2Table
@@ -324,7 +312,7 @@ class AddCourse extends Component {
                           type="text"
                           id="groupNum"
                           name="groupNum"
-                          onChange={this.handleInputChange}
+                          onChange={this.handleInputChange.bind(this)}
                           value={this.state.groupNum}
                         >
                           <option value="0"></option>
@@ -346,7 +334,7 @@ class AddCourse extends Component {
                           id="studentNumId"
                           name="studentNum"
                           value={this.state.studentNum}
-                          onChange={this.handleInputChange}
+                          onChange={this.handleInputChange.bind(this)}
                           maxLength={3}
                           onKeyPress={this.handleInputValidate.bind(this)} />
                       </div>

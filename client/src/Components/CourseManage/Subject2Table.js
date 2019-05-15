@@ -22,6 +22,7 @@ class Subject2Table extends Component {
 
     componentDidMount () {
       this._isMounted = true
+      this.loadDataBySubjectId(this.props.selectSubId)
     }
 
     componentWillUnmount () {
@@ -51,7 +52,7 @@ class Subject2Table extends Component {
 
     loadDataIntoTable () {
       var returnData = []
-      for (var i = 0; i < this.state.data.length - 1; i++) {
+      for (var i = 0; i < this.state.data.length; i++) {
         returnData[i] = <SubjectTableItem
           key={i}
           // selectItem={(e) => { this.selectItem(e) }}
