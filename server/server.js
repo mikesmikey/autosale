@@ -5,6 +5,8 @@ const mongoose = require('mongoose')
 const UserRouter = require('./router/UserRouter')
 const SubjectRouter = require('./router/SubjectRouter')
 const ExamRouter = require('./router/ExamRouter')
+const FacultyRouter = require('./router/FacultyRouter')
+const GlobalDataRouter = require('./router/GlobalDataRouter')
 
 const app = express()
 const port = 5000
@@ -29,6 +31,8 @@ db.once('open', function () {
 app.use('/user', UserRouter)
 app.use('/exam', ExamRouter)
 app.use('/subject', SubjectRouter)
+app.use('/faculty', FacultyRouter)
+app.use('yearAndTerm', GlobalDataRouter)
 
 const WebDAO = require('./WebDAO')
 const WebService = require('./WebService')
@@ -190,15 +194,15 @@ app.post('/login', (req, res) => {
 //   })
 // })
 
-app.get('/facultys', (req, res) => {
-  WebDAOObj.getAllFaculty().then((data) => {
-    if (data != null) {
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
+// app.get('/facultys', (req, res) => {
+//   WebDAOObj.getAllFaculty().then((data) => {
+//     if (data != null) {
+//       res.json(data)
+//     } else {
+//       res.sendStatus(404)
+//     }
+//   })
+// })
 
 // app.post('/user/addmany', (req, res) => {
 //   WebDAOObj.addManyStudents(req.body.usersData).then((pass) => {
@@ -284,25 +288,25 @@ app.post('/token', (req, res) => {
   })
 })
 
-app.get('/yearAndTerm', (req, res) => {
-  WebDAOObj.getYearAndTerm().then(data => {
-    if (data != null) {
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
+// app.get('/yearAndTerm', (req, res) => {
+//   WebDAOObj.getYearAndTerm().then(data => {
+//     if (data != null) {
+//       res.json(data)
+//     } else {
+//       res.sendStatus(404)
+//     }
+//   })
+// })
 
-app.get('/yearAndTerms', (req, res) => {
-  WebDAOObj.getAllYearAndTerm().then(data => {
-    if (data != null) {
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
+// app.get('/yearAndTerms', (req, res) => {
+//   WebDAOObj.getAllYearAndTerm().then(data => {
+//     if (data != null) {
+//       res.json(data)
+//     } else {
+//       res.sendStatus(404)
+//     }
+//   })
+// })
 
 // app.get('/subject', (req, res) => {
 //   WebDAOObj.getAllSubject().then((data) => {
@@ -370,11 +374,11 @@ app.post('/building/edit', (req, res) => {
   })
 })
 
-app.post('/yearAndTerm/edit', (req, res) => {
-  WebDAOObj.editYearAndTerm(req.body.globalData).then((pass) => {
-    res.send(pass)
-  })
-})
+// app.post('/yearAndTerm/edit', (req, res) => {
+//   WebDAOObj.editYearAndTerm(req.body.globalData).then((pass) => {
+//     res.send(pass)
+//   })
+// })
 
 // app.get('/courses/:year/:semester', (req, res) => {
 //   WebDAOObj.getAllCourseByYearAndSemester(req.params.year, req.params.semester).then(data => {
