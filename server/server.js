@@ -4,6 +4,7 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const UserRouter = require('./router/UserRouter')
 const ExamRouter = require('./router/ExamRouter')
+const AuthRouter = require('./router/AuthRouter')
 
 const app = express()
 const port = 5000
@@ -27,6 +28,7 @@ db.once('open', function () {
 
 app.use('/user', UserRouter)
 app.use('/exam', ExamRouter)
+app.use('/auth', AuthRouter)
 
 const WebDAO = require('./WebDAO')
 const WebService = require('./WebService')
@@ -158,11 +160,11 @@ app.get('/subjects/id_:subjid/:subjname', (req, res) => {
 //   })
 // })
 
-app.post('/login', (req, res) => {
-  WebServiceObj.loginAuth(req.body.loginInfo).then((pass) => {
-    res.send(pass)
-  })
-})
+// app.post('/login', (req, res) => {
+//   WebServiceObj.loginAuth(req.body.loginInfo).then((pass) => {
+//     res.send(pass)
+//   })
+// })
 
 // app.post('/user/remove/:username', (req, res) => {
 //   WebDAOObj.deleteUserByUsername(req.params.username).then((pass) => {
@@ -270,17 +272,17 @@ app.post('/subject/id_:subjid/course/add', (req, res) => {
   })
 })
 
-app.post('/token', (req, res) => {
-  WebServiceObj.verifyToken(req.body.token).then((verifyResult) => {
-    if (verifyResult) {
-      WebDAOObj.getUserByUsername(verifyResult.username).then((result) => {
-        res.send(result)
-      })
-    } else {
-      res.send(verifyResult)
-    }
-  })
-})
+// app.post('/token', (req, res) => {
+//   WebServiceObj.verifyToken(req.body.token).then((verifyResult) => {
+//     if (verifyResult) {
+//       WebDAOObj.getUserByUsername(verifyResult.username).then((result) => {
+//         res.send(result)
+//       })
+//     } else {
+//       res.send(verifyResult)
+//     }
+//   })
+// })
 
 app.get('/yearAndTerm', (req, res) => {
   WebDAOObj.getYearAndTerm().then(data => {

@@ -5,10 +5,12 @@
   "main": "server.js",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "chai": "^4.2.0",
     "concurrently": "^4.1.0",
     "express": "^4.16.4",
     "express-prettify": "^0.1.1",
     "jsonwebtoken": "^8.5.1",
+    "mocha": "^6.1.4",
     "mongodb": "^3.1.13",
     "mongoose": "^5.5.7"
   },
@@ -21,7 +23,8 @@
     "eslint-plugin-standard": "^4.0.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npm run test-server",
+    "test-server": "nodemon --exec 'mocha -R min'",
     "start": "node server.js",
     "client": "cd .. && cd client && npm start",
     "server": "nodemon server.js",

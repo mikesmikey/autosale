@@ -57,7 +57,7 @@ class UserService {
 
   getUserByToken (token) {
     return new Promise((resolve, reject) => {
-      axios.post(`/token`, { 'token': token }).then((result) => {
+      axios.post(`/user/token`, { 'token': token }).then((result) => {
         resolve(result.data)
       })
     })

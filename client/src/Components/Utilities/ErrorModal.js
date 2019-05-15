@@ -24,7 +24,7 @@ class ErrorModal extends Component {
           <div className="box-title is-yentafo">
             Error!
           </div>
-          <div className="box-content">
+          <div className="box-content" style={{ textAlign: 'center' }}>
             <p>{this.state.error}</p>
             <div className="button is-yentafo" onClick={() => { this.modal.closeModal() }}>
             ตกลง

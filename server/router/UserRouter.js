@@ -3,6 +3,8 @@ const UserRouter = express.Router()
 // const app = express()
 const User = require('../dao/UserDAO')
 
+const AuthService = require('../service/AuthService')
+
 UserRouter.route('/').get((req, res) => {
   User.find().select({ '_id': 0, 'password': 0 }).then(function (users) {
     if (users) {
@@ -124,4 +126,17 @@ UserRouter.route('/addmany').post((req, res) => {
   })
 })
 
+UserRouter.route('/token').post((req, res) => {
+  const service = new AuthService()
+  service.verifyToken(req.body.token).then((verifyResult) => {
+    if (verifyResult) {
+      const user = new User()
+      user.getUserByUsername(verifyResult.username).then((result) => {
+        res.send(result)
+      })
+    } else {
+      res.send(verifyResult)
+    }
+  })
+})
 module.exports = UserRouter

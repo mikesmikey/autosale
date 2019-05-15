@@ -1,5 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { Component } from 'react'
+import ErrorModal from '../Utilities/ErrorModal'
+import InfoModal from '../Utilities/InfoModal'
 
 import '../../StyleSheets/loginScreen.css'
 
@@ -8,6 +10,13 @@ import loginImage from '../../Resources/imgs/login_image.svg'
 import AuthService from '../../Services/AuthService'
 
 const AuthServiceObj = new AuthService()
+
+const ERROR_TEXT_TABLE = {
+  'username-blank': 'กรุณากรอก Username!',
+  'password-blank': 'กรุณากรอก Password!',
+  'wrong-username': 'Username ผิด!',
+  'wrong-password': 'Password ผิด!'
+}
 
 class LoginScreen extends Component {
   constructor (props) {
@@ -32,13 +41,13 @@ class LoginScreen extends Component {
       password: this.state.password
     }
     AuthServiceObj.checkAuth(loginData).then((result) => {
-      if (result) {
-        AuthServiceObj.login(() => { this.props.setUserAppAuth(true, result.userData) }, result)
-      } else {
-        alert('ข้อมูลผู้ใช้ไม่ถูกต้อง โปรดระบุใหม่')
+      if (result.error) {
+        this.errorModal.showModal(ERROR_TEXT_TABLE[result.error])
         this.setState({
           isLoading: false
         })
+      } else {
+        AuthServiceObj.login(() => { this.props.setUserAppAuth(true, result.userData) }, result)
       }
     })
   }
@@ -79,6 +88,12 @@ class LoginScreen extends Component {
             </div>
           </div>
         </div>
+        <ErrorModal
+          ref={instance => { this.errorModal = instance }}
+        />
+        <InfoModal
+          ref={instance => { this.infoModal = instance }}
+        />
       </div>
     )
   }

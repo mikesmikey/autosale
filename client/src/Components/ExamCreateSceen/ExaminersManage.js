@@ -118,7 +118,7 @@ class ExaminersManage extends Component {
           } else if (startTimeToString.length === 5) {
             startTimeToString = startTimeToString.charAt(0) + startTimeToString.charAt(1) + ':' + startTimeToString.charAt(3) + startTimeToString.charAt(4)
           }
-  
+
           if (finishTimeToString.length === 1) {
             finishTimeToString = '0' + finishTimeToString + ':00'
           } else if (finishTimeToString.length === 2) {
@@ -134,7 +134,7 @@ class ExaminersManage extends Component {
           } else if (finishTimeToString.length === 5) {
             finishTimeToString = finishTimeToString.charAt(0) + finishTimeToString.charAt(1) + ':' + finishTimeToString.charAt(3) + finishTimeToString.charAt(4)
           }
-  
+
           var setTime = startTimeToString + '-' + finishTimeToString
           var select = document.getElementById('TimeExamgSelect')
           var el = document.createElement('option')
