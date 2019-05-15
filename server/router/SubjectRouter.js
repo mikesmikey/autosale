@@ -67,6 +67,7 @@ SubjectRouter.route('/add').post((req, res) => {
 // [================= AddCourse =================]
 
 SubjectRouter.route('/findone/id/:subjectId').get((req, res) => {
+  console.log('in')
   Subject.findOne({ 'subjectId': req.params.subjectId }).limit(16).select({ '_id': 0 }).then(function (subjects) {
     if (subjects) {
       res.json(subjects)
