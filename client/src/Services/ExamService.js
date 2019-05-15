@@ -53,7 +53,8 @@ class ExamService {
 
   deleteExamRoom (objId, roomId, startTime) {
     return new Promise((resolve, reject) => {
-      axios.post(`/examRoom/remove/${objId}/${roomId}/${startTime}`).then((result) => {
+      axios.post(`/exam/room/delete/${objId}/${roomId}/${startTime}`).then((result) => {
+        console.log(result)
         resolve(result.data)
       })
     })

@@ -529,11 +529,11 @@ app.post('/course/delete/:a/:b', (req, res) => {
 //   })
 // })
 
-app.post('/examRoom/remove/:objId/:roomId/:startTime', (req, res) => {
-  WebDAOObj.deleteExamRoom(req.params.objId, req.params.roomId, req.params.startTime).then((pass) => {
-    res.send(pass)
-  })
-})
+// app.post('/examRoom/remove/:objId/:roomId/:startTime', (req, res) => {
+//   WebDAOObj.deleteExamRoom(req.params.objId, req.params.roomId, req.params.startTime).then((pass) => {
+//     res.send(pass)
+//   })
+// })
 
 // app.get('/exam/:objId', (req, res) => {
 //   WebDAOObj.getExamByObjId(req.params.objId).then((data) => {
