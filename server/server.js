@@ -32,7 +32,7 @@ app.use('/user', UserRouter)
 app.use('/exam', ExamRouter)
 app.use('/subject', SubjectRouter)
 app.use('/faculty', FacultyRouter)
-app.use('yearAndTerm', GlobalDataRouter)
+app.use('/yearAndTerm', GlobalDataRouter)
 
 const WebDAO = require('./WebDAO')
 const WebService = require('./WebService')
