@@ -42,4 +42,12 @@ const User = new Schema({
   collection: 'User'
 })
 
+User.methods.getAllStudentByRegisteredCourse = function (subjectId, courseId, callback) {
+  const query = { 'typeOfUser': 'student',
+    'courses.subjectId': subjectId,
+    'courses.courseId': courseId
+  }
+  return this.model('User').find(query, callback).select({ '_id': 0, 'password': 0 })
+}
+
 module.exports = mongoose.model('User', User)

@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
 
 import React, { Component } from 'react'
-import ClientService from '../Utilities/ClientService'
+import CExaminerService from '../../Services/ExaminerService'
 
-const ServiceObj = new ClientService()
+const ExaminerService = new CExaminerService()
 
 class courseTable extends Component {
   _isMounted = false;
@@ -39,7 +39,7 @@ class courseTable extends Component {
   }
 
   loadAllDataExaminer (username) {
-    ServiceObj.getDataUserExamnier(username).then((examinerData) => {
+    ExaminerService.getDataUserExamnier(username).then((examinerData) => {
       if (this._isMounted) {
         this.setState({ DataUser: examinerData })
       }
@@ -48,8 +48,8 @@ class courseTable extends Component {
 
       if (examinerData.length !== 0) {
         for (var i = 0; i < examinerData[0].examList.length; i++) {
-          ServiceObj.getDataExam(examinerData[0].examList[i]).then((examData) => {
-            ServiceObj.checkSubjecetCurrent(examData[0].subjectId).then((check) => {
+          ExaminerService.getDataExam(examinerData[0].examList[i]).then((examData) => {
+            ExaminerService.checkSubjecetCurrent(examData[0].subjectId).then((check) => {
               if (check) {
                 var CopyData = this.state.data
                 CopyData.push(examData[0])
@@ -66,7 +66,7 @@ class courseTable extends Component {
     var DataObj = []
     if (this.state.data.length !== 0) {
       for (var i = 0; i < this.state.data.length; i++) {
-        var listRoom = ServiceObj.getNumberRoom(this.state.DataUser[0].username, this.state.data[i])
+        var listRoom = ExaminerService.getNumberRoom(this.state.DataUser[0].username, this.state.data[i])
         for (var j = 0; j < listRoom.length; j++) {
           DataObj[i] = <ExaminerTableItem
             key={i}

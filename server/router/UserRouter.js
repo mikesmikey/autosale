@@ -62,7 +62,7 @@ UserRouter.route('/:type/:username/:startPos/:limit').get((req, res) => {
   const username = req.params.username
   const startPos = req.params.startPos
   const limit = req.params.limit
-  const regex = new RegExp(`${username}`)
+  const regex = new RegExp(username)
   User.find({ 'username': regex, 'typeOfUser': type }).select({ '_id': 0, 'password': 0 }).skip(Number.parseInt(startPos)).limit(Number.parseInt(limit)).then((data) => {
     if (data) {
       res.json(data)

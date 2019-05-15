@@ -16,7 +16,7 @@ class UserService {
 
   getAllUserBySelectType (type, startPos, limit) {
     return new Promise((resolve, reject) => {
-      axios.get(`/users/type/${type}/${startPos || 0}/${limit || 0}`).then((result) => {
+      axios.get(`/user/type/${type}/${startPos || 0}/${limit || 0}`).then((result) => {
         resolve(result.data)
       })
     })
@@ -24,7 +24,7 @@ class UserService {
 
   searchAllUserByTypeAndUsername (type, userId, startPos, limit) {
     return new Promise((resolve, reject) => {
-      var url = `/users/${userId.length === 0 ? `type/${type}` : `${type}/${userId}`}/${startPos || 0}/${limit || 0}`
+      var url = `/user/${userId.length === 0 ? `type/${type}` : `${type}/${userId}`}/${startPos || 0}/${limit || 0}`
       axios.get(url).then((result) => {
         resolve(result.data)
       })
@@ -65,7 +65,7 @@ class UserService {
 
   countUserByTypeAndUsername (type, username) {
     return new Promise((resolve, reject) => {
-      var url = `/users/count/${username.length === 0 ? `${type}` : `${type}/${username}`}`
+      var url = `/user/count/${username.length === 0 ? `${type}` : `${type}/${username}`}`
       axios.get(url).then((result) => {
         resolve(result.data)
       })

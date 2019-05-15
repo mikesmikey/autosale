@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { Component } from 'react'
-import ClientService from '../Utilities/ClientService'
+import CExamService from '../../Services/ExamService'
 import ErrorModal from '../Utilities/ErrorModal'
 import InfoModal from '../Utilities/InfoModal'
 
@@ -10,7 +10,7 @@ import Exam from '../../Objects/Exam'
 
 import '../../StyleSheets/ExamAddSimpleData.css'
 
-const CServiceObj = new ClientService()
+const ExamService = new CExamService()
 
 class ExamAddSimpleData extends Component {
   constructor (props) {
@@ -63,6 +63,14 @@ class ExamAddSimpleData extends Component {
           examMaxScoreInput: this.props.selectedExam.maxScore
         })
       }
+    } else if (mode === 'create') {
+      let date = new Date(Date.now())
+      date.setHours(date.getHours() - (date.getTimezoneOffset() / 60))
+      this.setState({
+        examNameInput: '',
+        date: date,
+        examMaxScoreInput: ''
+      })
     }
     this.setState({
       mode: mode
@@ -114,7 +122,7 @@ class ExamAddSimpleData extends Component {
     this.setState({
       isLoading: true
     })
-    CServiceObj.createExam(newExam.getExamObjectdata()).then((result) => {
+    ExamService.createExam(newExam.getExamObjectdata()).then((result) => {
       if (result) {
         newExam._id = result
         this.props.insertMemExam(newExam)
@@ -139,7 +147,7 @@ class ExamAddSimpleData extends Component {
       this.setState({
         isLoading: true
       })
-      CServiceObj.updateExamData(this.props.selectedExam._id, newData).then((result) => {
+      ExamService.updateExamData(this.props.selectedExam._id, newData).then((result) => {
         if (result) {
           const updatedExam = Object.assign(this.props.selectedExam, newData)
           this.props.updateMemExam(updatedExam)
