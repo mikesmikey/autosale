@@ -348,16 +348,6 @@ app.get('/building', (req, res) => {
   })
 })
 
-app.get('/building/:building', (req, res) => {
-  WebDAOObj.getAllBuilding().then((data) => {
-    if (data != null) {
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
-
 app.get('/building/:buildingname/:room', (req, res) => {
   WebDAOObj.getAllBuildingByRoom(req.params.buildingname, req.params.room).then((data) => {
     if (data != null) {
