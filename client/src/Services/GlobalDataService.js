@@ -3,7 +3,7 @@ import GlobalData from '../Objects/GlobalData'
 class GlobalDataService {
     getYearAndTerm() {
         return new Promise((resolve, reject) => {
-            axios.get(`/yearAndTerm/findone`).then((result) => {
+            axios.get(`/yearAndTerm/findone`).then((result) => { //find current 
                 resolve(result.data)
             })
         })
@@ -11,7 +11,7 @@ class GlobalDataService {
 
     getAllYearAndTerm() {
         return new Promise((resolve, reject) => {
-            axios.get(`/yearAndTerm`).then((result) => {
+            axios.get(`/yearAndTerm`).then((result) => { //find all
                 resolve(result.data)
             })
         })
