@@ -40,7 +40,6 @@ class Subject2Table extends Component {
     loadDataBySubjectId(subIdInput) {
         SubjectService.searchAllSubjectBySubjectId(subIdInput).then((result) => {                  
             if (this._isMounted) {
-
                 this.setState({ data: result })
             }
         }) 
@@ -53,7 +52,7 @@ class Subject2Table extends Component {
     loadDataIntoTable () {
         var returnData = []
         for (var i = 0; i < this.state.data.length ; i++) {
-            this.state.data
+            
             returnData[i] = <SubjectTableItem
             key={i}
             // selectItem={(e) => { this.selectItem(e) }}
