@@ -1,4 +1,3 @@
-import ClientService from '../Components/Utilities/ClientService'
 
 class Exam {
   constructor (form) {
