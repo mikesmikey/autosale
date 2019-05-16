@@ -88,7 +88,7 @@ class StudentExcelPopup extends Component {
         alert('ไม่มีไฟล์ อัพโหลดมาใหม่')
       } else {
         readXlsxFile(this.state.source).then((rows) => {
-          console.log(rows[0].length)
+          // console.log(rows[0].length())
           if (rows.length >= 1) {
             if (rows[0][0] === 'รหัสนิสิต' &&
                         rows[0][1] === 'ชื่อ' &&
