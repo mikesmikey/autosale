@@ -563,15 +563,15 @@ app.post('/examRoom/remove/:objId/:roomId/:startTime', (req, res) => {
 //   })
 // })
 
-// app.get('/subbjec/current', (req, res) => {
-//   WebDAOObj.checkSubjectCurrent().then((data) => {
-//     if (data != null) {
-//       res.json(data)
-//     } else {
-//       res.sendStatus(404)
-//     }
-//   })
-// })
+app.get('/subbjec/current', (req, res) => {
+  WebDAOObj.checkSubjectCurrent().then((data) => {
+    if (data != null) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
 
 app.get('/room/id=:roomId', (req, res) => {
   WebDAOObj.getRoomByRoomId(req.params.roomId).then((data) => {
