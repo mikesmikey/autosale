@@ -33,9 +33,13 @@ class MainScreen extends Component {
         <MainNavBar
           setUserAppAuth={this.props.setUserAppAuth}
           username={this.props.user.firstName}
+
           handleHamburger={() => { this.mainMenuBar.handleHamburger() }}
         />
-        <MainMenuBar ref={instance => { this.mainMenuBar = instance }} />
+        <MainMenuBar
+          ref={instance => { this.mainMenuBar = instance }}
+          user={this.props.user}
+        />
         <div className="main-subcontent">
           <Route exact path="/" render={(props) =>
             <Home />
@@ -71,10 +75,10 @@ class MainScreen extends Component {
           } />
           <Route path="/examiner" render={(props) =>
             <Examiner
-              username={this.props.user.firstName}
+              username={this.props.user.username}
             />
           }/>
-           <Route path="/add_course" render={(props) =>
+          <Route path="/add_course" render={(props) =>
             <AddCourse />
           } />
           <Route path="/add_course_data" render={(props) =>

@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
 
 import React, { Component } from 'react'
-import ClientService from '../Utilities/ClientService'
+import CExaminerService from '../../Services/ExaminerService'
 
-const ServiceObj = new ClientService()
+const ExaminerService = new CExaminerService()
 
 class courseTable extends Component {
   _isMounted = false;
@@ -39,23 +39,27 @@ class courseTable extends Component {
   }
 
   loadAllDataExaminer (username) {
-    ServiceObj.getDataUserExamnier(username).then((examinerData) => {
+    ExaminerService.getDataUserExamnier(username).then((examinerData) => {
       if (this._isMounted) {
-        this.setState({ DataUser: examinerData })
+        if (examinerData !== null) {
+          this.setState({ DataUser: examinerData })
+        }
       }
-      console.log('examinerData')
-      console.log(examinerData)
+      // console.log('examinerData')
+      // console.log(examinerData.examList.length)
 
-      if (examinerData.length !== 0) {
-        for (var i = 0; i < examinerData[0].examList.length; i++) {
-          ServiceObj.getDataExam(examinerData[0].examList[i]).then((examData) => {
-            ServiceObj.checkSubjecetCurrent(examData[0].subjectId).then((check) => {
-              if (check) {
-                var CopyData = this.state.data
-                CopyData.push(examData[0])
-                this.setState({ data: CopyData })
-              }
-            })
+      if (examinerData !== null) {
+        for (var i = 0; i < examinerData.examList.length; i++) {
+          ExaminerService.getDataExam(examinerData.examList[i]).then((examData) => {
+            if (examData) {
+              ExaminerService.checkSubjecetCurrent(examData.subjectId).then((check) => {
+                if (check) {
+                  var CopyData = this.state.data
+                  CopyData.push(examData)
+                  this.setState({ data: CopyData })
+                }
+              })
+            }
           })
         }
         console.log(this.state.data)
@@ -66,7 +70,8 @@ class courseTable extends Component {
     var DataObj = []
     if (this.state.data.length !== 0) {
       for (var i = 0; i < this.state.data.length; i++) {
-        var listRoom = ServiceObj.getNumberRoom(this.state.DataUser[0].username, this.state.data[i])
+        console.log(this.state.DataUser)
+        var listRoom = ExaminerService.getNumberRoom(this.state.DataUser.username, this.state.data[i])
         for (var j = 0; j < listRoom.length; j++) {
           DataObj[i] = <ExaminerTableItem
             key={i}

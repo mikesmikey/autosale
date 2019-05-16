@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { Component } from 'react'
-import ClientService from '../Utilities/ClientService'
+import ClientService from '../../Services/UserService'
 
 // Objects
 import Student from '../../Objects/Student'
@@ -156,7 +156,7 @@ class UserTableItem extends Component {
 
   renderItemByType () {
     const userFaculty = this.props.facultys.find((faculty) => {
-      return faculty.facultyId === this.props.itemData.facultyId
+      return Number.parseInt(faculty.facultyId) === this.props.itemData.facultyId
     })
     return (
       this.props.facultys.length !== 0

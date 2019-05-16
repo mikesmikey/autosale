@@ -82,14 +82,7 @@ class ManageUserPopUp extends Component {
               <p>{this.state.subjectName}</p>
             </div>
           </div>
-          <div className="columns">
-            <div className="column is-1">
-              <p>ชื่อครู</p>
-            </div>
-            <div className='column'>
-              {this.loadNameTeacher()}
-            </div>
-          </div>
+         
           <div className="columns">
             <div className='column is-4'>
               <p>จำนวนกลุ่ม</p>

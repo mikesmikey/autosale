@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import ClientService from '../Utilities/ClientService'
+import CFacultyService from '../../Services/FacultyService'
 
 // Components
 import Modal from '../Utilities/Modal'
@@ -8,7 +8,7 @@ import '../../StyleSheets/addNewSubject.css'
 import AddSubjectPopup from './AddSubjectPopup'
 import SubjectTable from './SubjectTable'
 
-const CServiceObj = new ClientService()
+const FacultyService = new CFacultyService()
 class AddSubject extends Component {
     
     constructor(props) {
@@ -31,7 +31,7 @@ class AddSubject extends Component {
     }
 
     loadFacultyData() {
-        CServiceObj.getAllFaculty().then((result) => {
+        FacultyService.getAllFaculty().then((result) => {
             if (this._isMounted) {
                 this.setState({
                     faculties: result

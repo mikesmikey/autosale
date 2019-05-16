@@ -2,9 +2,11 @@
 // eslint-disable-next-line no-unused-vars
 import React, { Component } from 'react'
 
-import ClientService from '../Utilities/ClientService'
+import CSubjectService from '../../Services/SubjectService'
+import CExamService from '../../Services/ExamService'
 
-const ServiceObj = new ClientService()
+const SubjectService = new CSubjectService()
+const ExamService = new CExamService()
 
 class ScoreTable extends Component {
   _isMounted = false;
@@ -82,14 +84,14 @@ class ScoreTable extends Component {
   }
 
   loadDataBySubjectID (SubjectId, username) {
-    ServiceObj.getAllExamBySubjectId(SubjectId, username).then((usersData) => {
+    ExamService.getAllExamBySubjectId(SubjectId, username).then((usersData) => {
       if (this._isMounted) {
         this.props.setDataLoadingStatus(false)
         this.setState({ data: usersData })
         // console.log(this.state.data)
       }
     })
-    ServiceObj.getAllSubject().then((SubjectData) => {
+    SubjectService.getAllSubject().then((SubjectData) => {
       this.setState({ subjectNameArray: SubjectData })
     })
   }

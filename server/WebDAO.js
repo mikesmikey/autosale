@@ -1,6 +1,5 @@
 /* eslint-disable no-new-object */
-/* eslint
-disable handle-callback-err */
+/* eslint-disable handle-callback-err */
 const mongoClient = require('mongodb').MongoClient
 const ObjectId = require('mongodb').ObjectID
 const url = 'mongodb+srv://jeff:jeff123@cluster0-mumpe.mongodb.net/test?retryWrites=true'
@@ -341,7 +340,7 @@ class WebDAO {
       mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
         if (_err) { resolve(null) }
         const db = client.db(dbName)
-        db.collection('Building').find({}).project({ '_id': 0, 'password': 0 }).toArray((err, data) => {
+        db.collection('Building').find({}).toArray((err, data) => {
           if (err) { throw err }
           client.close()
           return resolve(data)
@@ -543,7 +542,7 @@ class WebDAO {
 
   getAllSubjectBySubjectName (subjname) {
     return new Promise((resolve, reject) => {
-      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
         const db = client.db(dbName)
         const regex = new RegExp(`${subjname}`)
         db.collection('Subject').find({ 'subjectName': regex }).limit(16).project({ '_id': 0 }).toArray((err, data) => {
@@ -558,7 +557,7 @@ class WebDAO {
 
   getAllSubjectBySubjectIdMoreOne (subjid) {
     return new Promise((resolve, reject) => {
-      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
         const db = client.db(dbName)
         const regex = new RegExp(`${subjid}`)
         db.collection('Subject').find({ 'subjectId': regex }).limit(16).project({ '_id': 0 }).toArray((err, data) => {
@@ -573,7 +572,7 @@ class WebDAO {
 
   getAllSubjectBySubjectId (subjid) {
     return new Promise((resolve, reject) => {
-      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
         const db = client.db(dbName)
         db.collection('Subject').find({ '$or': [{ 'subjectId': subjid }] }).limit(16).project({ '_id': 0 }).toArray((err, data) => {
           if (err) { throw err }
@@ -587,7 +586,7 @@ class WebDAO {
 
   getAllSubject () {
     return new Promise((resolve, reject) => {
-      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
         const db = client.db(dbName)
         db.collection('Subject').find({}).project({ '_id': 0 }).toArray((err, data) => {
           if (err) { throw err }
@@ -601,7 +600,7 @@ class WebDAO {
 
   insertSubject (subject) {
     return new Promise((resolve, reject) => {
-      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
         const db = client.db(dbName)
         db.collection('Subject').findOne({ '$or': [{ 'subjectId': subject.subjectId }, { 'subjectName': subject.subjectName }] }, (err, data) => {
           if (err) { throw err }
@@ -616,14 +615,13 @@ class WebDAO {
             return resolve(false)
           }
         })
-        client.close()
       })
     })
   }
 
   getAllCourseByThisSubject (subjname) {
     return new Promise((resolve, reject) => {
-      mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
+      mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
         const db = client.db(dbName)
         db.collection('Subject').find({}).project({ '_id': 0 }).toArray((err, data) => {
           if (err) { throw err }
@@ -638,6 +636,7 @@ class WebDAO {
   // coming with subject name, subject id
 
   // ******* [BUG?] NEED MATCH OPERATOR TO RETREVE ONLY MATCH OBJECT *******
+
   getAllCourseByYearAndSemester (year, semester) {
     return new Promise((resolve, reject) => {
       mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {

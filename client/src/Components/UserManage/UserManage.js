@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 // eslint-disable-next-line no-unused-vars
 import React, { Component } from 'react'
-import ClientService from '../Utilities/ClientService'
+import ClientService from '../../Services/UserService'
 
 // Components
 import Modal from '../Utilities/Modal'
@@ -9,7 +9,9 @@ import '../../StyleSheets/userManage.css'
 import ManageUserPopUp from './ManageUserPopup'
 import StudentExcelPopUp from './StudentExcelPopup'
 import UserTable from './UserTable'
+import FaultyServices from '../../Services/FacultyService'
 
+const ServicesFaulty = new FaultyServices()
 const ServiceObj = new ClientService()
 
 class UserManage extends Component {
@@ -99,7 +101,7 @@ class UserManage extends Component {
 
   loadFacultyData () {
     if (!this.state.isDataLoading) {
-      ServiceObj.getAllFaculty().then((data) => {
+      ServicesFaulty.getAllFaculty().then((data) => {
         if (this._isMounted) {
           this.setState({
             facultys: data

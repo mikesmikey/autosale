@@ -6,12 +6,12 @@ import ExaminersManage from './ExaminersManage'
 import ErrorModal from '../Utilities/ErrorModal'
 import InfoModal from '../Utilities/InfoModal'
 
-import ClientService from '../Utilities/ClientService'
+import CExamService from '../../Services/ExamService'
 import Exam from '../../Objects/Exam'
 
 import '../../StyleSheets/ExamManage.css'
 
-const CServiceObj = new ClientService()
+const ExamService = new CExamService()
 
 class ExamManageModal extends Component {
   _isMounted = false
@@ -88,7 +88,7 @@ class ExamManageModal extends Component {
       this.setState({
         isLoading: true
       })
-      CServiceObj.deleteExam(this.state.selectedExam._id).then((result) => {
+      ExamService.deleteExam(this.state.selectedExam._id).then((result) => {
         this.deleteMemExam(this.state.selectedExam)
         this.infoModal.showModal('ยกเลิกการสอบสำเร็จ')
         this.setState({
@@ -114,7 +114,7 @@ class ExamManageModal extends Component {
       exams: []
     })
 
-    CServiceObj.getAllExamBySubjectAndCourse(subjectId, courseId).then((result) => {
+    ExamService.getAllExamBySubjectAndCourse(subjectId, courseId).then((result) => {
       if (this._isMounted) {
         this.setState({
           exams: result,
@@ -193,7 +193,7 @@ class ExamManageModal extends Component {
       this.setState({
         isLoading: true
       })
-      CServiceObj.confirmExam(this.state.selectedExam._id).then((result) => {
+      ExamService.confirmExam(this.state.selectedExam._id).then((result) => {
         if (result.examConfirm) {
           this.infoModal.showModal('ยืนยันการสอบสำเร็จ')
           let newExam = this.state.selectedExam
@@ -218,7 +218,7 @@ class ExamManageModal extends Component {
       'validMaxScore': 'คะแนนเต็มสอบไม่ถูกต้อง',
       'courseExist': 'ไม่พบคอสเรียนในระบบ',
       'enoughSeat': 'ที่นั่งไม่เพียงพอ',
-      'enoughExaminer': 'ผู้คุมสอบไม่เพียงพอ'
+      'enoughExaminer': 'ผูมี้คุมสอบไม่เพียงพอครบทุกห้อง'
     }
     this.errorModal.showModal(errorTable[Object.keys(errorType)[0]])
   }

@@ -6,20 +6,33 @@ import {
 
 // import '../../StyleSheets/mainNavBar.css';
 import '../../StyleSheets/mainNavBar.css'
-import ClientService from '../Utilities/ClientService'
+import AuthService from '../../Services/AuthService'
+import GlobalDataService from '../../Services/GlobalDataService'
 
-const CServiceObj = new ClientService()
+const AuthServiceObj = new AuthService()
+const GlobalDataServiceObj = new GlobalDataService()
 
 class MainNavBar extends Component {
   constructor (props) {
     super(props)
 
     this.state = {
-      settingclick: false
+      settingclick: false,
+      currentYear: null,
+      currentSemester: null
     }
 
     this.handleDropDown = this.handleDropDown.bind(this)
     this.dropdownBlurHandle = this.dropdownBlurHandle.bind(this)
+  }
+
+  componentDidMount () {
+    GlobalDataServiceObj.getYearAndTerm().then(result => {
+      this.setState({
+        currentSemester: result.currentStudyTerm,
+        currentYear: result.currentStudyYear
+      })
+    })
   }
 
   dropdownBlurHandle (e) {
@@ -53,6 +66,9 @@ class MainNavBar extends Component {
               <span className="navbar-banner-text">Wua-Chon University</span>
             </div>
           </Link>
+          <div className="navbar-item" style={{ cursor: 'default' }}>
+            ปีการศึกษา : {this.state.currentYear} เทอม : {this.state.currentSemester}
+          </div>
           <button className="navbar-item user" onClick={this.handleDropDown}>
             <div className="user-container">
               <svg className="navbar-user-icon icon-user icon-size-5" ></svg>
@@ -61,7 +77,7 @@ class MainNavBar extends Component {
             </div>
             <div className={this.state.settingclick ? 'dropdown-items is-active' : 'dropdown-items user'}>
               <Link to='/about'>เกี่ยวกับ</Link>
-              <a onClick={() => { CServiceObj.logout(() => { this.props.setUserAppAuth(false) }) }}>ออกจากระบบ</a>
+              <a onClick={() => { AuthServiceObj.logout(() => { this.props.setUserAppAuth(false) }) }}>ออกจากระบบ</a>
               <a className="is-detail">เวอร์ชั่น 0.0.2</a>
             </div>
           </button>

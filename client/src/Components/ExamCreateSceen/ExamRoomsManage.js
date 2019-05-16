@@ -1,11 +1,16 @@
 /* eslint-disable no-unused-vars */
 import React, { Component } from 'react'
-import ClientService from '../Utilities/ClientService'
+import CCourseService from '../../Services/CourseService'
+import CExamService from '../../Services/ExamService'
+import ErrorModal from '../Utilities/ErrorModal'
+import InfoModal from '../Utilities/InfoModal'
 import Modal from '../Utilities/Modal'
 
 import '../../StyleSheets/ExamRoomsModal.css'
 
-const CServiceObj = new ClientService()
+const CourseService = new CCourseService()
+const ExamService = new CExamService()
+
 class ExamRoomsModal extends Component {
   _isMounted = false;
   constructor (props) {
@@ -48,7 +53,7 @@ class ExamRoomsModal extends Component {
     this.setState({
       isLoading: true
     })
-    CServiceObj.updateExamSeatType(this.props.selectedExam._id, this.state.seatLineUpType, this.state.seatOrderTypeRadio).then(() => {
+    ExamService.updateExamSeatType(this.props.selectedExam._id, this.state.seatLineUpType, this.state.seatOrderTypeRadio).then(() => {
       if (this._isMounted) {
         this.setState({
           isLoading: false
@@ -62,7 +67,7 @@ class ExamRoomsModal extends Component {
       this.setState({
         isLoading: true
       })
-      CServiceObj.updateExamSeatType(this.props.selectedExam._id, this.state.seatLineUpType, this.state.seatOrderTypeRadio).then((result) => {
+      ExamService.updateExamSeatType(this.props.selectedExam._id, this.state.seatLineUpType, this.state.seatOrderTypeRadio).then((result) => {
         this.setState({
           isLoading: false
         })
@@ -77,7 +82,7 @@ class ExamRoomsModal extends Component {
     this.setState({
       isLoading: true
     })
-    CServiceObj.getExamByObjId(this.props.selectedExam._id).then((data) => {
+    ExamService.getExamByObjId(this.props.selectedExam._id).then((data) => {
       this.checkSeat(data)
       this.setState({
         isLoading: false
@@ -94,7 +99,7 @@ class ExamRoomsModal extends Component {
       })
       if (data.rooms) {
         this.setState({
-          selectedExamRoom: data.rooms[0]
+          selectedExamRoom: ''
         })
       }
     }
@@ -223,6 +228,21 @@ class ExamRoomsModal extends Component {
     }
   }
 
+  deleteButtonHandle () {
+    if (this.state.selectedExamRoom !== undefined) {
+      ExamService.deleteExamRoom(this.props.selectedExam._id, this.state.selectedExamRoom.roomId, this.state.selectedExamRoom.startTime).then((result) => {
+        if (result) {
+          this.infoModal.showModal('ลบสำเร็จ')
+          this.reloadTable()
+        } else {
+          this.errorModal.showModal('กรุณาเลือกห้องสอบที่ต้องการลบ!')
+        }
+      })
+    } else {
+      this.errorModal.showModal('ลบไม่สำเร็จ!')
+    }
+  }
+
   render () {
     return (
       <div className="exam-rooms-modal box with-title">
@@ -261,16 +281,15 @@ class ExamRoomsModal extends Component {
           </div>
           <div className="exam-rooms-button-area">
             <button className="button is-3 is-oros is-round" style={{ width: '130px' }} onClick={() => { this.props.showModal('addRoomDetailModal') }}>เพิ่มห้อง</button>
-            <button className="button is-3 is-yentafo is-round" style={{ width: '130px' }} onClick={() => { this.deleteExamRoomPopUp.showModal() }}>ลบห้อง</button>
+            <button className="button is-3 is-yentafo is-round" style={{ width: '130px' }} onClick={this.deleteButtonHandle.bind(this)}>ลบห้อง</button>
             <button className="button is-3 is-banana  is-round" style={{ width: '130px' }} onClick={this.handleBackButton}>ย้อนกลับ</button>
           </div>
         </div>
-        <Modal ref={instance => { this.deleteExamRoomPopUp = instance }} content={
-          <DeleteExamRoomPopUp closeDeleteExamRoomPopUp={() => { this.deleteExamRoomPopUp.closeModal() }}
-            selectedExamRoom={this.state.selectedExamRoom}
-            exam={this.props.selectedExam}
-            reloadTable={() => { this.reloadTable() }}
-          />}
+        <ErrorModal
+          ref={instance => { this.errorModal = instance }}
+        />
+        <InfoModal
+          ref={instance => { this.infoModal = instance }}
         />
       </div>
     )
@@ -301,45 +320,6 @@ class ExamRoomsTableItem extends Component {
 
   render () {
     return (this.renderItem())
-  }
-}
-
-class DeleteExamRoomPopUp extends Component {
-  constructor (props) {
-    super(props)
-
-    this.state = {
-    }
-    this.deleteButtonHandle = this.deleteButtonHandle.bind(this)
-  }
-
-  deleteButtonHandle () {
-    console.log(this.props.exam._id, this.props.selectedExamRoom.roomId, this.props.selectedExamRoom.startTime)
-    CServiceObj.deleteExamRoom(this.props.exam._id, this.props.selectedExamRoom.roomId, this.props.selectedExamRoom.startTime).then((result) => {
-      if (result) {
-        alert('ลบสำเร็จ')
-        this.props.closeDeleteExamRoomPopUp()
-        this.props.reloadTable()
-      } else {
-        alert('ลบไม่สำเร็จ!')
-        this.props.closeDeleteExamRoomPopUp()
-      }
-    })
-  }
-
-  render () {
-    return (
-      <div className="box " style={{ width: '400px' }}>
-        <div className="columns">
-          <label className="label font-size-1" >ต้องการลบหรือไม่</label>
-        </div>
-        <br />
-        <div className="columns">
-          <button className="button is-oros is-round" onClick={this.deleteButtonHandle}>ตกลง</button>
-          <button className="button is-yentafo is-round" onClick={this.props.closeDeleteExamRoomPopUp}>ยกเลิก</button>
-        </div>
-      </div>
-    )
   }
 }
 
