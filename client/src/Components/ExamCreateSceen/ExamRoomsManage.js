@@ -1,11 +1,14 @@
 /* eslint-disable no-unused-vars */
 import React, { Component } from 'react'
-import ClientService from '../Utilities/ClientService'
+import CCourseService from '../../Services/CourseService'
+import CExamService from '../../Services/ExamService'
 import Modal from '../Utilities/Modal'
 
 import '../../StyleSheets/ExamRoomsModal.css'
 
-const CServiceObj = new ClientService()
+const CourseService = new CCourseService()
+const ExamService = new CExamService()
+
 class ExamRoomsModal extends Component {
   _isMounted = false;
   constructor (props) {
@@ -48,7 +51,7 @@ class ExamRoomsModal extends Component {
     this.setState({
       isLoading: true
     })
-    CServiceObj.updateExamSeatType(this.props.selectedExam._id, this.state.seatLineUpType, this.state.seatOrderTypeRadio).then(() => {
+    CourseService.updateExamSeatType(this.props.selectedExam._id, this.state.seatLineUpType, this.state.seatOrderTypeRadio).then(() => {
       if (this._isMounted) {
         this.setState({
           isLoading: false
@@ -62,7 +65,7 @@ class ExamRoomsModal extends Component {
       this.setState({
         isLoading: true
       })
-      CServiceObj.updateExamSeatType(this.props.selectedExam._id, this.state.seatLineUpType, this.state.seatOrderTypeRadio).then((result) => {
+      CourseService.updateExamSeatType(this.props.selectedExam._id, this.state.seatLineUpType, this.state.seatOrderTypeRadio).then((result) => {
         this.setState({
           isLoading: false
         })
@@ -77,7 +80,7 @@ class ExamRoomsModal extends Component {
     this.setState({
       isLoading: true
     })
-    CServiceObj.getExamByObjId(this.props.selectedExam._id).then((data) => {
+    ExamService.getExamByObjId(this.props.selectedExam._id).then((data) => {
       this.checkSeat(data)
       this.setState({
         isLoading: false
@@ -315,7 +318,7 @@ class DeleteExamRoomPopUp extends Component {
 
   deleteButtonHandle () {
     console.log(this.props.exam._id, this.props.selectedExamRoom.roomId, this.props.selectedExamRoom.startTime)
-    CServiceObj.deleteExamRoom(this.props.exam._id, this.props.selectedExamRoom.roomId, this.props.selectedExamRoom.startTime).then((result) => {
+    ExamService.deleteExamRoom(this.props.exam._id, this.props.selectedExamRoom.roomId, this.props.selectedExamRoom.startTime).then((result) => {
       if (result) {
         alert('ลบสำเร็จ')
         this.props.closeDeleteExamRoomPopUp()

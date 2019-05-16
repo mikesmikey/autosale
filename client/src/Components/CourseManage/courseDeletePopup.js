@@ -3,10 +3,10 @@ import React, { Component } from 'react'
 
 import '../../StyleSheets/ExamScoreSceen.css'
 
-import ClientService from '../Utilities/ClientService'
+import CCourseService from '../../Services/CourseService'
 import '../../StyleSheets/RoomTable.css'
 
-const ServiceObj = new ClientService()
+const CourseService = new CCourseService()
 
 // eslint-disable-next-line react/require-render-return
 class DeleteRoomPopup extends Component {
@@ -34,7 +34,7 @@ class DeleteRoomPopup extends Component {
 
   deleteButtonHandle () {
     if (this.props.selectedCourse.courseId !== '' && this.props.selectedCourse.subjectNumber !== '') {
-      ServiceObj.deleteCourse(this.props.selectedCourse.subjectNumber, this.props.selectedCourse.courseId).then((data) => {
+      CourseService.deleteCourse(this.props.selectedCourse.subjectNumber, this.props.selectedCourse.courseId).then((data) => {
       // eslint-disable-next-line no-constant-condition
         if (data) {
           var a = this.props.deleteItemByName(this.props.selectedCourse.subjectName)
