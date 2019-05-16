@@ -5,6 +5,7 @@ const mongoose = require('mongoose')
 const UserRouter = require('./router/UserRouter')
 const SubjectRouter = require('./router/SubjectRouter')
 const ExamRouter = require('./router/ExamRouter')
+const AuthRouter = require('./router/AuthRouter')
 const FacultyRouter = require('./router/FacultyRouter')
 const GlobalDataRouter = require('./router/GlobalDataRouter')
 
@@ -17,7 +18,7 @@ app.use(expPretty({ query: 'pretty' }))
 // app.use(cors())
 // disable cors due to the server will not using cross origin feature.
 
-const dbname = 'ooad_kob'
+var dbname = 'ooad_kob'
 mongoose.Promise = global.Promise
 mongoose.connect(`mongodb+srv://jeff:jeff123@cluster0-mumpe.mongodb.net/${dbname}?retryWrites=true`, { useNewUrlParser: true })
 
@@ -30,15 +31,14 @@ db.once('open', function () {
 
 app.use('/user', UserRouter)
 app.use('/exam', ExamRouter)
+app.use('/auth', AuthRouter)
 app.use('/subject', SubjectRouter)
 app.use('/faculty', FacultyRouter)
 app.use('/yearAndTerm', GlobalDataRouter)
 
 const WebDAO = require('./WebDAO')
-const WebService = require('./WebService')
 
 const WebDAOObj = new WebDAO()
-const WebServiceObj = new WebService()
 
 // app.get('/users', (req, res) => {
 //   WebDAOObj.getAllUser().then((data) => {
@@ -164,11 +164,11 @@ const WebServiceObj = new WebService()
 //   })
 // })
 
-app.post('/login', (req, res) => {
-  WebServiceObj.loginAuth(req.body.loginInfo).then((pass) => {
-    res.send(pass)
-  })
-})
+// app.post('/login', (req, res) => {
+//   WebServiceObj.loginAuth(req.body.loginInfo).then((pass) => {
+//     res.send(pass)
+//   })
+// })
 
 // app.post('/user/remove/:username', (req, res) => {
 //   WebDAOObj.deleteUserByUsername(req.params.username).then((pass) => {
@@ -276,17 +276,17 @@ app.post('/login', (req, res) => {
 //   })
 // })
 
-app.post('/token', (req, res) => {
-  WebServiceObj.verifyToken(req.body.token).then((verifyResult) => {
-    if (verifyResult) {
-      WebDAOObj.getUserByUsername(verifyResult.username).then((result) => {
-        res.send(result)
-      })
-    } else {
-      res.send(verifyResult)
-    }
-  })
-})
+// app.post('/token', (req, res) => {
+//   WebServiceObj.verifyToken(req.body.token).then((verifyResult) => {
+//     if (verifyResult) {
+//       WebDAOObj.getUserByUsername(verifyResult.username).then((result) => {
+//         res.send(result)
+//       })
+//     } else {
+//       res.send(verifyResult)
+//     }
+//   })
+// })
 
 // app.get('/yearAndTerm', (req, res) => {
 //   WebDAOObj.getYearAndTerm().then(data => {
@@ -397,11 +397,11 @@ app.get('/getDataExam/:ObjectId', (req, res) => {
     }
   })
 })
-// app.get('/checkSubjectCurrent/:subjectId', (req, res) => {
-//   WebDAOObj.checkSubjectCurrent(req.params.subjectId).then(data => {
-//     res.json(data)
-//   })
-// })
+app.get('/subject/current/:subjectId', (req, res) => {
+  WebDAOObj.checkSubjectCurrent(req.params.subjectId).then(data => {
+    res.json(data)
+  })
+})
 
 // app.get('/courses/year=:year/semester=:semester/subject=:subjectId/start=:startPos/limit=:limit', (req, res) => {
 //   let params = req.params
@@ -514,11 +514,11 @@ app.get('/building/:short_name', (req, res) => {
 //   })
 // })
 
-app.post('/examRoom/remove/:objId/:roomId/:startTime', (req, res) => {
-  WebDAOObj.deleteExamRoom(req.params.objId, req.params.roomId, req.params.startTime).then((pass) => {
-    res.send(pass)
-  })
-})
+// app.post('/examRoom/remove/:objId/:roomId/:startTime', (req, res) => {
+//   WebDAOObj.deleteExamRoom(req.params.objId, req.params.roomId, req.params.startTime).then((pass) => {
+//     res.send(pass)
+//   })
+// })
 
 // app.get('/exam/:objId', (req, res) => {
 //   WebDAOObj.getExamByObjId(req.params.objId).then((data) => {
@@ -587,3 +587,5 @@ app.get('/room/id=:roomId', (req, res) => {
 app.listen(port, () => {
   console.log(`App listening on ${port}`)
 })
+
+module.exports = app

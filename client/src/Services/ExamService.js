@@ -53,7 +53,8 @@ class ExamService {
 
   deleteExamRoom (objId, roomId, startTime) {
     return new Promise((resolve, reject) => {
-      axios.post(`/examRoom/remove/${objId}/${roomId}/${startTime}`).then((result) => {
+      axios.post(`/exam/room/delete/${objId}/${roomId}/${startTime}`).then((result) => {
+        console.log(result)
         resolve(result.data)
       })
     })
@@ -67,7 +68,7 @@ class ExamService {
     })
   }
 
-  updateExamSeatType(objId, seatLineUpType, seatOrderType) {
+  updateExamSeatType (objId, seatLineUpType, seatOrderType) {
     return new Promise((resolve) => {
       axios.post(`/exam/seatType/update/${objId}/${seatLineUpType}/${seatOrderType}`).then((result) => {
         resolve(result.data)

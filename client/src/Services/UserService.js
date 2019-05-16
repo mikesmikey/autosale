@@ -1,4 +1,5 @@
 import axios from 'axios'
+import User from '../Objects/User'
 import Student from '../Objects/Student'
 import Professor from '../Objects/Professor'
 import Staff from '../Objects/Staff'
@@ -10,8 +11,9 @@ class UserService {
 
   createUserObjectByType (userData) {
     if (userData.typeOfUser === 'student') return new Student(userData)
-    if (userData.typeOfUser === 'professor') return new Professor(userData)
-    if (userData.typeOfUser === 'staff') return new Staff(userData)
+    else if (userData.typeOfUser === 'professor') return new Professor(userData)
+    else if (userData.typeOfUser === 'staff') return new Staff(userData)
+    else return new User(userData)
   }
 
   getAllUserBySelectType (type, startPos, limit) {
@@ -57,7 +59,7 @@ class UserService {
 
   getUserByToken (token) {
     return new Promise((resolve, reject) => {
-      axios.post(`/token`, { 'token': token }).then((result) => {
+      axios.post(`/user/token`, { 'token': token }).then((result) => {
         resolve(result.data)
       })
     })

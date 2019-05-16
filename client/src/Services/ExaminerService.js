@@ -9,7 +9,8 @@ class ExaminerService {
   }
   checkSubjecetCurrent (subjectId) {
     return new Promise((resolve, reject) => {
-      axios.get(`/checkSubjectCurrent/${subjectId}`).then((result) => {
+      axios.get(`/subject/current/${subjectId}`).then((result) => {
+        console.log(result.data)
         resolve(result.data)
       })
     })

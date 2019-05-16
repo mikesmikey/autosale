@@ -119,6 +119,18 @@ ExamRouter.route('/room/update').post((req, res) => {
   })
 })
 
+ExamRouter.route('/room/delete/:objId/:roomId/:startTime').post((req, res) => {
+  const findQuery = { '_id': new ObjectId(req.params.objId), 'rooms': { '$elemMatch': { 'roomId': req.params.roomId, 'startTime': Number.parseInt(req.params.startTime) } } }
+  const removeRoomQuery = { $pull: { 'rooms': { 'roomId': req.params.roomId, 'startTime': Number.parseInt(req.params.startTime) } } }
+  Exam.findByIdAndUpdate(findQuery, removeRoomQuery, (_err, result) => {
+    if (result) {
+      res.send(true)
+    } else {
+      res.send(false)
+    }
+  })
+})
+
 ExamRouter.route('/objectid=:objectid').get((req, res) => {
   var exam = new Exam()
   exam.getExamByObjId(req.params.objectid, (err, exam) => {

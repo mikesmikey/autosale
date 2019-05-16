@@ -218,7 +218,7 @@ class ExamManageModal extends Component {
       'validMaxScore': 'คะแนนเต็มสอบไม่ถูกต้อง',
       'courseExist': 'ไม่พบคอสเรียนในระบบ',
       'enoughSeat': 'ที่นั่งไม่เพียงพอ',
-      'enoughExaminer': 'ผู้คุมสอบไม่เพียงพอ'
+      'enoughExaminer': 'ผูมี้คุมสอบไม่เพียงพอครบทุกห้อง'
     }
     this.errorModal.showModal(errorTable[Object.keys(errorType)[0]])
   }

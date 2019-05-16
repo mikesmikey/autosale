@@ -11,7 +11,7 @@ const GlobalData = require('../dao/GlobalDataDAO')
 // route done
 SubjectRouter.route('/').get((req, res) => {
   Subject.find().select({ '_id': 0 }).then(function (subjects) {
-    if (subjects) {
+    if (subjects.length > 0) {
       res.json(subjects)
     } else {
       res.sendStatus(404)
@@ -141,6 +141,7 @@ SubjectRouter.route('/find/courses/year/:year/semester/:semester').get((req, res
 SubjectRouter.route('/find/courses/year/:year/semester/:semester/id/:subjectId/:startPos/:limit').get((req, res) => {
   var subId = req.params.subjectId
   var lim = req.params.limit
+  var skipNum = req.params.startPos
 
   if (subId === 'none') {
     subId = ''
@@ -149,7 +150,7 @@ SubjectRouter.route('/find/courses/year/:year/semester/:semester/id/:subjectId/:
     lim = Number.MAX_SAFE_INTEGER
   }
 
-  const regex = new RegExp(`${req.params.subId}`)
+  const regex = new RegExp(`${subId}`)
   Subject.aggregate([
     {
       '$match': {
@@ -181,7 +182,7 @@ SubjectRouter.route('/find/courses/year/:year/semester/:semester/id/:subjectId/:
       }
     }
   ])
-    .skip(Number.parseInt(req.param.startPos)).limit(Number.parseInt(lim))
+    .skip(Number.parseInt(skipNum)).limit(Number.parseInt(lim))
     .then(function (subjects) {
       if (subjects) {
         res.json(subjects)
@@ -212,17 +213,17 @@ SubjectRouter.route('/findone').get((req, res) => {
   })
 })
 
-// SubjectRouter.route('findone/courses/id/:subjectId').get((req, res) => {
-//   GlobalData.findOne().then((NowCurrent) => {
-//     Subject.findOne({ 'subjectId': req.params.subjectId, 'courses': { school_year: NowCurrent.currentStudyYear, semester: NowCurrent.currentStudyTerm } }).then((data) => {
-//       if (!data) {
-//         res.send(false)
-//       } else {
-//         res.send(true)
-//       }
-//     })
-//   })
-// })
+SubjectRouter.route('/current/:subjectId').get((req, res) => {
+  GlobalData.findOne().then((NowCurrent) => {
+    Subject.findOne({ 'subjectId': req.params.subjectId, 'courses': { school_year: NowCurrent.currentStudyYear, semester: NowCurrent.currentStudyTerm } }, (_err, data) => {
+      if (!data) {
+        res.send(true)
+      } else {
+        res.send(false)
+      }
+    })
+  })
+})
 
 // getObjectCountRegisterCourseBySubjectId()
 SubjectRouter.route('/regCourse/find/id/:subjectId').get((req, res) => {

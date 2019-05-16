@@ -3,6 +3,8 @@ const UserRouter = express.Router()
 // const app = express()
 const User = require('../dao/UserDAO')
 
+const AuthService = require('../service/AuthService')
+
 UserRouter.route('/').get((req, res) => {
   User.find().select({ '_id': 0, 'password': 0 }).then(function (users) {
     if (users) {
@@ -46,8 +48,8 @@ UserRouter.route('/count/:type/:username').get((req, res) => {
 
 UserRouter.route('/type/:userType/:startPos/:limit').get((req, res) => {
   const type = req.params.userType
-  const startPos = req.params.startPos
-  const limit = req.params.limit
+  const startPos = req.params.startPos <= 0 ? 0 : req.params.startPos
+  const limit = req.params.limit <= 0 ? Number.MAX_SAFE_INTEGER : req.params.limit
   User.find({ 'typeOfUser': type }).select({ '_id': 0, 'password': 0 }).skip(Number.parseInt(startPos)).limit(Number.parseInt(limit)).then((data) => {
     if (data) {
       res.json(data)
@@ -60,8 +62,8 @@ UserRouter.route('/type/:userType/:startPos/:limit').get((req, res) => {
 UserRouter.route('/:type/:username/:startPos/:limit').get((req, res) => {
   const type = req.params.type
   const username = req.params.username
-  const startPos = req.params.startPos
-  const limit = req.params.limit
+  const startPos = req.params.startPos <= 0 ? 0 : req.params.startPos
+  const limit = req.params.limit <= 0 ? Number.MAX_SAFE_INTEGER : req.params.limit
   const regex = new RegExp(username)
   User.find({ 'username': regex, 'typeOfUser': type }).select({ '_id': 0, 'password': 0 }).skip(Number.parseInt(startPos)).limit(Number.parseInt(limit)).then((data) => {
     if (data) {
@@ -73,7 +75,7 @@ UserRouter.route('/:type/:username/:startPos/:limit').get((req, res) => {
 })
 
 UserRouter.route('/add').post((req, res) => {
-  const user = new User(req.body.registerForm)
+  const user = new User(req.body.userData)
   User.findOne({ 'username': user.username }).then((data) => {
     if (!data) {
       user.save()
@@ -94,9 +96,9 @@ UserRouter.route('/add').post((req, res) => {
 })
 
 UserRouter.route('/edit').post((req, res) => {
-  const newUserData = req.params.userData
+  const newUserData = req.body.userData
   User.findOneAndUpdate({ 'username': newUserData.username }, { '$set': newUserData }).then((result) => {
-    if (result.value) {
+    if (result) {
       res.send(true)
     } else {
       res.send(false)
@@ -124,4 +126,17 @@ UserRouter.route('/addmany').post((req, res) => {
   })
 })
 
+UserRouter.route('/token').post((req, res) => {
+  const service = new AuthService()
+  service.verifyToken(req.body.token).then((verifyResult) => {
+    if (verifyResult) {
+      const user = new User()
+      user.getUserByUsername(verifyResult.username).then((result) => {
+        res.send(result)
+      })
+    } else {
+      res.send(verifyResult)
+    }
+  })
+})
 module.exports = UserRouter

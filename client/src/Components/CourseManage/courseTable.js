@@ -52,7 +52,6 @@ class courseTable extends Component {
 
   loadAllDataCourse () {
     CourseService.getAllDataCoures().then((courseData) => {
-      console.log(courseData)
       if (this._isMounted) {
         this.setState({ data: courseData })
       }
@@ -95,7 +94,6 @@ class courseTable extends Component {
 
   loadDataIntoTable () {
     var DataObj = []
-    console.log(this.state.data)
     for (var i = 0; i < this.state.data.length; i++) {
       DataObj[i] = <CourseTableItem
         selectItem={(e) => { this.selectItem(e) }}
@@ -113,7 +111,6 @@ class courseTable extends Component {
       alert('กรุณาเลือกกการเรียนที่ต้องการก่อน')
     } else {
       if (this.state.dataRow.courseId !== '' && this.state.dataRow.subjectNumber !== '') {
-        console.log(this.state.dataRow.courseId,this.state.dataRow.subjectNumber)
         CourseService.deleteCourse(this.state.dataRow.subjectNumber, this.state.dataRow.courseId).then((data) => {
           // eslint-disable-next-line no-constant-condition
             if (data) {
@@ -125,7 +122,6 @@ class courseTable extends Component {
             }
           })
       }
-     //console.log(this.state.dataRow)
     }
   } 
   render () {
