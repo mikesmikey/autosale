@@ -4,7 +4,10 @@ import React, { Component } from 'react'
 import CCourseService from '../../Services/CourseService'
 import ErrorModal from '../Utilities/ErrorModal'
 import InfoModal from '../Utilities/InfoModal'
-
+import '../../StyleSheets/mainMenuBar.css'
+import {
+  Link
+} from 'react-router-dom'
 const CourseService = new CCourseService()
 
 class courseTable extends Component {
@@ -136,7 +139,9 @@ class courseTable extends Component {
           </tbody>
         </table>
         <div className='columns box-content'>
-          <button className="button is-oros is-round is-pulled-right" >เพิ่มการเรียน</button>
+        <Link to='add_course'>
+        <button className="button is-oros is-round is-pulled-right" >เพิ่มการเรียน</button>
+        </Link>
           <button className="button is-oros is-round is-pulled-right" onClick={() => { this.deleteButtonHandle() }} >ลบการเรียน</button>
         </div>
         <ErrorModal
