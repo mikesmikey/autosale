@@ -6,6 +6,8 @@ import '../../StyleSheets/userManage.css'
 
 import CUserService from '../../Services/UserService'
 import CExaminerService from '../../Services/ExaminerService'
+import ErrorModal from '../Utilities/ErrorModal'
+import InfoModal from '../Utilities/InfoModal'
 // Objects
 import Student from '../../Objects/Student'
 import Professor from '../../Objects/Professor'
@@ -48,6 +50,11 @@ class ExaminersManage extends Component {
     this.checkClick = ''
     this.Exam = []
     this.checkAdd = 0
+    this.FNDelete = false
+    this.LNDelete = false
+    this.TyDelete = false
+    this.RDelete = false
+    this.TiDelete = false
 
     this.handleSelectType = this.handleSelectType.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
@@ -404,6 +411,18 @@ class ExaminersManage extends Component {
     })
   }
 
+  setDeleteByOne (data) {
+    // console.log(data)
+    this.setState({
+      UserNameDelete: data.username,
+      FNameDelete: data.firstName,
+      LNameDelete: data.lastName,
+      TypeDelete: data.typeOfUser,
+      RoomDelete: data.room,
+      TimeDelete: data.time
+    })
+  }
+
   setUsername (data) {
     this.setState({
       UserName: data
@@ -416,6 +435,21 @@ class ExaminersManage extends Component {
       var rooms = []
       for (var z = 0; z < this.Exam.rooms.length; z++) {
         rooms.push(this.Exam.rooms[z])
+      }
+      if (this.Examiner.length === 0) {
+        for (var jj = 0; jj < rooms.length; jj++) {
+          var examinersData = []
+          var time = ''
+          var timenumber = parseInt(this.TiDelete)
+          if (rooms[jj].roomId === this.RDelete &&
+                rooms[jj].startTime === timenumber) {
+            rooms[jj].roomId = this.Exam.rooms[jj].roomId
+            rooms[jj].startTime = this.Exam.rooms[jj].startTime
+            rooms[jj].hours = this.Exam.rooms[jj].hours
+            rooms[jj].maxStudent = this.Exam.rooms[jj].maxStudent
+            rooms[jj].examiners = examinersData
+          }
+        }
       }
       for (var i = 0; i < this.Examiner.length; i++) {
         this.checkAdd = 0
@@ -504,7 +538,9 @@ class ExaminersManage extends Component {
     }
     // console.log(this.checkExaminer)
     // console.log(this.Examiner.length)
-    if (this.checkExaminer === this.Examiner.length && this.state.FName !== false) {
+    if (this.checkExaminer === this.Examiner.length && this.state.FName !== false &&
+        this.state.Room !== false &&
+        this.state.Time !== false) {
       this.Examiner.push({
         username: this.state.UserName,
         firstName: this.state.FName,
@@ -514,20 +550,31 @@ class ExaminersManage extends Component {
         time: this.state.Time
       })
       this.addExaminer()
+      this.infoModal.showModal('เพิ่มสำเร็จ!!')
     } else if (this.checkClick === '') {
-      alert('ยังไม่ได้เลือก user ที่จะเพิ่ม')
+      this.errorModal.showModal('ยังไม่ได้เลือก user ที่จะเพิ่ม')
     } else {
-      alert('เพิ่มไม่สำเร็จ!!')
+      this.errorModal.showModal('เพิ่มไม่สำเร็จ!!')
     }
   }
 
   deleteToSelectedExaminerTable () {
+    var checkDelete = 0
     for (var i = 0; i < this.Examiner.length; i++) {
-      if (this.Examiner.length === 1) {
+      if (this.Examiner.length === 1 &&
+        this.checkClick !== '') {
+        this.FNDelete = this.Examiner[0].firstName
+        this.LNDelete = this.Examiner[0].lastName
+        this.TyDelete = this.Examiner[0].typeOfUser
+        this.RDelete = this.Examiner[0].room
+        this.TiDelete = this.Examiner[0].time
+        checkDelete++
         this.Examiner.splice(i, 1)
+        this.addExaminer()
+        console.log(this.Examiner)
+        this.infoModal.showModal('ลบสำเร็จ!!')
         break
-      }
-      if (this.state.FNameDelete === this.Examiner[i].firstName &&
+      } if (this.state.FNameDelete === this.Examiner[i].firstName &&
         this.state.LNameDelete === this.Examiner[i].lastName &&
         this.state.TypeDelete === this.Examiner[i].typeOfUser &&
         this.state.RoomDelete === this.Examiner[i].room &&
@@ -535,8 +582,16 @@ class ExaminersManage extends Component {
       ) {
         this.Examiner.splice(i, 1)
         this.addExaminer()
+        checkDelete++
+        this.infoModal.showModal('ลบสำเร็จ!!')
         break
       }
+    }
+    if (checkDelete === 0 &&
+      this.checkClick === '') {
+      this.errorModal.showModal('ยังไม่ได้เลือก user ที่จะลบ!!')
+    } else if (checkDelete === 0) {
+      this.errorModal.showModal('ไม่ลบสำเร็จ!!')
     }
   }
 
@@ -673,6 +728,12 @@ class ExaminersManage extends Component {
             </div>
           </div>
         </div>
+        <ErrorModal
+          ref={instance => { this.errorModal = instance }}
+        />
+        <InfoModal
+          ref={instance => { this.infoModal = instance }}
+        />
       </div>
     )
   }

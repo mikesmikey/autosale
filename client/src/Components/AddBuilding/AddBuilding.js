@@ -1,6 +1,8 @@
 /* eslint-disable no-unused-vars */
 import React, { Component } from 'react'
 import CBuildingService from '../../Services/BuildingService'
+import ErrorModal from '../Utilities/ErrorModal'
+import InfoModal from '../Utilities/InfoModal'
 
 // Components
 import Modal from '../Utilities/Modal'
@@ -141,6 +143,17 @@ class AddBuilding extends Component {
     }
   }
 
+  deleteButtonHandle () {
+    BuildingService.deleteBuilding(this.state.selectedBuilding).then((result) => {
+      if (result) {
+        this.loadBuilding()
+        this.infoModal.showModal('ลบสำเร็จ')
+      } else {
+        this.errorModal.showModal('ลบไม่สำเร็จ!')
+      }
+    })
+  }
+
   render () {
     return (
       <div className="subcontent-main-div home">
@@ -177,19 +190,19 @@ class AddBuilding extends Component {
             <div className="columns">
               <div className="column is-building-button">
                 <button className="button is-oros is-round" onClick={() => { this.manageBuildingPopUp.showModal() }}>เพิ่มตึก</button>
-                <button className="button is-yentafo is-round" onClick={() => { this.deleteBuildingPopUp.showModal() }}>ลบตึก</button>
+                <button className="button is-yentafo is-round" onClick={this.deleteButtonHandle.bind(this)}>ลบตึก</button>
               </div>
             </div>
           </div>
         </div>
+        <ErrorModal
+          ref={instance => { this.errorModal = instance }}
+        />
+        <InfoModal
+          ref={instance => { this.infoModal = instance }}
+        />
         <Modal ref={instance => { this.manageBuildingPopUp = instance }} content={
           <BuildingPopUp closeBuildingPopUp={() => { this.manageBuildingPopUp.closeModal() }}
-            reloadTable={() => { this.loadBuilding() }}
-          />}
-        />
-        <Modal ref={instance => { this.deleteBuildingPopUp = instance }} content={
-          <DeleteBuildingPopUp closeDeleteBuildingPopUp={() => { this.deleteBuildingPopUp.closeModal() }}
-            selectedBuilding={this.state.selectedBuilding}
             reloadTable={() => { this.loadBuilding() }}
           />}
         />
@@ -257,7 +270,7 @@ class BuildingPopUp extends Component {
     // eslint-disable-next-line radix
     var floorInt = parseInt(this.state.inputFloorsBuilding)
     if (floorInt <= 0 || isNaN(floorInt) || this.state.inputNameBuilding === '' || this.state.inputShortNameBuilding === '' || this.state.inputFloorsBuilding === '') {
-      alert('กรุณาใส่ข้อมูลให้ถูกต้อง')
+      this.errorModal.showModal('กรุณาใส่ข้อมูลให้ถูกต้อง')
     } else {
       var newBuilding = {}
       newBuilding.building_name = this.state.inputNameBuilding
@@ -268,11 +281,11 @@ class BuildingPopUp extends Component {
       const buildingObj = BuildingService.createBuildingDataObject(newBuilding)
       BuildingService.addBuilding(buildingObj.getBuildingObjectData()).then((result) => {
         if (result) {
-          alert('เพิ่มสำเร็จ')
+          this.infoModal.showModal('เพิ่มสำเร็จ')
           this.setBuldingInput('', '', '')
           this.props.reloadTable()
         } else {
-          alert('เพิ่มไม่สำเร็จ!')
+          this.errorModal.showModal('เพิ่มไม่สำเร็จ!')
         }
       })
     }
@@ -316,44 +329,12 @@ class BuildingPopUp extends Component {
           <button className="button is-oros is-round" onClick={this.addButtonPopUpHandle}>บันทึก</button>
           <button className="button is-yentafo is-round" onClick={this.props.closeBuildingPopUp}>ยกเลิก</button>
         </div>
-      </div>
-    )
-  }
-}
-
-class DeleteBuildingPopUp extends Component {
-  constructor (props) {
-    super(props)
-
-    this.state = {
-      shortnameDelete: null
-    }
-    this.deleteButtonHandle = this.deleteButtonHandle.bind(this)
-  }
-
-  deleteButtonHandle () {
-    BuildingService.deleteBuilding(this.props.selectedBuilding).then((result) => {
-      if (result) {
-        alert('ลบสำเร็จ')
-        this.props.closeDeleteBuildingPopUp()
-        this.props.reloadTable()
-      } else {
-        alert('ลบไม่สำเร็จ!')
-      }
-    })
-  }
-
-  render () {
-    return (
-      <div className="box " style={{ width: '400px' }}>
-        <div className="columns">
-          <label className="label font-size-1" >ต้องการลบหรือไม่</label>
-        </div>
-        <br />
-        <div className="columns">
-          <button className="button is-oros is-round" onClick={this.deleteButtonHandle}>ตกลง</button>
-          <button className="button is-yentafo is-round" onClick={this.props.closeDeleteBuildingPopUp}>ยกเลิก</button>
-        </div>
+        <ErrorModal
+          ref={instance => { this.errorModal = instance }}
+        />
+        <InfoModal
+          ref={instance => { this.infoModal = instance }}
+        />
       </div>
     )
   }
