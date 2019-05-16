@@ -16,8 +16,8 @@ class MainScrenMenuBar extends Component {
     }
 
     this.USER_PERMISSION = {
-      'academic-staff': ['home', 'exam-schdule', 'examiner-schedule', 'exam-manage', 'user-manage', 'room-manage', 'building-manage', 'year-manage', 'subject-manage', 'course-manage'],
-      'student': ['home', 'exam-schdule', 'examiner-schedule'],
+      'academic-staff': ['home', 'exam-schedule', 'examiner-schedule', 'exam-manage', 'user-manage', 'room-manage', 'building-manage', 'year-manage', 'subject-manage', 'course-manage'],
+      'student': ['home', 'exam-schedule', 'examiner-schedule'],
       'professor': ['home', 'examiner-schedule'],
       'staff': ['home', 'examiner-schedule']
     }
@@ -65,7 +65,6 @@ class MainScrenMenuBar extends Component {
   }
 
   renderByPermission (menu) {
-    console.log(menu)
     if (this.props.user.username === 'jeff' || (this.props.user.typeOfUser === 'staff' && this.props.user.standing === 'เจ้าหน้าที่วิชาการ')) {
       if (this.USER_PERMISSION['academic-staff'].includes(menu)) {
         return ''
