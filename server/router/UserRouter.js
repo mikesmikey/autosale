@@ -124,4 +124,14 @@ UserRouter.route('/addmany').post((req, res) => {
   })
 })
 
+UserRouter.route('/type/student').get((req, res) => {
+  User.find({ 'typeOfUser': 'student' }).select({ '_id': 0, 'password': 0 }).then((data) => {
+    if (data) {
+      res.json(data)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
 module.exports = UserRouter
