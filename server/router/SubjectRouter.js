@@ -11,7 +11,7 @@ const GlobalData = require('../dao/GlobalDataDAO')
 // route done
 SubjectRouter.route('/').get((req, res) => {
   Subject.find().select({ '_id': 0 }).then(function (subjects) {
-    if (subjects) {
+    if (subjects.length > 0) {
       res.json(subjects)
     } else {
       res.sendStatus(404)
@@ -211,17 +211,17 @@ SubjectRouter.route('/findone').get((req, res) => {
   })
 })
 
-// SubjectRouter.route('findone/courses/id/:subjectId').get((req, res) => {
-//   GlobalData.findOne().then((NowCurrent) => {
-//     Subject.findOne({ 'subjectId': req.params.subjectId, 'courses': { school_year: NowCurrent.currentStudyYear, semester: NowCurrent.currentStudyTerm } }).then((data) => {
-//       if (!data) {
-//         res.send(false)
-//       } else {
-//         res.send(true)
-//       }
-//     })
-//   })
-// })
+SubjectRouter.route('/current/:subjectId').get((req, res) => {
+  GlobalData.findOne().then((NowCurrent) => {
+    Subject.findOne({ 'subjectId': req.params.subjectId, 'courses': { school_year: NowCurrent.currentStudyYear, semester: NowCurrent.currentStudyTerm } }, (_err, data) => {
+      if (!data) {
+        res.send(true)
+      } else {
+        res.send(false)
+      }
+    })
+  })
+})
 
 // getObjectCountRegisterCourseBySubjectId()
 SubjectRouter.route('/regCourse/find/id/:subjectId').get((req, res) => {

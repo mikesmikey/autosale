@@ -4,7 +4,7 @@ const Schema = mongoose.Schema
 
 var Faculty = new Schema({
   facultyId: {
-    type: String
+    type: Number
   },
   facultyName: {
     type: String

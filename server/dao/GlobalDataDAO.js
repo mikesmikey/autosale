@@ -3,10 +3,10 @@ const Schema = mongoose.Schema
 
 const GlobalData = new Schema({
   currentStudyYear: {
-    type: String
+    type: Number
   },
   currentStudyTerm: {
-    type: String
+    type: Number
   }
 }, {
   collection: 'GlobalData'

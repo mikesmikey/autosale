@@ -397,11 +397,11 @@ app.get('/getDataExam/:ObjectId', (req, res) => {
     }
   })
 })
-// app.get('/checkSubjectCurrent/:subjectId', (req, res) => {
-//   WebDAOObj.checkSubjectCurrent(req.params.subjectId).then(data => {
-//     res.json(data)
-//   })
-// })
+app.get('/subject/current/:subjectId', (req, res) => {
+  WebDAOObj.checkSubjectCurrent(req.params.subjectId).then(data => {
+    res.json(data)
+  })
+})
 
 // app.get('/courses/year=:year/semester=:semester/subject=:subjectId/start=:startPos/limit=:limit', (req, res) => {
 //   let params = req.params
