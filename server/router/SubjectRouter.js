@@ -11,7 +11,7 @@ const GlobalData = require('../dao/GlobalDataDAO')
 // route done
 SubjectRouter.route('/').get((req, res) => {
   Subject.find().select({ '_id': 0 }).then(function (subjects) {
-    if (subjects) {
+    if (subjects.length > 0) {
       res.json(subjects)
     } else {
       res.sendStatus(404)

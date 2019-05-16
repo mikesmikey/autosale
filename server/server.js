@@ -27,11 +27,10 @@ db.once('open', function () {
   // we're connected!
   console.log('connected to mongoose')
 })
-
+app.use('/faculty', FacultyRouter)
 app.use('/user', UserRouter)
 app.use('/exam', ExamRouter)
 app.use('/subject', SubjectRouter)
-app.use('/faculty', FacultyRouter)
 app.use('/yearAndTerm', GlobalDataRouter)
 
 const WebDAO = require('./WebDAO')
@@ -194,7 +193,7 @@ app.post('/login', (req, res) => {
 //   })
 // })
 
-// app.get('/facultys', (req, res) => {
+// app.get('/faculty', (req, res) => {
 //   WebDAOObj.getAllFaculty().then((data) => {
 //     if (data != null) {
 //       res.json(data)

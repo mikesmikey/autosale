@@ -5,7 +5,7 @@ const Faculty = require('../dao/FacultyDAO')
 
 FacultyRouter.route('/').get((req, res) => {
   Faculty.find().select({ '_id': 0 }).then(function (facultys) {
-    if (facultys) {
+    if (facultys.length > 0) {
       res.json(facultys)
     } else {
       res.sendStatus(404)

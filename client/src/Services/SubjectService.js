@@ -19,13 +19,15 @@ class SubjectService {
   // serve done
   searchAllSubjectBySubjectIdOrSubjectName (subjid, subjname) {
     return new Promise((resolve, reject) => {
+      console.log('id => ', subjid, ' | name => ',subjname )
       var url = '/subject'
       
-      if (subjid.length === 0 && subjname.trim.length > 0) {
+      if (subjid.trim.length === 0 && subjname.trim.length > 0) {
         url = `/subject/find/name/${subjname}` // search 'more one' by specified only name
-      } else if (subjid.length > 0 && subjname.trim.length === 0) {
+      } else if (subjid.trim.length > 0 && subjname.trim.length === 0) {
         url = `/subject/find/id/${subjid}` // search 'more one' by specified only id
       }
+      console.log(url)
       axios.get(url)
         .then((result) => {
           resolve(result.data)
