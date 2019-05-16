@@ -58,4 +58,8 @@ User.methods.insertManyUser = function (users, callback) {
   return this.model('User').insertMany(users, callback)
 }
 
+User.methods.updateUserData = function (userData, callback) {
+  return this.model('User').findOneAndUpdate({ 'username': userData.username }, { '$set': userData }, callback)
+}
+
 module.exports = mongoose.model('User', User)

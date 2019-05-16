@@ -108,7 +108,18 @@ UserRouter.route('/add').post((req, res) => {
 
 UserRouter.route('/edit').post((req, res) => {
   const newUserData = req.body.userData
-  User.findOneAndUpdate({ 'username': newUserData.username }, { '$set': newUserData }).then((result) => {
+  // User.findOneAndUpdate({ 'username': newUserData.username }, { '$set': newUserData }).then((result) => {
+  //   if (result) {
+  //     res.send(true)
+  //   } else {
+  //     res.send(false)
+  //   }
+  // })
+  const user = new User()
+  user.updateUserData(newUserData, (err, result) => {
+    if (err) {
+      throw err
+    }
     if (result) {
       res.send(true)
     } else {

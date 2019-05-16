@@ -21,8 +21,11 @@ class ExamService {
                 console.log('SYSTEM: CONFIRMING EXAM . . . .')
                 examDAO.updateExamData(examId, { examConfirm: true }, (_err, result) => {
                   if (result) {
-                    console.log('SYSTEM: Exam Confirm returning to client.')
-                    resolve({ examConfirm: true })
+                    console.log('SYSTEM: Update examiner data . . .')
+                    this.assignExaminer(exam).then(() => {
+                      console.log('SYSTEM: Exam Confirmed. returning to client.')
+                      resolve({ examConfirm: true })
+                    })
                   }
                 })
               }
@@ -358,6 +361,35 @@ class ExamService {
         }
       }
       resolve({ seatArr: ownedSeatArr, lastColumn: lastColumn, lastRow: lastRow, lastStudent: studentCount })
+    })
+  }
+
+  assignExaminer (exam) {
+    return new Promise((resolve, reject) => {
+      const userDAO = new User()
+      exam.rooms.forEach(room => {
+        room.examiners.forEach(examiners => {
+          userDAO.getUserByUsername(examiners.username, (err, result) => {
+            if (err) {
+              throw err
+            }
+            if (result) {
+              var examListArr = []
+              if (result.examList) {
+                examListArr = examListArr.concat(result.examList)
+              }
+              examListArr.push(exam._id.toString())
+              result.examList = examListArr
+              userDAO.updateUserData(result, (err, result) => {
+                if (err) {
+                  throw err
+                }
+              })
+            }
+          })
+        })
+      })
+      resolve(true)
     })
   }
 }
