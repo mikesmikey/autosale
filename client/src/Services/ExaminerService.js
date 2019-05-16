@@ -2,7 +2,7 @@ import axios from 'axios'
 class ExaminerService {
   getDataUserExamnier (user) {
     return new Promise((resolve, reject) => {
-      axios.get(`/getDataUserExaminer/${user}`).then((result) => {
+      axios.get(`/user/${user}`).then((result) => {
         resolve(result.data)
       })
     })

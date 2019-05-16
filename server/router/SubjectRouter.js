@@ -194,18 +194,20 @@ SubjectRouter.route('/find/courses/year/:year/semester/:semester/id/:subjectId/:
 // getAllCouresCurrent()
 SubjectRouter.route('/findone').get((req, res) => {
   GlobalData.findOne().then((NowCurrent) => {
-    Subject.find({ 'courses': { $elemMatch: { school_year: NowCurrent.currentStudyYear, semester: NowCurrent.currentStudyTerm } } }).then((data) => {
+    Subject.find().elemMatch("courses",{"school_year":Number.parseInt(NowCurrent.currentStudyYear),"semester":Number.parseInt(NowCurrent.currentStudyTerm)}).then((data) => {
+      let date = [NowCurrent.currentStudyYear, NowCurrent.currentStudyTerm]
       for (var i = 0; i < data.length; i++) {
         for (var j = 0; j < data[i].courses.length; j++) {
-          if (data[i].courses[j].school_year === NowCurrent.currentStudyYear &&
-            data[i].courses[j].semester === NowCurrent.currentStudyTerm) {
+          if (data[i].courses[j].school_year === Number.parseInt(NowCurrent.currentStudyYear) &&
+            data[i].courses[j].semester === Number.parseInt(NowCurrent.currentStudyTerm)) {
+              let qury = {'indexCouresCurrent':data[i].courses[j].courseId - 1}
             data[i].indexCouresCurrent = data[i].courses[j].courseId - 1
           }
         }
-        var date = [NowCurrent.currentStudyYear, NowCurrent.currentStudyTerm]
-        data.push(date)
-        res.json(data)
       }
+      data.push(date)
+      res.json(data)
+      //res.json(data)
     })
   })
 })
@@ -225,7 +227,7 @@ SubjectRouter.route('/findone').get((req, res) => {
 // getObjectCountRegisterCourseBySubjectId()
 SubjectRouter.route('/regCourse/find/id/:subjectId').get((req, res) => {
   User.find({ typeOfUser: 'student', 'RegisteredCourse': { $elemMatch: { subjectId: req.params.subjectId } } }).count((StudentData) => {
-    User.find({ typeOfUser: 'professor', 'RegisteredCourse': { $elemMatch: { subjectId: req.params.subjectId } } }).then((TeacherData) => {
+    User.find({ typeOfUser: 'professor'}).elemMatch('RegisteredCourse',{ subjectId: req.params.subjectId }).then(function (TeacherData) {
       let ObjectData = []
       ObjectData.push({ student: StudentData })
       let listTecher = []
