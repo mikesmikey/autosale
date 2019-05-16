@@ -256,7 +256,7 @@ class AddRoomDetail extends Component {
     if (isNaN(this.state.studentNumberInput) || this.state.studentNumberInput === '') {
       return false
     }
-    if (this.state.studentNumberInput > this.state.selectedSchedule.availableSeat) {
+    if (this.state.studentNumberInput > this.state.selectedSchedule.availableSeat || this.state.studentNumberInput <= 0) {
       return false
     }
     return true

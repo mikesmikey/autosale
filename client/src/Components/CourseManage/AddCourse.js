@@ -87,7 +87,7 @@ class AddCourse extends Component {
     handleInputValidate = (e) => {
       if (!(/[0-9:]+/g).test(e.key)) {
         e.preventDefault()
-        }
+      }
     }
 
     renderFacultyComponent () {
@@ -173,7 +173,6 @@ class AddCourse extends Component {
       } else if (hasAssigned) {
         alert('รหัสวิชานี้ได้ถูกเพิ่มไปแล้ว')
       } else {
-
         // find max course id in this select subject
         var maxCourseId = 0
         for (let j in courses) {
@@ -191,7 +190,7 @@ class AddCourse extends Component {
         }
 
         SubjectService.addCourseToThisSubject(this.state.selectSubId, courseData).then((result) => {
-            if (result) {
+          if (result) {
             alert('เพิ่มสำเร็จ')
             this.clearData()
           } else {

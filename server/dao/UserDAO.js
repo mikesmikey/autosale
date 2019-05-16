@@ -50,4 +50,16 @@ User.methods.getAllStudentByRegisteredCourse = function (subjectId, courseId, ca
   return this.model('User').find(query, callback).select({ '_id': 0, 'password': 0 })
 }
 
+User.methods.getUserByUsername = function (username, callback) {
+  return this.model('User').findOne({ 'username': username }, callback)
+}
+
+User.methods.insertManyUser = function (users, callback) {
+  return this.model('User').insertMany(users, callback)
+}
+
+User.methods.updateUserData = function (userData, callback) {
+  return this.model('User').findOneAndUpdate({ 'username': userData.username }, { '$set': userData }, callback)
+}
+
 module.exports = mongoose.model('User', User)

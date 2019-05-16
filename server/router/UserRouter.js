@@ -1,7 +1,10 @@
+/* eslint-disable no-unused-vars */
 const express = require('express')
 const UserRouter = express.Router()
 // const app = express()
 const User = require('../dao/UserDAO')
+
+const AuthService = require('../service/AuthService')
 
 UserRouter.route('/').get((req, res) => {
   User.find().select({ '_id': 0, 'password': 0 }).then(function (users) {
@@ -15,6 +18,16 @@ UserRouter.route('/').get((req, res) => {
 
 UserRouter.route('/:username').get((req, res) => {
   User.findOne({ 'username': req.params.username }).select({ '_id': 0, 'password': 0 }).then(function (users) {
+    if (users) {
+      res.json(users)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+UserRouter.route('/examiner/:username').get((req, res) => {
+  User.find({ username: req.params.username, isExaminer: true }).select({ '_id': 0, 'password': 0 }).then(function (users) {
     if (users) {
       res.json(users)
     } else {
@@ -46,8 +59,8 @@ UserRouter.route('/count/:type/:username').get((req, res) => {
 
 UserRouter.route('/type/:userType/:startPos/:limit').get((req, res) => {
   const type = req.params.userType
-  const startPos = req.params.startPos
-  const limit = req.params.limit
+  const startPos = req.params.startPos <= 0 ? 0 : req.params.startPos
+  const limit = req.params.limit <= 0 ? Number.MAX_SAFE_INTEGER : req.params.limit
   User.find({ 'typeOfUser': type }).select({ '_id': 0, 'password': 0 }).skip(Number.parseInt(startPos)).limit(Number.parseInt(limit)).then((data) => {
     if (data) {
       res.json(data)
@@ -60,11 +73,12 @@ UserRouter.route('/type/:userType/:startPos/:limit').get((req, res) => {
 UserRouter.route('/:type/:username/:startPos/:limit').get((req, res) => {
   const type = req.params.type
   const username = req.params.username
-  const startPos = req.params.startPos
-  const limit = req.params.limit
+  const startPos = req.params.startPos <= 0 ? 0 : req.params.startPos
+  const limit = req.params.limit <= 0 ? Number.MAX_SAFE_INTEGER : req.params.limit
   const regex = new RegExp(username)
   User.find({ 'username': regex, 'typeOfUser': type }).select({ '_id': 0, 'password': 0 }).skip(Number.parseInt(startPos)).limit(Number.parseInt(limit)).then((data) => {
     if (data) {
+      console.log(username)
       res.json(data)
     } else {
       res.sendStatus(404)
@@ -73,7 +87,7 @@ UserRouter.route('/:type/:username/:startPos/:limit').get((req, res) => {
 })
 
 UserRouter.route('/add').post((req, res) => {
-  const user = new User(req.body.registerForm)
+  const user = new User(req.body.userData)
   User.findOne({ 'username': user.username }).then((data) => {
     if (!data) {
       user.save()
@@ -94,9 +108,20 @@ UserRouter.route('/add').post((req, res) => {
 })
 
 UserRouter.route('/edit').post((req, res) => {
-  const newUserData = req.params.userData
-  User.findOneAndUpdate({ 'username': newUserData.username }, { '$set': newUserData }).then((result) => {
-    if (result.value) {
+  const newUserData = req.body.userData
+  // User.findOneAndUpdate({ 'username': newUserData.username }, { '$set': newUserData }).then((result) => {
+  //   if (result) {
+  //     res.send(true)
+  //   } else {
+  //     res.send(false)
+  //   }
+  // })
+  const user = new User()
+  user.updateUserData(newUserData, (err, result) => {
+    if (err) {
+      throw err
+    }
+    if (result) {
       res.send(true)
     } else {
       res.send(false)

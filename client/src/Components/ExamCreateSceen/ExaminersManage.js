@@ -6,6 +6,8 @@ import '../../StyleSheets/userManage.css'
 
 import CUserService from '../../Services/UserService'
 import CExaminerService from '../../Services/ExaminerService'
+import ErrorModal from '../Utilities/ErrorModal'
+import InfoModal from '../Utilities/InfoModal'
 // Objects
 import Student from '../../Objects/Student'
 import Professor from '../../Objects/Professor'
@@ -48,6 +50,11 @@ class ExaminersManage extends Component {
     this.checkClick = ''
     this.Exam = []
     this.checkAdd = 0
+    this.FNDelete = false
+    this.LNDelete = false
+    this.TyDelete = false
+    this.RDelete = false
+    this.TiDelete = false
 
     this.handleSelectType = this.handleSelectType.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
@@ -66,6 +73,7 @@ class ExaminersManage extends Component {
     this.setCheckClick = this.setCheckClick.bind(this)
     this.setDelete = this.setDelete.bind(this)
     this.setUsername = this.setUsername.bind(this)
+    this.setMaxPage = this.setMaxPage.bind(this)
   }
 
   loadDataToRoomExamSelect () {
@@ -118,7 +126,7 @@ class ExaminersManage extends Component {
           } else if (startTimeToString.length === 5) {
             startTimeToString = startTimeToString.charAt(0) + startTimeToString.charAt(1) + ':' + startTimeToString.charAt(3) + startTimeToString.charAt(4)
           }
-  
+
           if (finishTimeToString.length === 1) {
             finishTimeToString = '0' + finishTimeToString + ':00'
           } else if (finishTimeToString.length === 2) {
@@ -134,7 +142,7 @@ class ExaminersManage extends Component {
           } else if (finishTimeToString.length === 5) {
             finishTimeToString = finishTimeToString.charAt(0) + finishTimeToString.charAt(1) + ':' + finishTimeToString.charAt(3) + finishTimeToString.charAt(4)
           }
-  
+
           var setTime = startTimeToString + '-' + finishTimeToString
           var select = document.getElementById('TimeExamgSelect')
           var el = document.createElement('option')
@@ -212,7 +220,7 @@ class ExaminersManage extends Component {
       this.examinerTable.loadDataByTypeAndUsername(this.state.selectedType, this.state.searchInput, this.state.page === 1 ? 0 : (this.state.page - 1) * 50)
     }
     if (this.state.isDataLoading !== prevStates.isDataLoading) {
-      this.calculateMaxPage()
+      // this.calculateMaxPage()
     }
   }
 
@@ -318,7 +326,7 @@ class ExaminersManage extends Component {
       maxPage: 1
     })
     this.examinerTable.loadDataByTypeAndUsername(this.state.selectedType, this.state.searchInput, this.state.page === 1 ? 0 : (this.state.page - 1) * 50)
-    this.calculateMaxPage()
+    // this.calculateMaxPage()
   }
 
   setDataLoadingStatus (status) {
@@ -370,6 +378,23 @@ class ExaminersManage extends Component {
     })
   }
 
+  setMaxPage (data) {
+    this.setState({
+      maxPage: Math.ceil(data / 50)
+    })
+    if (data === 0) {
+      this.setState({
+        maxPage: 1
+      })
+    }
+  }
+
+  setPage (data) {
+    this.setState({
+      Page: Math.ceil(data / 50)
+    })
+  }
+
   setFName (data) {
     this.setState({
       FName: data
@@ -404,6 +429,18 @@ class ExaminersManage extends Component {
     })
   }
 
+  setDeleteByOne (data) {
+    // console.log(data)
+    this.setState({
+      UserNameDelete: data.username,
+      FNameDelete: data.firstName,
+      LNameDelete: data.lastName,
+      TypeDelete: data.typeOfUser,
+      RoomDelete: data.room,
+      TimeDelete: data.time
+    })
+  }
+
   setUsername (data) {
     this.setState({
       UserName: data
@@ -417,41 +454,63 @@ class ExaminersManage extends Component {
       for (var z = 0; z < this.Exam.rooms.length; z++) {
         rooms.push(this.Exam.rooms[z])
       }
-      for (var i = 0; i < this.Examiner.length; i++) {
-        this.checkAdd = 0
-        var userName = this.Examiner[i].username
-        for (var j = 0; j < rooms.length; j++) {
-          var examinersData = []
-          var time = ''
-          var timenumber = 0
-          for (var kk = 0; kk < this.Examiner[i].time.length; kk++) {
-            if (this.Examiner[i].time.charAt(kk) === ':') {
-              timenumber = parseInt(time)
-              break
-            }
-            time += this.Examiner[i].time.charAt(kk)
+      if (this.Examiner.length === 0) {
+        console.log(rooms.length)
+        for (var jj = 0; jj < rooms.length; jj++) {
+          let examinersData = []
+          let time = ''
+          let timenumber = parseInt(this.TiDelete)
+          if (rooms[jj].roomId === this.RDelete &&
+                rooms[jj].startTime === timenumber) {
+            rooms[jj].roomId = this.Exam.rooms[jj].roomId
+            rooms[jj].startTime = this.Exam.rooms[jj].startTime
+            rooms[jj].hours = this.Exam.rooms[jj].hours
+            rooms[jj].maxStudent = this.Exam.rooms[jj].maxStudent
+            rooms[jj].examiners = []
           }
-          if (rooms[j].roomId === this.Examiner[i].room &&
-                rooms[j].startTime === timenumber) {
-            for (var k = 0; k < rooms[j].examiners.length; k++) {
-              if (rooms[j].examiners[k].username === userName) {
-                this.checkAdd++
+          console.log(rooms[jj].roomId)
+          console.log(this.RDelete)
+          console.log(rooms[jj].startTime)
+          console.log(timenumber)
+        }
+      } else {
+        for (var i = 0; i < this.Examiner.length; i++) {
+          this.checkAdd = 0
+          var userName = this.Examiner[i].username
+          for (var j = 0; j < rooms.length; j++) {
+            let examinersData = []
+            let time = ''
+            let timenumber = 0
+            for (var kk = 0; kk < this.Examiner[i].time.length; kk++) {
+              if (this.Examiner[i].time.charAt(kk) === ':') {
+                timenumber = parseInt(time)
+                break
               }
-              if (rooms[j].examiners[k].username !== this.state.UserNameDelete) {
-                examinersData.push(rooms[j].examiners[k])
+              time += this.Examiner[i].time.charAt(kk)
+            }
+            if (rooms[j].roomId === this.Examiner[i].room &&
+                  rooms[j].startTime === timenumber) {
+              for (var k = 0; k < rooms[j].examiners.length; k++) {
+                if (rooms[j].examiners[k].username === userName) {
+                  this.checkAdd++
+                }
+                if (rooms[j].examiners[k].username !== this.state.UserNameDelete) {
+                  examinersData.push(rooms[j].examiners[k])
+                }
               }
+              if (this.checkAdd === 0) {
+                examinersData.push({ username: userName })
+              }
+              rooms[j].roomId = this.Exam.rooms[j].roomId
+              rooms[j].startTime = this.Exam.rooms[j].startTime
+              rooms[j].hours = this.Exam.rooms[j].hours
+              rooms[j].maxStudent = this.Exam.rooms[j].maxStudent
+              rooms[j].examiners = examinersData
             }
-            if (this.checkAdd === 0) {
-              examinersData.push({ username: userName })
-            }
-            rooms[j].roomId = this.Exam.rooms[j].roomId
-            rooms[j].startTime = this.Exam.rooms[j].startTime
-            rooms[j].hours = this.Exam.rooms[j].hours
-            rooms[j].maxStudent = this.Exam.rooms[j].maxStudent
-            rooms[j].examiners = examinersData
           }
         }
       }
+
       console.log(rooms)
       ExaminerService.insertExaminerIntoRoom(this.props.selectedExam._id, rooms).then((result) => {
         if (result) {
@@ -463,7 +522,7 @@ class ExaminersManage extends Component {
             Type: false
           })
           this.examinerTable.loadDataByTypeAndUsername(this.state.selectedType, this.state.searchInput, this.state.page === 1 ? 0 : (this.state.page - 1) * 50)
-          this.calculateMaxPage()
+          // this.calculateMaxPage()
           console.log('End')
         }
       })
@@ -504,7 +563,9 @@ class ExaminersManage extends Component {
     }
     // console.log(this.checkExaminer)
     // console.log(this.Examiner.length)
-    if (this.checkExaminer === this.Examiner.length && this.state.FName !== false) {
+    if (this.checkExaminer === this.Examiner.length && this.state.FName !== false &&
+        this.state.Room !== false &&
+        this.state.Time !== false) {
       this.Examiner.push({
         username: this.state.UserName,
         firstName: this.state.FName,
@@ -514,20 +575,31 @@ class ExaminersManage extends Component {
         time: this.state.Time
       })
       this.addExaminer()
+      this.infoModal.showModal('เพิ่มสำเร็จ!!')
     } else if (this.checkClick === '') {
-      alert('ยังไม่ได้เลือก user ที่จะเพิ่ม')
+      this.errorModal.showModal('ยังไม่ได้เลือก user ที่จะเพิ่ม')
     } else {
-      alert('เพิ่มไม่สำเร็จ!!')
+      this.errorModal.showModal('เพิ่มไม่สำเร็จ!!')
     }
   }
 
   deleteToSelectedExaminerTable () {
+    var checkDelete = 0
     for (var i = 0; i < this.Examiner.length; i++) {
-      if (this.Examiner.length === 1) {
+      if (this.Examiner.length === 1 &&
+        this.checkClick !== '') {
+        this.FNDelete = this.Examiner[0].firstName
+        this.LNDelete = this.Examiner[0].lastName
+        this.TyDelete = this.Examiner[0].typeOfUser
+        this.RDelete = this.Examiner[0].room
+        this.TiDelete = this.Examiner[0].time
+        checkDelete++
         this.Examiner.splice(i, 1)
+        this.addExaminer()
+        // console.log(this.Examiner)
+        this.infoModal.showModal('ลบสำเร็จ!!')
         break
-      }
-      if (this.state.FNameDelete === this.Examiner[i].firstName &&
+      } if (this.state.FNameDelete === this.Examiner[i].firstName &&
         this.state.LNameDelete === this.Examiner[i].lastName &&
         this.state.TypeDelete === this.Examiner[i].typeOfUser &&
         this.state.RoomDelete === this.Examiner[i].room &&
@@ -535,8 +607,16 @@ class ExaminersManage extends Component {
       ) {
         this.Examiner.splice(i, 1)
         this.addExaminer()
+        checkDelete++
+        this.infoModal.showModal('ลบสำเร็จ!!')
         break
       }
+    }
+    if (checkDelete === 0 &&
+      this.checkClick === '') {
+      this.errorModal.showModal('ยังไม่ได้เลือก user ที่จะลบ!!')
+    } else if (checkDelete === 0) {
+      this.errorModal.showModal('ไม่ลบสำเร็จ!!')
     }
   }
 
@@ -596,6 +676,7 @@ class ExaminersManage extends Component {
                   LName={this.state.LName}
                   Type={this.state.Type}
                   setCheckClick={this.setCheckClick}
+                  setMaxPage={this.setMaxPage}
                 />
               </div>
               <br></br>
@@ -659,6 +740,7 @@ class ExaminersManage extends Component {
                   setDelete={this.setDelete}
                   Time={this.state.Time}
                   Room={this.state.Room}
+                  setCheckClick={this.setCheckClick}
                 />
               </div>
               <br></br>
@@ -673,6 +755,12 @@ class ExaminersManage extends Component {
             </div>
           </div>
         </div>
+        <ErrorModal
+          ref={instance => { this.errorModal = instance }}
+        />
+        <InfoModal
+          ref={instance => { this.infoModal = instance }}
+        />
       </div>
     )
   }
@@ -688,7 +776,7 @@ class ExaminerTable extends Component {
       selectedRow: null,
       data: []
     }
-
+    this.number = 0
     this.loadDataByTypeAndUsername = this.loadDataByTypeAndUsername.bind(this)
   }
 
@@ -724,6 +812,13 @@ class ExaminerTable extends Component {
           this.props.setDataLoadingStatus(false)
           this.setState({ data: usersData })
         }
+        this.number = 0
+        for (var i = 0; i < usersData.length; i++) {
+          if (usersData[i].isExaminer === true) {
+            this.number++
+          }
+        }
+        this.props.setMaxPage(this.number)
       })
     } else {
       console.log('no')
@@ -732,14 +827,18 @@ class ExaminerTable extends Component {
 
   renderTableItem () {
     var items = []
+    this.number = 0
     for (var i = 0; i < this.state.data.length; i++) {
-      items[i] = <ExaminerTableItem
-        inspectItem={(e) => { this.inspectItem(e) }}
-        selectedType={this.props.selectedType}
-        itemIndex={i}
-        itemData={this.state.data[i]}
-        key={i}
-      />
+      if (this.state.data[i].isExaminer === true) {
+        items[i] = <ExaminerTableItem
+          inspectItem={(e) => { this.inspectItem(e) }}
+          selectedType={this.props.selectedType}
+          itemIndex={i}
+          itemData={this.state.data[i]}
+          key={i}
+        />
+        this.number++
+      }
     }
     return items
   }
@@ -796,6 +895,7 @@ class SelectedExaminerTable extends Component {
           selectedRow: parent
         })
         this.props.setDelete(this.props.Examiner[parent.getAttribute('index')])
+        this.props.setCheckClick(this.props.Examiner[parent.getAttribute('index')])
         console.log(this.props.Examiner[parent.getAttribute('index')])
       }
     }

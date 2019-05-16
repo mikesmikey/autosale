@@ -156,7 +156,7 @@ class UserTableItem extends Component {
 
   renderItemByType () {
     const userFaculty = this.props.facultys.find((faculty) => {
-      return faculty.facultyId === this.props.itemData.facultyId
+      return Number.parseInt(faculty.facultyId) === this.props.itemData.facultyId
     })
     return (
       this.props.facultys.length !== 0

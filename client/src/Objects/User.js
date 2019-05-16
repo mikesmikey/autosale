@@ -18,11 +18,18 @@ class User {
   }
 
   validUserData () {
-    if (this.username === '' || this.firstName === '' || this.lastName === '' || this.typeOfUser === '') {
-      return false
+    if (this.username === '') {
+      return { error: 'username-blank' }
+    } else if (this.firstName === '') {
+      return { error: 'firstname-blank' }
+    } else if (this.lastName === '') {
+      return { error: 'lastname-blank' }
+    } else if (this.typeOfUser === '') {
+      return { error: 'typeofuser-blank' }
     }
+
     if (typeof (this.isExaminer) !== 'boolean') {
-      return false
+      return { error: 'isexaminer-not-boolean' }
     }
     return true
   }

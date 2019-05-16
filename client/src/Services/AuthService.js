@@ -53,13 +53,15 @@ class AuthService {
 
   checkAuth (data) {
     return new Promise((resolve, reject) => {
-      if (this.loginUsernameCheck(data.username) && this.loginPasswordCheck(data.password)) {
+      if (!this.loginUsernameCheck(data.username)) {
+        resolve({ error: 'username-blank' })
+      } else if (!this.loginPasswordCheck(data.password)) {
+        resolve({ error: 'password-blank' })
+      } else {
         const sendData = { 'loginInfo': data }
-        axios.post('/login', sendData).then((result) => {
+        axios.post('/auth/login', sendData).then((result) => {
           resolve(result.data)
         })
-      } else {
-        resolve(false)
       }
     })
   }

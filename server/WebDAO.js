@@ -340,7 +340,7 @@ class WebDAO {
       mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
         if (_err) { resolve(null) }
         const db = client.db(dbName)
-        db.collection('Building').find({}).project({ '_id': 0, 'password': 0 }).toArray((err, data) => {
+        db.collection('Building').find({}).toArray((err, data) => {
           if (err) { throw err }
           client.close()
           return resolve(data)

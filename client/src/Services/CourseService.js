@@ -13,7 +13,7 @@ class CourseService {
       })
     })
   }
-  
+
   searchAllCurrentCourseBySubjectId(subjectId, startPos, limit) {
     return new Promise((resolve, reject) => {
       GlobalDataService.getYearAndTerm().then((timeData) => {
@@ -55,7 +55,7 @@ class CourseService {
         if (ArrayObj.length > 1) {
           ArrayObj.forEach(element => {
             this.getObjectCountRegisterCourseBySubjectId(element[0].subjectNumber).then((result) => {
-              element[0].studentRegister = result[0].student
+              element[0].studentRegister = result[0].student 
               element[0].teacherName = result[1]
             })
           })
@@ -64,13 +64,25 @@ class CourseService {
       })
     })
   }
-
+  getCurrentCourse(array,year,semater) {
+      for (let i = 0; i < array.courses.length; i++) {
+        if (Number.parseInt(year) === Number.parseInt(array.courses[i].school_year) &&
+          Number.parseInt(semater) === Number.parseInt(array.courses[i].semester)) {
+            let result = 0
+            result = array.courses[i].courseId - 1
+            return result
+        }
+      }
+  }
   getAllCouresCurrent() {
     return new Promise((resolve, reject) => {
       axios.get('/subject/findone').then((result) => {
         var listCourse = []
         for (var i = 0; i < result.data.length - 1; i++) {
-          var indexCourse = result.data[i].indexCouresCurrent
+         let year = result.data[result.data.length-1][0]
+         let semater = result.data[result.data.length-1][1]
+         let indexCourse = this.getCurrentCourse(result.data[i],year,semater)
+         //console.log(indexCourse)
           var objarray = [{
             subjectNumber: result.data[i].subjectId,
             subjectName: result.data[i].subjectName,
@@ -88,7 +100,7 @@ class CourseService {
       })
     })
   }
-  
+
   getObjectCountRegisterCourseBySubjectId(subjecId) {
     return new Promise((resolve, reject) => {
       axios.get(`/subject/regCourse/find/id/${subjecId}`).then((result) => {

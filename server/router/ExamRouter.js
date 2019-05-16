@@ -108,9 +108,24 @@ ExamRouter.route('/room').post((req, res) => {
   })
 })
 
-ExamRouter.route('/room/update').post((req, res) => {
+ExamRouter.route('/update').post((req, res) => {
   var exam = new Exam()
-  exam.updateExamData(req.body.examId, req.body.examData, (result) => {
+  exam.updateExamData(req.body.examId, req.body.examData, (err, result) => {
+    if (err) {
+      throw err
+    }
+    if (result) {
+      res.send(true)
+    } else {
+      res.send(false)
+    }
+  })
+})
+
+ExamRouter.route('/room/delete/:objId/:roomId/:startTime').post((req, res) => {
+  const findQuery = { '_id': new ObjectId(req.params.objId), 'rooms': { '$elemMatch': { 'roomId': req.params.roomId, 'startTime': Number.parseInt(req.params.startTime) } } }
+  const removeRoomQuery = { $pull: { 'rooms': { 'roomId': req.params.roomId, 'startTime': Number.parseInt(req.params.startTime) } } }
+  Exam.findByIdAndUpdate(findQuery, removeRoomQuery, (_err, result) => {
     if (result) {
       res.send(true)
     } else {
@@ -129,7 +144,7 @@ ExamRouter.route('/objectid=:objectid').get((req, res) => {
     if (exam) {
       res.json(exam)
     } else {
-      res.sendStatus(404)
+      res.send(false)
     }
   })
 })

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const express = require('express')
 const SubjectRouter = express.Router()
 // const app = express()
@@ -6,7 +7,7 @@ const User = require('../dao/UserDAO')
 const GlobalData = require('../dao/GlobalDataDAO')
 // const GlobalData = require('../dao/GlobalData')
 
-// [================= AddSubject =================]
+// [================= Subject =================]
 
 // route done
 SubjectRouter.route('/').get((req, res) => {
@@ -64,7 +65,7 @@ SubjectRouter.route('/add').post((req, res) => {
   })
 })
 
-// [================= AddCourse =================]
+// [================= Course =================]
 
 // route done
 SubjectRouter.route('/findone/id/:subjectId').get((req, res) => {
@@ -141,6 +142,7 @@ SubjectRouter.route('/find/courses/year/:year/semester/:semester').get((req, res
 SubjectRouter.route('/find/courses/year/:year/semester/:semester/id/:subjectId/:startPos/:limit').get((req, res) => {
   var subId = req.params.subjectId
   var lim = req.params.limit
+  var skipNum = req.params.startPos
 
   if (subId === 'none') {
     subId = ''
@@ -149,7 +151,7 @@ SubjectRouter.route('/find/courses/year/:year/semester/:semester/id/:subjectId/:
     lim = Number.MAX_SAFE_INTEGER
   }
 
-  const regex = new RegExp(`${req.params.subId}`)
+  const regex = new RegExp(`${subId}`)
   Subject.aggregate([
     {
       '$match': {
@@ -181,7 +183,7 @@ SubjectRouter.route('/find/courses/year/:year/semester/:semester/id/:subjectId/:
       }
     }
   ])
-    .skip(Number.parseInt(req.param.startPos)).limit(Number.parseInt(lim))
+    .skip(Number.parseInt(skipNum)).limit(Number.parseInt(lim))
     .then(function (subjects) {
       if (subjects) {
         res.json(subjects)
@@ -194,29 +196,31 @@ SubjectRouter.route('/find/courses/year/:year/semester/:semester/id/:subjectId/:
 // getAllCouresCurrent()
 SubjectRouter.route('/findone').get((req, res) => {
   GlobalData.findOne().then((NowCurrent) => {
-    Subject.find({ 'courses': { $elemMatch: { school_year: NowCurrent.currentStudyYear, semester: NowCurrent.currentStudyTerm } } }).then((data) => {
+    Subject.find().elemMatch('courses', { 'school_year': Number.parseInt(NowCurrent.currentStudyYear), 'semester': Number.parseInt(NowCurrent.currentStudyTerm) }).then((data) => {
+      let date = [NowCurrent.currentStudyYear, NowCurrent.currentStudyTerm]
       for (var i = 0; i < data.length; i++) {
         for (var j = 0; j < data[i].courses.length; j++) {
-          if (data[i].courses[j].school_year === NowCurrent.currentStudyYear &&
-            data[i].courses[j].semester === NowCurrent.currentStudyTerm) {
+          if (data[i].courses[j].school_year === Number.parseInt(NowCurrent.currentStudyYear) &&
+            data[i].courses[j].semester === Number.parseInt(NowCurrent.currentStudyTerm)) {
+            let qury = { 'indexCouresCurrent': data[i].courses[j].courseId - 1 }
             data[i].indexCouresCurrent = data[i].courses[j].courseId - 1
           }
         }
-        var date = [NowCurrent.currentStudyYear, NowCurrent.currentStudyTerm]
-        data.push(date)
-        res.json(data)
       }
+      data.push(date)
+      res.json(data)
+      // res.json(data)
     })
   })
 })
 
-SubjectRouter.route('findone/courses/id/:subjectId').get((req, res) => {
+SubjectRouter.route('/current/:subjectId').get((req, res) => {
   GlobalData.findOne().then((NowCurrent) => {
-    Subject.findOne({ 'subjectId': req.params.subjectId, 'courses': { school_year: NowCurrent.currentStudyYear, semester: NowCurrent.currentStudyTerm } }).then((data) => {
+    Subject.findOne({ 'subjectId': req.params.subjectId, 'courses': { school_year: NowCurrent.currentStudyYear, semester: NowCurrent.currentStudyTerm } }, (_err, data) => {
       if (!data) {
-        res.send(false)
-      } else {
         res.send(true)
+      } else {
+        res.send(false)
       }
     })
   })
@@ -225,7 +229,7 @@ SubjectRouter.route('findone/courses/id/:subjectId').get((req, res) => {
 // getObjectCountRegisterCourseBySubjectId()
 SubjectRouter.route('/regCourse/find/id/:subjectId').get((req, res) => {
   User.find({ typeOfUser: 'student', 'RegisteredCourse': { $elemMatch: { subjectId: req.params.subjectId } } }).count((StudentData) => {
-    User.find({ typeOfUser: 'professor', 'RegisteredCourse': { $elemMatch: { subjectId: req.params.subjectId } } }).then((TeacherData) => {
+    User.find({ typeOfUser: 'professor' }).elemMatch('RegisteredCourse', { subjectId: req.params.subjectId }).then(function (TeacherData) {
       let ObjectData = []
       ObjectData.push({ student: StudentData })
       let listTecher = []
@@ -289,384 +293,3 @@ SubjectRouter.route('/find/course/id/:subjectId/courseId/:courseId').get((req, r
 })
 
 module.exports = SubjectRouter
-
-// getAllSubjectCurrent () {
-//   return new Promise((resolve, reject) => {
-//     mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
-//       if (err) { resolve(null) }
-//       const db = client.db(dbName)
-//       this.getYearAndTerm().then((NowCurrent) => {
-//         db.collection('Subject').find({ 'courses': { $elemMatch: { school_year: NowCurrent.currentStudyYear, semester: NowCurrent.currentStudyTerm } } }).toArray((err, data) => {
-//           if (err) { throw err }
-//           for (var i = 0; i < data.length; i++) {
-//             for (var j = 0; j < data[i].courses.length; j++) {
-//               if (data[i].courses[j].school_year === NowCurrent.currentStudyYear &&
-//                 data[i].courses[j].semester === NowCurrent.currentStudyTerm) {
-//                 data[i].indexCouresCurrent = data[i].courses[j].courseId - 1
-//               }
-//             }
-//           }
-//           var date = [NowCurrent.currentStudyYear, NowCurrent.currentStudyTerm]
-//           data.push(date)
-//           client.close()
-//           return resolve(data)
-//         })
-//       })
-//       // client.close()
-//     })
-//   })
-// }
-
-// checkSubjectCurrent (subjectId) {
-//   return new Promise((resolve, reject) => {
-//     mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
-//       if (err) { resolve(null) }
-//       const db = client.db(dbName)
-//       this.getYearAndTerm().then((NowCurrent) => {
-//         db.collection('Subject').findOne({ 'subjectId': subjectId, 'courses': { school_year: NowCurrent.currentStudyYear, semester: NowCurrent.currentStudyTerm } }, (err, data) => {
-//           if (err) { throw err }
-//           if (!data) {
-//             return resolve(true)
-//           } else { client.close(); return resolve(false) }
-//         })
-//       })
-//     })
-//   })
-// }
-
-// getAllCourseByYearAndSemester (year, semester) {
-//   return new Promise((resolve, reject) => {
-//     mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
-//       if (err) { resolve(null) }
-
-//       const db = client.db(dbName)
-//       db.collection('Subject').aggregate(
-//         [
-//           {
-//             '$match': { '$and':
-//             [
-//               { 'courses.school_year': Number.parseInt(year) },
-//               { 'courses.semester': Number.parseInt(semester) }
-//             ] }
-//           },
-//           {
-//             '$project': {
-//               '_id': 0,
-//               'subjectId': 1,
-//               'subjectName': 1,
-//               'courses': {
-//                 '$filter': {
-//                   'input': '$courses',
-//                   'as': 'course',
-//                   'cond': {
-//                     '$and': [
-//                       { '$eq': ['$$course.school_year', Number.parseInt(year)] },
-//                       { '$eq': ['$$course.semester', Number.parseInt(semester)] }
-//                     ]
-//                   }
-//                 }
-//               }
-//             }
-//           }
-//         ]
-//       ).toArray((err, data) => {
-//         if (err) { throw err }
-//         client.close()
-//         return resolve(data)
-//       })
-//       client.close()
-//     })
-//   })
-// }
-
-// getAllCourseByYearSemesterAndSubjectId (year, semester, subjectId, startPos, limit) {
-//   if (subjectId === 'none') {
-//     subjectId = ''
-//   }
-//   if (limit <= 0) {
-//     limit = Number.MAX_SAFE_INTEGER
-//   }
-
-//   return new Promise((resolve, reject) => {
-//     mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
-//       if (err) { resolve(null) }
-
-//       const db = client.db(dbName)
-
-//       const regex = new RegExp(`${subjectId}`)
-//       db.collection('Subject').aggregate(
-//         [
-//           {
-//             '$match': {
-//               '$and':
-//                 [
-//                   { 'subjectId': { '$regex': regex } },
-//                   { 'courses.school_year': Number.parseInt(year) },
-//                   { 'courses.semester': Number.parseInt(semester) }
-//                 ]
-//             }
-//           },
-//           {
-//             '$project': {
-//               '_id': 0,
-//               'subjectId': 1,
-//               'subjectName': 1,
-//               'courses': {
-//                 '$filter': {
-//                   'input': '$courses',
-//                   'as': 'course',
-//                   'cond': {
-//                     '$and': [
-//                       { '$eq': ['$$course.school_year', Number.parseInt(year)] },
-//                       { '$eq': ['$$course.semester', Number.parseInt(semester)] }
-//                     ]
-//                   }
-//                 }
-//               }
-//             }
-//           }
-//         ]
-//       ).skip(Number.parseInt(startPos)).limit(Number.parseInt(limit)).toArray((err, data) => {
-//         if (err) { throw err }
-//         client.close()
-//         return resolve(data)
-//       })
-//       client.close()
-//     })
-//   })
-// }
-
-// getAllSubjectBySubjectName (subjname) {
-//   return new Promise((resolve, reject) => {
-//     mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
-//       const db = client.db(dbName)
-//       const regex = new RegExp(`${subjname}`)
-//       db.collection('Subject').find({ 'subjectName': regex }).limit(16).project({ '_id': 0 }).toArray((err, data) => {
-//         if (err) { throw err }
-//         client.close()
-//         return resolve(data)
-//       })
-//       client.close()
-//     })
-//   })
-// }
-
-// getAllSubjectBySubjectIdMoreOne (subjid) {
-//   return new Promise((resolve, reject) => {
-//     mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
-//       const db = client.db(dbName)
-//       const regex = new RegExp(`${subjid}`)
-//       db.collection('Subject').find({ 'subjectId': regex }).limit(16).project({ '_id': 0 }).toArray((err, data) => {
-//         if (err) { throw err }
-//         client.close()
-//         return resolve(data)
-//       })
-//       client.close()
-//     })
-//   })
-// }
-
-// getAllSubjectBySubjectId (subjid) {
-//   return new Promise((resolve, reject) => {
-//     mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
-//       const db = client.db(dbName)
-//       db.collection('Subject').find({ '$or': [{ 'subjectId': subjid }] }).limit(16).project({ '_id': 0 }).toArray((err, data) => {
-//         if (err) { throw err }
-//         client.close()
-//         return resolve(data)
-//       })
-//       client.close()
-//     })
-//   })
-// }
-
-// getAllSubject () {
-//   return new Promise((resolve, reject) => {
-//     mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
-//       const db = client.db(dbName)
-//       db.collection('Subject').find({}).project({ '_id': 0 }).toArray((err, data) => {
-//         if (err) { throw err }
-//         client.close()
-//         return resolve(data)
-//       })
-//       client.close()
-//     })
-//   })
-// }
-
-// insertSubject (subject) {
-//   return new Promise((resolve, reject) => {
-//     mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
-//       const db = client.db(dbName)
-//       db.collection('Subject').findOne({ '$or': [{ 'subjectId': subject.subjectId }, { 'subjectName': subject.subjectName }] }, (err, data) => {
-//         if (err) { throw err }
-//         if (!data) {
-//           db.collection('Subject').insertOne(subject, (err, result) => {
-//             if (err) { throw err }
-//             client.close()
-//             return resolve(true)
-//           })
-//         } else {
-//           client.close()
-//           return resolve(false)
-//         }
-//       })
-//       client.close()
-//     })
-//   })
-// }
-
-// getAllCourseByThisSubject (subjname) {
-//   return new Promise((resolve, reject) => {
-//     mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
-//       const db = client.db(dbName)
-//       db.collection('Subject').find({}).project({ '_id': 0 }).toArray((err, data) => {
-//         if (err) { throw err }
-//         client.close()
-//         return resolve(data)
-//       })
-//       client.close()
-//     })
-//   })
-// }
-
-// insertCourseByThisSubject (subjid, courseData) {
-//   return new Promise((resolve, reject) => {
-//     mongoClient.connect(url, { useNewUrlParser: true }, (_err, client) => {
-//       if (_err) { resolve(null) }
-//       const db = client.db(dbName)
-//       db.collection('Subject').findOneAndUpdate({ 'subjectId': subjid }, { '$push': { 'courses': courseData } }, (err, result) => {
-//         if (err) { throw err }
-//         if (result.value) {
-//           client.close()
-//           return resolve(true)
-//         } else {
-//           client.close()
-//           return resolve(false)
-//         }
-//       })
-//       client.close()
-//     })
-//   })
-// }
-
-// getObjectRegisterCourseBySubjectId (id) {
-//   return new Promise((resolve, reject) => {
-//     mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
-//       if (err) { resolve(null) }
-//       const db = client.db(dbName)
-//       db.collection('User').find({ typeOfUser: 'student', 'RegisteredCourse': { $elemMatch: { subjectId: id } } }).count((err, StudentData) => {
-//         if (err) { throw err }
-//         db.collection('User').find({ typeOfUser: 'professor', 'RegisteredCourse': { $elemMatch: { subjectId: id } } }).toArray((err, TeacherData) => {
-//           if (err) { throw err }
-//           client.close()
-//           let ObjectData = []
-//           ObjectData.push({ student: StudentData })
-//           let listTecher = []
-//           for (var i = 0; i < TeacherData.length; i++) {
-//             listTecher.push({ firstName: TeacherData[i].firstName, lastName: TeacherData[i].lastName })
-//           }
-//           ObjectData.push(listTecher)
-//           return resolve(ObjectData)
-//         })
-//       })
-//       // client.close()
-//     })
-//   })
-// }
-
-// getNameTeacherInRegisterCourseBySubjectId (type) {
-//   return new Promise((resolve, reject) => {
-//     mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
-//       if (err) { resolve(null) }
-//       const db = client.db(dbName)
-//       db.collection('User').find(
-//         { typeOfUser: 'professor', 'RegisteredCourse': { $elemMatch: { subjectId: type } } }).toArray((err, data) => {
-//         if (err) { throw err }
-//         var listData = []
-//         for (var i = 0; i < data.length; i++) {
-//           var obj = { firstName: data[i].firstName, lastName: data[i].lastName }
-//           listData.push(obj)
-//         }
-//         client.close()
-//         return resolve(listData)
-//       })
-//       // eslint-disable-next-line no-unused-expressions
-//       // client.close()
-//     })
-//   })
-// }
-
-// getCountRegisterCourseStudentBySubjectId (id) {
-//   return new Promise((resolve, reject) => {
-//     mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
-//       if (err) { resolve(null) }
-//       const db = client.db(dbName)
-//       db.collection('User').find({ typeOfUser: 'student', 'RegisteredCourse': { $elemMatch: { subjectId: id } } }).count((err, data) => {
-//         if (err) { throw err }
-//         client.close()
-//         return resolve(true)
-//       })
-//       // client.close()
-//     })
-//   })
-// }
-
-// deleteCourse (sjid, cid) {
-//   return new Promise((resolve, reject) => {
-//     mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
-//       if (err) { resolve(null) }
-//       const db = client.db(dbName)
-//       // eslint-disable-next-line no-undef
-//       // eslint-disable-next-line no-undef
-//       db.collection('Subject').updateMany({ subjectId: sjid }, { $pull: { courses: { courseId: Number.parseInt(cid) } } }, (err, data) => {
-//         if (err) { throw err }
-//         db.collection('User').updateMany({ '$or': [{ typeOfUser: 'professor' }, { typeOfUser: 'student' }] }, { $pull: { RegisteredCourse: { subjectId: sjid } } }, (err, data) => {
-//           if (err) { throw err }
-//           client.close()
-//           return resolve(true)
-//         })
-//       })
-//       // client.close()
-//     })
-//   })
-// }
-
-// getCourseBySubjectAndCourseId (subjectId, courseId) {
-//   return new Promise((resolve, reject) => {
-//     mongoClient.connect(url, { useNewUrlParser: true }, (err, client) => {
-//       if (err) { resolve(null) }
-//       const db = client.db(dbName)
-//       db.collection('Subject').aggregate(
-//         [
-//           {
-//             '$match': { '$and':
-//             [
-//               { 'subjectId': subjectId },
-//               { 'courses.courseId': Number.parseInt(courseId) }
-//             ] }
-//           },
-//           {
-//             '$project': {
-//               '_id': 0,
-//               'subjectId': 1,
-//               'subjectName': 1,
-//               'courses': {
-//                 '$filter': {
-//                   'input': '$courses',
-//                   'as': 'course',
-//                   'cond': { '$eq': [ '$$course.courseId', Number.parseInt(courseId) ] }
-//                 }
-//               }
-//             }
-//           }
-//         ]
-//       ).toArray((err, data) => {
-//         if (err) { throw err }
-//         client.close()
-//         return resolve(data)
-//       })
-//       client.close()
-//     })
-//   })
-// }

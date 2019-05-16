@@ -12,14 +12,19 @@ class Student extends User {
   }
 
   validStudentData () {
-    if (!this.validUserData()) {
-      return false
+    const userValid = this.validUserData()
+    if (userValid.error) {
+      return userValid
     }
-    if (this.facultyId === 0 || this.branchId === 0 || this.year === 0) {
-      return false
+    if (this.facultyId <= 0) {
+      return { error: 'faculty-wrong' }
+    } else if (this.branchId <= 0) {
+      return { error: 'branch-wrong' }
+    } else if (this.year <= 0) {
+      return { error: 'year-wrong' }
     }
     if (typeof (this.isScore) !== 'boolean') {
-      return false
+      return { error: 'isscore-wrong' }
     }
     return true
   }

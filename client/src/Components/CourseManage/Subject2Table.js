@@ -24,7 +24,7 @@ class Subject2Table extends Component {
       this._isMounted = true
       this.loadDataBySubjectId(this.props.selectSubId)
     }
-    
+
     componentWillUnmount () {
       this._isMounted = false
     }

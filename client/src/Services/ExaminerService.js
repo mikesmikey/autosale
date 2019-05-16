@@ -2,21 +2,26 @@ import axios from 'axios'
 class ExaminerService {
   getDataUserExamnier (user) {
     return new Promise((resolve, reject) => {
-      axios.get(`/getDataUserExaminer/${user}`).then((result) => {
-        resolve(result.data)
+      axios.get(`/user/${user}`).then((result) => {
+        if (result.data.isExaminer) {
+          resolve(result.data)
+        } else {
+          resolve(null)
+        }
       })
     })
   }
   checkSubjecetCurrent (subjectId) {
     return new Promise((resolve, reject) => {
-      axios.get(`/checkSubjectCurrent/${subjectId}`).then((result) => {
+      axios.get(`/subject/current/${subjectId}`).then((result) => {
+        console.log(result.data)
         resolve(result.data)
       })
     })
   }
   getDataExam (objecId) {
     return new Promise((resolve, reject) => {
-      axios.get(`/getDataExam/${objecId}`).then((result) => {
+      axios.get(`/exam/objectid=${objecId}`).then((result) => {
         resolve(result.data)
       })
     })
