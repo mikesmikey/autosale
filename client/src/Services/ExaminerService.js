@@ -3,7 +3,11 @@ class ExaminerService {
   getDataUserExamnier (user) {
     return new Promise((resolve, reject) => {
       axios.get(`/user/${user}`).then((result) => {
-        resolve(result.data)
+        if(result.data.isExaminer){
+          resolve(result.data)
+        }else{
+          resolve(null)
+        }
       })
     })
   }
