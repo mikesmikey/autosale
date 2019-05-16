@@ -210,17 +210,17 @@ SubjectRouter.route('/findone').get((req, res) => {
   })
 })
 
-// SubjectRouter.route('findone/courses/id/:subjectId').get((req, res) => {
-//   GlobalData.findOne().then((NowCurrent) => {
-//     Subject.findOne({ 'subjectId': req.params.subjectId, 'courses': { school_year: NowCurrent.currentStudyYear, semester: NowCurrent.currentStudyTerm } }).then((data) => {
-//       if (!data) {
-//         res.send(false)
-//       } else {
-//         res.send(true)
-//       }
-//     })
-//   })
-// })
+SubjectRouter.route('findone/courses/id/:subjectId').get((req, res) => {
+  GlobalData.findOne().then((NowCurrent) => {
+    Subject.findOne({ 'subjectId': req.params.subjectId, 'courses': { school_year: NowCurrent.currentStudyYear, semester: NowCurrent.currentStudyTerm } }).then((data) => {
+      if (!data) {
+        res.send(false)
+      } else {
+        res.send(true)
+      }
+    })
+  })
+})
 
 // getObjectCountRegisterCourseBySubjectId()
 SubjectRouter.route('/regCourse/find/id/:subjectId').get((req, res) => {
