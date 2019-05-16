@@ -16,11 +16,11 @@ class Student extends User {
     if (userValid.error) {
       return userValid
     }
-    if (this.facultyId === 0) {
+    if (this.facultyId <= 0) {
       return { error: 'faculty-wrong' }
-    } else if (this.branchId === 0) {
+    } else if (this.branchId <= 0) {
       return { error: 'branch-wrong' }
-    } else if (this.year === 0) {
+    } else if (this.year <= 0) {
       return { error: 'year-wrong' }
     }
     if (typeof (this.isScore) !== 'boolean') {

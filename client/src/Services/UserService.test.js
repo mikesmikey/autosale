@@ -115,7 +115,7 @@ it('name invalid', () => {
   }
   const student = new Student(studentForm)
   const service = new UserService()
-  expect(service.userObjFormCheck(student)).toEqual(false)
+  expect(service.userObjFormCheck(student)).toEqual({ 'error': 'firstname-blank' })
 })
 
 it('surname invalid', () => {
@@ -132,7 +132,7 @@ it('surname invalid', () => {
   }
   const student = new Student(studentForm)
   const service = new UserService()
-  expect(service.userObjFormCheck(student)).toEqual(false)
+  expect(service.userObjFormCheck(student)).toEqual({ 'error': 'lastname-blank' })
 })
 
 it('faculty invalid', () => {
@@ -140,7 +140,7 @@ it('faculty invalid', () => {
     'username': 'jeff',
     'password': '123',
     'firstName': 'jeff',
-    'lastName': '',
+    'lastName': 'comeback',
     'typeOfUser': 'student',
     'isExaminer': true,
     'facultyId': 0,
@@ -149,7 +149,7 @@ it('faculty invalid', () => {
   }
   const student = new Student(studentForm)
   const service = new UserService()
-  expect(service.userObjFormCheck(student)).toEqual(false)
+  expect(service.userObjFormCheck(student)).toEqual({ 'error': 'faculty-wrong' })
 })
 
 it('branch invalid', () => {
@@ -157,7 +157,7 @@ it('branch invalid', () => {
     'username': 'jeff',
     'password': '123',
     'firstName': 'jeff',
-    'lastName': '',
+    'lastName': 'comeback',
     'typeOfUser': 'student',
     'isExaminer': true,
     'facultyId': 2,
@@ -166,7 +166,7 @@ it('branch invalid', () => {
   }
   const student = new Student(studentForm)
   const service = new UserService()
-  expect(service.userObjFormCheck(student)).toEqual(false)
+  expect(service.userObjFormCheck(student)).toEqual({ 'error': 'branch-wrong' })
 })
 
 it('year invalid', () => {
@@ -174,7 +174,7 @@ it('year invalid', () => {
     'username': 'jeff',
     'password': '123',
     'firstName': 'jeff',
-    'lastName': '',
+    'lastName': 'comeback',
     'typeOfUser': 'student',
     'isExaminer': true,
     'facultyId': 2,
@@ -183,5 +183,5 @@ it('year invalid', () => {
   }
   const student = new Student(studentForm)
   const service = new UserService()
-  expect(service.userObjFormCheck(student)).toEqual(false)
+  expect(service.userObjFormCheck(student)).toEqual({ 'error': 'year-wrong' })
 })
