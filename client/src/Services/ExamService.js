@@ -68,7 +68,7 @@ class ExamService {
     })
   }
 
-  updateExamSeatType(objId, seatLineUpType, seatOrderType) {
+  updateExamSeatType (objId, seatLineUpType, seatOrderType) {
     return new Promise((resolve) => {
       axios.post(`/exam/seatType/update/${objId}/${seatLineUpType}/${seatOrderType}`).then((result) => {
         resolve(result.data)

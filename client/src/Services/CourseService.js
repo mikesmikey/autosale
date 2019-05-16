@@ -2,8 +2,7 @@ import axios from 'axios'
 import CGlobalDataService from './GlobalDataService'
 const GlobalDataService = new CGlobalDataService()
 class CourseService {
-
-  getAllCurrentCourse() {
+  getAllCurrentCourse () {
     return new Promise((resolve, reject) => {
       GlobalDataService.getYearAndTerm().then((timeData) => {
         if (!timeData) return null
@@ -13,8 +12,8 @@ class CourseService {
       })
     })
   }
-  
-  searchAllCurrentCourseBySubjectId(subjectId, startPos, limit) {
+
+  searchAllCurrentCourseBySubjectId (subjectId, startPos, limit) {
     return new Promise((resolve, reject) => {
       GlobalDataService.getYearAndTerm().then((timeData) => {
         if (!timeData) return null
@@ -25,7 +24,7 @@ class CourseService {
     })
   }
 
-  getCourseByIdAndSubjectId(courseId, subjectId) {
+  getCourseByIdAndSubjectId (courseId, subjectId) {
     return new Promise((resolve, reject) => {
       axios.get(`/subject/find/course/id/${subjectId}/courseId/${courseId}`).then((result) => {
         resolve(result.data)
@@ -33,7 +32,7 @@ class CourseService {
     })
   }
 
-  deleteCourse(a, b) {
+  deleteCourse (a, b) {
     return new Promise((resolve, reject) => {
       axios.post(`/subject/remove/course/id/${a}/courseId/${b}`).then((result) => {
         resolve(result.data)
@@ -41,7 +40,7 @@ class CourseService {
     })
   }
 
-  getNameteacherFormRegisterCourseBySubjectId(subjecId) {
+  getNameteacherFormRegisterCourseBySubjectId (subjecId) {
     return new Promise((resolve, reject) => {
       axios.get(`/subject/regCourse/find/teacher/id/${subjecId}`).then((result) => {
         resolve(result.data)
@@ -49,7 +48,7 @@ class CourseService {
     })
   }
 
-  getAllDataCoures() {
+  getAllDataCoures () {
     return new Promise((resolve, reject) => {
       this.getAllCouresCurrent().then((ArrayObj) => {
         if (ArrayObj.length > 1) {
@@ -65,7 +64,7 @@ class CourseService {
     })
   }
 
-  getAllCouresCurrent() {
+  getAllCouresCurrent () {
     return new Promise((resolve, reject) => {
       axios.get('/subject/findone').then((result) => {
         var listCourse = []
@@ -88,8 +87,8 @@ class CourseService {
       })
     })
   }
-  
-  getObjectCountRegisterCourseBySubjectId(subjecId) {
+
+  getObjectCountRegisterCourseBySubjectId (subjecId) {
     return new Promise((resolve, reject) => {
       axios.get(`/subject/regCourse/find/id/${subjecId}`).then((result) => {
         resolve(result.data)

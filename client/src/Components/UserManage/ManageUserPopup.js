@@ -25,7 +25,7 @@ class ManageUserPopUp extends Component {
     }
 
     this.ERROR_TEXT_TABLE = {
-      'username-blank': 'กรุณากรอก Username!',
+      'username-blank': 'กรุณากรอกรหัสประจำตัว (Username)!',
       'firstname-blank': 'กรุณากรอกชื่อ!',
       'lastname-blank': 'กรุณากรอกนามสกุล!',
       'faculty-wrong': 'กรุณาระบุคณะให้ถูกต้อง!',

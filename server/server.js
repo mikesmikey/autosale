@@ -37,10 +37,8 @@ app.use('/faculty', FacultyRouter)
 app.use('/yearAndTerm', GlobalDataRouter)
 
 const WebDAO = require('./WebDAO')
-const WebService = require('./WebService')
 
 const WebDAOObj = new WebDAO()
-const WebServiceObj = new WebService()
 
 // app.get('/users', (req, res) => {
 //   WebDAOObj.getAllUser().then((data) => {

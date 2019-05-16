@@ -48,8 +48,8 @@ UserRouter.route('/count/:type/:username').get((req, res) => {
 
 UserRouter.route('/type/:userType/:startPos/:limit').get((req, res) => {
   const type = req.params.userType
-  const startPos = req.params.startPos
-  const limit = req.params.limit
+  const startPos = req.params.startPos <= 0 ? 0 : req.params.startPos
+  const limit = req.params.limit <= 0 ? Number.MAX_SAFE_INTEGER : req.params.limit
   User.find({ 'typeOfUser': type }).select({ '_id': 0, 'password': 0 }).skip(Number.parseInt(startPos)).limit(Number.parseInt(limit)).then((data) => {
     if (data) {
       res.json(data)
@@ -62,8 +62,8 @@ UserRouter.route('/type/:userType/:startPos/:limit').get((req, res) => {
 UserRouter.route('/:type/:username/:startPos/:limit').get((req, res) => {
   const type = req.params.type
   const username = req.params.username
-  const startPos = req.params.startPos
-  const limit = req.params.limit
+  const startPos = req.params.startPos <= 0 ? 0 : req.params.startPos
+  const limit = req.params.limit <= 0 ? Number.MAX_SAFE_INTEGER : req.params.limit
   const regex = new RegExp(username)
   User.find({ 'username': regex, 'typeOfUser': type }).select({ '_id': 0, 'password': 0 }).skip(Number.parseInt(startPos)).limit(Number.parseInt(limit)).then((data) => {
     if (data) {

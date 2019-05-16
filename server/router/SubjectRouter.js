@@ -141,6 +141,7 @@ SubjectRouter.route('/find/courses/year/:year/semester/:semester').get((req, res
 SubjectRouter.route('/find/courses/year/:year/semester/:semester/id/:subjectId/:startPos/:limit').get((req, res) => {
   var subId = req.params.subjectId
   var lim = req.params.limit
+  var skipNum = req.params.startPos
 
   if (subId === 'none') {
     subId = ''
@@ -149,7 +150,7 @@ SubjectRouter.route('/find/courses/year/:year/semester/:semester/id/:subjectId/:
     lim = Number.MAX_SAFE_INTEGER
   }
 
-  const regex = new RegExp(`${req.params.subId}`)
+  const regex = new RegExp(`${subId}`)
   Subject.aggregate([
     {
       '$match': {
@@ -181,7 +182,7 @@ SubjectRouter.route('/find/courses/year/:year/semester/:semester/id/:subjectId/:
       }
     }
   ])
-    .skip(Number.parseInt(req.param.startPos)).limit(Number.parseInt(lim))
+    .skip(Number.parseInt(skipNum)).limit(Number.parseInt(lim))
     .then(function (subjects) {
       if (subjects) {
         res.json(subjects)
