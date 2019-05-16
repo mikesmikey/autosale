@@ -141,7 +141,7 @@ ExamRouter.route('/objectid=:objectid').get((req, res) => {
     if (exam) {
       res.json(exam)
     } else {
-      res.sendStatus(404)
+      res.send(false)
     }
   })
 })

@@ -46,18 +46,20 @@ class courseTable extends Component {
         }
       }
       // console.log('examinerData')
-      console.log(examinerData.examList.length)
+      // console.log(examinerData.examList.length)
 
       if (examinerData !== null) {
         for (var i = 0; i < examinerData.examList.length; i++) {
           ExaminerService.getDataExam(examinerData.examList[i]).then((examData) => {
-            ExaminerService.checkSubjecetCurrent(examData.subjectId).then((check) => {
-              if (check) {
-                var CopyData = this.state.data
-                CopyData.push(examData)
-                this.setState({ data: CopyData })
-              }
-            })
+            if (examData) {
+              ExaminerService.checkSubjecetCurrent(examData.subjectId).then((check) => {
+                if (check) {
+                  var CopyData = this.state.data
+                  CopyData.push(examData)
+                  this.setState({ data: CopyData })
+                }
+              })
+            }
           })
         }
         console.log(this.state.data)

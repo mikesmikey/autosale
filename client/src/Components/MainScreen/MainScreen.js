@@ -33,10 +33,13 @@ class MainScreen extends Component {
         <MainNavBar
           setUserAppAuth={this.props.setUserAppAuth}
           username={this.props.user.firstName}
-          
+
           handleHamburger={() => { this.mainMenuBar.handleHamburger() }}
         />
-        <MainMenuBar ref={instance => { this.mainMenuBar = instance }} />
+        <MainMenuBar
+          ref={instance => { this.mainMenuBar = instance }}
+          user={this.props.user}
+        />
         <div className="main-subcontent">
           <Route exact path="/" render={(props) =>
             <Home />
