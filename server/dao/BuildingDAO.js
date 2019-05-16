@@ -13,6 +13,7 @@ var Building = new Schema({
   },
   Rooms: {
     type: Object
+
   }
 }, {
   collection: 'Building'
