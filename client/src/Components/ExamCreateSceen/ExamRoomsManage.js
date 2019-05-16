@@ -67,7 +67,7 @@ class ExamRoomsModal extends Component {
       this.setState({
         isLoading: true
       })
-      CourseService.updateExamSeatType(this.props.selectedExam._id, this.state.seatLineUpType, this.state.seatOrderTypeRadio).then((result) => {
+      ExamService.updateExamSeatType(this.props.selectedExam._id, this.state.seatLineUpType, this.state.seatOrderTypeRadio).then((result) => {
         this.setState({
           isLoading: false
         })

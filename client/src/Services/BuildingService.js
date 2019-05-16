@@ -5,7 +5,7 @@ import Building from '../Objects/Building'
 class BuidingService {
   getAllBuildingByRoom (buildingname, room) {
     return new Promise((resolve) => {
-      var url = `/building/${room.length === 0 ? `/${buildingname}` : `/${buildingname}/${room}`}`
+      var url = `/building/${room.length === 0 ? `/${buildingname}` : `/name=${buildingname}/room=${room}`}`
       axios.get(url).then((result) => {
         resolve(result.data)
       })
@@ -14,7 +14,7 @@ class BuidingService {
 
   getAllBuilding () {
     return new Promise((resolve) => {
-      axios.get(`/buildings`).then((result) => {
+      axios.get(`/building`).then((result) => {
         resolve(result.data)
       })
     })

@@ -3,13 +3,13 @@ const Schema = mongoose.Schema
 
 var Building = new Schema({
   building_name: {
-    type: Number
+    type: String
   },
   short_name: {
-    type: Number
+    type: String
   },
   floors: {
-    type: String
+    type: Number
   },
   Rooms: {
     type: Object

@@ -49,10 +49,10 @@ class courseTable extends Component {
       if (examinerData.length !== 0) {
         for (var i = 0; i < examinerData[0].examList.length; i++) {
           ExaminerService.getDataExam(examinerData[0].examList[i]).then((examData) => {
-            ExaminerService.checkSubjecetCurrent(examData[0].subjectId).then((check) => {
+            ExaminerService.checkSubjecetCurrent(examData.subjectId).then((check) => {
               if (check) {
                 var CopyData = this.state.data
-                CopyData.push(examData[0])
+                CopyData.push(examData)
                 this.setState({ data: CopyData })
               }
             })

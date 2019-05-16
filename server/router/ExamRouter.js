@@ -56,15 +56,15 @@ ExamRouter.route('/').post((req, res) => {
   })
 })
 
-ExamRouter.route('/:objectid').delete((req, res) => {
-  Exam.findOneAndDelete({ '_id': new ObjectId(req.params.objectid) }).then((result) => {
-    if (result) {
-      res.send(true)
-    } else {
-      res.send(false)
-    }
-  })
-})
+// ExamRouter.route('/:objectid').delete((req, res) => {
+//   Exam.findOneAndDelete({ '_id': new ObjectId(req.params.objectid) }).then((result) => {
+//     if (result) {
+//       res.send(true)
+//     } else {
+//       res.send(false)
+//     }
+//   })
+// })
 
 ExamRouter.route('/date=:day/:month/:year/room=:roomId').get((req, res) => {
   const strDate = `${req.params.day}/${req.params.month}/${req.params.year}`

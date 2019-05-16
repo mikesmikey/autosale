@@ -24,7 +24,7 @@ class InfoModal extends Component {
           <div className="box-title is-oros">
             Information
           </div>
-          <div className="box-content">
+          <div className="box-content" style={{ textAlign: 'center' }}>
             <p>{this.state.info}</p>
             <div className="button is-oros" onClick={() => { this.modal.closeModal() }}>
             ตกลง
