@@ -3,7 +3,10 @@ const expPretty = require('express-prettify')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const UserRouter = require('./router/UserRouter')
+const SubjectRouter = require('./router/SubjectRouter')
 const ExamRouter = require('./router/ExamRouter')
+const FacultyRouter = require('./router/FacultyRouter')
+const GlobalDataRouter = require('./router/GlobalDataRouter')
 
 const app = express()
 const port = 5000
@@ -27,6 +30,9 @@ db.once('open', function () {
 
 app.use('/user', UserRouter)
 app.use('/exam', ExamRouter)
+app.use('/subject', SubjectRouter)
+app.use('/faculty', FacultyRouter)
+app.use('/yearAndTerm', GlobalDataRouter)
 
 const WebDAO = require('./WebDAO')
 const WebService = require('./WebService')
@@ -132,15 +138,15 @@ const WebServiceObj = new WebService()
 //   })
 // })
 
-app.get('/subjects/id_:subjid/:subjname', (req, res) => {
-  WebDAOObj.getAllSubjectBySubjectIdOrSubjectName(req.params.subjid, req.params.subjname).then((data) => {
-    if (data != null) {
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
+// app.get('/subjects/id_:subjid/:subjname', (req, res) => {
+//   WebDAOObj.getAllSubjectBySubjectIdOrSubjectName(req.params.subjid, req.params.subjname).then((data) => {
+//     if (data != null) {
+//       res.json(data)
+//     } else {
+//       res.sendStatus(404)
+//     }
+//   })
+// })
 
 // app.post('/user', (req, res) => {
 //   WebDAOObj.insertUser(req.body.registerForm).then((pass) => {
@@ -188,15 +194,15 @@ app.post('/login', (req, res) => {
 //   })
 // })
 
-app.get('/facultys', (req, res) => {
-  WebDAOObj.getAllFaculty().then((data) => {
-    if (data != null) {
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
+// app.get('/facultys', (req, res) => {
+//   WebDAOObj.getAllFaculty().then((data) => {
+//     if (data != null) {
+//       res.json(data)
+//     } else {
+//       res.sendStatus(404)
+//     }
+//   })
+// })
 
 // app.post('/user/addmany', (req, res) => {
 //   WebDAOObj.addManyStudents(req.body.usersData).then((pass) => {
@@ -204,71 +210,71 @@ app.get('/facultys', (req, res) => {
 //   })
 // })
 
-app.get('/subjects', (req, res) => {
-  WebDAOObj.getAllSubject().then((data) => {
-    // console.log(data)
-    if (data != null) {
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
+// app.get('/subjects', (req, res) => {
+//   WebDAOObj.getAllSubject().then((data) => {
+//     // console.log(data)
+//     if (data != null) {
+//       res.json(data)
+//     } else {
+//       res.sendStatus(404)
+//     }
+//   })
+// })
 
-app.get('/subjects/nm_:subjname', (req, res) => {
-  WebDAOObj.getAllSubjectBySubjectName(req.params.subjname).then((data) => {
-    if (data != null) {
-      // data.push({ found: true })
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
+// app.get('/subjects/nm_:subjname', (req, res) => {
+//   WebDAOObj.getAllSubjectBySubjectName(req.params.subjname).then((data) => {
+//     if (data != null) {
+//       // data.push({ found: true })
+//       res.json(data)
+//     } else {
+//       res.sendStatus(404)
+//     }
+//   })
+// })
 
-app.get('/subjects/id_:subjid', (req, res) => {
-  WebDAOObj.getAllSubjectBySubjectIdMoreOne(req.params.subjid).then((data) => {
-    if (data != null) {
-      // data.push({ found: true })
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
+// app.get('/subjects/id_:subjid', (req, res) => {
+//   WebDAOObj.getAllSubjectBySubjectIdMoreOne(req.params.subjid).then((data) => {
+//     if (data != null) {
+//       // data.push({ found: true })
+//       res.json(data)
+//     } else {
+//       res.sendStatus(404)
+//     }
+//   })
+// })
 
-app.get('/subject/id_:subjid', (req, res) => {
-  WebDAOObj.getAllSubjectBySubjectId(req.params.subjid).then((data) => {
-    if (data != null) {
-      data.push({ found: true })
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
+// app.get('/subject/id_:subjid', (req, res) => {
+//   WebDAOObj.getAllSubjectBySubjectId(req.params.subjid).then((data) => {
+//     if (data != null) {
+//       data.push({ found: true })
+//       res.json(data)
+//     } else {
+//       res.sendStatus(404)
+//     }
+//   })
+// })
 
-app.get('/subject/:subjname/courses/', (req, res) => {
-  WebDAOObj.getAllCourseByThisSubject(req.params.subjname).then((data) => {
-    if (data != null) {
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
+// app.get('/subject/:subjname/courses/', (req, res) => {
+//   WebDAOObj.getAllCourseByThisSubject(req.params.subjname).then((data) => {
+//     if (data != null) {
+//       res.json(data)
+//     } else {
+//       res.sendStatus(404)
+//     }
+//   })
+// })
 
-app.post('/subject/add', (req, res) => {
-  WebDAOObj.insertSubject(req.body.subjectData).then((pass) => {
-    res.send(pass)
-  })
-})
+// app.post('/subject/add', (req, res) => {
+//   WebDAOObj.insertSubject(req.body.subjectData).then((pass) => {
+//     res.send(pass)
+//   })
+// })
 
-app.post('/subject/id_:subjid/course/add', (req, res) => {
-  WebDAOObj.insertCourseByThisSubject(req.params.subjid, req.body.courseData).then((pass) => {
-    res.send(pass)
-  })
-})
+// app.post('/subject/id_:subjid/course/add', (req, res) => {
+//   WebDAOObj.insertCourseByThisSubject(req.params.subjid, req.body.courseData).then((pass) => {
+//     res.send(pass)
+//   })
+// })
 
 app.post('/token', (req, res) => {
   WebServiceObj.verifyToken(req.body.token).then((verifyResult) => {
@@ -282,35 +288,35 @@ app.post('/token', (req, res) => {
   })
 })
 
-app.get('/yearAndTerm', (req, res) => {
-  WebDAOObj.getYearAndTerm().then(data => {
-    if (data != null) {
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
+// app.get('/yearAndTerm', (req, res) => {
+//   WebDAOObj.getYearAndTerm().then(data => {
+//     if (data != null) {
+//       res.json(data)
+//     } else {
+//       res.sendStatus(404)
+//     }
+//   })
+// })
 
-app.get('/yearAndTerms', (req, res) => {
-  WebDAOObj.getAllYearAndTerm().then(data => {
-    if (data != null) {
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
+// app.get('/yearAndTerms', (req, res) => {
+//   WebDAOObj.getAllYearAndTerm().then(data => {
+//     if (data != null) {
+//       res.json(data)
+//     } else {
+//       res.sendStatus(404)
+//     }
+//   })
+// })
 
-app.get('/subject', (req, res) => {
-  WebDAOObj.getAllSubject().then((data) => {
-    if (data != null) {
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
+// app.get('/subject', (req, res) => {
+//   WebDAOObj.getAllSubject().then((data) => {
+//     if (data != null) {
+//       res.json(data)
+//     } else {
+//       res.sendStatus(404)
+//     }
+//   })
+// })
 
 // app.get('/exam/username/:username', (req, res) => {
 //   WebDAOObj.getAllExamByUsername(req.params.username).then((data) => {
@@ -342,16 +348,6 @@ app.get('/building', (req, res) => {
   })
 })
 
-app.get('/building/:building', (req, res) => {
-  WebDAOObj.getAllBuilding().then((data) => {
-    if (data != null) {
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
-
 app.get('/building/:buildingname/:room', (req, res) => {
   WebDAOObj.getAllBuildingByRoom(req.params.buildingname, req.params.room).then((data) => {
     if (data != null) {
@@ -368,21 +364,21 @@ app.post('/building/edit', (req, res) => {
   })
 })
 
-app.post('/yearAndTerm/edit', (req, res) => {
-  WebDAOObj.editYearAndTerm(req.body.globalData).then((pass) => {
-    res.send(pass)
-  })
-})
+// app.post('/yearAndTerm/edit', (req, res) => {
+//   WebDAOObj.editYearAndTerm(req.body.globalData).then((pass) => {
+//     res.send(pass)
+//   })
+// })
 
-app.get('/courses/:year/:semester', (req, res) => {
-  WebDAOObj.getAllCourseByYearAndSemester(req.params.year, req.params.semester).then(data => {
-    if (data != null) {
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
+// app.get('/courses/:year/:semester', (req, res) => {
+//   WebDAOObj.getAllCourseByYearAndSemester(req.params.year, req.params.semester).then(data => {
+//     if (data != null) {
+//       res.json(data)
+//     } else {
+//       res.sendStatus(404)
+//     }
+//   })
+// })
 app.get('/getDataUserExaminer/:username', (req, res) => {
   WebDAOObj.getUserExaminerByUserName(req.params.username).then(data => {
     if (data != null) {
@@ -401,21 +397,22 @@ app.get('/getDataExam/:ObjectId', (req, res) => {
     }
   })
 })
-app.get('/checkSubjectCurrent/:subjectId', (req, res) => {
-  WebDAOObj.checkSubjectCurrent(req.params.subjectId).then(data => {
-    res.json(data)
-  })
-})
-app.get('/courses/year=:year/semester=:semester/subject=:subjectId/start=:startPos/limit=:limit', (req, res) => {
-  let params = req.params
-  WebDAOObj.getAllCourseByYearSemesterAndSubjectId(params.year, params.semester, params.subjectId, params.startPos, params.limit).then(data => {
-    if (data != null) {
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
+// app.get('/checkSubjectCurrent/:subjectId', (req, res) => {
+//   WebDAOObj.checkSubjectCurrent(req.params.subjectId).then(data => {
+//     res.json(data)
+//   })
+// })
+
+// app.get('/courses/year=:year/semester=:semester/subject=:subjectId/start=:startPos/limit=:limit', (req, res) => {
+//   let params = req.params
+//   WebDAOObj.getAllCourseByYearSemesterAndSubjectId(params.year, params.semester, params.subjectId, params.startPos, params.limit).then(data => {
+//     if (data != null) {
+//       res.json(data)
+//     } else {
+//       res.sendStatus(404)
+//     }
+//   })
+// })
 
 app.get('/buildings', (req, res) => {
   WebDAOObj.getBuilding().then(data => {
@@ -459,35 +456,25 @@ app.get('/building/:short_name', (req, res) => {
 //   })
 // })
 
-app.get('/registerCourse/teachar/:subjecId', (req, res) => {
-  WebDAOObj.getNameTeacherInRegisterCourseBySubjectId(req.params.subjecId).then((data) => {
-    if (data != null) {
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
+// app.get('/registerCourse/teachar/:subjecId', (req, res) => {
+//   WebDAOObj.getNameTeacherInRegisterCourseBySubjectId(req.params.subjecId).then((data) => {
+//     if (data != null) {
+//       res.json(data)
+//     } else {
+//       res.sendStatus(404)
+//     }
+//   })
+// })
 
-app.get('/registerCourse/:subjecId', (req, res) => {
-  WebDAOObj.getObjectRegisterCourseBySubjectId(req.params.subjecId).then((data) => {
-    if (data != null) {
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
-
-app.get('/subbjec/current', (req, res) => {
-  WebDAOObj.checkSubjectCurrent().then((data) => {
-    if (data != null) {
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
+// app.get('/registerCourse/:subjecId', (req, res) => {
+//   WebDAOObj.getObjectRegisterCourseBySubjectId(req.params.subjecId).then((data) => {
+//     if (data != null) {
+//       res.json(data)
+//     } else {
+//       res.sendStatus(404)
+//     }
+//   })
+// })
 
 // app.post('/exam', (req, res) => {
 //   WebDAOObj.insertExam(req.body.examData).then((pass) => {
@@ -512,12 +499,12 @@ app.get('/subbjec/current', (req, res) => {
 //   })
 // })
 
-app.post('/course/delete/:a/:b', (req, res) => {
-  WebDAOObj.deleteCourse(req.params.a, req.params.b).then((data) => {
-    console.log(data)
-    res.send(data)
-  })
-})
+// app.post('/course/delete/:a/:b', (req, res) => {
+//   WebDAOObj.deleteCourse(req.params.a, req.params.b).then((data) => {
+//     console.log(data)
+//     res.send(data)
+//   })
+// })
 
 // app.post('/exam/room', (req, res) => {
 //   WebDAOObj.addRoomIntoExam(req.body.examId, req.body.roomData).then((pass) => {
@@ -567,15 +554,25 @@ app.post('/examRoom/remove/:objId/:roomId/:startTime', (req, res) => {
 //   })
 // })
 
-app.get('/course/subject=:subjectId/course=:courseId', (req, res) => {
-  WebDAOObj.getCourseBySubjectAndCourseId(req.params.subjectId, req.params.courseId).then((data) => {
-    if (data != null) {
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
+// app.get('/course/subject=:subjectId/course=:courseId', (req, res) => {
+//   WebDAOObj.getCourseBySubjectAndCourseId(req.params.subjectId, req.params.courseId).then((data) => {
+//     if (data != null) {
+//       res.json(data)
+//     } else {
+//       res.sendStatus(404)
+//     }
+//   })
+// })
+
+// app.get('/subbjec/current', (req, res) => {
+//   WebDAOObj.checkSubjectCurrent().then((data) => {
+//     if (data != null) {
+//       res.json(data)
+//     } else {
+//       res.sendStatus(404)
+//     }
+//   })
+// })
 
 app.get('/room/id=:roomId', (req, res) => {
   WebDAOObj.getRoomByRoomId(req.params.roomId).then((data) => {
