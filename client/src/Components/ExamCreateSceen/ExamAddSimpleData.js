@@ -151,6 +151,7 @@ class ExamAddSimpleData extends Component {
         if (result) {
           const updatedExam = Object.assign(this.props.selectedExam, newData)
           this.props.updateMemExam(updatedExam)
+          this.myModal.closeModal()
         }
         this.setState({
           isLoading: false

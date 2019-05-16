@@ -108,9 +108,12 @@ ExamRouter.route('/room').post((req, res) => {
   })
 })
 
-ExamRouter.route('/room/update').post((req, res) => {
+ExamRouter.route('/update').post((req, res) => {
   var exam = new Exam()
-  exam.updateExamData(req.body.examId, req.body.examData, (result) => {
+  exam.updateExamData(req.body.examId, req.body.examData, (err, result) => {
+    if (err) {
+      throw err
+    }
     if (result) {
       res.send(true)
     } else {

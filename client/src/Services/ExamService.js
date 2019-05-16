@@ -78,7 +78,7 @@ class ExamService {
 
   updateExamData (examId, examData) {
     return new Promise((resolve) => {
-      axios.post(`/exam/room/update`, { 'examId': examId, 'examData': examData }).then((result) => {
+      axios.post(`/exam/update`, { 'examId': examId, 'examData': examData }).then((result) => {
         resolve(result.data)
       })
     })
