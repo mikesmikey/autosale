@@ -33,6 +33,7 @@ class MainScreen extends Component {
         <MainNavBar
           setUserAppAuth={this.props.setUserAppAuth}
           username={this.props.user.firstName}
+          
           handleHamburger={() => { this.mainMenuBar.handleHamburger() }}
         />
         <MainMenuBar ref={instance => { this.mainMenuBar = instance }} />
@@ -71,7 +72,7 @@ class MainScreen extends Component {
           } />
           <Route path="/examiner" render={(props) =>
             <Examiner
-              username={this.props.user.firstName}
+              username={this.props.user.username}
             />
           }/>
           <Route path="/add_course" render={(props) =>

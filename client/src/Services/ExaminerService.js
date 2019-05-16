@@ -2,8 +2,12 @@ import axios from 'axios'
 class ExaminerService {
   getDataUserExamnier (user) {
     return new Promise((resolve, reject) => {
-      axios.get(`/user/examiner/${user}`).then((result) => {
-        resolve(result.data)
+      axios.get(`/user/${user}`).then((result) => {
+        if (result.data.isExaminer) {
+          resolve(result.data)
+        } else {
+          resolve(null)
+        }
       })
     })
   }

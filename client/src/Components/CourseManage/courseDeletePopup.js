@@ -1,6 +1,8 @@
 /* eslint-disable no-unused-vars */
 import React, { Component } from 'react'
 
+import ErrorModal from '../Utilities/ErrorModal'
+import InfoModal from '../Utilities/InfoModal'
 import '../../StyleSheets/ExamScoreSceen.css'
 
 import CCourseService from '../../Services/CourseService'
@@ -34,32 +36,53 @@ class DeleteRoomPopup extends Component {
 
   deleteButtonHandle () {
     if (this.props.selectedCourse.courseId !== '' && this.props.selectedCourse.subjectNumber !== '') {
-      CourseService.deleteCourse(this.props.selectedCourse.subjectNumber, this.props.selectedCourse.courseId).then((data) => {
-      // eslint-disable-next-line no-constant-condition
-        if (data) {
-          var a = this.props.deleteItemByName(this.props.selectedCourse.subjectName)
-          this.props.closeModal()
-        } else {
-          this.props.closeModal()
-          alert('เกิดข้อผิดพลาด ลบไม่สำเร็จ')
-        }
-      })
-    } else {
-      console.log('STATE NOT CHANE')
+      if (true) {
+        this.infoModal.showModal('ลบข้อมูลสำเร็จ')
+        this.props.deleteItemByName(this.props.selectedCourse.subjectName)
+        //document.getElementById('buttonCancel').removeAttribute 
+        //this.props.closeModal()
+      
+        
+      }// this.props.closeModal()
     }
+  
+  //     CourseService.deleteCourse(this.props.selectedCourse.subjectNumber, this.props.selectedCourse.courseId).then((data) => {
+  //     // eslint-disable-next-line no-constant-condition
+  //       if (data) {
+  //         this.infoModal.showModal('ลบข้อมูลสำเร็จ').then(() =>{
+  //           var a = this.props.deleteItemByName(this.props.selectedCourse.subjectName)
+  //         this.props.closeModal()
+  //         this.infoModal.showModal('ลบข้อมูลสำเร็จ')
+  //         }
+  //       } else {
+  //        this.errorModal.showModal('เกิดข้อผิดพลาด ลบไม่สำเร็จ')
+  //         this.props.closeModal()
+  //         this.errorModal.showModal('เกิดข้อผิดพลาด ลบไม่สำเร็จ')
+  //         alert('เกิดข้อผิดพลาด ลบไม่สำเร็จ')
+  //       }
+  //     })
+  //   } else {
+  //     console.log('STATE NOT CHANE')
+  //   }
   }
 
   render () {
     return (
       <div className="box is-user-popUp" style={{ width: '500px' }}>
         <div>
-          <h1 align="center">ต้องการลบหรือไม่</h1>
+          <h1 id='text' align="center">ต้องการลบหรือไม่</h1>
           <div style={{ textAlign: 'center' }}>
-            <button className="button is-oros is-round" onClick={() => { this.deleteButtonHandle() }}>ลบห้อง</button>
+            <button id='buttonOk'className="button is-oros is-round" onClick={() => { this.deleteButtonHandle() }}>ลบห้อง</button>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button className="button is-yentafo is-round" onClick={this.props.closeModal}>ยกเลิก</button>
+            <button id='buttonCancel'className="button is-yentafo is-round" onClick={this.props.closeModal}>ยกเลิก</button>
           </div>
         </div>
+        <ErrorModal
+              ref={instance => { this.errorModal = instance }}
+            />
+            <InfoModal
+              ref={instance => { this.infoModal = instance }}
+            />
       </div>
     )
   }
