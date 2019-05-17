@@ -536,7 +536,9 @@ class ExaminersManage extends Component {
     }
     // console.log(this.checkExaminer)
     // console.log(this.Examiner.length)
-    if (this.checkExaminer === this.Examiner.length && this.state.FName !== false) {
+    if (this.checkExaminer === this.Examiner.length && this.state.FName !== false &&
+        this.state.Room !== false &&
+        this.state.Time !== false) {
       this.Examiner.push({
         username: this.state.UserName,
         firstName: this.state.FName,
@@ -546,6 +548,7 @@ class ExaminersManage extends Component {
         time: this.state.Time
       })
       this.addExaminer()
+      alert('เพิ่มสำเร็จ!!')
     } else if (this.checkClick === '') {
       alert('ยังไม่ได้เลือก user ที่จะเพิ่ม')
     } else {
@@ -554,20 +557,22 @@ class ExaminersManage extends Component {
   }
 
   deleteToSelectedExaminerTable () {
+    var checkDelete = 0
     for (var i = 0; i < this.Examiner.length; i++) {
-      if (this.Examiner.length === 1) {
+      if (this.Examiner.length === 1 &&
+        this.checkClick !== '') {
         this.FNDelete = this.Examiner[0].firstName
         this.LNDelete = this.Examiner[0].lastName
         this.TyDelete = this.Examiner[0].typeOfUser
         this.RDelete = this.Examiner[0].room
         this.TiDelete = this.Examiner[0].time
-
+        checkDelete++
         this.Examiner.splice(i, 1)
         this.addExaminer()
         console.log(this.Examiner)
+        alert('ลบสำเร็จ!!')
         break
-      }
-      if (this.state.FNameDelete === this.Examiner[i].firstName &&
+      } if (this.state.FNameDelete === this.Examiner[i].firstName &&
         this.state.LNameDelete === this.Examiner[i].lastName &&
         this.state.TypeDelete === this.Examiner[i].typeOfUser &&
         this.state.RoomDelete === this.Examiner[i].room &&
@@ -575,8 +580,16 @@ class ExaminersManage extends Component {
       ) {
         this.Examiner.splice(i, 1)
         this.addExaminer()
+        checkDelete++
+        alert('ลบสำเร็จ!!')
         break
       }
+    }
+    if (checkDelete === 0 &&
+      this.checkClick === '') {
+      alert('ยังไม่ได้เลือก user ที่จะลบ!!')
+    } else if (checkDelete === 0) {
+      alert('ไม่ลบสำเร็จ!!')
     }
   }
 
