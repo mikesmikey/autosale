@@ -285,6 +285,9 @@ class ExamService {
       let lastColumn = startColumn; let lastRow = startRow
       let ownedSeatArr = []
 
+      console.log(students)
+      console.log(studentCount)
+
       if (lineUpType === 'horizontal') {
         for (let i = 0; i < seatArr.length; i++) {
           if (studentCount === (startStudent + maxStudent) - 1) {
@@ -296,6 +299,7 @@ class ExamService {
             if (!seatArr[i][j].studentCode) {
               if (studentCount <= students.length - 1) {
                 if (studentCount === (startStudent + maxStudent) - 1) {
+                  // console.log(students[studentCount].username)
                   ownedSeatArr[i][j] = {}
                   ownedSeatArr[i][j].seatNumber = seatArr[i][j].seatNumber
                   ownedSeatArr[i][j].studentCode = students[studentCount].username
