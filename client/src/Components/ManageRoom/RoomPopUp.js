@@ -5,6 +5,8 @@ import '../../StyleSheets/ManageRoom.css'
 
 import CBuildingService from '../../Services/BuildingService'
 import CRoomService from '../../Services/RoomService'
+import ErrorModal from '../Utilities/ErrorModal'
+import InfoModal from '../Utilities/InfoModal'
 const BuildingService = new CBuildingService()
 const RoomService = new CRoomService()
 // eslint-disable-next-line react/require-render-return
@@ -73,14 +75,15 @@ class RoomPopUp extends Component {
         RoomService.editRoom(BuildingObj.getUserObjectData()).then((result) => {
           if (result) {
             this.props.reloadTable()
+            this.infoModal.showModal('เพิ่มสำเร็จ!')
             this.props.closeModal()
           } else {
-            alert('เพิ่มไม่สำเร็จ!')
+            this.errorModal.showModal('เพิ่มไม่สำเร็จ!')
           }
           this.props.setDataLoadingStatus(false)
         })
       } else {
-        alert('เพิ่มไม่สำเร็จ!')
+        this.errorModal.showModal('เพิ่มไม่สำเร็จ!')
       }
     })
   }
@@ -105,7 +108,7 @@ class RoomPopUp extends Component {
       this.numRoom = value.toString()
     }
     if (name === 'stringFloor') {
-      this.numFloor = parseInt(value,10)
+      this.numFloor = parseInt(value, 10)
       this.floor = value.toString()
     }
     if (name === 'stringRow') {
@@ -379,6 +382,12 @@ class RoomPopUp extends Component {
             <button className="button is-yentafo is-round" onClick={this.props.closeModal}>ออก</button>
           </center>
         </div>
+        <ErrorModal
+          ref={instance => { this.errorModal = instance }}
+        />
+        <InfoModal
+          ref={instance => { this.infoModal = instance }}
+        />
       </div>
     )
   }

@@ -12,7 +12,7 @@ class Home extends Component {
       <div className="subcontent-main-div home">
         <div className="box with-title is-round">
           <div className="box-title is-violet">
-                        sdfsadfsdlakf;
+                        หน้าแรก
           </div>
           <div className="box-content">
             <button className="button">normal</button>
