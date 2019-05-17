@@ -19,7 +19,7 @@ class ExamRoomsModal extends Component {
     this.state = {
       seatOrderTypeRadio: 'shuffle',
       seatLineUpType: 'vertical',
-      selectedExamRoom: '',
+      selectedExamRoom: null,
       dataExam: [],
       selectedRow: null,
       isLoading: false
@@ -229,7 +229,7 @@ class ExamRoomsModal extends Component {
   }
 
   deleteButtonHandle () {
-    if (this.state.selectedExamRoom !== undefined) {
+    if (this.state.selectedExamRoom) {
       ExamService.deleteExamRoom(this.props.selectedExam._id, this.state.selectedExamRoom.roomId, this.state.selectedExamRoom.startTime).then((result) => {
         if (result) {
           this.infoModal.showModal('ลบสำเร็จ')
