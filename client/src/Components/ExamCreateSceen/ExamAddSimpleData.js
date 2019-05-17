@@ -63,6 +63,14 @@ class ExamAddSimpleData extends Component {
           examMaxScoreInput: this.props.selectedExam.maxScore
         })
       }
+    } else if (mode === 'create') {
+      let date = new Date(Date.now())
+      date.setHours(date.getHours() - (date.getTimezoneOffset() / 60))
+      this.setState({
+        examNameInput: '',
+        date: date,
+        examMaxScoreInput: ''
+      })
     }
     this.setState({
       mode: mode

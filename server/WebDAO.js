@@ -615,7 +615,6 @@ class WebDAO {
             return resolve(false)
           }
         })
-        client.close()
       })
     })
   }
