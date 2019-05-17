@@ -23,14 +23,15 @@ class AddSubject extends Component {
 
     componentDidMount() {
         this._isMounted = true
-        this.loadFacultyData()
+        this.loadInformation()
+        this.subTable.loadDataBySubjectIdOrSubjectName(this.state.subjectIdSearch, this.state.subjectNameSearch)
     }
 
     componentWillUnmount() {
         this._isMounted = false
     }
 
-    loadFacultyData() {
+    loadInformation() {
         FacultyService.getAllFaculty().then((result) => {
             if (this._isMounted) {
                 this.setState({

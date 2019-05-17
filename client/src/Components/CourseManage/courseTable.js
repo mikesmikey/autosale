@@ -111,7 +111,7 @@ class courseTable extends Component {
 
   deleteButtonHandle () {
     if (this.state.selectedRow === null) {
-      alert('กรุณาเลือกกการเรียนที่ต้องการก่อน')
+      this.errorModal.showModal('กรุณาเลือกกการเรียนที่ต้องการก่อน')
     } else {
       if (this.state.dataRow.courseId !== '' && this.state.dataRow.subjectNumber !== '') {
         CourseService.deleteCourse(this.state.dataRow.subjectNumber, this.state.dataRow.courseId).then((data) => {
