@@ -296,7 +296,7 @@ class ManageUserPopUp extends Component {
             </div>
           </div>
 
-          <div className="columns input-div">
+          <div className={`columns input-div ${this.state.popupStatus === 'edit' ? 'disabled' : ''}`}>
             <div className="column is-2">
               <label className="label">รหัสประจำตัว</label>
             </div>
