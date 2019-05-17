@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-
 var Building = new Schema({
   building_name: {
     type: Number
@@ -19,7 +18,6 @@ var Building = new Schema({
 }, {
   collection: 'Building'
 })
-
 
 Building.methods.getRoomByRoomId = function (roomId, callback) {
   return this.model('Building').aggregate([
@@ -39,6 +37,5 @@ Building.methods.getRoomByRoomId = function (roomId, callback) {
     }
   ], callback)
 }
-
 
 module.exports = mongoose.model('Building', Building)

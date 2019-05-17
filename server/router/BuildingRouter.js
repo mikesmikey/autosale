@@ -65,4 +65,32 @@ BuildingRouter.route('/add', (req, res) => {
   })
 })
 
+BuildingRouter.route('/room/id=:roomId', (req, res) => {
+  Building.aggregate(
+    [
+      {
+        '$match': { 'Rooms.room': req.params.roomId }
+      },
+      {
+        '$project': {
+          'rooms': {
+            '$filter': {
+              'input': '$Rooms',
+              'as': 'room',
+              'cond': { '$eq': [ '$$room.room', req.params.roomId ] }
+            }
+          }
+        }
+      }
+    ]
+  ).then(function (room) {
+    if (room) {
+      res.json(room)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
+
 module.exports = BuildingRouter
