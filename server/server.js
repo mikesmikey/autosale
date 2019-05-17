@@ -189,7 +189,6 @@ app.post('/login', (req, res) => {
 
 app.get('/facultys', (req, res) => {
   WebDAOObj.getAllFaculty().then((data) => {
-    
     if (data != null) {
       res.json(data)
     } else {
@@ -332,41 +331,41 @@ app.get('/exam/:username/:SubjectId', (req, res) => {
   })
 })
 
-app.get('/building', (req, res) => {
-  WebDAOObj.getAllBuilding().then((data) => {
-    if (data != null) {
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
+// app.get('/building', (req, res) => {
+// WebDAOObj.getAllBuilding().then((data) => {
+//   if (data != null) {
+//    res.json(data)
+//   } else {
+//     res.sendStatus(404)
+//   }
+// })
+// })
 
-app.get('/building/:building', (req, res) => {
-  WebDAOObj.getAllBuilding().then((data) => {
-    if (data != null) {
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
+// app.get('/building/:building', (req, res) => {
+// WebDAOObj.getAllBuilding().then((data) => {
+//   if (data != null) {
+//     res.json(data)
+//  } else {
+//    res.sendStatus(404)
+//    }
+//  })
+// })
 
-app.get('/building/:buildingname/:room', (req, res) => {
-  WebDAOObj.getAllBuildingByRoom(req.params.buildingname, req.params.room).then((data) => {
-    if (data != null) {
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
+// app.get('/building/:buildingname/:room', (req, res) => {
+//  WebDAOObj.getAllBuildingByRoom(req.params.buildingname, req.params.room).then((data) => {
+//   if (data != null) {
+//     res.json(data)
+//   } else {
+//      res.sendStatus(404)
+//    }
+//  })
+// })
 
-app.post('/building/edit', (req, res) => {
-  WebDAOObj.editRoom(req.body.BuildingData).then((pass) => {
-    res.send(pass)
-  })
-})
+// app.post('/building/edit', (req, res) => {
+// WebDAOObj.editRoom(req.body.BuildingData).then((pass) => {
+//   res.send(pass)
+//  })
+// })
 
 app.post('/yearAndTerm/edit', (req, res) => {
   WebDAOObj.editYearAndTerm(req.body.globalData).then((pass) => {
@@ -417,27 +416,27 @@ app.get('/courses/year=:year/semester=:semester/subject=:subjectId/start=:startP
   })
 })
 
-app.get('/buildings', (req, res) => {
-  WebDAOObj.getBuilding().then(data => {
-    if (data != null) {
-      res.json(data)
-    } else {
-      res.sendStatus(404)
-    }
-  })
-})
+// app.get('/buildings', (req, res) => {
+// WebDAOObj.getBuilding().then(data => {
+//   if (data != null) {
+//     res.json(data)
+//   } else {
+//      res.sendStatus(404)
+//    }
+//  })
+// })
 
-app.post('/building/add', (req, res) => {
-  WebDAOObj.insertBuilding(req.body.buildingData).then((pass) => {
-    res.send(pass)
-  })
-})
+// app.post('/building/add', (req, res) => {
+// WebDAOObj.insertBuilding(req.body.buildingData).then((pass) => {
+//   res.send(pass)
+//  })
+// })
 
-app.post('/building/remove/:short_name', (req, res) => {
-  WebDAOObj.deleteBuildingByShortName(req.params.short_name).then((pass) => {
-    res.send(pass)
-  })
-})
+// app.post('/building/remove/:short_name', (req, res) => {
+//  WebDAOObj.deleteBuildingByShortName(req.params.short_name).then((pass) => {
+//    res.send(pass)
+//  })
+// })
 
 app.get('/building/:short_name', (req, res) => {
   WebDAOObj.getBuildingByShortName(req.params.short_name).then((data) => {
