@@ -71,6 +71,7 @@ class ExaminersManage extends Component {
     this.setCheckClick = this.setCheckClick.bind(this)
     this.setDelete = this.setDelete.bind(this)
     this.setUsername = this.setUsername.bind(this)
+    this.setMaxPage = this.setMaxPage.bind(this)
   }
 
   loadDataToRoomExamSelect () {
@@ -217,7 +218,7 @@ class ExaminersManage extends Component {
       this.examinerTable.loadDataByTypeAndUsername(this.state.selectedType, this.state.searchInput, this.state.page === 1 ? 0 : (this.state.page - 1) * 50)
     }
     if (this.state.isDataLoading !== prevStates.isDataLoading) {
-      this.calculateMaxPage()
+      // this.calculateMaxPage()
     }
   }
 
@@ -323,7 +324,7 @@ class ExaminersManage extends Component {
       maxPage: 1
     })
     this.examinerTable.loadDataByTypeAndUsername(this.state.selectedType, this.state.searchInput, this.state.page === 1 ? 0 : (this.state.page - 1) * 50)
-    this.calculateMaxPage()
+    // this.calculateMaxPage()
   }
 
   setDataLoadingStatus (status) {
@@ -372,6 +373,23 @@ class ExaminersManage extends Component {
     const newPage = this.state.page === 1 || this.state.page - 1
     this.setState({
       page: newPage
+    })
+  }
+
+  setMaxPage (data) {
+    this.setState({
+      maxPage: Math.ceil(data / 50)
+    })
+    if (data === 0) {
+      this.setState({
+        maxPage: 1
+      })
+    }
+  }
+
+  setPage (data) {
+    this.setState({
+      Page: Math.ceil(data / 50)
     })
   }
 
@@ -502,7 +520,7 @@ class ExaminersManage extends Component {
             Type: false
           })
           this.examinerTable.loadDataByTypeAndUsername(this.state.selectedType, this.state.searchInput, this.state.page === 1 ? 0 : (this.state.page - 1) * 50)
-          this.calculateMaxPage()
+          // this.calculateMaxPage()
           console.log('End')
         }
       })
@@ -656,6 +674,7 @@ class ExaminersManage extends Component {
                   LName={this.state.LName}
                   Type={this.state.Type}
                   setCheckClick={this.setCheckClick}
+                  setMaxPage={this.setMaxPage}
                 />
               </div>
               <br></br>
@@ -749,7 +768,7 @@ class ExaminerTable extends Component {
       selectedRow: null,
       data: []
     }
-
+    this.number = 0
     this.loadDataByTypeAndUsername = this.loadDataByTypeAndUsername.bind(this)
   }
 
@@ -785,6 +804,13 @@ class ExaminerTable extends Component {
           this.props.setDataLoadingStatus(false)
           this.setState({ data: usersData })
         }
+        this.number = 0
+        for (var i = 0; i < usersData.length; i++) {
+          if (usersData[i].isExaminer === true) {
+            this.number++
+          }
+        }
+        this.props.setMaxPage(this.number)
       })
     } else {
       console.log('no')
@@ -793,14 +819,18 @@ class ExaminerTable extends Component {
 
   renderTableItem () {
     var items = []
+    this.number = 0
     for (var i = 0; i < this.state.data.length; i++) {
-      items[i] = <ExaminerTableItem
-        inspectItem={(e) => { this.inspectItem(e) }}
-        selectedType={this.props.selectedType}
-        itemIndex={i}
-        itemData={this.state.data[i]}
-        key={i}
-      />
+      if (this.state.data[i].isExaminer === true) {
+        items[i] = <ExaminerTableItem
+          inspectItem={(e) => { this.inspectItem(e) }}
+          selectedType={this.props.selectedType}
+          itemIndex={i}
+          itemData={this.state.data[i]}
+          key={i}
+        />
+        this.number++
+      }
     }
     return items
   }
