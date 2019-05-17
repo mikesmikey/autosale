@@ -18,12 +18,12 @@ class User {
   }
 
   validUserData () {
-    if (this.username === '') {
-      return { error: 'username-blank' }
-    } else if (this.firstName === '') {
+    if (this.firstName === '') {
       return { error: 'firstname-blank' }
     } else if (this.lastName === '') {
       return { error: 'lastname-blank' }
+    } else if (this.username === '') {
+      return { error: 'username-blank' }
     } else if (this.typeOfUser === '') {
       return { error: 'typeofuser-blank' }
     }
