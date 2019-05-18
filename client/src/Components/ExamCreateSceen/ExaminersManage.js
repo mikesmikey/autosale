@@ -203,12 +203,12 @@ class ExaminersManage extends Component {
   }
 
   componentDidMount () {
+    this.Exam = this.props.selectedExam
+    this.loadExaminer()
     this.examinerTable.loadDataByTypeAndUsername(this.state.selectedType, this.state.searchInput)
     this.loadDataToRoomExamSelect()
     this.loadTimeStart()
-    this.Exam = this.props.selectedExam
-    this.loadExaminer()
-    // console.log(this.props.selectedExam)
+    // console.log(this.Exam)
   }
 
   componentWillUnmount () {
@@ -677,6 +677,7 @@ class ExaminersManage extends Component {
                   Type={this.state.Type}
                   setCheckClick={this.setCheckClick}
                   setMaxPage={this.setMaxPage}
+                  loadExaminer={this.loadExaminer}
                 />
               </div>
               <br></br>

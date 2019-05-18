@@ -5,13 +5,15 @@ import '../../StyleSheets/ExamScoreSceen.css'
 import CRoomSerive from '../../Services/RoomService'
 import CSBuildingService from '../../Services/BuildingService'
 import '../../StyleSheets/RoomTable.css'
+import ErrorModal from '../Utilities/ErrorModal'
+import InfoModal from '../Utilities/InfoModal'
 
 const BuildingService = new CSBuildingService()
 const RoomService = new CRoomSerive()
 
 // eslint-disable-next-line react/require-render-return
 class DeleteRoomPopup extends Component {
-  _isMounted = false;
+  _isMounted = false
 
   constructor (props) {
     super(props)
@@ -58,9 +60,10 @@ class DeleteRoomPopup extends Component {
     RoomService.editRoom(BuildingObj.getUserObjectData()).then((result) => {
       if (result) {
         this.props.reloadTable()
+        this.infoModal.showModal('ลบสำเร็จ!')
         this.props.closeModal()
       } else {
-        alert('ลบไม่สำเร็จ!')
+        this.errorModal.showModal('ลบไม่สำเร็จ!')
       }
       this.props.setDataLoadingStatus(false)
     })
@@ -77,6 +80,12 @@ class DeleteRoomPopup extends Component {
             <button className="button is-yentafo is-round" onClick={this.props.closeModal}>ยกเลิก</button>
           </div>
         </div>
+        <ErrorModal
+          ref={instance => { this.errorModal = instance }}
+        />
+        <InfoModal
+          ref={instance => { this.infoModal = instance }}
+        />
       </div>
     )
   }

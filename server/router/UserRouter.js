@@ -26,6 +26,21 @@ UserRouter.route('/:username').get((req, res) => {
   })
 })
 
+UserRouter.route('/subjectid=:subjectid/courseid=:courseid').get((req, res) => {
+  const user = new User()
+  console.log('in')
+  user.getAllStudentByRegisteredCourse(req.params.subjectid, req.params.courseid, (err, users) => {
+    if (err) {
+      throw err
+    }
+    if (users) {
+      res.json(users)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
 UserRouter.route('/examiner/:username').get((req, res) => {
   User.find({ username: req.params.username, isExaminer: true }).select({ '_id': 0, 'password': 0 }).then(function (users) {
     if (users) {
@@ -78,7 +93,6 @@ UserRouter.route('/:type/:username/:startPos/:limit').get((req, res) => {
   const regex = new RegExp(username)
   User.find({ 'username': regex, 'typeOfUser': type }).select({ '_id': 0, 'password': 0 }).skip(Number.parseInt(startPos)).limit(Number.parseInt(limit)).then((data) => {
     if (data) {
-      console.log(username)
       res.json(data)
     } else {
       res.sendStatus(404)

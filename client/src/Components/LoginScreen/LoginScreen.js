@@ -15,7 +15,7 @@ const ERROR_TEXT_TABLE = {
   'username-blank': 'กรุณากรอก Username!',
   'password-blank': 'กรุณากรอก Password!',
   'wrong-username': 'ไม่พบ user นี้!',
-  'wrong-password': 'Password ผิด!'
+  'wrong-password': 'Password ไม่ถูกต้อง!'
 }
 
 class LoginScreen extends Component {

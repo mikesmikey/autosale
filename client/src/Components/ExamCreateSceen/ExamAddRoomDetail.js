@@ -293,7 +293,7 @@ class AddRoomDetail extends Component {
     return (
       <div className="add-room-detail box with-title">
         <div className="box-title is-violet">
-          <h3 className="label is-2">เพิ่มรายละเอียดการสอบ</h3>
+          <h3 className="label is-2">เพิ่มรายละเอียดห้องสอบ</h3>
           <button className="exit-button fas fa-times fa-1x" onClick={this.props.closeModal}></button>
         </div>
         <div className="box-content">

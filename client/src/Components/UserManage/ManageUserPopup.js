@@ -196,6 +196,7 @@ class ManageUserPopUp extends Component {
     newData.firstName = this.state.fnameInput
     newData.lastName = this.state.snameInput
     newData.username = this.state.usernameInput
+    newData.password = this.state.usernameInput
     newData.typeOfUser = this.props.selectedType
     newData.isExaminer = this.state.examinerRadio
 
@@ -296,7 +297,7 @@ class ManageUserPopUp extends Component {
             </div>
           </div>
 
-          <div className="columns input-div">
+          <div className={`columns input-div ${this.state.popupStatus === 'edit' ? 'disabled' : ''}`}>
             <div className="column is-2">
               <label className="label">รหัสประจำตัว</label>
             </div>

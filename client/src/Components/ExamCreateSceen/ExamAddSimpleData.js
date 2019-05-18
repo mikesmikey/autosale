@@ -89,7 +89,7 @@ class ExamAddSimpleData extends Component {
     if (this.state.examNameInput === '') {
       return false
     }
-    if (isNaN(Number.parseInt(this.state.examMaxScoreInput))) {
+    if (isNaN(this.state.examMaxScoreInput)) {
       return false
     }
     return true

@@ -114,9 +114,15 @@ class ExamSchedule extends Component {
         if (this.state.exams[i].examConfirm) {
           this.state.exams[i].rooms.forEach(room => {
             for (let j = 0; j < room.examSeats.length; j++) {
+              // console.log(room.examSeats[j])
               let seatFound = room.examSeats[j].find((seat) => {
-                return seat.studentCode === this.props.user.username
+                if (seat) {
+                  return seat.studentCode === this.props.user.username
+                } else {
+                  return false
+                }
               })
+
               if (seatFound) {
                 let examData = {}
                 examData.subjectId = this.state.exams[i].subjectId

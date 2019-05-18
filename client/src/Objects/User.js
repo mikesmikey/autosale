@@ -1,6 +1,7 @@
 class User {
   constructor (form) {
     this.username = form.username ? form.username : ''
+    this.password = form.password ? form.password : ''
     this.firstName = form.firstName ? form.firstName : ''
     this.lastName = form.lastName ? form.lastName : ''
     this.typeOfUser = form.typeOfUser ? form.typeOfUser : ''
@@ -18,12 +19,12 @@ class User {
   }
 
   validUserData () {
-    if (this.username === '') {
-      return { error: 'username-blank' }
-    } else if (this.firstName === '') {
+    if (this.firstName === '') {
       return { error: 'firstname-blank' }
     } else if (this.lastName === '') {
       return { error: 'lastname-blank' }
+    } else if (this.username === '') {
+      return { error: 'username-blank' }
     } else if (this.typeOfUser === '') {
       return { error: 'typeofuser-blank' }
     }
