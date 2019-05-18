@@ -195,20 +195,20 @@ SubjectRouter.route('/find/courses/year/:year/semester/:semester/id/:subjectId/:
 // getAllCouresCurrent()
 SubjectRouter.route('/findone').get((req, res) => {
   GlobalData.findOne().then((NowCurrent) => {
-    Subject.find().elemMatch("courses",{"school_year":Number.parseInt(NowCurrent.currentStudyYear),"semester":Number.parseInt(NowCurrent.currentStudyTerm)}).then((data) => {
+    Subject.find().elemMatch('courses', { 'school_year': Number.parseInt(NowCurrent.currentStudyYear), 'semester': Number.parseInt(NowCurrent.currentStudyTerm) }).then((data) => {
       let date = [NowCurrent.currentStudyYear, NowCurrent.currentStudyTerm]
       for (var i = 0; i < data.length; i++) {
         for (var j = 0; j < data[i].courses.length; j++) {
           if (data[i].courses[j].school_year === Number.parseInt(NowCurrent.currentStudyYear) &&
             data[i].courses[j].semester === Number.parseInt(NowCurrent.currentStudyTerm)) {
-              let qury = {'indexCouresCurrent':data[i].courses[j].courseId - 1}
+            let qury = { 'indexCouresCurrent': data[i].courses[j].courseId - 1 }
             data[i].indexCouresCurrent = data[i].courses[j].courseId - 1
           }
         }
       }
       data.push(date)
       res.json(data)
-      //res.json(data)
+      // res.json(data)
     })
   })
 })
@@ -228,7 +228,7 @@ SubjectRouter.route('/current/:subjectId').get((req, res) => {
 // getObjectCountRegisterCourseBySubjectId()
 SubjectRouter.route('/regCourse/find/id/:subjectId').get((req, res) => {
   User.find({ typeOfUser: 'student', 'RegisteredCourse': { $elemMatch: { subjectId: req.params.subjectId } } }).count((StudentData) => {
-    User.find({ typeOfUser: 'professor'}).elemMatch('RegisteredCourse',{ subjectId: req.params.subjectId }).then(function (TeacherData) {
+    User.find({ typeOfUser: 'professor' }).elemMatch('RegisteredCourse', { subjectId: req.params.subjectId }).then(function (TeacherData) {
       let ObjectData = []
       ObjectData.push({ student: StudentData })
       let listTecher = []
@@ -264,29 +264,8 @@ SubjectRouter.route('/remove/course/id/:subjectId/courseId/:courseId').post((req
 
 // getCourseByIdAndSubjectId()
 SubjectRouter.route('/find/course/id/:subjectId/courseId/:courseId').get((req, res) => {
-  Subject.aggregate([
-    {
-      '$match': { '$and':
-      [
-        { 'subjectId': req.params.subjectId },
-        { 'courses.courseId': Number.parseInt(req.params.courseId) }
-      ] }
-    },
-    {
-      '$project': {
-        '_id': 0,
-        'subjectId': 1,
-        'subjectName': 1,
-        'courses': {
-          '$filter': {
-            'input': '$courses',
-            'as': 'course',
-            'cond': { '$eq': [ '$$course.courseId', Number.parseInt(req.params.courseId) ] }
-          }
-        }
-      }
-    }
-  ]).then((data) => {
+  const subject = new Subject()
+  subject.getCourseBySubjectAndCourseId(req.params.subjectId, req.params.courseId).then((data) => {
     res.json(data)
   })
 })

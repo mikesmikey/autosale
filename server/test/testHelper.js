@@ -7,7 +7,7 @@ const ExamRouter = require('../router/ExamRouter')
 const AuthRouter = require('../router/AuthRouter')
 
 const app = express()
-const port = 5000
+const port = 9000
 // const cors= require('cors')
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
