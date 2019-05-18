@@ -124,13 +124,22 @@ class ExamService {
       const CourseDAO = new Subject()
       CourseDAO.getCourseBySubjectAndCourseId(exam.subjectId, exam.courseId).then((result) => {
         if (result.length === 1) {
-          if (totalSeat > result[0].courses[0].max_students) {
-            resolve({ 'enoughSeat': true })
-          } else {
-            resolve({ 'enoughSeat': false })
-          }
+          const userDAO = new User()
+          userDAO.getAllStudentByRegisteredCourse(exam.subjectId, exam.courseId, (_err, students) => {
+            if (_err) {
+              throw _err
+            }
+            if (students) {
+              if (totalSeat >= students.length) {
+                resolve({ 'enoughSeat': true })
+              } else {
+                resolve({ 'enoughSeat': false })
+              }
+            }
+          })
+        } else {
+          resolve({ 'courseExist': false })
         }
-        resolve({ 'courseExist': false })
       })
     })
   }
@@ -199,6 +208,7 @@ class ExamService {
               if (typeof (seatArr) === 'object') {
                 this.mappingAlreadyAssignSeat(exam, room, seatArr).then((mappedSeatArr) => {
                   this.assignStudent(exam.seatLineUpType, students, mappedSeatArr, startColumn, startRow, startStudent, room.maxStudent).then((assignedResult) => {
+                    // console.log('student length ' + students.length)
                     exam.rooms[i].examSeats = assignedResult.seatArr
                     lastColumn = assignedResult.lastColumn
                     lastRow = assignedResult.lastRow
@@ -285,10 +295,10 @@ class ExamService {
       let lastColumn = startColumn; let lastRow = startRow
       let ownedSeatArr = []
 
-      console.log(students)
-      console.log(studentCount)
+      // console.log(`start student: ${startStudent}, max student: ${maxStudent}`)
+      // console.log(`start count: ${studentCount}, max student: ${students.length - 1}`)
 
-      if (lineUpType === 'horizontal') {
+      if (lineUpType === 'vertical') {
         for (let i = 0; i < seatArr.length; i++) {
           if (studentCount === (startStudent + maxStudent) - 1) {
             resolve({ seatArr: ownedSeatArr, lastColumn: lastColumn, lastRow: lastRow, lastStudent: studentCount })
@@ -309,10 +319,7 @@ class ExamService {
                   resolve({ seatArr: ownedSeatArr, lastColumn: lastColumn, lastRow: lastRow, lastStudent: studentCount })
                   break
                 }
-                if (studentCount === students.length - 1) {
-                  ownedSeatArr[i][j] = {}
-                  ownedSeatArr[i][j].seatNumber = seatArr[i][j].seatNumber
-                } else {
+                if (studentCount <= students.length - 1) {
                   ownedSeatArr[i][j] = {}
                   ownedSeatArr[i][j].seatNumber = seatArr[i][j].seatNumber
                   ownedSeatArr[i][j].studentCode = students[studentCount].username
@@ -320,12 +327,15 @@ class ExamService {
                   lastColumn = i + startColumn
                   lastRow = j + startRow
                   studentCount++
+                } else {
+                  resolve({ seatArr: ownedSeatArr, lastColumn: lastColumn, lastRow: lastRow, lastStudent: studentCount })
+                  break
                 }
               }
             }
           }
         }
-      } else if (lineUpType === 'vertical') {
+      } else if (lineUpType === 'horizontal') {
         for (let i = 0; i < seatArr[0].length; i++) {
           if (studentCount === (startStudent + maxStudent) - 1) {
             resolve({ seatArr: ownedSeatArr, lastColumn: lastColumn, lastRow: lastRow, lastStudent: studentCount })
@@ -347,10 +357,7 @@ class ExamService {
                   resolve({ seatArr: ownedSeatArr, lastColumn: lastColumn, lastRow: lastRow, lastStudent: studentCount })
                   break
                 }
-                if (studentCount === students.length - 1) {
-                  ownedSeatArr[j][i] = {}
-                  ownedSeatArr[j][i].seatNumber = seatArr[j][i].seatNumber
-                } else {
+                if (studentCount <= students.length - 1) {
                   ownedSeatArr[j][i] = {}
                   ownedSeatArr[j][i].seatNumber = seatArr[j][i].seatNumber
                   ownedSeatArr[j][i].studentCode = students[studentCount].username
@@ -358,6 +365,9 @@ class ExamService {
                   lastColumn = j + startColumn
                   lastRow = i + startRow
                   studentCount++
+                } else {
+                  resolve({ seatArr: ownedSeatArr, lastColumn: lastColumn, lastRow: lastRow, lastStudent: studentCount })
+                  break
                 }
               }
             }

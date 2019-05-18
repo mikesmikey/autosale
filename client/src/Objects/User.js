@@ -1,6 +1,7 @@
 class User {
   constructor (form) {
     this.username = form.username ? form.username : ''
+    this.password = form.password ? form.password : ''
     this.firstName = form.firstName ? form.firstName : ''
     this.lastName = form.lastName ? form.lastName : ''
     this.typeOfUser = form.typeOfUser ? form.typeOfUser : ''

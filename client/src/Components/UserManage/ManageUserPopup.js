@@ -196,6 +196,7 @@ class ManageUserPopUp extends Component {
     newData.firstName = this.state.fnameInput
     newData.lastName = this.state.snameInput
     newData.username = this.state.usernameInput
+    newData.password = this.state.usernameInput
     newData.typeOfUser = this.props.selectedType
     newData.isExaminer = this.state.examinerRadio
 
