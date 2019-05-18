@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import ClientService from '../Utilities/ClientService'
+import CSubjectService from '../../Services/SubjectService'
 
-const CServiceObj = new ClientService()
+const SubjectService = new CSubjectService()
 
 class AddSubjectPopup extends Component {
 
@@ -21,7 +21,7 @@ class AddSubjectPopup extends Component {
 
     componentDidMount() {
         this._isMounted = true
-        CServiceObj.getAllSubject().then((result) => {
+        SubjectService.getAllSubject().then((result) => {
             if (this._isMounted) {
                 this.setState({
                     subjects: result
@@ -99,7 +99,7 @@ class AddSubjectPopup extends Component {
             valid = false;
         }
 
-        //done 
+        //done
         if (valid) {
             var subjectJson = {
                 subjectId: this.state.subjectId,
@@ -110,7 +110,7 @@ class AddSubjectPopup extends Component {
                 courses: []
             }
 
-            CServiceObj.addSubject(subjectJson).then((result) => {
+            SubjectService.addSubject(subjectJson).then((result) => {
                 if (result) {
                     alert('เพิ่มสำเร็จ!')
                     this.props.closeModal()

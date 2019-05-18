@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
 import React, { Component } from 'react'
 
-import ClientService from '../Utilities/ClientService'
+import CBuildingService from '../../Services/BuildingService'
 import '../../StyleSheets/RoomTable.css'
 
-const ServiceObj = new ClientService()
+const BuildingService = new CBuildingService()
 
 class RoomTable extends Component {
   _isMounted = false;
@@ -48,16 +48,13 @@ class RoomTable extends Component {
     const parent = e.target.parentElement
     if (parent.classList.contains('score-table-item')) {
       if (!parent.classList.contains('is-active')) {
-        if (this.state.selectedRow != null) {
-          this.state.selectedRow.classList.remove('is-active')
-        }
         parent.classList.add('is-active')
         this.setState({
           selectedRow: parent
         })
 
         for (var i = 0; i < this.state.data.length; i++) {
-          if (this.state.data[i].building_name == this.props.SelectedBuildingname) {
+          if (this.state.data[i].building_name === this.props.SelectedBuildingname) {
             this.props.setSelectedBuilding(this.state.data[i])
             this.props.setSelectedRoom(this.state.data[i].Rooms[parent.getAttribute('index')])
           }
@@ -72,7 +69,7 @@ class RoomTable extends Component {
       this.props.showDeleteModal()
 
       for (var i = 0; i < this.state.data.length; i++) {
-        if (this.state.data[i].building_name == this.props.SelectedBuildingname) {
+        if (this.state.data[i].building_name === this.props.SelectedBuildingname) {
           this.props.setSelectedBuilding(this.state.data[i])
           this.props.setSelectedRoom(this.state.data[i].Rooms[parent.getAttribute('index')])
         }
@@ -90,7 +87,7 @@ class RoomTable extends Component {
   }
 
   dataMainUpdate () {
-    ServiceObj.getAllBuilding().then((usersData) => {
+    BuildingService.getAllBuilding().then((usersData) => {
       if (this._isMounted) {
         this.props.setdataMain(usersData)
       }
@@ -98,7 +95,7 @@ class RoomTable extends Component {
   }
 
   loadData () {
-    ServiceObj.getAllBuilding().then((usersData) => {
+    BuildingService.getAllBuilding().then((usersData) => {
       if (this._isMounted) {
         // this.props.setDataLoadingStatus(false)
         this.setState({ data: usersData })
@@ -109,7 +106,7 @@ class RoomTable extends Component {
   }
 
   loadDataByRoomID (buildingname, room) {
-    ServiceObj.getAllBuildingByRoom(buildingname, room).then((usersData) => {
+    BuildingService.getAllBuildingByRoom(buildingname, room).then((usersData) => {
       if (this._isMounted) {
         // this.props.setDataLoadingStatus(false)
         this.setState({ data: usersData })
@@ -127,22 +124,22 @@ class RoomTable extends Component {
       el.value = this.state.data[i].building_name
       el.textContent = this.state.data[i].building_name
       let num = 0
-      if (this.BuildingAll.length == 0) {
+      if (this.BuildingAll.length === 0) {
         this.props.setSelectedBuildingname(this.state.data[i].building_name)
         this.props.setBuildingPopUp(this.state.data[i].building_name)
       }
       for (var z = 0; z < this.BuildingAll.length; z++) {
-        if (this.BuildingAll[z] != this.state.data[i].building_name) {
+        if (this.BuildingAll[z] !== this.state.data[i].building_name) {
           num++
         }
       }
-      if (num == this.BuildingAll.length) {
+      if (num === this.BuildingAll.length) {
         select.appendChild(el)
         this.BuildingAll.push(this.state.data[i].building_name)
         this.props.buildingAll.push(this.state.data[i].building_name)
       }
 
-      if (this.state.data[i].building_name == this.props.SelectedBuildingname) {
+      if (this.state.data[i].building_name === this.props.SelectedBuildingname) {
         // this.props.setSelectedRoomUpdate(this.state.data[i])
         for (var j = 0; j < this.state.data[i].Rooms.length; j++) {
           this.check = 0
@@ -150,14 +147,14 @@ class RoomTable extends Component {
           for (var k = 0; k < this.state.data[i].Rooms[j].room.length; k++) {
             this.checkK = k
             for (var p = 0; p < this.state.Input.length; p++) {
-              if (this.state.data[i].Rooms[j].room.charAt(this.checkK) == this.state.Input.charAt(p)) {
+              if (this.state.data[i].Rooms[j].room.charAt(this.checkK) === this.state.Input.charAt(p)) {
                 this.check++
                 this.checkK++
-              } else{
+              } else {
                 break
               }
             }
-            if (this.check == this.state.Input.length) {
+            if (this.check === this.state.Input.length) {
               returnData[j] = <RoomTableItem
                 key={j}
                 itemIndex={j}

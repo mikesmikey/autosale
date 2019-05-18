@@ -1,12 +1,14 @@
 /* eslint-disable no-unused-vars */
 import React, { Component } from 'react'
-import ClientService from '../Utilities/ClientService'
+import CGlobalDataService from '../../Services/GlobalDataService'
+import ErrorModal from '../Utilities/ErrorModal'
+import InfoModal from '../Utilities/InfoModal'
 
 // Components
 
 import '../../StyleSheets/home.css'
 import '../../StyleSheets/yearAndTermManage.css'
-const CServiceObj = new ClientService()
+const GlobalDataService = new CGlobalDataService()
 
 class YearAndTermManage extends Component {
   _isMounted = false;
@@ -38,7 +40,7 @@ class YearAndTermManage extends Component {
   }
 
   loadYearAndTerm () {
-    CServiceObj.getYearAndTerm().then((data) => {
+    GlobalDataService.getYearAndTerm().then((data) => {
       this.setYearAndTerm(data.currentStudyYear, data.currentStudyTerm)
     })
   }
@@ -60,26 +62,27 @@ class YearAndTermManage extends Component {
       })
     }
   }
+
   updateButtonHandle () {
     // eslint-disable-next-line radix
     var yearInt = parseInt(this.state.yearInput)
     // eslint-disable-next-line radix
     var termInt = parseInt(this.state.termInput)
-    if (yearInt <= 0 || isNaN(yearInt) || this.state.termInput === '0') {
-      alert('กรุณาใส่ข้อมูลให้ถูกต้อง')
+    if (yearInt <= 0 || isNaN(yearInt) || this.state.termInput === 0) {
+      this.errorModal.showModal('กรุณาระบุข้อมูลให้ถูกต้อง')
     } else {
       var newGlobalData = {}
       newGlobalData.currentStudyYear = yearInt
       newGlobalData.currentStudyTerm = termInt
 
-      const globalObj = CServiceObj.createGlobalDataObject(newGlobalData)
-      CServiceObj.editGlobalData(globalObj.getGlobalObjectData()).then((result) => {
+      const globalObj = GlobalDataService.createGlobalDataObject(newGlobalData)
+      GlobalDataService.editGlobalData(globalObj.getGlobalObjectData()).then((result) => {
         if (result) {
           this.setYearAndTerm(this.state.yearInput, this.state.termInput)
           this.setYearAndTermInput('', 0)
-          alert('อัพเดทสำเร็จ')
+          this.infoModal.showModal('อัพเดทสำเร็จ')
         } else {
-          alert('อัพเดทไม่สำเร็จ!')
+          this.errorModal.showModal('อัพเดทไม่สำเร็จ!')
         }
         // document.getElementById("showYear").innerHTML = "ปีการศึกษา : " + cStudyYear
         // document.getElementById("showTerm").innerHTML = "เทอม : " + cStudyTerm
@@ -146,7 +149,7 @@ class YearAndTermManage extends Component {
                 <div className="tab-is-1">
                   <label className="label font-size-1 tab-is-16 ">เทอม : </label>
                   <span className="tab-is-17"></span>
-                  <select className="user-mange-select-box" id="select_term" value={this.state.termInput} name="termInput" onChange={this.handleInputChange}>
+                  <select className="year-mange-select-box" id="select_term" value={this.state.termInput} name="termInput" onChange={this.handleInputChange}>
                     <option value="0"></option>
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -163,7 +166,12 @@ class YearAndTermManage extends Component {
                 </div>
               </div>
             </div>
-
+            <ErrorModal
+              ref={instance => { this.errorModal = instance }}
+            />
+            <InfoModal
+              ref={instance => { this.infoModal = instance }}
+            />
           </div>
         </div>
       </div>

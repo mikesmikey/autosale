@@ -19,6 +19,9 @@ import YearAndTermManage from '../YearAndTermManage/YearAndTermManage'
 import AddBuilding from '../AddBuilding/AddBuilding'
 import AddSubject from '../AddSubject/AddSubject'
 import CourseManage from '../CourseManage/courseManage'
+import Examiner from '../ExaminerSchedule/examinerMain'
+import AddCourse from '../CourseManage/AddCourse'
+import AddCourseData from '../CourseManage/AddCourseData'
 
 import '../../StyleSheets/mainScreen.css'
 import '../../StyleSheets/pageHelper.css'
@@ -28,17 +31,23 @@ class MainScreen extends Component {
     return (
       <div className="main-screen">
         <MainNavBar
-          mockLogout={this.props.mockLogout}
+          setUserAppAuth={this.props.setUserAppAuth}
           username={this.props.user.firstName}
+
           handleHamburger={() => { this.mainMenuBar.handleHamburger() }}
         />
-        <MainMenuBar ref={instance => { this.mainMenuBar = instance }} />
+        <MainMenuBar
+          ref={instance => { this.mainMenuBar = instance }}
+          user={this.props.user}
+        />
         <div className="main-subcontent">
           <Route exact path="/" render={(props) =>
             <Home />
           } />
           <Route path="/exam_schedule" render={(props) =>
-            <ExamSchedule />
+            <ExamSchedule
+              user={this.props.user}
+            />
           } />
           <Route path="/exam_create" render={(props) =>
             <ExamCreateScreen />
@@ -63,6 +72,17 @@ class MainScreen extends Component {
           } />
           <Route path="/course_manage" render={(props) =>
             <CourseManage />
+          } />
+          <Route path="/examiner" render={(props) =>
+            <Examiner
+              username={this.props.user.username}
+            />
+          }/>
+          <Route path="/add_course" render={(props) =>
+            <AddCourse />
+          } />
+          <Route path="/add_course_data" render={(props) =>
+            <AddCourseData />
           } />
         </div>
       </div>

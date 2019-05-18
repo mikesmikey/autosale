@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { Component } from 'react'
-import ClientService from '../Utilities/ClientService'
+import ClientService from '../../Services/UserService'
 
 // Objects
 import Student from '../../Objects/Student'
@@ -62,7 +62,6 @@ class UserTable extends Component {
     const parent = e.target.parentElement
     if (parent.classList.contains('user-table-item')) {
       this.props.showManageModal()
-      this.props.setSelectedUser(this.state.data[parent.getAttribute('index')])
     }
   }
 
@@ -117,19 +116,21 @@ class UserTable extends Component {
     return returnData
   }
 
-  loadDataByTypeAndUsername (typeInput, usernameInput) {
+  loadDataByTypeAndUsername (typeInput, usernameInput, startPos) {
     if (!this.props.isDataLoading) {
       this.props.setDataLoadingStatus(true)
       this.setState({
         data: []
       })
 
-      ServiceObj.searchAllUserByTypeAndUsername(typeInput, usernameInput).then((usersData) => {
+      ServiceObj.searchAllUserByTypeAndUsername(typeInput, usernameInput, startPos, 50).then((usersData) => {
         if (this._isMounted) {
           this.props.setDataLoadingStatus(false)
           this.setState({ data: usersData })
         }
       })
+    } else {
+      console.log('no')
     }
   }
 
@@ -154,6 +155,9 @@ class UserTableItem extends Component {
   }
 
   renderItemByType () {
+    const userFaculty = this.props.facultys.find((faculty) => {
+      return Number.parseInt(faculty.facultyId) === this.props.itemData.facultyId
+    })
     return (
       this.props.facultys.length !== 0
         ? <tr className="user-table-item"
@@ -164,7 +168,7 @@ class UserTableItem extends Component {
           <td id="tableUserId">{this.props.itemData.username}</td>
           <td>{`${this.props.itemData.firstName} ${this.props.itemData.lastName}`}</td>
 
-          {this.props.itemData.typeOfUser !== 'staff' ? <td>{this.props.facultys[this.props.itemData.facultyId - 1].facultyName}</td> : null}
+          {this.props.itemData.typeOfUser !== 'staff' ? <td>{userFaculty.facultyName}</td> : null}
           {this.props.itemData.typeOfUser === 'student' ? <td>{this.props.itemData.year}</td> : null}
           {this.props.itemData.typeOfUser === 'staff' ? <td>{this.props.itemData.standing}</td> : null}
         </tr>

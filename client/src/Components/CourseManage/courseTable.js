@@ -1,9 +1,14 @@
 /* eslint-disable no-unused-vars */
 
 import React, { Component } from 'react'
-import ClientService from '../Utilities/ClientService'
-
-const ServiceObj = new ClientService()
+import CCourseService from '../../Services/CourseService'
+import ErrorModal from '../Utilities/ErrorModal'
+import InfoModal from '../Utilities/InfoModal'
+import '../../StyleSheets/mainMenuBar.css'
+import {
+  Link
+} from 'react-router-dom'
+const CourseService = new CCourseService()
 
 class courseTable extends Component {
   _isMounted = false;
@@ -15,11 +20,25 @@ class courseTable extends Component {
 
     this.state = {
       selectedRow: null,
-      data: []
+      data: [],
+      dataRow:[]
     }
-
+    this.setDataRow = this.setDataRow.bind(this)
     this.loadDataIntoTable = this.loadDataIntoTable.bind(this)
     this.inspectItem = this.inspectItem.bind(this)
+    this.deleteItemByname = this.deleteItemByname.bind(this)
+  }
+  
+  deleteItemByname (name) {
+    for (var i = 0; i < this.state.data.length; i++) {
+      if (this.state.data[i][0].subjectName === name) {
+        var CopyData = this.state.data
+        CopyData.splice(i, 1)
+        this.setState({ data: CopyData })
+        return true
+      }
+    }
+    return false
   }
   componentWillUnmount () {
     this._isMounted = false
@@ -35,11 +54,14 @@ class courseTable extends Component {
   }
 
   loadAllDataCourse () {
-    ServiceObj.getAllDataCoures().then((courseData) => {
+    CourseService.getAllDataCoures().then((courseData) => {
       if (this._isMounted) {
         this.setState({ data: courseData })
       }
     })
+  }
+  setDataRow(index){
+    this.setState({dataRow: this.state.data[index][0]})
   }
   selectItem (e) {
     const parent = e.target.parentElement
@@ -52,6 +74,7 @@ class courseTable extends Component {
         this.setState({
           selectedRow: parent
         })
+        this.setDataRow(parent.getAttribute('index'))
         this.props.setSelectedCourse(this.state.data[parent.getAttribute('index')][0])
       }
     }
@@ -88,11 +111,22 @@ class courseTable extends Component {
 
   deleteButtonHandle () {
     if (this.state.selectedRow === null) {
-      alert('กรุณาเลือกกการเรียนที่ต้องการก่อน')
+      this.errorModal.showModal('กรุณาเลือกกการเรียนที่ต้องการก่อน')
     } else {
-      this.props.showDeleteModal()
+      if (this.state.dataRow.courseId !== '' && this.state.dataRow.subjectNumber !== '') {
+        CourseService.deleteCourse(this.state.dataRow.subjectNumber, this.state.dataRow.courseId).then((data) => {
+          // eslint-disable-next-line no-constant-condition
+            if (data) {
+              this.infoModal.showModal('ลบข้อมูลสำเร็จ')
+              this.deleteItemByname(this.state.dataRow.subjectName)
+              
+            } else {
+             this.errorModal.showModal('เกิดข้อผิดพลาด ลบไม่สำเร็จ')
+            }
+          })
+      }
     }
-  }
+  } 
   render () {
     return (
       <div>
@@ -105,10 +139,17 @@ class courseTable extends Component {
           </tbody>
         </table>
         <div className='columns box-content'>
-          <button className="button is-oros is-round is-pulled-right" >เพิ่มการเรียน</button>
-          <button className="button is-oros is-round is-pulled-right" >เพิ่มข้อมูล</button>
+        <Link to='add_course'>
+        <button className="button is-oros is-round is-pulled-right" >เพิ่มการเรียน</button>
+        </Link>
           <button className="button is-oros is-round is-pulled-right" onClick={() => { this.deleteButtonHandle() }} >ลบการเรียน</button>
         </div>
+        <ErrorModal
+              ref={instance => { this.errorModal = instance }}
+            />
+            <InfoModal
+              ref={instance => { this.infoModal = instance }}
+            />
       </div>
     )
   }

@@ -2,15 +2,18 @@
 import React, { Component } from 'react'
 
 import '../../StyleSheets/ExamScoreSceen.css'
-
-import ClientService from '../Utilities/ClientService'
+import CRoomSerive from '../../Services/RoomService'
+import CSBuildingService from '../../Services/BuildingService'
 import '../../StyleSheets/RoomTable.css'
+import ErrorModal from '../Utilities/ErrorModal'
+import InfoModal from '../Utilities/InfoModal'
 
-const ServiceObj = new ClientService()
+const BuildingService = new CSBuildingService()
+const RoomService = new CRoomSerive()
 
 // eslint-disable-next-line react/require-render-return
 class DeleteRoomPopup extends Component {
-  _isMounted = false;
+  _isMounted === false;
 
   constructor (props) {
     super(props)
@@ -36,7 +39,7 @@ class DeleteRoomPopup extends Component {
     newData.floors = this.props.selectedBuilding.floors
 
     for (var i = 0; i < this.props.selectedBuilding.Rooms.length; i++) {
-      if (this.props.selectedBuilding.Rooms[i].room != this.props.selectedRoom.room) {
+      if (this.props.selectedBuilding.Rooms[i].room !== this.props.selectedRoom.room) {
         roomArray.push(this.props.selectedBuilding.Rooms[i])
       }
     }
@@ -49,17 +52,18 @@ class DeleteRoomPopup extends Component {
     // console.log(this.props.selectedBuilding)
     // console.log(this.props.selectedRoom)
 
-    const BuildingObj = ServiceObj.createBuilding(this.currentFormObject())
-    console.log(BuildingObj)
+    const BuildingObj = BuildingService.createBuilding(this.currentFormObject())
+    // console.log(BuildingObj)
 
     this.props.setDataLoadingStatus(true)
 
-    ServiceObj.editRoom(BuildingObj.getUserObjectData()).then((result) => {
+    RoomService.editRoom(BuildingObj.getUserObjectData()).then((result) => {
       if (result) {
         this.props.reloadTable()
+        this.infoModal.showModal('ลบสำเร็จ!')
         this.props.closeModal()
       } else {
-        alert('ลบไม่สำเร็จ!')
+        this.errorModal.showModal('ลบไม่สำเร็จ!')
       }
       this.props.setDataLoadingStatus(false)
     })
@@ -76,6 +80,12 @@ class DeleteRoomPopup extends Component {
             <button className="button is-yentafo is-round" onClick={this.props.closeModal}>ยกเลิก</button>
           </div>
         </div>
+        <ErrorModal
+          ref={instance => { this.errorModal = instance }}
+        />
+        <InfoModal
+          ref={instance => { this.infoModal = instance }}
+        />
       </div>
     )
   }

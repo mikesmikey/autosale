@@ -9,10 +9,11 @@ import Modal from '../Utilities/Modal'
 import CourseTable from './courseTable.js'
 // eslint-disable-next-line no-unused-vars
 import CoursePopup from './coursePopup.js'
+// eslint-disable-next-line no-unused-vars
 import CoureseDeletePopup from './courseDeletePopup'
 
-import ClientService from '../Utilities/ClientService'
-const CServiceObj = new ClientService()
+import CGlobalDataService from '../../Services/GlobalDataService'
+const GlobalDataService = new CGlobalDataService()
 
 class App extends Component {
   constructor (props) {
@@ -32,23 +33,16 @@ class App extends Component {
       selectedCourse: course
     })
   }
-  setDataDelete () {
-    // for (var i; i < this.courseTable.state.data.leaght; i++) {
-    //   if (this.courseTable.state.data[i][0].subjectNumber === this.state.selectedCourse.subjectNumber) {
-    //     this.courseTable.data.splice(i, 1)
-    //   }
-    // }
-  }
+
   componentDidMount () {
     this.courseTable.loadAllDataCourse()
     this.loadYearAndTerm()
-    console.log(this.courseTable.state.data)
   }
   componentWillUnmount () {
     this._isMounted = false
   }
   loadYearAndTerm () {
-    CServiceObj.getYearAndTerm().then((data) => {
+    GlobalDataService.getYearAndTerm().then((data) => {
       this.setYearAndTerm(data.currentStudyYear, data.currentStudyTerm)
     })
   }
@@ -97,8 +91,8 @@ class App extends Component {
             showModal={() => {
               this.CoureseDeletePopup.showModal()
             }}
+            deleteItemByName={(data) => { this.courseTable.deleteItemByname(data) }}
             selectedCourse={this.state.selectedCourse}
-            loadNewTable={this.setDataDelete()}
           />
         }
         />
