@@ -4,9 +4,11 @@ import React, { Component } from 'react'
 import ClientService from '../../Services/UserService'
 import readXlsxFile from 'read-excel-file'
 import FaultyServices from '../../Services/FacultyService'
+import StudentServices from '../../Services/StudentService'
+import UserServices from '../../Services/UserService'
 
-const ServicesFaulty = new FaultyServices()
-const CServiceObj = new ClientService()
+const ServicesFaulty = new FaultyServices() 
+const ServiceStudent = new StudentServices()
 
 class StudentExcelPopup extends Component {
   constructor (props) {
@@ -52,7 +54,7 @@ class StudentExcelPopup extends Component {
       })
 
       let studentsID = []
-      CServiceObj.getAllUserBySelectType('student').then((result) => {
+      ServiceStudent.getAllUserByStudentType().then((result) => {
         if (this._isMounted) {
           for (var i in result) {
             studentsID.push({
@@ -69,7 +71,7 @@ class StudentExcelPopup extends Component {
     }
 
     addManyStudent (studentObj, countExcel) {
-      CServiceObj.addManyStudents(studentObj).then((result) => {
+      ServiceStudent.addManyStudents(studentObj).then((result) => {
         if (result) {
           alert(`จากรายการข้อมูลนิสิตทั้งหมดใน excel : ${countExcel}\nเพิ่มสำเร็จ : ${studentObj.length}`)
           this.setState({
@@ -87,7 +89,7 @@ class StudentExcelPopup extends Component {
         alert('ไม่มีไฟล์ อัพโหลดมาใหม่')
       } else {
         readXlsxFile(this.state.source).then((rows) => {
-          console.log(rows[0].length)
+          // console.log(rows[0].length())
           if (rows.length >= 1) {
             if (rows[0][0] === 'รหัสนิสิต' &&
                         rows[0][1] === 'ชื่อ' &&
