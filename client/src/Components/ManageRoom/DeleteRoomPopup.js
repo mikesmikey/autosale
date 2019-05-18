@@ -13,7 +13,7 @@ const RoomService = new CRoomSerive()
 
 // eslint-disable-next-line react/require-render-return
 class DeleteRoomPopup extends Component {
-  _isMounted === false;
+  _isMounted = false
 
   constructor (props) {
     super(props)
