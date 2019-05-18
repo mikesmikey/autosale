@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 const express = require('express')
 const UserRouter = express.Router()
 // const app = express()
@@ -162,14 +161,17 @@ UserRouter.route('/addmany').post((req, res) => {
   })
 })
 
-UserRouter.route('/type/student').get((req, res) => {
-  User.find({ 'typeOfUser': 'student' }).select({ '_id': 0, 'password': 0 }).then((data) => {
-    if (data) {
-      res.json(data)
+UserRouter.route('/token').post((req, res) => {
+  const service = new AuthService()
+  service.verifyToken(req.body.token).then((verifyResult) => {
+    if (verifyResult) {
+      const user = new User()
+      user.getUserByUsername(verifyResult.username).then((result) => {
+        res.send(result)
+      })
     } else {
-      res.sendStatus(404)
+      res.send(verifyResult)
     }
   })
 })
-
 module.exports = UserRouter
