@@ -18,7 +18,7 @@ class MainScrenMenuBar extends Component {
     this.USER_PERMISSION = {
       'academic-staff': ['home', 'exam-schedule', 'examiner-schedule', 'exam-manage', 'user-manage', 'room-manage', 'building-manage', 'year-manage', 'subject-manage', 'course-manage'],
       'student': ['home', 'exam-schedule', 'examiner-schedule'],
-      'professor': ['home', 'examiner-schedule'],
+      'professor': ['home', 'examiner-schedule', 'course-manage'],
       'staff': ['home', 'examiner-schedule']
     }
 

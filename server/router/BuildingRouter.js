@@ -29,6 +29,19 @@ BuildingRouter.route('/name=:short_name').get((req, res) => {
   })
 })
 
+BuildingRouter.route('/longname=:long_name').get((req, res) => {
+  Building.findOne({ 'building_name': req.params.long_name }, function (err, buildings) {
+    if (err) {
+      throw (err)
+    }
+    if (buildings) {
+      res.json(buildings)
+    } else {
+      res.sendStatus(404)
+    }
+  })
+})
+
 BuildingRouter.route('/room/id=:roomId').get((req, res) => {
   Building.aggregate(
     [
@@ -89,10 +102,11 @@ BuildingRouter.route('/add').post((req, res) => {
 })
 
 BuildingRouter.route('/edit').post((req, res) => {
-  Building.findOneAndUpdate({ 'building_name': req.body.newBuildingData.building_name }, { '$set': req.body.newBuildingData }, (err, result) => {
+  Building.findOneAndUpdate({ 'building_name': req.body.BuildingData.building_name }, { '$set': req.body.BuildingData }, (err, result) => {
     if (err) {
       console.log(err)
     }
+    console.log(err)
     if (result) {
       res.send(true)
     } else {

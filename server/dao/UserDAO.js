@@ -45,7 +45,7 @@ const User = new Schema({
 User.methods.getAllStudentByRegisteredCourse = function (subjectId, courseId, callback) {
   const query = { 'typeOfUser': 'student',
     'courses.subjectId': subjectId,
-    'courses.courseId': courseId
+    'courses.courseId': Number.parseInt(courseId)
   }
   return this.model('User').find(query, callback).select({ '_id': 0, 'password': 0 })
 }
