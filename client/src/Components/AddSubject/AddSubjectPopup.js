@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import CSubjectService from '../../Services/SubjectService'
+import ErrorModal from '../Utilities/ErrorModal'
+import InfoModal from '../Utilities/InfoModal'
 
 const SubjectService = new CSubjectService()
 
@@ -14,6 +16,15 @@ class AddSubjectPopup extends Component {
             subjects: [],
             facultyIndex: 1,
             branchIndex: 1
+        }
+
+        this.ERROR_TEXT = {
+            'neededfield': 'กรุณากรอกข้อมูลให้ครบ'
+        }
+
+        this.INFO_TEXT = {
+            'canAdd': 'เพิ่มสำเร็จ',
+            'cannotAdd': 'เพิ่มไม่สำเร็จ'
         }
         this.handleInputChange = this.handleInputChange.bind(this)
     }
@@ -112,17 +123,17 @@ class AddSubjectPopup extends Component {
 
             SubjectService.addSubject(subjectJson).then((result) => {
                 if (result) {
-                    alert('เพิ่มสำเร็จ!')
+                    this.infoModal.showModal(this.INFO_TEXT.canAdd)
                     this.props.closeModal()
                 } else {
-                    alert('เพิ่มไม่สำเร็จ!')
+                    this.errorModal.showModal(this.INFO_TEXT.cannotAdd)
                 }
             })
 
             this.clearInputAndCloseModal()
         }
         else {
-            alert('กรอกข้อมูลให้ครบ')
+            this.errorModal.showModal(this.ERROR_TEXT.neededfield)
         }
     }
 
@@ -230,11 +241,17 @@ class AddSubjectPopup extends Component {
                                 </button>
                         <button
                             className="button is-yentafo is-round"
-                            onClick={() => {this.clearInputAndCloseModal()}} >
+                            onClick={() => { this.clearInputAndCloseModal() }} >
                             ยกเลิก
-                                </button>
+                        </button>
                     </div>
                 </div>
+                <ErrorModal
+                    ref={instance => { this.errorModal = instance }}
+                />
+                <InfoModal
+                    ref={instance => { this.infoModal = instance }}
+                />
             </div>
         )
     }

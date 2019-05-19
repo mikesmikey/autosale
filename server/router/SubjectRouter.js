@@ -5,7 +5,6 @@ const SubjectRouter = express.Router()
 const Subject = require('../dao/SubjectDAO')
 const User = require('../dao/UserDAO')
 const GlobalData = require('../dao/GlobalDataDAO')
-// const GlobalData = require('../dao/GlobalData')
 
 // [================= AddSubject =================]
 
