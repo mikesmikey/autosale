@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 const mongoose = require('mongoose')
-const md5 = require('md5')
 const Schema = mongoose.Schema
 
 const User = new Schema({

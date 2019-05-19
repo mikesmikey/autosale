@@ -1,8 +1,7 @@
 const jwt = require('jsonwebtoken')
 const fs = require('fs')
-
+const md5 = require('md5')
 const User = require('../dao/UserDAO')
-
 const secret = fs.readFileSync('secret.key').toString()
 
 class AuthService {
@@ -52,6 +51,7 @@ class AuthService {
         var userData = {}
         userData.username = '59100' + i
         userData.password = Number.parseInt(Math.random() * 100000000).toString()
+        console.log('fuck md5 => ', md5('fuck'))
         userData.firstName = nameTable[Number.parseInt(Math.random() * 10)]
         userData.lastName = surnametable[Number.parseInt(Math.random() * 10)]
         userData.typeOfUser = typeTable[Number.parseInt(Math.random() * 3)]

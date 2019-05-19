@@ -2,7 +2,7 @@ const express = require('express')
 const UserRouter = express.Router()
 // const app = express()
 const User = require('../dao/UserDAO')
-
+const md5 = require('md5')
 const AuthService = require('../service/AuthService')
 
 UserRouter.route('/').get((req, res) => {
@@ -100,6 +100,7 @@ UserRouter.route('/:type/:username/:startPos/:limit').get((req, res) => {
 
 UserRouter.route('/add').post((req, res) => {
   const user = new User(req.body.userData)
+  console.log('md5 => ', md5('what the heck'))
   User.findOne({ 'username': user.username }).then((data) => {
     if (!data) {
       user.save()
