@@ -62,8 +62,11 @@ class ExamService {
   validCourse (exam) {
     return new Promise((resolve, reject) => {
       const CourseDAO = new Subject()
-      CourseDAO.getCourseBySubjectAndCourseId(exam.subjectId, exam.courseId, function (_err, course) {
-        if (course) { resolve({ 'courseExist': true }) } else resolve({ 'courseExist': false })
+      CourseDAO.getCourseBySubjectAndCourseId(exam.subjectId, exam.courseId, function (err, course) {
+        if (err) {
+          throw err
+        }
+        if (course.length > 0) { resolve({ 'courseExist': true }) } else resolve({ 'courseExist': false })
       })
     })
   }
@@ -123,7 +126,7 @@ class ExamService {
       })
       const CourseDAO = new Subject()
       CourseDAO.getCourseBySubjectAndCourseId(exam.subjectId, exam.courseId).then((result) => {
-        if (result.length === 1) {
+        if (result.length >= 1) {
           const userDAO = new User()
           userDAO.getAllStudentByRegisteredCourse(exam.subjectId, exam.courseId, (_err, students) => {
             if (_err) {
@@ -185,6 +188,10 @@ class ExamService {
         if (exam.seatOrderType === 'shuffle') {
           students = this.shuffle(students)
         }
+
+        const quit = () => {
+          resolve(true)
+        }
         for (let i = 0, p = Promise.resolve(); i < exam.rooms.length; i++) {
           p = p.then((_) => new Promise(resolve => {
             let room = exam.rooms[i]
@@ -213,22 +220,28 @@ class ExamService {
                     lastColumn = assignedResult.lastColumn
                     lastRow = assignedResult.lastRow
                     lastStudent = assignedResult.lastStudent
-
                     const examDAO = new Exam()
                     // console.log(`last column : ${lastColumn} last row : ${lastRow} last student : ${lastStudent} max student : ${room.maxStudent}`)
                     examDAO.updateExamData(exam._id, { 'rooms': exam.rooms }).then(() => {
+                      if (i === exam.rooms.length - 1) {
+                        resolve()
+                        quit()
+                      }
                       resolve()
                     })
                   })
                 })
               } else {
+                if (i === exam.rooms.length - 1) {
+                  resolve()
+                  quit()
+                }
                 resolve()
               }
             })
           })
           )
         }
-        resolve(true)
       })
     })
   }
@@ -398,12 +411,14 @@ class ExamService {
                 if (err) {
                   throw err
                 }
+                resolve(true)
               })
+            } else {
+              resolve(false)
             }
           })
         })
       })
-      resolve(true)
     })
   }
 }

@@ -25,6 +25,9 @@ var Subject = new Schema({
 })
 
 Subject.methods.getCourseBySubjectAndCourseId = function (subjectId, courseId, callback) {
+  // console.log(subjectId)
+  // console.log(courseId)
+  // console.log(callback)
   return this.model('Subject').aggregate(
     [
       {
