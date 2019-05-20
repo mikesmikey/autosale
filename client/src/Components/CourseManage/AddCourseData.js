@@ -166,7 +166,7 @@ class AddCourseData extends Component {
                     </div>
                     <div className='columns' >
                         <div className='column is-4'>
-                            <h3 style={{ marginLeft: 40 }}>เพิ่มรายชื่อครู</h3>
+                            <h3 style={{ marginLeft: 40 }}>เพิ่มรายชื่ออาจารย์</h3>
                         </div>
                         <div className='column is-4'>
 

@@ -174,7 +174,7 @@ class AddNameTeacher extends Component {
     return <div style={{ padding: 30 }}>
       <div >
         <div style={{ padding: 10 }} >
-          ชื่อครู
+          ชื่ออาจารย์
                     &nbsp; <input className="input is-userId-width" type="text" id="Teacherid" name="searchInput" onChange={this.handleInputChange} value={this.state.inputName} />
           <button className="button is-oros is-round is-free-size" type="button" onClick={() => this.serach()} style={{ width: '40px', height: '40px' }}><i className="fa fa-search height50"></i></button>
         </div>
