@@ -1,9 +1,8 @@
 const jwt = require('jsonwebtoken')
 const fs = require('fs')
-
 const User = require('../dao/UserDAO')
-
 const secret = fs.readFileSync('secret.key').toString()
+const md5 = require('md5')
 
 class AuthService {
   loginAuth (loginInfo) {
@@ -11,7 +10,7 @@ class AuthService {
       const user = new User()
       user.getUserByUsername(loginInfo.username, (_err, result) => {
         if (result) {
-          if (loginInfo.password === result.password) {
+          if (md5(loginInfo.password) === result.password) {
             return resolve({
               userData: result,
               token: this.provideToken(result)

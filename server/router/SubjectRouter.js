@@ -1,10 +1,10 @@
+/* eslint-disable no-unused-vars */
 const express = require('express')
 const SubjectRouter = express.Router()
 // const app = express()
 const Subject = require('../dao/SubjectDAO')
 const User = require('../dao/UserDAO')
 const GlobalData = require('../dao/GlobalDataDAO')
-// const GlobalData = require('../dao/GlobalData')
 
 // [================= AddSubject =================]
 
