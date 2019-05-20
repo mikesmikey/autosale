@@ -46,6 +46,20 @@ class Subject2Table extends Component {
       })
     }
 
+    filterProfessorSubject (data) {
+      let returnSubjectArr = []
+      if (this.props.user && this.props.user.courses) {
+        for (let i = 0; i < data.length; i++) {
+          for (let j = 0; j < this.props.user.courses.length; j++) {
+            if (data[i].subjectId === this.props.user.courses[j].subjectId) {
+              returnSubjectArr.push(data[i])
+            }
+          }
+        }
+      }
+      return (returnSubjectArr)
+    }
+
     SubjectObject (data) {
       return new Subject(data)
     }
