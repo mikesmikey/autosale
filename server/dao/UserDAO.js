@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
+const md5 = require('md5')
 
 const User = new Schema({
   username: {
@@ -41,6 +42,11 @@ const User = new Schema({
   }
 }, {
   collection: 'User'
+})
+
+User.pre('save', function (next) {
+  this.password = md5(this.password)
+  next()
 })
 
 User.methods.getAllStudentByRegisteredCourse = function (subjectId, courseId, callback) {
