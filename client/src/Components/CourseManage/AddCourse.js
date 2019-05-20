@@ -50,6 +50,7 @@ class AddCourse extends Component {
         }
       })
     }
+
     loadAllSubject () {
       SubjectService.getAllSubject().then((result) => {
         if (this._isMounted) {
@@ -296,6 +297,7 @@ class AddCourse extends Component {
                       ref={instance => { this.subTable = instance }}
                       selectSubId={this.state.selectSubId}
                       faculties={this.state.faculties}
+                      user={this.props.user}
                     />
                   </div>
                 </div>
