@@ -64,7 +64,13 @@ class UserService {
       })
     })
   }
-
+  addCourseByUserId(subjectId,userId,courseId,group){
+    return new Promise((resolve, reject) => {
+      axios.post(`/user/add/course/${subjectId}/${userId}/${courseId}/${group}`).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
   countUserByTypeAndUsername (type, username) {
     return new Promise((resolve, reject) => {
       var url = `/user/count/${username.length === 0 ? `${type}` : `${type}/${username}`}`
@@ -82,6 +88,25 @@ class UserService {
       })
     })
   }
+
+  getUserByUsernameTypeStudent (username) {
+    return new Promise((resolve, reject) => {
+      var url = `/user/student/${username}`
+      axios.get(url).then((result) => {
+        resolve(result.data)
+      })
+    })
+  }
+getNameTeacher (firstName,lastName) {
+  return new Promise((resolve, reject) => {
+    var url = `/user/serach/${firstName}/${lastName}`
+    axios.get(url).then((result) => {
+      resolve(result.data)
+    })
+  })
 }
+
+}
+
 
 export default UserService

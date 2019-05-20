@@ -81,7 +81,7 @@ class MainScreen extends Component {
           <Route path="/add_course" render={(props) =>
             <AddCourse />
           } />
-          <Route path="/add_course_data" render={(props) =>
+          <Route path="/add_course_data/:subjectId/:coruseId" render={(props) =>
             <AddCourseData />
           } />
         </div>

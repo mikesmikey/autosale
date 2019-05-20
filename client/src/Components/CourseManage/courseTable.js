@@ -21,14 +21,17 @@ class courseTable extends Component {
     this.state = {
       selectedRow: null,
       data: [],
-      dataRow:[]
+      dataRow:[],
+      setUrl:'add_course_data',
+      isLoading:false,
+      selectItem:null
     }
     this.setDataRow = this.setDataRow.bind(this)
     this.loadDataIntoTable = this.loadDataIntoTable.bind(this)
     this.inspectItem = this.inspectItem.bind(this)
     this.deleteItemByname = this.deleteItemByname.bind(this)
+    this.selectItem= this.selectItem.bind(this)
   }
-  
   deleteItemByname (name) {
     for (var i = 0; i < this.state.data.length; i++) {
       if (this.state.data[i][0].subjectName === name) {
@@ -61,10 +64,13 @@ class courseTable extends Component {
     })
   }
   setDataRow(index){
-    this.setState({dataRow: this.state.data[index][0]})
+    let data = this.state.data[index][0]
+    
+    this.setState({dataRow: this.state.data[index][0],setUrl:'add_course_data'+'/'+data.subjectNumber+'/'+data.courseId})
   }
   selectItem (e) {
     const parent = e.target.parentElement
+    console.log(this.state.selectItem)
     if (parent.classList.contains('course-table-item')) {
       if (!parent.classList.contains('is-active')) {
         if (this.state.selectedRow != null) {
@@ -74,10 +80,13 @@ class courseTable extends Component {
         this.setState({
           selectedRow: parent
         })
-        this.setDataRow(parent.getAttribute('index'))
+      
+        this.setState({isLoading:true})
         this.props.setSelectedCourse(this.state.data[parent.getAttribute('index')][0])
+        this.setDataRow(parent.getAttribute('index'))
       }
     }
+   
   }
   inspectItem (e) {
     const parent = e.target.parentElement
@@ -141,6 +150,9 @@ class courseTable extends Component {
         <div className='columns box-content'>
         <Link to='add_course'>
         <button className="button is-oros is-round is-pulled-right" >เพิ่มการเรียน</button>
+        </Link>
+        <Link to={this.state.setUrl}>
+        <button  style={{display: this.state.isLoading ? 'block' : 'none' }} className="button is-free-size is-oros is-round  is-pulled-right" >เพิ่มข้อมูลการเรียน</button>
         </Link>
           <button className="button is-oros is-round is-pulled-right" onClick={() => { this.deleteButtonHandle() }} >ลบการเรียน</button>
         </div>

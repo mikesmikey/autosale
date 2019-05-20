@@ -36,6 +36,8 @@ class SubjectService {
   }
   // serve done
   searchAllSubjectBySubjectId (subjid) {
+    console.log(subjid)
+    // console.log(subjid.length)
     return new Promise((resolve, reject) => {
       var url = `${subjid.length > 0 ? `/subject/find/id/${subjid}` : `/subject`}` // search 'one' by specified id
       axios.get(url)
@@ -44,7 +46,6 @@ class SubjectService {
         })
     })
   }
-
   getAllCourseByThisSubject (subjname) {
     return new Promise((resolve, reject) => {
       var url = `/subject/findone/name/${subjname}`
