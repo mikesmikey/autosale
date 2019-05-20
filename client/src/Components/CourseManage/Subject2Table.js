@@ -41,9 +41,28 @@ class Subject2Table extends Component {
     loadDataBySubjectId (subIdInput) {
       SubjectService.searchAllSubjectBySubjectId(subIdInput).then((result) => {
         if (this._isMounted) {
-          this.setState({ data: result })
+          if (this.props.user.typeOfUser === 'professor') {
+            let professorSubjects = this.filterProfessorSubject(result)
+            this.setState({ data: professorSubjects })
+          } else {
+            this.setState({ data: result })
+          }
         }
       })
+    }
+
+    filterProfessorSubject(data) {
+      let returnSubjectArr = []
+        if (this.props.user && this.props.user.courses) {
+          for (let i=0;i<data.length;i++) {
+            for (let j=0;j<this.props.user.courses.length;j++) {
+              if (data[i].subjectId === this.props.user.courses[j].subjectId) {
+                returnSubjectArr.push(data[i])
+              }
+            }
+          }
+        }
+        return (returnSubjectArr)
     }
 
     SubjectObject (data) {
