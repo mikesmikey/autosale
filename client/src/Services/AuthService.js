@@ -59,7 +59,9 @@ class AuthService {
         resolve({ error: 'password-blank' })
       } else {
         const sendData = { 'loginInfo': data }
+        console.log(sendData)
         axios.post('/auth/login', sendData).then((result) => {
+          console.log(result.data)
           resolve(result.data)
         })
       }

@@ -52,6 +52,24 @@
 
     width: 100px;
 }
+.bouder{
+    border-style: solid;
+    border-color: #6e6c6c;
+    border-width: 1px;
+}
+.add-div{
+    overflow-y: scroll;
+    height: 222px;
+    background-color: #e5e5e5;
+}
+.add-div2{
+    overflow-y: scroll;
+    height: 450px;
+    background-color: #e5e5e5;
+}
+.padding{
+    padding: 2%
+}
 
 .button:hover {
     background-color: #d8d8d8;

@@ -24,9 +24,8 @@ GlobalDataRouter.route('/findone').get((req, res) => {
 })
 
 GlobalDataRouter.route('/edit').post((req, res) => {
-  const globaldata = new GlobalData(req.body.subjectData)
-  GlobalData.findOneAndUpdate({ 'id': globaldata.id }, { '$set': globaldata }).then((result) => {
-    if (result.value) {
+  GlobalData.findOneAndUpdate({}, { '$set': req.body.globalData }).then((result) => {
+    if (result) {
       return res.send(true)
     } else {
       return res.send(false)

@@ -55,8 +55,8 @@ class CourseService {
         if (ArrayObj.length > 1) {
           ArrayObj.forEach(element => {
             this.getObjectCountRegisterCourseBySubjectId(element[0].subjectNumber).then((result) => {
-              element[0].studentRegister = result[0].student 
-              element[0].teacherName = result[1]
+              element[0].studentRegister = result.length
+          //    element[0].teacherName = result[1]
             })
           })
         }
@@ -74,6 +74,7 @@ class CourseService {
         }
       }
   }
+  
   getAllCouresCurrent() {
     return new Promise((resolve, reject) => {
       axios.get('/subject/findone').then((result) => {

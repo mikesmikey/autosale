@@ -40,6 +40,7 @@ class LoginScreen extends Component {
       username: this.state.username,
       password: this.state.password
     }
+    console.log(loginData)
     AuthServiceObj.checkAuth(loginData).then((result) => {
       if (result.error) {
         this.errorModal.showModal(ERROR_TEXT_TABLE[result.error])

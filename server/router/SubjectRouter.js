@@ -227,19 +227,11 @@ SubjectRouter.route('/current/:subjectId').get((req, res) => {
 
 // getObjectCountRegisterCourseBySubjectId()
 SubjectRouter.route('/regCourse/find/id/:subjectId').get((req, res) => {
-  User.find({ typeOfUser: 'student', 'RegisteredCourse': { $elemMatch: { subjectId: req.params.subjectId } } }).count((StudentData) => {
-    User.find({ typeOfUser: 'professor' }).elemMatch('RegisteredCourse', { subjectId: req.params.subjectId }).then(function (TeacherData) {
-      let ObjectData = []
-      ObjectData.push({ student: StudentData })
-      let listTecher = []
-      for (var i = 0; i < TeacherData.length; i++) {
-        listTecher.push({ firstName: TeacherData[i].firstName, lastName: TeacherData[i].lastName })
-      }
-      ObjectData.push(listTecher)
-      res.send(ObjectData)
+  console.log(req.params.subjectId)
+  User.find({ typeOfUser: 'student'}).elemMatch('courses', { subjectId: req.params.subjectId }).then((StudentData) => {
+    res.send(StudentData)
     })
   })
-})
 
 // getNameteacherFormRegisterCourseBySubjectId()
 SubjectRouter.route('/regCourse/find/teacher/id/:subjectId').get((req, res) => {
@@ -255,11 +247,11 @@ SubjectRouter.route('/regCourse/find/teacher/id/:subjectId').get((req, res) => {
 
 // deleteCourse()
 SubjectRouter.route('/remove/course/id/:subjectId/courseId/:courseId').post((req, res) => {
-  Subject.updateMany({ subjectId: req.params.subjectId }, { $pull: { courses: { courseId: Number.parseInt(req.params.courseId) } } }).then((data) => {
-    User.updateMany({ '$or': [{ typeOfUser: 'professor' }, { typeOfUser: 'student' }] }, { $pull: { RegisteredCourse: { subjectId: req.params.subjectId } } }).then((data) => {
+ Subject.updateMany({ subjectId: req.params.subjectId }, { $pull: { courses: { courseId: Number.parseInt(req.params.courseId) } } }).then((data) => {
+    User.updateMany({ '$or': [{ typeOfUser: 'professor' }, { typeOfUser: 'student' }] }, { $pull: { courses: { subjectId: req.params.subjectId } } }).then((data) => {
       res.send(true)
     })
-  })
+ })
 })
 
 // getCourseByIdAndSubjectId()
