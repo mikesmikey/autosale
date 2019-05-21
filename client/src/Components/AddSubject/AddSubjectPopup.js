@@ -124,13 +124,11 @@ class AddSubjectPopup extends Component {
             SubjectService.addSubject(subjectJson).then((result) => {
                 if (result) {
                     this.infoModal.showModal(this.INFO_TEXT.canAdd)
-                    this.props.closeModal()
+                    this.clearInputAndCloseModal()
                 } else {
                     this.errorModal.showModal(this.INFO_TEXT.cannotAdd)
                 }
-            })
-
-            this.clearInputAndCloseModal()
+            })   
         }
         else {
             this.errorModal.showModal(this.ERROR_TEXT.neededfield)

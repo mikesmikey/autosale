@@ -66,6 +66,7 @@ User.methods.insertManyUser = function (users, callback) {
 }
 
 User.methods.updateUserData = function (userData, callback) {
+  // userData.password = md5(userData.password)
   return this.model('User').findOneAndUpdate({ 'username': userData.username }, { '$set': userData }, callback)
 }
 
