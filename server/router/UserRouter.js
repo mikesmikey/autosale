@@ -2,7 +2,6 @@ const express = require('express')
 const UserRouter = express.Router()
 // const app = express()
 const User = require('../dao/UserDAO')
-
 const AuthService = require('../service/AuthService')
 
 UserRouter.route('/').get((req, res) => {

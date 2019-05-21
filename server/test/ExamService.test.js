@@ -1318,6 +1318,7 @@ describe('INTEGRAL TEST: assignExaminer', () => {
 
   const userData = {
     'username': 'iamexaminer',
+    'password': 'iamexaminer',
     'typeOfUser': 'student'
   }
 
@@ -1344,6 +1345,9 @@ describe('INTEGRAL TEST: assignExaminer', () => {
     const service = new ExamService()
     service.assignExaminer(exam).then((result) => {
       User.findById(user.id, (_err, user) => {
+        if (_err) {
+          throw _err
+        }
         user.should.be.a('object')
         user.should.have.property('examList')
         done()
