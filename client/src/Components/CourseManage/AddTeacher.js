@@ -4,11 +4,11 @@ import InfoModal from '../Utilities/InfoModal'
 import CUserService from '../../Services/UserService'
 import '../../StyleSheets/mainMenuBar.css'
 import '../../StyleSheets/courseManager.css'
-import { throws } from 'assert';
+import { throws } from 'assert'
 
 const UserService = new CUserService()
 class AddNameTeacher extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       inputName: '',
@@ -18,7 +18,7 @@ class AddNameTeacher extends Component {
       dataRow: [],
       TeacherSelect: [],
       AddAlert: false,
-      groupData:[]
+      groupData: []
     }
     this.setTeacherSelect = this.setTeacherSelect.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
@@ -28,7 +28,7 @@ class AddNameTeacher extends Component {
     this.setTeacher = this.setTeacher.bind(this)
     this.setDefaultTeacher = this.setDefaultTeacher.bind(this)
   }
-  setDefaultTeacher() {
+  setDefaultTeacher () {
     this.setState({
       inputName: '',
       data: [],
@@ -39,14 +39,14 @@ class AddNameTeacher extends Component {
       AddAlert: false
     })
   }
-  setTeacherSelect() {
+  setTeacherSelect () {
     var data = this.state.TeacherSelect
     data.push(this.state.dataRow)
     this.setState({
       TeacherSelect: data
     })
   }
-  deleteTeacher(username) {
+  deleteTeacher (username) {
     for (var i = 0; i < this.state.TeacherSelect.length; i++) {
       if (this.state.TeacherSelect[i].username === username) {
         var CopyData = this.state.TeacherSelect
@@ -55,7 +55,7 @@ class AddNameTeacher extends Component {
       }
     }
   }
-  selectItem(e) {
+  selectItem (e) {
     const parent = e.target.parentElement
     if (parent.classList.contains('course-table-item')) {
       if (!parent.classList.contains('is-active')) {
@@ -70,31 +70,29 @@ class AddNameTeacher extends Component {
       }
     }
   }
-  handleInputChange(e) {
+  handleInputChange (e) {
     const target = e.target
     const value = target.value
     this.setState({
       inputName: value
     })
   }
-  serach() {
-    var string = this.state.inputName.split(" ")
+  serach () {
+    var string = this.state.inputName.split(' ')
     if (this.state.inputName !== '' && string.length === 2) {
       UserService.getNameTeacher(string[0], string[1]).then((result) => {
         this.setState({ data: result, AddAlert: false })
         this.loadDataIntoTable()
         this.props.setGroup()
-
       })
-
     } else {
       this.errorModal.showModal('รายชื่ออาจารย์ไม่ต้องเงือนไข')
     }
   }
-  loadDataIntoTable() {
+  loadDataIntoTable () {
     if (!this.state.AddAlert) {
       if (this.state.data.length !== 0) {
-        var DataObj = []
+        let DataObj = []
         for (var i = 0; i < this.state.data.length; i++) {
           DataObj[i] = <TeacherName
             selectItem={(e) => { this.selectItem(e) }}
@@ -105,17 +103,17 @@ class AddNameTeacher extends Component {
         }
         return DataObj
       } else {
-        var DataObj = []
+        let DataObj = []
         return DataObj
       }
     } else {
-      var DataObj = []
+      let DataObj = []
       return DataObj
     }
   }
-  loadDataIntoTableTeacherSelect() {
+  loadDataIntoTableTeacherSelect () {
     if (this.state.TeacherSelect.length !== 0) {
-      var DataObj = []
+      let DataObj = []
       for (var i = 0; i < this.state.TeacherSelect.length; i++) {
         DataObj[i] = <TeacherSelect
           removeTeacher={(data) => this.removeTeacher(data)}
@@ -126,54 +124,52 @@ class AddNameTeacher extends Component {
       }
       return DataObj
     } else {
-      var DataObj = []
+      let DataObj = []
       return DataObj
     }
   }
-  setTeacher() {
-    
-      if (this.state.dataRow.length !== 0) {
-        let booleanCheckInsert = true
-        let courseCheck = true
-        try {
-          this.state.dataRow.courses.length
-        } catch (ex) {
-          courseCheck = false
-        }
-        console.log(courseCheck)
-        if (courseCheck) {
-          for (let i = 0; i < this.state.dataRow.courses.length; i++) {
-            let id = this.state.dataRow.courses[i].subjectId
-            console.log(this.props.addNameStudent.state.selectgroups)
-            console.log(Number.parseInt(this.props.addNameStudent.state.selectgroups) === this.state.dataRow.courses[i].group)
-            if (Number.parseInt(this.props.addNameStudent.state.selectgroups) === this.state.dataRow.courses[i].group && id === this.props.subjectId) {
-              this.errorModal.showModal(`อาจารย์ลงทะเบียนวิชา ${this.props.subjectId} กลุ่มที่ ${this.props.addNameStudent.state.selectgroups} แล้ว`)
-              booleanCheckInsert = false
-            }
-          }
-        }
-        for (let i = 0; i < this.state.TeacherSelect.length; i++) {
-  
-          if (this.state.dataRow.username === this.state.TeacherSelect[i].username && booleanCheckInsert) {
-            this.errorModal.showModal('รายชื่ออาจารย์ซ้ำ')
-            booleanCheckInsert = false
-            break
-          }
-        }
-        if (booleanCheckInsert) {
-          this.setTeacherSelect()
-          this.props.setTeacher(this.state.dataRow)
-          this.setState({ AddAlert: true, dataRow: [] })
-        }
-      } else {
-        this.errorModal.showModal('กรุณาเลือกรายชื่ออาจารย์ก่อน')
+  setTeacher () {
+    if (this.state.dataRow.length !== 0) {
+      let booleanCheckInsert = true
+      let courseCheck = true
+      try {
+        this.state.dataRow.courses.length
+      } catch (ex) {
+        courseCheck = false
       }
+      console.log(courseCheck)
+      if (courseCheck) {
+        for (let i = 0; i < this.state.dataRow.courses.length; i++) {
+          let id = this.state.dataRow.courses[i].subjectId
+          console.log(this.props.addNameStudent.state.selectgroups)
+          console.log(Number.parseInt(this.props.addNameStudent.state.selectgroups) === this.state.dataRow.courses[i].group)
+          if (Number.parseInt(this.props.addNameStudent.state.selectgroups) === this.state.dataRow.courses[i].group && id === this.props.subjectId) {
+            this.errorModal.showModal(`อาจารย์ลงทะเบียนวิชา ${this.props.subjectId} กลุ่มที่ ${this.props.addNameStudent.state.selectgroups} แล้ว`)
+            booleanCheckInsert = false
+          }
+        }
+      }
+      for (let i = 0; i < this.state.TeacherSelect.length; i++) {
+        if (this.state.dataRow.username === this.state.TeacherSelect[i].username && booleanCheckInsert) {
+          this.errorModal.showModal('รายชื่ออาจารย์ซ้ำ')
+          booleanCheckInsert = false
+          break
+        }
+      }
+      if (booleanCheckInsert) {
+        this.setTeacherSelect()
+        this.props.setTeacher(this.state.dataRow)
+        this.setState({ AddAlert: true, dataRow: [] })
+      }
+    } else {
+      this.errorModal.showModal('กรุณาเลือกรายชื่ออาจารย์ก่อน')
+    }
   }
-  removeTeacher(name) {
+  removeTeacher (name) {
     this.deleteTeacher(name)
     this.props.deleteTeacher(name)
   }
-  render() {
+  render () {
     return <div style={{ padding: 30 }}>
       <div >
         <div style={{ padding: 10 }} >
@@ -222,15 +218,14 @@ class AddNameTeacher extends Component {
         ref={instance => { this.infoModal = instance }}
       />
     </div>
-
   }
 }
 class TeacherName extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.renderItemByType = this.renderItemByType.bind(this)
   }
-  renderItemByType() {
+  renderItemByType () {
     return (
       <tr className="course-table-item"
         onClick={(e) => { this.props.selectItem(e) }}
@@ -241,19 +236,19 @@ class TeacherName extends Component {
       </tr>
     )
   }
-  render() {
+  render () {
     return (this.renderItemByType())
   }
 }
 class TeacherSelect extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.renderItemByType = this.renderItemByType.bind(this)
   }
-  delete(value) {
+  delete (value) {
     value.props.removeTeacher(value.props.itemData.username)
   }
-  renderItemByType() {
+  renderItemByType () {
     return (
       <tr className="course-table-item"
         index={this.props.itemIndex}
@@ -264,7 +259,7 @@ class TeacherSelect extends Component {
       </tr>
     )
   }
-  render() {
+  render () {
     return (this.renderItemByType())
   }
 }
