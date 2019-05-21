@@ -33,33 +33,37 @@ class ExamSchedule extends Component {
   loadUserExam () {
     if (this.props.user) {
       console.log('LOG: Loading user exam')
-      for (let i = 0, p = Promise.resolve(); i < this.props.user.courses.length; i++) {
-        p = p.then((_) => new Promise(resolve => {
-          ExamService.getAllExamBySubjectAndCourse(this.props.user.courses[i].subjectId, this.props.user.courses[i].courseId).then((result) => {
-            let newExams = this.state.exams
-            newExams = newExams.concat(result)
-            this.setState({
-              exams: newExams
+      if (this.props.user.courses) {
+        for (let i = 0, p = Promise.resolve(); i < this.props.user.courses.length; i++) {
+          p = p.then((_) => new Promise(resolve => {
+            ExamService.getAllExamBySubjectAndCourse(this.props.user.courses[i].subjectId, this.props.user.courses[i].courseId).then((result) => {
+              let newExams = this.state.exams
+              newExams = newExams.concat(result)
+              this.setState({
+                exams: newExams
+              })
+              resolve()
             })
-            resolve()
-          })
-        }))
+          }))
+        }
       }
     }
   }
 
   loadUserCourse () {
-    for (let i = 0, p = Promise.resolve(); i < this.props.user.courses.length; i++) {
-      p = p.then((_) => new Promise(resolve => {
-        CourseService.getCourseByIdAndSubjectId(this.props.user.courses[i].courseId, this.props.user.courses[i].subjectId).then((result) => {
-          let newCourses = this.state.courses
-          newCourses = newCourses.concat(result)
-          this.setState({
-            courses: newCourses
+    if (this.props.user.courses) {
+      for (let i = 0, p = Promise.resolve(); i < this.props.user.courses.length; i++) {
+        p = p.then((_) => new Promise(resolve => {
+          CourseService.getCourseByIdAndSubjectId(this.props.user.courses[i].courseId, this.props.user.courses[i].subjectId).then((result) => {
+            let newCourses = this.state.courses
+            newCourses = newCourses.concat(result)
+            this.setState({
+              courses: newCourses
+            })
+            resolve()
           })
-          resolve()
-        })
-      }))
+        }))
+      }
     }
   }
 
