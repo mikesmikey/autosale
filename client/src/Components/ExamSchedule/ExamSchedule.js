@@ -196,7 +196,7 @@ class ExamScheduleItem extends Component {
         <div className="schedule-item-columns columns">
           <div className="exam-date-box column is-2 is-white-violet">
             <div className="date-labels">
-              <h1>{examDate.getDate()}</h1>
+              <h1>{examDate.getDate()}</h1> 
               <h3>{monthNames[examDate.getMonth()]}</h3>
               <h3>{examDate.getFullYear()}</h3>
               <h2>เวลา {this.props.examData.timeString}</h2>

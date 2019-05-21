@@ -196,12 +196,16 @@ console.log(ex)
                 let checkRegister = true
                 if (result !== false) {
                     var checkSubject = true
-                    for (let i = 0; i < result.courses.length; i++) {
-                        if (result.courses[i].subjectId === this.props.subjectId) {
-                            this.errorModal.showModal('นิสิตลงทะเบียนวิชานี้แล้ว')
-                            checkSubject = false
-                            checkRegister = false
-                        }
+                    console.log(`skdlaskd;las`)
+                    console.log(result.courses)
+                    if(!(result.courses === undefined)){
+                        for (let i = 0; i < result.courses.length; i++) {
+                            if (result.courses[i].subjectId === this.props.subjectId) {
+                                this.errorModal.showModal('นิสิตลงทะเบียนวิชานี้แล้ว')
+                                checkSubject = false
+                                checkRegister = false
+                            }
+                        } 
                     }
                     if (checkRegister) {
                         console.log(`subjectData[0].courses[${this.props.courseId}]`)
