@@ -158,6 +158,7 @@ class ExamManageModal extends Component {
     this.setState({
       exams: newExamArr
     })
+    this.setSelectedExam(null)
   }
 
   handleManageRoomModal () {
