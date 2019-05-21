@@ -27,8 +27,8 @@ class AddNameStudent extends Component {
             e: null,
             regstudent: 0,
             subjectData: 0,
-            groups: 1,
-            page:0
+            groups: 0,
+            selectgroups: 1
         }
         this.setStudentSelect = this.setStudentSelect.bind(this)
         this.handleInputChange = this.handleInputChange.bind(this)
@@ -39,6 +39,53 @@ class AddNameStudent extends Component {
         this.getGroups = this.getGroups.bind(this)
         this.loadState = this.loadState.bind(this)
         this.setDefaultStudent = this.setDefaultStudent.bind(this)
+        this.selectgroups = this.selectgroups.bind(this)
+        this.onChangeTY = this.onChangeTY.bind(this)
+    }
+    selectgroups() {
+        try {
+            console.log('RUN')
+            console.log(`lengthTeacher ${lengthTeacher} || lengthStuden ${lengthStuden}`)
+            let lengthTeacher = this.props.addNameTeacher.TeacherSelect.length
+            let lengthStuden = this.state.StudentSelect.length
+            if (Number.parseInt(lengthTeacher) === 0 && Number.parseInt(lengthStuden) === 0) {
+                if(this.state.groups === 0){
+                    this.setState({
+                        selectgroups: null
+                    })
+                }else{
+                    this.setState({
+                        selectgroups: this.state.groups
+                    })
+                }
+            }
+        } catch (ex) {
+
+        }
+
+    }
+    onChangeTY(e){
+        const target = e.target
+        const name = target.name
+        const value = target.value
+
+        try {
+            console.log(typeof this.props.addNameTeacher.state.TeacherSelect)
+            let lengthTeacher = this.props.addNameTeacher.state.TeacherSelect === undefined ? 0 : this.props.addNameTeacher.state.TeacherSelect.length
+            let lengthStuden = this.state.StudentSelect === undefined ? 0 : this.state.StudentSelect.length
+            console.log(`lengthTeacher ${lengthTeacher} || lengthStuden ${lengthStuden}`)
+            let check =Number.parseInt(lengthTeacher) === 0  && Number.parseInt(lengthStuden) === 0
+            console.log(`check ${check}`)
+            console.log('my test')
+            if (check) {
+                console.log('my test')
+                this.setState({
+                    selectgroups: value
+                })
+            }
+        } catch (ex) {
+console.log(ex)
+        }
     }
     setDefaultStudent() {
         this.setState({
@@ -53,7 +100,8 @@ class AddNameStudent extends Component {
             e: null,
             regstudent: 0,
             subjectData: 0,
-            groups: 0
+            groups: 0,
+            selectgroups: 1
         })
     }
     componentDidMount() {
@@ -221,11 +269,18 @@ class AddNameStudent extends Component {
     }
     optionGroups() {
         var DataObj = []
-        for (var i = 1; i <= this.state.maxGroups; i++) {
-            DataObj[i] = <Option
+        for (var i = 0; i <= this.state.maxGroups+1; i++) {
+            if(i===0){
+                DataObj[i] = <Option
+                key={i}
+                index={'กรุณาเลือกกลุ่ม'}
+            />
+            }else{
+                DataObj[i] = <Option
                 key={i}
                 index={i}
             />
+            }
         }
         return DataObj
     }
@@ -237,9 +292,13 @@ class AddNameStudent extends Component {
             <div className='columns'>
                 กลุ่ม
                 &nbsp;
-               <select className="year-mange-select-box" id="select_term" value={this.state.groups} name="termInput" onChange={this.handleInputChangeOption}>
+               <select className="year-mange-select-box" id="select_term" value={this.state.groups} name="termInput" onChange={this.onChangeTY}>
+                       
                     {this.optionGroups()}
                 </select>
+            </div>
+            <div className='columns'>
+                <p>กลุ่มที่เลือก : {this.state.selectgroups}</p>
             </div>
             <div className='columns' style={{ padding: 10 }} >
                 รหัสนิสิต
@@ -301,7 +360,7 @@ class StudentSelect extends Component {
             >
                 <td >{this.props.itemData.username}</td>
                 <td >{this.props.itemData.firstName} {this.props.itemData.lastName}</td>
-                <td ><button style={{ cursor: 'pointer' }} className='button is-oros is-round is-pulled-right' onClick={() => this.delete(this)}>ลบ</button></td>
+                <td ><button style={{ cursor: 'pointer' }} className='button is-free-size is-oros is-round is-pulled-right' onClick={() => this.delete(this)}>ลบ</button></td>
             </tr>
         )
     }

@@ -247,11 +247,11 @@ SubjectRouter.route('/regCourse/find/teacher/id/:subjectId').get((req, res) => {
 
 // deleteCourse()
 SubjectRouter.route('/remove/course/id/:subjectId/courseId/:courseId').post((req, res) => {
-  Subject.updateMany({ subjectId: req.params.subjectId }, { $pull: { courses: { courseId: Number.parseInt(req.params.courseId) } } }).then((data) => {
-    User.updateMany({ '$or': [{ typeOfUser: 'professor' }, { typeOfUser: 'student' }] }, { $pull: { RegisteredCourse: { subjectId: req.params.subjectId } } }).then((data) => {
+ Subject.updateMany({ subjectId: req.params.subjectId }, { $pull: { courses: { courseId: Number.parseInt(req.params.courseId) } } }).then((data) => {
+    User.updateMany({ '$or': [{ typeOfUser: 'professor' }, { typeOfUser: 'student' }] }, { $pull: { courses: { subjectId: req.params.subjectId } } }).then((data) => {
       res.send(true)
     })
-  })
+ })
 })
 
 // getCourseByIdAndSubjectId()

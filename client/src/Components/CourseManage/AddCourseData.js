@@ -41,6 +41,13 @@ class AddCourseData extends Component {
         this.loadState = this.loadState.bind(this)
         this.setGroup = this.setGroup.bind(this)
     }
+    setGroupData(value){
+        var data = this.state.groupData
+        data.push(value)
+        this.setState({
+            groupData: data
+        })
+    }
     setGroup() {
         this.setState({
             group: this.addNameStudent.state.groups
@@ -110,10 +117,10 @@ class AddCourseData extends Component {
         let groups = null
         let userId = null
         try {
-            console.log(this.addNameStudent.state.groups)
+            console.log(this.addNameStudent.state.selectgroups)
             couresId = Number.parseInt(this.state.courseId) + 1
             subjectId = this.state.subjectId
-            groups = this.addNameStudent.state.groups
+            groups = this.addNameStudent.state.selectgroups
             userId = ''
         } catch (ex) {
             this.errorModal.showModal('ข้อมูลผิดพลาด ')
@@ -189,6 +196,7 @@ class AddCourseData extends Component {
                             <AddNameStudent
                                 ref={instance => { this.addNameStudent = instance }}
                                 courseId={this.state.courseId}
+                                addNameTeacher={this.addNameTeacher}
                                 setGroup={() => { this.setGroup() }}
                                 subjectData={this.state.subjectData}
                                 regStudent={this.state.regstudent}

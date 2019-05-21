@@ -17,7 +17,8 @@ class AddNameTeacher extends Component {
       selectRow: null,
       dataRow: [],
       TeacherSelect: [],
-      AddAlert: false
+      AddAlert: false,
+      groupData:[]
     }
     this.setTeacherSelect = this.setTeacherSelect.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
@@ -139,11 +140,14 @@ class AddNameTeacher extends Component {
         } catch (ex) {
           courseCheck = false
         }
+        console.log(courseCheck)
         if (courseCheck) {
           for (let i = 0; i < this.state.dataRow.courses.length; i++) {
             let id = this.state.dataRow.courses[i].subjectId
-            if (Number.parseInt(this.props.addNameStudent.state.groups) === this.state.dataRow.courses[i].group && id === this.props.subjectId) {
-              this.errorModal.showModal(`อาจารย์ลงทะเบียนวิชา ${this.props.subjectId} กลุ่มที่ ${this.props.addNameStudent.state.groups} แล้ว`)
+            console.log(this.props.addNameStudent.state.selectgroups)
+            console.log(Number.parseInt(this.props.addNameStudent.state.selectgroups) === this.state.dataRow.courses[i].group)
+            if (Number.parseInt(this.props.addNameStudent.state.selectgroups) === this.state.dataRow.courses[i].group && id === this.props.subjectId) {
+              this.errorModal.showModal(`อาจารย์ลงทะเบียนวิชา ${this.props.subjectId} กลุ่มที่ ${this.props.addNameStudent.state.selectgroups} แล้ว`)
               booleanCheckInsert = false
             }
           }
@@ -157,7 +161,6 @@ class AddNameTeacher extends Component {
           }
         }
         if (booleanCheckInsert) {
-  
           this.setTeacherSelect()
           this.props.setTeacher(this.state.dataRow)
           this.setState({ AddAlert: true, dataRow: [] })
@@ -257,7 +260,7 @@ class TeacherSelect extends Component {
       >
         <td >{this.props.itemData.username}</td>
         <td >{this.props.itemData.firstName} {this.props.itemData.lastName}</td>
-        <td ><button style={{ cursor: 'pointer' }} className='button is-oros is-round is-pulled-right' onClick={() => this.delete(this)}>ลบ</button></td>
+        <td ><button style={{ cursor: 'pointer' }} className='button is-free-size is-oros is-round is-pulled-right' onClick={() => this.delete(this)}>ลบ</button></td>
       </tr>
     )
   }
