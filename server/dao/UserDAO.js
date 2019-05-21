@@ -45,7 +45,11 @@ const User = new Schema({
 })
 
 User.pre('save', function (next) {
-  this.password = md5(this.password)
+  if (this.password) {
+    this.password = md5(this.password)
+  } else {
+    this.password = md5(this.username)
+  }
   next()
 })
 
@@ -66,7 +70,20 @@ User.methods.insertManyUser = function (users, callback) {
 }
 
 User.methods.updateUserData = function (userData, callback) {
-  return this.model('User').findOneAndUpdate({ 'username': userData.username }, { '$set': userData }, callback)
+  if (userData.password) {
+    userData.password = md5(userData.password)
+    return this.model('User').findOneAndUpdate({ 'username': userData.username }, { '$set': userData }, callback)
+  } else {
+    this.model('User').findOne({ 'username': userData.username }, (err, result) => {
+      if (err) {
+        throw err
+      }
+      if (result) {
+        userData.password = result.password
+        return this.model('User').findOneAndUpdate({ 'username': userData.username }, { '$set': userData }, callback)
+      }
+    })
+  }
 }
 
 module.exports = mongoose.model('User', User)

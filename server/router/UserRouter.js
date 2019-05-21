@@ -147,6 +147,7 @@ UserRouter.route('/edit').post((req, res) => {
   //   }
   // })
   const user = new User()
+  console.log('sadfsd')
   user.updateUserData(newUserData, (err, result) => {
     if (err) {
       throw err

@@ -6,6 +6,7 @@ var chai = require('chai')
 var chaiHttp = require('chai-http')
 var server = require('./testHelper')
 var should = chai.should()
+const md5 = require('md5')
 
 const User = require('../dao/UserDAO')
 
@@ -137,7 +138,7 @@ describe('U: update user test', () => {
       User.findOne({ 'username': user.username }, (_err, user) => {
         user.should.be.a('object')
         user.should.have.property('password')
-        user.password.should.equal(data.userData.password)
+        user.password.should.equal(md5(data.userData.password))
         done()
       })
     })
