@@ -189,7 +189,7 @@ class AddNameStudent extends Component {
     })
   }
   serach () {
-    if (this.state.inputName !== '' && this.state.inputName !== '' && Number.parseInt(this.state.inputName)) {
+    if (this.state.inputName !== '' && this.state.inputName !== '' ) {
       UserService.getUserByUsernameTypeStudent(this.state.inputName).then((result) => {
         let checkRegister = true
         if (result !== false) {
@@ -226,7 +226,7 @@ class AddNameStudent extends Component {
         }
       })
     } else {
-      this.errorModal.showModal('รหัสนิสิตไม่ต้องเงือนไข')
+      this.errorModal.showModal('รหัสนิสิตไม่ตรงเงือนไข')
     }
   }
 
