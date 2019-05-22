@@ -139,6 +139,7 @@ UserRouter.route('/add').post((req, res) => {
 
 UserRouter.route('/edit').post((req, res) => {
   const newUserData = req.body.userData
+  console.log(newUserData)
   // User.findOneAndUpdate({ 'username': newUserData.username }, { '$set': newUserData }).then((result) => {
   //   if (result) {
   //     res.send(true)

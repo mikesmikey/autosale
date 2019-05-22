@@ -103,7 +103,6 @@ class StudentExcelPopup extends Component {
       this.errorModal.showModal(this.ERROR_TEXT.nofile)
     } else {
       readXlsxFile(this.state.source).then((rows) => {
-        console.log(rows[0].length)
         if (rows.length >= 1) {
           if (rows[0][0] === 'รหัสนิสิต' &&
             rows[0][1] === 'ชื่อ' &&
@@ -184,7 +183,6 @@ class StudentExcelPopup extends Component {
           })
         }
       })
-      this.clearFileAndCloseModal()
     }
   }
   handleFileChange = (event) => {
