@@ -18,7 +18,7 @@ class MainScrenMenuBar extends Component {
     this.USER_PERMISSION = {
       'academic-staff': ['home', 'exam-schedule', 'examiner-schedule', 'exam-manage', 'user-manage', 'room-manage', 'building-manage', 'year-manage', 'subject-manage', 'course-manage'],
       'student': ['home', 'exam-schedule', 'examiner-schedule'],
-      'professor': ['home', 'examiner-schedule', 'course-manage'],
+      'professor': ['home', 'examiner-schedule', 'course-manage', 'add-course-manage'],
       'staff': ['home', 'examiner-schedule']
     }
 
@@ -130,7 +130,7 @@ class MainScrenMenuBar extends Component {
             </a>
             <ul id="course_manage_list" className="dropdown-hide">
               <li>
-                <NavLink to="/course_manage" activeClassName="is-active is-black-violet" type="sub_course_manage" onClick={this.handleButtonPointer}>
+                <NavLink to="/course_manage" activeClassName="is-active is-black-violet" className={`${this.props.user.typeOfUser === 'professor' ? 'dropdown-hide' : ''}`} type="sub_course_manage" onClick={this.handleButtonPointer}>
                   จัดการการเรียน
                 </NavLink>
               </li>
