@@ -808,7 +808,7 @@ class ExaminerTable extends Component {
         data: []
       })
 
-      ExaminerService.searchAllUserByTypeAndName(typeInput, usernameInput, startPos, 50).then((usersData) => {
+      ExaminerService.searchAllUserByTypeAndName(typeInput, usernameInput, startPos || 0, 0).then((usersData) => {
         if (this._isMounted) {
           this.props.setDataLoadingStatus(false)
           this.setState({ data: usersData })
