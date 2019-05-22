@@ -308,16 +308,21 @@ class ExamService {
       let lastColumn = startColumn; let lastRow = startRow
       let ownedSeatArr = []
 
-      // console.log(`start student: ${startStudent}, max student: ${maxStudent}`)
-      // console.log(`start count: ${studentCount}, max student: ${students.length - 1}`)
-
+      console.log(`start student: ${startStudent}, max student: ${maxStudent}`)
+      console.log(`start count: ${studentCount}, max student: ${students.length - 1}`)
       if (lineUpType === 'vertical') {
         for (let i = 0; i < seatArr.length; i++) {
+          ownedSeatArr[i] = []
           if (studentCount === (startStudent + maxStudent) - 1) {
+            ownedSeatArr[i][0] = {}
+            ownedSeatArr[i][0].seatNumber = seatArr[i][0].seatNumber
+            ownedSeatArr[i][0].studentCode = students[studentCount].username
+            ownedSeatArr[i][0].status = 'unregistered'
+            lastColumn = i + startColumn
+            lastRow = 0 + startRow
             resolve({ seatArr: ownedSeatArr, lastColumn: lastColumn, lastRow: lastRow, lastStudent: studentCount })
             break
           }
-          ownedSeatArr[i] = []
           for (let j = 0; j < seatArr[i].length; j++) {
             if (!seatArr[i][j].studentCode) {
               if (studentCount <= students.length - 1) {
@@ -407,6 +412,7 @@ class ExamService {
               }
               examListArr.push(exam._id.toString())
               result.examList = examListArr
+              result.password = null //prevent md5 encrypt
               userDAO.updateUserData(result, (err, result) => {
                 if (err) {
                   throw err
