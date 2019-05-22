@@ -71,7 +71,9 @@ class MainScreen extends Component {
             <AddSubject />
           } />
           <Route path="/course_manage" render={(props) =>
-            <CourseManage />
+            <CourseManage
+              user={this.props.user}
+            />
           } />
           <Route path="/examiner" render={(props) =>
             <Examiner
@@ -80,7 +82,7 @@ class MainScreen extends Component {
           }/>
           <Route path="/add_course" render={(props) =>
             <AddCourse
-              user={this.props.user} 
+              user={this.props.user}
             />
           } />
           <Route path="/add_course_data/:subjectId/:coruseId" render={(props) =>

@@ -25,7 +25,7 @@ UserRouter.route('/:username').get((req, res) => {
 })
 
 UserRouter.route('/student/:username').get((req, res) => {
-  User.findOne({ 'username': req.params.username,typeOfUser:'student'}).then(function (users) {
+  User.findOne({ 'username': req.params.username, typeOfUser: 'student' }).then(function (users) {
     if (users) {
       res.json(users)
     } else {
@@ -34,7 +34,7 @@ UserRouter.route('/student/:username').get((req, res) => {
   })
 })
 UserRouter.route('/serach/:firstName/:lastName').get((req, res) => {
-  User.find({ 'firstName': req.params.firstName,'lastName':req.params.lastName,'typeOfUser': 'professor'}).then(function (users) {
+  User.find({ 'firstName': req.params.firstName, 'lastName': req.params.lastName, 'typeOfUser': 'professor' }).then(function (users) {
     if (users) {
       res.json(users)
     } else {
@@ -181,7 +181,7 @@ UserRouter.route('/addmany').post((req, res) => {
   })
 })
 UserRouter.route('/add/course/:subjectId/:userId/:courseId/:groups').post((req, res) => {
-  User.findOneAndUpdate({ 'username': req.params.userId }, { '$push': { 'courses': {group:Number.parseInt(req.params.groups),subjectId:req.params.subjectId,courseId:Number.parseInt(req.params.courseId)} } }).then((result) => {
+  User.findOneAndUpdate({ 'username': req.params.userId }, { '$push': { 'courses': { group: Number.parseInt(req.params.groups), subjectId: req.params.subjectId, courseId: Number.parseInt(req.params.courseId) } } }).then((result) => {
     if (result) {
       res.send(true)
     } else {

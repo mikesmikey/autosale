@@ -41,7 +41,12 @@ class Subject2Table extends Component {
     loadDataBySubjectId (subIdInput) {
       SubjectService.searchAllSubjectBySubjectId(subIdInput).then((result) => {
         if (this._isMounted) {
-          this.setState({ data: result })
+          if (this.props.user.typeOfUser === 'professor') {
+            let newResult = this.filterProfessorSubject(result)
+            this.setState({ data: newResult })
+          } else {
+            this.setState({ data: result })
+          }
         }
       })
     }
